@@ -13,6 +13,9 @@ export class Pos extends Component {
   }
 
   componentDidMount() {
+    window.setInterval(() => {
+      this.fetchItems();
+    }, 60000);
     this.fetchItems();
   }
 
@@ -130,15 +133,11 @@ class Singleorder extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // console.log("SSS", this.state.items);
-  }
-
   backgroundChange = (e) => {
-    console.log(e.target.value);
-    if (e.target.value == "preparing") {
+    console.log(e);
+    if (e == "preparing") {
       document.getElementById("main_cart").classList.add("text-bg-danger");
-    } else if (e.target.value == "prepared") {
+    } else if (e == "prepared") {
       document.getElementById("main_cart").classList.add("text-bg-success");
       document.getElementById("main_cart").classList.remove("text-bg-danger");
     } else {
@@ -161,10 +160,7 @@ class Singleorder extends React.Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.status) {
-          console.log(json);
-          this.setState({
-            items: json.data,
-          });
+          // this.backgroundChange();
         } else {
           console.log(json);
         }
@@ -179,41 +175,34 @@ class Singleorder extends React.Component {
 
   render() {
     return (
-      <div className="card my-2" id="main_cart">
-        {this.state.items.map((item) => {
+      <>
+        {this.props.singleItem.map((item) => {
           return (
-            <>
+            <div className="card my-2 border pb-3" id="main_cart">
+              <select
+                name=""
+                id=""
+                onChange={(e) => {
+                  this.changeOrderStatus(item.id, e);
+                  this.backgroundChange(e.target.value);
+                }}
+                style={{
+                  border: "1px solid #000",
+                  padding: "10px",
+                }}
+                value={item.order_product_status}
+              >
+                <option value="preparing">Preparing</option>
+                <option value="prepared">Prepared</option>
+              </select>
               {item.addons.map((addon) => {
                 return (
-                  <div className="card-body">
+                  <div className="card-body pb-0">
                     <div className="d-flex align-items-center justify-content-between mb-2">
                       <h5 className="card-title text-start mb-0">
                         {item.product.product_name}{" "}
-                        {/* <strong>x{item.product_quantity}</strong> */}
+                        <strong>x{item.product_quantity}</strong>
                       </h5>
-                      <select
-                        name=""
-                        id=""
-                        onChange={(e) => {
-                          this.changeOrderStatus(item.id, e);
-                        }}
-                        style={{
-                          border: "none",
-                          borderBottom: "1px solid black",
-                          focusVisible: "none",
-                        }}
-                        value={item.order_product_status}
-                        // options={[
-                        //   {value:"ordered",label:"ordered"},
-                        //   { value: "preparing", label: "Preparing" },
-                        //   { value: "prepared", label: "Prepared" },
-
-                        // ]}
-                      >
-                        <option value="order_received">Order Received</option>
-                        <option value="preparing">Preparing</option>
-                        <option value="prepared">Prepared</option>
-                      </select>
                     </div>
                     <p className="card-text text-start">
                       Addons:{" "}
@@ -224,10 +213,10 @@ class Singleorder extends React.Component {
                   </div>
                 );
               })}
-            </>
+            </div>
           );
         })}
-      </div>
+      </>
     );
   }
 }
