@@ -3,3 +3,16 @@
   outline: 0;
   box-shadow: 0 0 0 0.2rem #eda23233;
 }
+
+@media only screen and (max-width: 600px) {
+  .header_column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+select:focus {
+  outline: none;
+  box-shadow: none;
+}

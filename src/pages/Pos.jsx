@@ -7,8 +7,13 @@ export class Pos extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      orderedItems: [],
       options: [{ name: 1 }, { name: 2 }, { name: 3 }, { name: 4 }],
     };
+  }
+
+  componentDidMount() {
+    this.fetchItems();
   }
 
   onSelect(selectedList, selectedItem) {
@@ -18,9 +23,36 @@ export class Pos extends Component {
   onRemove(selectedList, removedItem) {
     console.warn(selectedList, removedItem);
   }
+
+  fetchItems = () => {
+    fetch(global.api + "fetch_item_for_cooking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        vendor_id: 1,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.status) {
+          this.setState({
+            orderedItems: json.data,
+          });
+          // console.log(json);
+        } else {
+          console.log(json);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+  };
   render() {
     return (
-      <div className="container">
+      <>
         <header
           className=" position-sticky top-0 bg-white"
           style={{
@@ -28,97 +60,64 @@ export class Pos extends Component {
           }}
         >
           <div className="d-flex flex-column flex-md-row align-items-center p-3 mb-4 border-bottom">
-            <Link
-              to="/pos"
-              className="d-flex align-items-center text-dark text-decoration-none"
-            >
-              <img src={logo} alt="logo" width={150} className="mr-3" />
-            </Link>
-            <nav className="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-              <div className="d-flex align-items-center">
-                <Multiselect
-                  options={this.state.options} // Options to display in the dropdown
-                  selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
-                  onSelect={this.onSelect} // Function will trigger on select event
-                  onRemove={this.onRemove} // Function will trigger on remove event
-                  displayValue="name" // Property name to display in the dropdown options
-                  className="mr-2"
-                />
-                <button className="btn btn-primary">Signout</button>
-              </div>
-            </nav>
+            <div className="container d-flex header_column">
+              <Link
+                to="/pos"
+                className="d-flex align-items-center text-dark text-decoration-none"
+              >
+                <img src={logo} alt="logo" width={150} className="mr-3" />
+              </Link>
+              <nav className="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+                <div className="d-flex align-items-center">
+                  <Multiselect
+                    options={this.state.options} // Options to display in the dropdown
+                    selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+                    onSelect={this.onSelect} // Function will trigger on select event
+                    onRemove={this.onRemove} // Function will trigger on remove event
+                    displayValue="name" // Property name to display in the dropdown options
+                    className="mr-2"
+                  />
+                  <button
+                    className="btn btn-primary"
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Signout
+                  </button>
+                </div>
+              </nav>
+            </div>
           </div>
         </header>
-        <main>
-          <div className="row" data-masonry='{"percentPosition": true }'>
-            <div className="col-sm-6 col-lg-4 mb-4">
-              <div className="card text-center p-3 py-0">
-                <div className="mb-0">
-                  <div className="blockquote mt-1 p-2 text-bg-primary rounded">
-                    <p className="text-center">Indian</p>
-                  </div>
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                </div>
-              </div>
+        <div className="container">
+          <main>
+            <div className="row" data-masonry='{"percentPosition": true }'>
+              {this.state.orderedItems.map((items) => {
+                return (
+                  <>
+                    {items.order_item.length > 0 ? (
+                      <div className="col-sm-6 col-lg-4 mb-4">
+                        <div className="card text-center p-3 py-0">
+                          <div className="mb-0">
+                            <div className="blockquote mt-1 p-2 text-bg-primary rounded">
+                              <p className="text-center">{items.name}</p>
+                            </div>
+                            <Singleorder
+                              singleItem={items.order_item}
+                              fetchItems={() => this.fetchItems()}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                );
+              })}
             </div>
-            <div className="col-sm-6 col-lg-4 mb-4">
-              <div className="card text-center p-3 py-0">
-                <div className="mb-0">
-                  <div className="blockquote mt-1 p-2 text-bg-primary rounded">
-                    <p className="text-center">Chinese</p>
-                  </div>
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-lg-4 mb-4">
-              <div className="card text-center p-3 py-0">
-                <div className="mb-0">
-                  <div className="blockquote mt-1 p-2 text-bg-primary rounded">
-                    <p className="text-center">Italian</p>
-                  </div>
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-lg-4 mb-4">
-              <div className="card text-center p-3 py-0">
-                <div className="mb-0">
-                  <div className="blockquote mt-1 p-2 text-bg-primary rounded">
-                    <p className="text-center">Tandoor</p>
-                  </div>
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                </div>
-              </div>
-            </div>
-            <div className="col-sm-6 col-lg-4 mb-4">
-              <div className="card text-center p-3 py-0">
-                <div className="mb-0">
-                  <div className="blockquote mt-1 p-2 text-bg-primary rounded">
-                    <p className="text-center">South Indian</p>
-                  </div>
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                  <Singleorder />
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
+      </>
     );
   }
 }
@@ -126,54 +125,108 @@ export class Pos extends Component {
 class Singleorder extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      items: props.singleItem,
+    };
+  }
+
+  componentDidMount() {
+    // console.log("SSS", this.state.items);
   }
 
   backgroundChange = (e) => {
+    console.log(e.target.value);
     if (e.target.value == "preparing") {
       document.getElementById("main_cart").classList.add("text-bg-danger");
     } else if (e.target.value == "prepared") {
       document.getElementById("main_cart").classList.add("text-bg-success");
+      document.getElementById("main_cart").classList.remove("text-bg-danger");
     } else {
       document.getElementById("main_cart").classList.remove("text-bg-danger");
       document.getElementById("main_cart").classList.remove("text-bg-success");
     }
   };
 
+  changeOrderStatus = (id, e) => {
+    fetch(global.api + "update_item_for_cooking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        item_id: id,
+        item_status: e.target.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.status) {
+          console.log(json);
+          this.setState({
+            items: json.data,
+          });
+        } else {
+          console.log(json);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        this.props.fetchItems();
+      });
+  };
+
   render() {
     return (
       <div className="card my-2" id="main_cart">
-        <div className="card-body">
-          <div className="d-flex align-items-center justify-content-between mb-2">
-            <h5 className="card-title text-start mb-0">
-              Dal Makhni <strong>x2</strong>
-            </h5>
-            <select
-              name=""
-              id=""
-              onChange={(e) => {
-                this.backgroundChange(e);
-                // alert(e.target.value);
-              }}
-              style={{
-                border: "none",
-                borderBottom: "1px solid black",
-                focusVisible: "none",
-                borderRadius: "3px",
-                borderRadius: "3px",
-              }}
-            >
-              <option value="order_received">Order Received</option>
-              <option value="preparing">Preparing</option>
-              <option value="prepared">Prepared</option>
-            </select>
-          </div>
-          <p className="card-text text-start">
-            <small>
-              With supporting text below as a natural lead-in to additional
-              content.sssssss
-            </small>
-          </p>
-        </div>
+        {this.state.items.map((item) => {
+          return (
+            <>
+              {item.addons.map((addon) => {
+                return (
+                  <div className="card-body">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <h5 className="card-title text-start mb-0">
+                        {item.product.product_name}{" "}
+                        {/* <strong>x{item.product_quantity}</strong> */}
+                      </h5>
+                      <select
+                        name=""
+                        id=""
+                        onChange={(e) => {
+                          this.changeOrderStatus(item.id, e);
+                        }}
+                        style={{
+                          border: "none",
+                          borderBottom: "1px solid black",
+                          focusVisible: "none",
+                        }}
+                        value={item.order_product_status}
+                        // options={[
+                        //   {value:"ordered",label:"ordered"},
+                        //   { value: "preparing", label: "Preparing" },
+                        //   { value: "prepared", label: "Prepared" },
+
+                        // ]}
+                      >
+                        <option value="order_received">Order Received</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="prepared">Prepared</option>
+                      </select>
+                    </div>
+                    <p className="card-text text-start">
+                      Addons:{" "}
+                      <small className="border border-warning rounded px-2 py-1">
+                        {addon.addon_name}{" "}
+                      </small>
+                    </p>
+                  </div>
+                );
+              })}
+            </>
+          );
+        })}
       </div>
     );
   }
