@@ -40,6 +40,7 @@ export class Pos extends Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.status) {
+          console.log(json);
           this.setState({
             orderedItems: json.data,
           });
@@ -195,24 +196,20 @@ class Singleorder extends React.Component {
                 <option value="preparing">Preparing</option>
                 <option value="prepared">Prepared</option>
               </select>
-              {item.addons.map((addon) => {
-                return (
-                  <div className="card-body pb-0">
-                    <div className="d-flex align-items-center justify-content-between mb-2">
-                      <h5 className="card-title text-start mb-0">
-                        {item.product.product_name}{" "}
-                        <strong>x{item.product_quantity}</strong>
-                      </h5>
-                    </div>
-                    <p className="card-text text-start">
-                      Addons:{" "}
-                      <small className="border border-warning rounded px-2 py-1">
-                        {addon.addon_name}{" "}
-                      </small>
-                    </p>
-                  </div>
-                );
-              })}
+              <div className="card-body pb-0">
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                  <h5 className="card-title text-start mb-0">
+                    {item.product.product_name}{" "}
+                    <strong>x{item.product_quantity}</strong>
+                  </h5>
+                </div>
+                <p className="card-text text-start">
+                  Addons:{" "}
+                  <small className="border border-warning rounded px-2 py-1">
+                    {item.addon_name}{" "}
+                  </small>
+                </p>
+              </div>
             </div>
           );
         })}
