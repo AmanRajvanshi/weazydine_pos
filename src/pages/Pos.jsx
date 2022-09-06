@@ -34,7 +34,7 @@ export class Pos extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        vendor_id: 1,
+        vendor_id: 3,
       }),
     })
       .then((res) => res.json())
