@@ -8,12 +8,20 @@ export class App extends Component {
         <div className="main-wrappers">
           <div className="header">
             <div className="header-left border-0">
-              <a
-                href="https://dreamspos.dreamguystech.com/html/template/index.html"
-                className="logo"
-              >
-                <img src={logo} alt="" />
-              </a>
+            <a
+            href="javascript:void(0)"
+            className="add-list hamburger_header color-bg"
+            onClick={() => this.openNav()}
+            style={{
+              width: "40px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              float: "right",
+            }}
+          >
+            <i className="fa fa-bars" style={{ display: "block !important" }} />
+          </a>
             </div>
             <ul className="nav user-menu">
               <li className="nav-item">
