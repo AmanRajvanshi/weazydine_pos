@@ -6,7 +6,7 @@ export class App extends Component {
   render() {
     return (
       <Routes>
-        <Route path="/" component={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
       </Routes>
     );
   }

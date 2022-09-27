@@ -1,24 +1,15 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/images/main_logo.png";
 
 export class Header extends Component {
   render() {
     return (
       <div className="header">
         <div className="header-left border-0">
-          <a
-            href="javascript:void(0)"
-            className="add-list hamburger_header color-bg"
-            onClick={() => this.openNav()}
-            style={{
-              width: "40px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              float: "right",
-            }}
-          >
-            <i className="fa fa-bars" style={{ display: "block !important" }} />
-          </a>
+          <Link to="/" className="logo">
+            <img src={logo} alt="" />
+          </Link>
         </div>
         <ul className="nav user-menu">
           <li className="nav-item">

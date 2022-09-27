@@ -990,7 +990,7 @@ strong {
 }
 
 .page-wrapper {
-  margin: 0 0 0 260px;
+  margin: 0 0 0 190px;
   padding: 60px 0 0;
   position: relative;
   left: 0;
@@ -3391,7 +3391,7 @@ span.select2-container.select2-container--default.select2-container--open {
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
   border-right: 1px solid #E8EBED;
-  width: 260px;
+  width: 190px;
 }
 @media (max-width: 991px) {
   .sidebar {

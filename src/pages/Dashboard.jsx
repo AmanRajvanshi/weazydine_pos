@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import logo from "../assets/images/main_logo.png";
 import Header from "../othercomponent/Header";
+import Sidebar from "../othercomponent/Sidebar";
 
 export class Dashboard extends Component {
   render() {
@@ -8,7 +8,8 @@ export class Dashboard extends Component {
       <>
         <div className="main-wrappers">
           <Header />
-          <div className="page-wrapper ms-0">
+          <Sidebar />
+          <div className="page-wrapper" id="sidebar">
             <div className="content">
               <div className="row">
                 <div className="col-lg-2 sidebar_scroll">
