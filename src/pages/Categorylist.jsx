@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Header from "../othercomponent/Header";
-import Sidebar from "../othercomponent/Sidebar";
+
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import delete_icon from "../assets/images/icons/delete.svg"
-import edit_icon from "../assets/images/icons/edit.svg"
+import delete_icon from "../assets/images/icons/delete.svg";
+import edit_icon from "../assets/images/icons/edit.svg";
 
 export class Categorylist extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ export class Categorylist extends Component {
       <>
         <div className="main-wrapper">
           <Header />
-          <Sidebar />
+
           <div className="page-wrapper">
             <div className="content">
               <div className="page-header">
@@ -76,19 +76,13 @@ export class Categorylist extends Component {
                                 this.setState({ openedit: true });
                               }}
                             >
-                              <img
-                                src={edit_icon}
-                                alt="img"
-                              />
+                              <img src={edit_icon} alt="img" />
                             </a>
                             <a
                               className="confirm-text"
                               href="javascript:void(0);"
                             >
-                              <img
-                                src={delete_icon}
-                                alt="img"
-                              />
+                              <img src={delete_icon} alt="img" />
                             </a>
                           </td>
                         </tr>

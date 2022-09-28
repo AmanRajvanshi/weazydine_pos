@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import Header from "../othercomponent/Header";
-import Sidebar from "../othercomponent/Sidebar";
 
 export class Addproduct extends Component {
   render() {
     return (
       <div className="main-wrapper">
-        <Sidebar />
         <Header />
         <div className="page-wrapper">
           <div className="content">

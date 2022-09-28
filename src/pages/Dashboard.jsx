@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "../othercomponent/Header";
-import Sidebar from "../othercomponent/Sidebar";
+
 import { BiRupee } from "react-icons/bi";
 
 export class Dashboard extends Component {
@@ -9,7 +9,7 @@ export class Dashboard extends Component {
       <>
         <div className="main-wrappers">
           <Header />
-          <Sidebar />
+
           <div className="page-wrapper">
             <div className="content">
               <div className="row">
@@ -45,7 +45,7 @@ export class Dashboard extends Component {
                     </div>
                     <div className="dash-widgetcontent">
                       <h5>
-                        <BiRupee/>
+                        <BiRupee />
                         <span className="counters" data-count={4385.0}>
                           4,385.00
                         </span>
