@@ -10,10 +10,12 @@ export class Sidebar extends Component {
             <ul>
               <li>
                 <NavLink
+                  // exact={true}
+                  end={true}
                   className={({ isActive }) =>
                     isActive ? "active" : "not-active"
                   }
-                  to="/dashboard"
+                  to="/"
                 >
                   Dashboard
                 </NavLink>
@@ -36,6 +38,36 @@ export class Sidebar extends Component {
                   to="/orders"
                 >
                   Orders
+                </NavLink>
+              </li>{" "}
+              <li>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active" : "not-active"
+                  }
+                  to="/kot"
+                >
+                  KOT
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active" : "not-active"
+                  }
+                  to="/productlist"
+                >
+                  Product List
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "active" : "not-active"
+                  }
+                  to="/categorylist"
+                >
+                  Category List
                 </NavLink>
               </li>
             </ul>

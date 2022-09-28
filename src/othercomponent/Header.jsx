@@ -11,6 +11,13 @@ export class Header extends Component {
             <img src={logo} alt="" />
           </div>
         </div>
+        <a id="mobile_btn" className="mobile_btn" href="#sidebar">
+          <span className="bar-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </a>
         <ul className="nav user-menu">
           <li className="nav-item dropdown has-arrow main-drop">
             <a
