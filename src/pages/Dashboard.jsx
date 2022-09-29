@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Header from "../othercomponent/Header";
 
 import { BiRupee } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 export class Dashboard extends Component {
   render() {
@@ -55,7 +56,7 @@ export class Dashboard extends Component {
                   </div>
                 </div>
                 <h4>Tables</h4>
-                <div className="col-lg-4 col-sm-6 col-12 d-flex">
+                <div className="col-lg-3 col-sm-6 col-12 d-flex">
                   <div className="dash-count">
                     <div className="dash-counts">
                       <h4>Table 1</h4>
@@ -63,15 +64,17 @@ export class Dashboard extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-6 col-12 d-flex">
-                  <div className="dash-count1">
-                    <div className="dash-counts">
-                      <h4>Table 2</h4>
-                      <h6>Vacant</h6>
+                <div className="col-lg-3 col-sm-6 col-12 d-flex">
+                  <Link to="/tableorderdetails" className="w-100">
+                    <div className="dash-count1">
+                      <div className="dash-counts">
+                        <h4>Table 2</h4>
+                        <h6>Vacant</h6>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
-                <div className="col-lg-4 col-sm-6 col-12 d-flex">
+                <div className="col-lg-3 col-sm-6 col-12 d-flex">
                   <div className="dash-count">
                     <div className="dash-counts">
                       <h4>Table 3</h4>
@@ -79,7 +82,7 @@ export class Dashboard extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-sm-6 col-12 d-flex">
+                <div className="col-lg-3 col-sm-6 col-12 d-flex">
                   <div className="dash-count1">
                     <div className="dash-counts">
                       <h4>Table 4</h4>

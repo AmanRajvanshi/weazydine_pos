@@ -5,7 +5,7 @@ import { BiRupee } from "react-icons/bi";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 
-export class Orderdetails extends Component {
+export class TableOrderDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -399,4 +399,4 @@ export class Orderdetails extends Component {
   }
 }
 
-export default Orderdetails;
+export default TableOrderDetails;

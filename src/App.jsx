@@ -11,6 +11,7 @@ import Pos from "./pages/Pos.jsx";
 import Productlist from "./pages/Productlist.jsx";
 import Orderlist from "./pages/Orderlist.jsx";
 import Orderdetails from "./pages/Orderdetails.jsx";
+import TableOrderDetails from "./pages/TableOrderDetails.jsx";
 
 global.token = "s";
 
@@ -45,6 +46,7 @@ export class App extends Component {
             <Route exact path="/addproduct" element={<Addproduct />} />
             <Route exact path="/orderlist" element={<Orderlist />} />
             <Route exact path="/orderdetails" element={<Orderdetails />} />
+            <Route exact path="/tableorderdetails" element={<TableOrderDetails />} />
             <Route path="*" element={<Pagenotfound />} />
           </Routes>
         ) : (

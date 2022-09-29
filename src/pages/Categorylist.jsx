@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Header from "../othercomponent/Header";
-
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import delete_icon from "../assets/images/icons/delete.svg";
