@@ -55,7 +55,9 @@ class Orderlist extends Component {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>WD-1878787</td>
+                        <Link to="/orderdetails">
+                          <td>WD-1878787</td>
+                        </Link>
                         <td>10</td>
                         <td>{moment().calendar()}</td>
                         <td>Online</td>
