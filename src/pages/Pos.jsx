@@ -84,11 +84,11 @@ export class Pos extends Component {
                 </ul>
               </div>
               <div className="row">
-                <div className="col-lg-9 col-sm-12 tabs_wrapper">
+                <div className="col-lg-8 col-sm-12 tabs_wrapper">
                   <div className="tabs_container">
                     <div className="tab_content active" data-tab="fruits">
                       <div className="row">
-                        <div className="col-lg-2 col-sm-6 d-flex">
+                        <div className="col-lg-3 d-flex">
                           <div className="productset flex-fill active">
                             <div className="productsetimg">
                               <img
@@ -109,7 +109,7 @@ export class Pos extends Component {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-2 col-sm-6 d-flex">
+                        <div className="col-lg-3 d-flex">
                           <div className="productset flex-fill active">
                             <div className="productsetimg">
                               <img
@@ -129,7 +129,7 @@ export class Pos extends Component {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-2 col-sm-6 d-flex">
+                        <div className="col-lg-3 d-flex">
                           <div className="productset flex-fill">
                             <div className="productsetimg">
                               <img
@@ -149,7 +149,7 @@ export class Pos extends Component {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-2 col-sm-6 d-flex">
+                        <div className="col-lg-3 d-flex">
                           <div className="productset flex-fill">
                             <div className="productsetimg">
                               <img
@@ -169,7 +169,7 @@ export class Pos extends Component {
                             </div>
                           </div>
                         </div>
-                        <div className="col-lg-2 col-sm-6 d-flex">
+                        <div className="col-lg-3 d-flex">
                           <div className="productset flex-fill">
                             <div className="productsetimg">
                               <img
@@ -193,11 +193,11 @@ export class Pos extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-3 col-sm-12 sidebar_scroll">
+                <div className="col-lg-4 col-sm-12 sidebar_scroll">
                   <div className="order-list">
                     <div className="orderid">
                       <h4>Order List</h4>
-                      <h5>Transaction id : #65565</h5>
+                      {/* <h5>Transaction id : #65565</h5> */}
                     </div>
                     <div className="actionproducts">
                       <ul>
@@ -269,16 +269,6 @@ export class Pos extends Component {
                               <select className="select-container">
                                 <option>Walk-in Customer</option>
                                 <option>Chris Moris</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-12">
-                          <div className="select-split">
-                            <div className="select-group w-100">
-                              <select className="select-container">
-                                <option>Product</option>
-                                <option>Barcode</option>
                               </select>
                             </div>
                           </div>

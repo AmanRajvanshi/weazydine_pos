@@ -25,7 +25,7 @@ export class Productlist extends Component {
                     alt="img"
                     className="me-1"
                   />
-                  Add New Category
+                  Add New Product
                 </Link>
               </div>
             </div>
