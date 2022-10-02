@@ -7897,3 +7897,19 @@ span.select-container.select-container--default.select-container--open {
   color: #1a181e;
   margin-top: 10px;
 }
+
+.checkbox_addon{
+  margin-bottom: 10px;
+  border: 1px solid #c1c1c1;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.new_checkbox{
+  height: 20px;
+  width: 20px;
+  margin-right:10px;
+  margin-top:0px
+}

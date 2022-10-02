@@ -3,7 +3,6 @@ import Header from "../othercomponent/Header";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { RadioGroup, RadioButton } from "react-radio-buttons";
-import { BiRupee } from "react-icons/bi";
 
 export class Addproduct extends Component {
   constructor(props) {
@@ -13,7 +12,6 @@ export class Addproduct extends Component {
       images: [],
       variants_addons_div: true,
       rows: [{}],
-      newaddon: false,
     };
   }
 
@@ -190,7 +188,6 @@ export class Addproduct extends Component {
                         <h3 className="mb-3 py-2 underline">
                           Variants and Addons
                         </h3>
-                        <h2 className="mb-3 py-2 underline">Variants</h2>
                         <div className="row">
                           <div className="col-mg-12">
                             <table
@@ -259,44 +256,6 @@ export class Addproduct extends Component {
                               </button>
                             </div>
                           </div>
-                        </div>
-                        <h2 className="mb-3 py-2 underline">Addons</h2>
-                        <div className="row">
-                          <div className="col-mg-12">
-                            <div className="checkbox_addon">
-                              <input
-                                type="checkbox"
-                                id="addon"
-                                name="addon"
-                                value="Addon"
-                                className="form-check-input new_checkbox mr-4"
-                              />
-                              <label for="addon">
-                                Addon - <BiRupee /> 20
-                              </label>
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "end",
-                              }}
-                            >
-                              <button
-                                className="btn btn-primary"
-                                onClick={() => {
-                                  this.setState({
-                                    newaddon: true,
-                                  });
-                                }}
-                                style={{
-                                  marginBottom: "20px",
-                                  marginTop: "10px",
-                                }}
-                              >
-                                Add New Addon
-                              </button>
-                            </div>
-                          </div>
                           <div className="col-lg-12">
                             <a className="btn btn-submit me-2">Submit</a>
                             <a
@@ -352,49 +311,6 @@ export class Addproduct extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Category Name</label>
-                      <input type="text" />
-                    </div>
-                  </div>
-                  <div className="col-lg-12 d-flex justify-content-end">
-                    <a
-                      href="javascript:void(0);"
-                      className="btn btn-submit me-2"
-                    >
-                      Submit
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
-
-        <Modal
-          open={this.state.newaddon}
-          onClose={() => this.setState({ newaddon: false })}
-          center
-          classNames={{
-            modal: "customModal",
-          }}
-        >
-          <div className="content">
-            <div className="page-header">
-              <div className="page-title">
-                <h4>Add Addon</h4>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Addon Name</label>
-                      <input type="text" />
-                    </div>
-                  </div>
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Addon Price</label>
                       <input type="text" />
                     </div>
                   </div>
