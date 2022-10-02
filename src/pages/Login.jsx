@@ -24,7 +24,12 @@ class Login extends Component {
     let rjx = /^[0]?[6789]\d{9}$/;
     let isValid = rjx.test(phoneNumber);
     if (!isValid) {
-      toast.error("Please enter valid phone number");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please enter valid mobile number",
+      });
+      this.setState({ isLoading: false });
     } else {
       fetch(global.api + "mobile-verification", {
         method: "POST",
@@ -43,9 +48,19 @@ class Login extends Component {
           if (json.msg === "ok") {
             // this.resend();
             this.setState({ otpPage: true });
-            toast.success("OTP sent successfully");
+            Swal.fire({
+              title: "OTP Sent",
+              text: "OTP has been sent to your mobile number",
+              icon: "success",
+              confirmButtonText: "Ok",
+            });
           } else {
-            toast(json.msg);
+            Swal.fire({
+              title: "Error",
+              text: "Something went wrong",
+              icon: "error",
+              confirmButtonText: "Ok",
+            });
           }
         })
         .catch((error) => {
@@ -76,12 +91,21 @@ class Login extends Component {
         if (json.msg === "ok") {
           global.token = json.token;
           global.user = json.usr;
+          Swal.fire({
+            title: "Success",
+            text: "Login Successfully",
+            icon: "success",
+            confirmButtonText: "Ok",
+          });
           const data = { token: json.token, user_id: json.usr };
           localStorage.setItem("@auth_login", JSON.stringify(data));
-          OneSignal.sendTag("id", "" + json.usr);
-          OneSignal.sendTag("account_type", "user-@aakasgfsusfd77232927ns");
         } else {
-          toast.error(json.error);
+          Swal.fire({
+            title: "Error!",
+            text: json.msg,
+            icon: "error",
+            confirmButtonText: "Ok",
+          });
           this.setState({
             otp: "",
           });
