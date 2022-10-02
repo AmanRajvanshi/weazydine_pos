@@ -1,7 +1,100 @@
 import React, { Component } from "react";
 import Header from "../othercomponent/Header";
+import { AuthContext } from '../AuthContextProvider';
+ class Pos extends Component {
+  static contextType = AuthContext;
+  constructor (props)
+  {
+    super(props);
+    this.state = {
+      category:[],
+      products:[],
+      active_cat:0,
+      is_loding:true,
+    }
+  }
 
-export class Pos extends Component {
+  componentDidMount()
+  {
+    this.fetchCategories();
+  }
+
+active_cat = (id) => {
+  this.setState({active_cat:id});
+  this.fetchProducts(id,1);
+}
+
+fetchProducts = (category_id,page) => {
+  fetch(global.api+ 'vendor_get_vendor_product', {
+    method: 'POST',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.context.token
+    },
+    body: JSON.stringify({
+        vendor_category_id: category_id,
+        product_type: 'product',
+        page: page
+    })
+}).then((response) => response.json())
+    .then((json) => {
+        //  console.warn(json);
+        if (!json.status) {
+            var msg = json.msg;
+            if (page == 1) {
+                this.setState({ products: [] })
+            }
+        }
+        else {
+            if (json.data.length > 0) {
+                this.setState({ products: json.data })
+            }
+            else {
+                // this.setState({data:''})
+                // Toast.show("Please Add Services First");
+
+            }
+
+            //    this.setState({prod_id:json.data[0].id})
+            //    alert(this.state.prod_id)
+
+        }
+        this.setState({ isloading: false, load_data: false })
+        return json;
+    }).catch((error) => {
+        console.error(error);
+    }).finally(() => {
+        this.setState({ isloading: false })
+    });
+
+}
+
+  fetchCategories = () => {
+  
+    fetch(global.api + "fetch_vendor_category", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+          // console.warn(json.data)
+          this.setState({category:json.data })
+          this.fetchProducts(0,1);              
+          return json;
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+          this.setState({ isLoading: false });
+      });
+  };
+
+
+
   render() {
     return (
       <>
@@ -9,190 +102,17 @@ export class Pos extends Component {
           <Header />
           <div className="page-wrapper" id="sidebar">
             <div className="content">
-              <div className="row">
-                <ul className="tabs horizontal_scroll">
-                  <li className="active">
-                    <div className="product-details active">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="product-details">
-                      <h6>Fruits</h6>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+            <Category category={this.state.category} fetch_product={this.active_cat}/>
+            
+         
+
               <div className="row">
                 <div className="col-lg-8 col-sm-12 tabs_wrapper">
-                  <div className="tabs_container">
-                    <div className="tab_content active" data-tab="fruits">
-                      <div className="row">
-                        <div className="col-lg-3 d-flex">
-                          <div className="productset flex-fill active">
-                            <div className="productsetimg">
-                              <img
-                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product29.jpg"
-                                alt="img"
-                                className="product_image"
-                              />
-                              <h6>Qty: 5</h6>
-                              <div className="check-product">
-                                <i className="fa fa-check" />
-                              </div>
-                            </div>
-                            <div className="productsetcontent">
-                              <div>
-                                <h4>Orange</h4>
-                                <h6>150.00</h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 d-flex">
-                          <div className="productset flex-fill active">
-                            <div className="productsetimg">
-                              <img
-                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product31.jpg"
-                                alt="img"
-                                className="product_image"
-                              />
-                              <h6>Qty: 1</h6>
-                              <div className="check-product">
-                                <i className="fa fa-check" />
-                              </div>
-                            </div>
-                            <div className="productsetcontent">
-                              <h5>Fruits</h5>
-                              <h4>Strawberry</h4>
-                              <h6>15.00</h6>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 d-flex">
-                          <div className="productset flex-fill">
-                            <div className="productsetimg">
-                              <img
-                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product35.jpg"
-                                alt="img"
-                                className="product_image"
-                              />
-                              <h6>Qty: 5</h6>
-                              <div className="check-product">
-                                <i className="fa fa-check" />
-                              </div>
-                            </div>
-                            <div className="productsetcontent">
-                              <h5>Fruits</h5>
-                              <h4>Banana</h4>
-                              <h6>150.00</h6>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 d-flex">
-                          <div className="productset flex-fill">
-                            <div className="productsetimg">
-                              <img
-                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product37.jpg"
-                                alt="img"
-                                className="product_image"
-                              />
-                              <h6>Qty: 5</h6>
-                              <div className="check-product">
-                                <i className="fa fa-check" />
-                              </div>
-                            </div>
-                            <div className="productsetcontent">
-                              <h5>Fruits</h5>
-                              <h4>Limon</h4>
-                              <h6>1500.00</h6>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 d-flex">
-                          <div className="productset flex-fill">
-                            <div className="productsetimg">
-                              <img
-                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product54.jpg"
-                                alt="img"
-                                className="product_image"
-                              />
-                              <h6>Qty: 5</h6>
-                              <div className="check-product">
-                                <i className="fa fa-check" />
-                              </div>
-                            </div>
-                            <div className="productsetcontent">
-                              <h5>Fruits</h5>
-                              <h4>Apple</h4>
-                              <h6>1500.00</h6>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <Products data={this.state.products}/>
                 </div>
+
+
+
                 <div className="col-lg-4 col-sm-12 sidebar_scroll">
                   <div className="order-list">
                     <div className="orderid">
@@ -573,6 +493,97 @@ class AddDelete extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+class Category extends Component {
+
+  render()
+  {
+    return(
+      <div className="row">
+      <ul className="tabs horizontal_scroll">
+        
+      <li onClick={()=>{this.props.fetch_product(0)}} >
+          <div className="product-details">
+            <h6>All</h6>
+          </div>
+        </li>
+
+
+        {
+          this.props.category.length > 0 ?
+          this.props.category.map((item,index)=>{
+            return(
+              <li onClick={()=>{this.props.fetch_product(item.id)}} >
+          <div className="product-details">
+            <h6>{item.name}</h6>
+          </div>
+        </li>
+            )
+          })
+          :
+          <></>
+
+        }
+       
+       
+      </ul>
+    </div>
+    );
+  }
+}
+
+
+class Products extends Component {
+constructor(props)
+{
+  super(props);
+ 
+}
+
+  render()
+  {
+    return(
+      
+      <div className="tabs_container">
+         <div className="tab_content active" data-tab="fruits">
+        <div className="row">
+        {
+          this.props.data.length > 0 ?
+          this.props.data.map((item,index)=>{
+            return(
+              <div className="col-lg-3 d-flex">
+              <div className="productset flex-fill active">
+                <div className="productsetimg">
+                  <img
+                    src={item.product_img}
+                    alt="img"
+                    className="product_image"
+                  />
+                  {/* <h6>Qty: 5</h6> */}
+                  <div className="check-product">
+                    <i className="fa fa-check" />
+                  </div>
+                </div>
+                <div className="productsetcontent">
+                  <div>
+                    <h4>{item.product_name}</h4>
+                    <h6>Starting from {item.our_price}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            )
+          })
+          :
+          <></>
+        }
+ 
+        </div>
+      </div>
+    </div>
+    )
   }
 }
 

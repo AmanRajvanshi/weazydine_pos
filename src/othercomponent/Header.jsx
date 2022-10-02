@@ -1,14 +1,54 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate,useParams } from "react-router-dom";
 import logo from "../assets/images/main_logo.png";
-
+import { AuthContext } from '../AuthContextProvider';
 export class Header extends Component {
+  static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
       sidebarText: false,
     };
   }
+
+
+  logOut = () => {
+    fetch(global.api + 'logout_vendor', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': global.token
+        },
+        body: JSON.stringify({
+
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+          global.token = null;
+          this.context.logout();
+          this.props.navigate('/login', { replace: true });
+
+        }).catch((error) => {
+            console.error(error);
+        }).finally(() => {
+            this.setState({ isLoading: false })
+        });
+
+    // try{
+    //     AsyncStorage.setItem('token',"");
+    //     AsyncStorage.setItem('login',"");
+    //     global.login_data=false
+    // }
+    // catch(e)
+    // {
+    //     Toast.show("Login Failed")
+    // }
+    // Toast.show("Logged out successfully!")
+    // this.props.navigation.navigate("MobileLogin")
+
+}
+
   render() {
     return (
       <>
@@ -250,7 +290,10 @@ export class Header extends Component {
                   <hr className="m-0" />
                   <a
                     className="dropdown-item logout pb-0"
-                    href="https://dreamspos.dreamguystech.com/html/template/signin.html"
+                   onClick={()=>{
+                    this.logOut();
+                 
+                   }}
                   >
                     <img
                       src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/log-out.svg"
@@ -392,4 +435,9 @@ export class Header extends Component {
   }
 }
 
-export default Header;
+function Navigate(props) {
+  const abcd = useNavigate();
+  return <Header {...props} {...useParams()} navigate={abcd} />;
+}
+
+export default Navigate;

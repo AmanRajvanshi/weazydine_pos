@@ -1,10 +1,13 @@
 import { Component } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams,useLocation } from "react-router-dom";
 import logo from "../assets/images/main_logo.png";
 import login from "../assets/images/login.jpg";
 import Swal from "sweetalert2";
+import { AuthContext } from '../AuthContextProvider';
+
 
 class Login extends Component {
+  static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +21,9 @@ class Login extends Component {
     window.scrollTo(0, 0);
   }
 
-  mobileVerification = () => {
+  mobileVerify = () => {
     this.setState({ isLoading: true });
-    var phoneNumber = this.state.number;
+    var phoneNumber = this.state.phoneNumber;
     let rjx = /^[0]?[6789]\d{9}$/;
     let isValid = rjx.test(phoneNumber);
     if (!isValid) {
@@ -38,7 +41,7 @@ class Login extends Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          contact: this.state.number,
+          contact: phoneNumber,
           verification_type: "user",
           request_type: "send",
         }),
@@ -47,13 +50,14 @@ class Login extends Component {
         .then((json) => {
           if (json.msg === "ok") {
             // this.resend();
-            this.setState({ otpPage: true });
+            this.setState({ otpButton: true });
             Swal.fire({
               title: "OTP Sent",
               text: "OTP has been sent to your mobile number",
               icon: "success",
               confirmButtonText: "Ok",
             });
+            
           } else {
             Swal.fire({
               title: "Error",
@@ -72,6 +76,8 @@ class Login extends Component {
     }
   };
 
+
+
   otpVerification = () => {
     this.setState({ isLoadingOtp: true });
     fetch(global.api + "otp-verification", {
@@ -81,7 +87,7 @@ class Login extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        contact: this.state.number,
+        contact: this.state.phoneNumber,
         otp: this.state.otp,
         verification_type: "user",
       }),
@@ -89,16 +95,35 @@ class Login extends Component {
       .then((response) => response.json())
       .then((json) => {
         if (json.msg === "ok") {
-          global.token = json.token;
-          global.user = json.usr;
           Swal.fire({
             title: "Success",
             text: "Login Successfully",
             icon: "success",
             confirmButtonText: "Ok",
           });
-          const data = { token: json.token, user_id: json.usr };
-          localStorage.setItem("@auth_login", JSON.stringify(data));
+
+          global.vendor = json.usr;
+          global.token = json.token;
+          global.msg = "Welcome"
+
+          if (json.user_type == 'login') {
+            const data = { 'token': json.token, 'vendor_id': json.usr, "use_type": "done" }
+            localStorage.setItem("@auth_login", JSON.stringify(data));
+            global.msg = "Welcome Back"
+          }
+          else {
+            const data = { 'token': json.token, 'vendor_id': json.usr, "use_type": "steps" }
+            localStorage.setItem("@auth_login", JSON.stringify(data));
+
+            global.msg = "Welcome"
+          }
+
+          this.context.login("done",json.token);
+          const path=this.props.location.state?.path || "/";
+
+          this.props.navigate(path, { replace: true });
+
+         
         } else {
           Swal.fire({
             title: "Error!",
@@ -137,30 +162,14 @@ class Login extends Component {
                 <div className="login-logo">
                   <img src={logo} alt="img" />
                 </div>
-                <div className="login-userheading">
-                  <h3>Sign In</h3>
-                  <h4>Please login to your account</h4>
-                </div>
-                <div className="form-login">
-                  <label>Mobile Number</label>
-                  <div className="form-addons">
-                    <input
-                      type="tel"
-                      placeholder="Enter your mobile number"
-                      maxLength={10}
-                      value={this.state.phoneNumber}
-                      onChange={(e) =>
-                        this.setState({ phoneNumber: e.target.value })
-                      }
-                    />
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/mail.svg"
-                      alt="img"
-                    />
-                  </div>
-                </div>
+              
                 {this.state.otpButton ? (
                   <>
+                  <div className="login-userheading">
+                  <h3>Verify Contact Number</h3>
+                  <h4>Please login to your account</h4>
+                </div>
+                
                     <div className="form-login">
                       <label>OTP</label>
                       <div className="pass-group">
@@ -185,7 +194,7 @@ class Login extends Component {
                       <div
                         className="btn btn-login"
                         onClick={() => {
-                          this.otpVerify();
+                          this.otpVerification();
                         }}
                       >
                         Login
@@ -193,6 +202,30 @@ class Login extends Component {
                     </div>
                   </>
                 ) : (
+                  <>
+                    <div className="login-userheading">
+                  <h3>Sign In</h3>
+                  <h4>Please login to your account</h4>
+                </div>
+                <div className="form-login">
+                  <label>Mobile Number</label>
+                  <div className="form-addons">
+                    <input
+                      type="tel"
+                      placeholder="Enter your mobile number"
+                      maxLength={10}
+                      value={this.state.phoneNumber}
+                      onChange={(e) =>
+                        this.setState({ phoneNumber: e.target.value })
+                      }
+                    />
+                    <img
+                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/mail.svg"
+                      alt="img"
+                    />
+                  </div>
+                </div>
+            
                   <div className="form-login">
                     <div
                       className="btn btn-login"
@@ -203,6 +236,7 @@ class Login extends Component {
                       Send Otp
                     </div>
                   </div>
+                  </>
                 )}
               </div>
             </div>
@@ -218,7 +252,8 @@ class Login extends Component {
 
 function Navigate(props) {
   const abcd = useNavigate();
-  return <Login {...props} {...useParams()} navigate={abcd} />;
+  const location = useLocation();
+  return <Login {...props} {...useParams()} navigate={abcd} location={location} />;
 }
 
 export default (props) => <Navigate {...props} />;
