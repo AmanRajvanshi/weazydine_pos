@@ -16,6 +16,16 @@ export class Addproduct extends Component {
       newaddon: false,
     };
   }
+  componentDidMount() {
+    const user_data = JSON.parse(localStorage.getItem("@auth_login"));
+    if (user_data != null) {
+      console.log(user_data.token);
+      global.token = user_data.token;
+      global.user = user_data.user_id;
+    } else {
+      global.token = "";
+    }
+  }
 
   handleChange = (idx) => (e) => {
     const { name, value } = e.target;
@@ -34,11 +44,6 @@ export class Addproduct extends Component {
     };
     this.setState({
       rows: [...this.state.rows, item],
-    });
-  };
-  handleRemoveRow = () => {
-    this.setState({
-      rows: this.state.rows.slice(0, -1),
     });
   };
   handleRemoveSpecificRow = (idx) => () => {

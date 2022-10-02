@@ -18,31 +18,81 @@ class Login extends Component {
     window.scrollTo(0, 0);
   }
 
-  mobileVerify = () => {
-    const { phoneNumber } = this.state;
-    if (phoneNumber.length === 10) {
-      this.setState({ otp: "1234", otpButton: true });
+  mobileVerification = () => {
+    this.setState({ isLoading: true });
+    var phoneNumber = this.state.number;
+    let rjx = /^[0]?[6789]\d{9}$/;
+    let isValid = rjx.test(phoneNumber);
+    if (!isValid) {
+      toast.error("Please enter valid phone number");
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please enter valid mobile number",
-      });
+      fetch(global.api + "mobile-verification", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contact: this.state.number,
+          verification_type: "user",
+          request_type: "send",
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.msg === "ok") {
+            // this.resend();
+            this.setState({ otpPage: true });
+            toast.success("OTP sent successfully");
+          } else {
+            toast(json.msg);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isLoading: false });
+        });
     }
   };
 
-  otpVerify = () => {
-    const { otp } = this.state;
-    if (otp === "1234") {
-      this.props.navigate("/");
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please enter valid OTP",
+  otpVerification = () => {
+    this.setState({ isLoadingOtp: true });
+    fetch(global.api + "otp-verification", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contact: this.state.number,
+        otp: this.state.otp,
+        verification_type: "user",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.msg === "ok") {
+          global.token = json.token;
+          global.user = json.usr;
+          const data = { token: json.token, user_id: json.usr };
+          localStorage.setItem("@auth_login", JSON.stringify(data));
+          OneSignal.sendTag("id", "" + json.usr);
+          OneSignal.sendTag("account_type", "user-@aakasgfsusfd77232927ns");
+        } else {
+          toast.error(json.error);
+          this.setState({
+            otp: "",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isLoadingOtp: false });
       });
-      this.setState({ otp: "" });
-    }
   };
 
   revealOtp = () => {
