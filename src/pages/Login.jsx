@@ -15,7 +15,8 @@ class Login extends Component {
     this.state = {
       phoneNumber: "",
       otp: "",
-      otpButton: true,
+      otpButton: false,
+      heading: "Please login to your account",
     };
   }
 
@@ -48,7 +49,10 @@ class Login extends Component {
         .then((json) => {
           if (json.msg === "ok") {
             // this.resend();
-            this.setState({ otpButton: true });
+            this.setState({
+              otpButton: true,
+              heading: "Please enter the OTP sent to your mobile number",
+            });
             toast.success("OTP sent successfully");
           } else {
             toast.error(json.msg);
@@ -163,9 +167,14 @@ class Login extends Component {
                             />
                           </div>
 
-                          <div className="login-userheading">
+                          <div
+                            className="login-userheading"
+                            style={{
+                              marginBottom: "20px",
+                            }}
+                          >
                             <h3>Verify Contact Number</h3>
-                            <h4>Please login to your account</h4>
+                            <h4>{this.state.heading}</h4>
                           </div>
                           {this.state.otpButton ? (
                             <>
@@ -182,10 +191,6 @@ class Login extends Component {
                                 <span>{this.state.phoneNumber}</span>
                               </p>
                               <div className="form-login">
-                                <label>
-                                  Please enter the OTP sent to your mobile
-                                  number
-                                </label>
                                 <div className="pass-group d-flex justify-content-center my-3">
                                   <OtpInput
                                     value={this.state.otp}
@@ -213,7 +218,7 @@ class Login extends Component {
                                 </div>
                               </div>
                               <Timer
-                                seconds={3}
+                                seconds={30}
                                 minutes={0}
                                 resend={() => this.mobileVerify()}
                                 text={"Resend OTP in"}
