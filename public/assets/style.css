@@ -1727,7 +1727,7 @@ div#global-loader,
 }
 
 .page-wrapper {
-  margin: 0 0 0 85px;
+  margin: 0 0 0 95px;
   padding: 60px 0 0;
   position: relative;
   left: 0;
@@ -1983,7 +1983,9 @@ a:hover {
   }
 }
 .form-group input[type="text"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group input[type="email"]
+{
   border: 1px solid rgba(145, 158, 171, 0.32);
   height: 40px;
   width: 100%;
@@ -4316,7 +4318,7 @@ span.select-container.select-container--default.select-container--open {
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
   border-right: 1px solid #e8ebed;
-  width: 90px;
+  width: 100px;
 }
 @media (max-width: 991px) {
   .sidebar {
@@ -6168,8 +6170,8 @@ span.select-container.select-container--default.select-container--open {
   height: 100vh;
 }
 .login-wrapper .login-content {
-  width: 40%;
-  height: 100vh;
+  /* width: 40%; */
+  /* height: 100vh; */
   padding: 30px;
   overflow: auto;
   display: flex;
@@ -7912,4 +7914,27 @@ span.select-container.select-container--default.select-container--open {
   width: 20px;
   margin-right:10px;
   margin-top:0px
+}
+
+.Toastify__toast {
+  border: none !important;
+  border-radius: 15px !important;
+  background: #fff !important;
+  text-align: center !important;
+  width: 100% !important;
+  margin: 0 auto 10px !important;
+}
+.Toastify__toast-body {
+  color: #070710;
+  font-size: 15px;
+  padding-left: 20px;
+  line-height: 12px;
+  padding: 0px;
+  padding-top: 10px;
+  width: 100%;
+  font-weight: 400;
+}
+
+.Toastify__toast {
+  min-height: 50px !important;
 }

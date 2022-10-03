@@ -5,7 +5,7 @@ import { Modal } from "react-responsive-modal";
 import { RadioGroup, RadioButton } from "react-radio-buttons";
 import { BiRupee } from "react-icons/bi";
 
-export class Addproduct extends Component {
+export class Editproduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,8 +67,7 @@ export class Addproduct extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Product Add</h4>
-                  <h6>Create new product</h6>
+                  <h4>Edit Product</h4>
                 </div>
               </div>
               <div className="card">
@@ -323,7 +322,9 @@ export class Addproduct extends Component {
                           <div className="col-lg-12">
                             <a
                               className="btn btn-submit me-2"
-                              onClick={() => this.add()}
+                              onClick={() => {
+                                this.add();
+                              }}
                             >
                               Submit
                             </a>
@@ -487,4 +488,4 @@ class TableRows extends React.Component {
   }
 }
 
-export default Addproduct;
+export default Editproduct;
