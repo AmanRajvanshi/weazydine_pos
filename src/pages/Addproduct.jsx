@@ -4,8 +4,10 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { RadioGroup, RadioButton } from "react-radio-buttons";
 import { BiRupee } from "react-icons/bi";
-
+import { toast } from "react-toastify";
+import { AuthContext } from "../AuthContextProvider";
 export class Addproduct extends Component {
+  static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -14,18 +16,75 @@ export class Addproduct extends Component {
       variants_addons_div: false,
       rows: [{}],
       newaddon: false,
+      new_category_name:'',
+      category:[],
+      add_data:[],
+      addon_name:'',
+      addon_price:'',
+      object: [],
     };
   }
-  componentDidMount() {
-    const user_data = JSON.parse(localStorage.getItem("@auth_login"));
-    if (user_data != null) {
-      console.log(user_data.token);
-      global.token = user_data.token;
-      global.user = user_data.user_id;
-    } else {
-      global.token = "";
-    }
+ 
+  componentDidMount()
+{
+  this.fetchCategories ();
+  this.fetch_addon();
+}
+
+  fetchCategories = () => {
+    fetch(global.api + "fetch_vendor_category", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json.data)
+        if(json.data.length==0)
+        {
+          this.setState({open: true})
+        }
+        this.setState({ category: json.data });
+        this.setState({ is_loding: false });
+        return json;
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+     
+      });
+  };
+
+
+
+  fetch_addon = () => {
+    fetch(global.api + 'fetch_product_addon', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+      })
+    }).then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          toast.error(json.msg);
+        }
+        else {
+          this.setState({ add_data: json.data });
+        }
+
+        this.setState({ isLoading: false });
+        return json;
+      }).catch((error) => {
+        console.error(error);
+      });
   }
+
 
   add = () => {
     console.log(this.state.rows);
@@ -58,6 +117,186 @@ export class Addproduct extends Component {
     image.push(e.target.files[0]);
     this.setState({ images: image });
   };
+
+
+  add = () => {
+    if (this.state.new_category_name != "") {
+        fetch(global.api + 'create_category_vendor', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.context.token
+            },
+            body: JSON.stringify({
+                category_name: this.state.new_category_name,
+                status: 'active'
+            })
+        }).then((response) => response.json())
+            .then((json) => {
+                // console.warn(json)
+                if (!json.status) {
+                    var msg = json.msg;
+                    toast.error(msg);
+                }
+                else {
+                  this.setState({ open: false,new_category_name:'' });
+                  toast.success(json.msg)
+                  this.fetchCategories();
+                  
+
+                }
+                return json;
+            }).catch((error) => {
+                console.error(error);
+            }).finally(() => {
+                this.setState({ isloading: false })
+            });
+
+    }
+    else {
+        toast.error('Please add Category first!');
+    }
+}
+
+  create = () => {
+
+    let numberValidation = /^[0-9]+$/;
+    let isnumValid = numberValidation.test(this.state.market_price + this.state.our_price);
+
+    if (this.state.name == "" || this.state.market_price == "" || this.state.image == "" || this.state.our_price == "" || this.state.description == "") {
+        toast.error("All fields are required !");
+    }
+    else if (this.state.category == "") {
+        toast.error("Add category first !");
+    }
+    // else if (this.state.market_price<this.state.our_price) {
+    //     toast.error("Your price should be less than market price !");
+    // }
+
+    else if (this.state.c_id == "") {
+        toast.error("Category is required !");
+    }
+    else if (!isnumValid) {
+        toast.error("Price contains digits only!");
+    }
+    else if (!isnumValid) {
+        toast.error("Price contains digits only!");
+    }
+    else if (this.state.description == "") {
+        toast.error("Description is required !");
+    }
+    else {
+        this.setState({ isLoading: true });
+        if (this.state.image != '') {
+            var photo = {
+                uri: this.state.image,
+                type: 'image/jpg',
+                name: 'akash.jpg'
+            };
+
+        }
+        var form = new FormData();
+        form.append("product_name", this.state.name);
+        // form.append("token",global.token);
+        form.append("vendor_category_id", this.state.c_id);
+        form.append("market_price", this.state.market_price);
+        form.append("price", this.state.our_price);
+        form.append("description", this.state.description);
+        form.append("type", this.state.type);
+        form.append("product_img", photo);
+        form.append("is_veg", this.state.is_veg);
+        fetch(global.vendor_api + 'vendor_add_product', {
+            method: 'POST',
+            body: form,
+            headers: {
+                'Authorization': global.token 
+            },
+        }).then((response) => response.json())
+            .then((json) => {
+                // console.warn(json)
+                if (!json.status) {
+                    var msg = json.msg;
+                    toast.error(msg);
+                }
+                else {
+                    toast.error(json.msg)
+                    this.props.get_cat();
+                    this.props.get_product(0,1);
+
+                    this.props.navigation.navigate('ProductVariants', { product_id: json.data.id, variants: json.data.variants, addons: json.data.addons, refresh: true, });
+                    // this.props.navigation.navigate(this.props.back,{refresh:true})
+
+                }
+                return json;
+            }).catch((error) => {
+                console.error(error);
+            }).finally(() => {
+                this.setState({ isLoading: false })
+            });
+    }
+}
+
+
+create_addon = () => {
+
+  if (this.state.addon_name == '' || this.state.addon_price == '') {
+    toast.error("All field is required!");
+  }
+  else {
+    this.setState({ isLoading: true });
+    fetch(global.api + 'add_product_addon', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.context.token
+      },
+      body: JSON.stringify({
+        addon_name: this.state.addon_name,
+        addon_price: this.state.addon_price,
+      })
+    }).then((response) => response.json())
+      .then((json) => {
+        console.warn(json)
+        if (!json.status) {
+          toast.error(json.msg);
+        }
+        else {
+          this.fetch_addon();
+          this.setState({addon_name:'',addon_price:'',newaddon:false})
+          toast.success(json.msg);
+        }
+
+        return json;
+      }).catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
+handleAddon = (e) => {
+// to find out if it's checked or not; returns true or false
+const checked = e.target.checked;
+// to get the checked value
+const checkedValue = e.target.value;
+
+if(checked) {
+  if (this.state.object[checkedValue]) {
+    const object = this.state.object;
+    object[checkedValue] = false;
+    this.setState({ object });
+  }
+  else {
+    const object = this.state.object;
+    object[checkedValue] = true;
+    this.setState({ object });
+  }
+}
+else {
+}
+//then you can do with the value all you want to do with it.
+};
   render() {
     return (
       <>
@@ -77,7 +316,9 @@ export class Addproduct extends Component {
                     <div className="col-lg-3 col-sm-6 col-12">
                       <div className="form-group">
                         <label>Product Name</label>
-                        <input type="text" />
+                        <input type="text"  onChange={(e)=>{this.setState(
+                        {name:e.target.value}
+                      )}}/>
                       </div>
                     </div>
                     <div className="col-lg-3 col-sm-6 col-12">
@@ -100,22 +341,36 @@ export class Addproduct extends Component {
                             </a>
                           </div>
                         </div>
-                        <select className="select-container">
-                          <option>Choose Category</option>
-                          <option>Computers</option>
+                        <select  onChange={(e)=>{this.setState(
+                        {c_id:e.target.value}
+                      )}} className="select-container">
+                            {
+                              this.state.category.length>0?
+                                this.state.category.map((item,index)=>(
+                                  <option value={item.id}>{item.name}</option>
+                                ))
+                                :
+                                <></>
+
+                            }
+
                         </select>
                       </div>
                     </div>
                     <div className="col-lg-3 col-sm-6 col-12">
                       <div className="form-group">
                         <label>Market Price</label>
-                        <input type="text" />
+                        <input type="text" onChange={(e)=>{this.setState(
+                        {market_price:e.target.value}
+                      )}}/>
                       </div>
                     </div>
                     <div className="col-lg-3 col-sm-6 col-12">
                       <div className="form-group">
                         <label>Our Price</label>
-                        <input type="text" />
+                        <input onChange={(e)=>{this.setState(
+                        {our_price:e.target.value}
+                      )}} type="text" />
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -148,7 +403,9 @@ export class Addproduct extends Component {
                     <div className="col-lg-12">
                       <div className="form-group">
                         <label>Description</label>
-                        <textarea className="form-control" defaultValue={""} />
+                        <textarea  onChange={(e)=>{this.setState(
+                        {description:e.target.value}
+                      )}} className="form-control" defaultValue={""} />
                       </div>
                     </div>
                     <div className="col-lg-12">
@@ -286,18 +543,30 @@ export class Addproduct extends Component {
                         <h2 className="mb-3 py-2 underline">Addons</h2>
                         <div className="row">
                           <div className="col-mg-12">
-                            <div className="checkbox_addon">
-                              <input
-                                type="checkbox"
-                                id="addon"
-                                name="addon"
-                                value="Addon"
-                                className="form-check-input new_checkbox mr-4"
-                              />
-                              <label for="addon">
-                                Addon - <BiRupee /> 20
-                              </label>
-                            </div>
+                                {
+                                   this.state.add_data.length>0?
+                                  this.state.add_data.map((item, index) => {
+                                    return(
+                                      <div className="checkbox_addon">
+                                      <input
+                                        type="checkbox"
+                                        id={"addon"+item.id}
+                                        name="addon"
+                                        value={item.id}
+                                        onChange={this.handleAddon}
+                                        className="form-check-input new_checkbox mr-4"
+                                      />
+                                      <label for={"addon"+item.id}>
+                                        {item.addon_name} - <BiRupee /> {item.addon_price}
+                                      </label>
+                                    </div>
+                                    )
+                                  })
+                                  :
+                                  <>No Addon Found</>
+                                }
+
+                          
                             <div
                               style={{
                                 display: "flex",
@@ -380,15 +649,18 @@ export class Addproduct extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Category Name</label>
-                      <input type="text" />
+                      <input type="text" onChange={(e)=>{this.setState(
+                        {new_category_name:e.target.value}
+                      )}} />
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     <a
                       href="javascript:void(0);"
+                      onClick={()=>{this.add()}}
                       className="btn btn-submit me-2"
                     >
-                      Submit
+                      Add Category
                     </a>
                   </div>
                 </div>
@@ -417,21 +689,25 @@ export class Addproduct extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Addon Name</label>
-                      <input type="text" />
+                      <input type="text" onChange={(e)=>{this.setState(
+                        {addon_name:e.target.value})}} />
                     </div>
                   </div>
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Addon Price</label>
-                      <input type="text" />
+                      <input type="text" onChange={(e)=>{this.setState(
+                        {addon_price:e.target.value})}}/>
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     <a
+                     onClick={()=>{this.create_addon()}}
+                   
                       href="javascript:void(0);"
                       className="btn btn-submit me-2"
                     >
-                      Submit
+                      Add New Addon
                     </a>
                   </div>
                 </div>

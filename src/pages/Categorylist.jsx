@@ -4,15 +4,133 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import delete_icon from "../assets/images/icons/delete.svg";
 import edit_icon from "../assets/images/icons/edit.svg";
-
+import { AuthContext } from "../AuthContextProvider";
+import { toast } from "react-toastify";
 export class Categorylist extends Component {
+  static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       openedit: false,
+      is_loding:true,
+      category:[],
+      new_category_name:"",
     };
   }
+
+componentDidMount()
+{
+  this.fetchCategories ();
+}
+
+  fetchCategories = () => {
+    fetch(global.api + "fetch_vendor_category", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json.data)
+        this.setState({ category: json.data });
+        this.setState({ is_loding: false });
+        return json;
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+     
+      });
+  };
+
+
+  add = () => {
+    if (this.state.new_category_name != "") {
+        fetch(global.api + 'create_category_vendor', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.context.token
+            },
+            body: JSON.stringify({
+                category_name: this.state.new_category_name,
+                status: 'active'
+            })
+        }).then((response) => response.json())
+            .then((json) => {
+                // console.warn(json)
+                if (!json.status) {
+                    var msg = json.msg;
+                    toast.error(msg);
+                }
+                else {
+                  this.setState({ open: false,new_category_name:'' });
+                  toast.success(json.msg)
+                  this.fetchCategories();
+                  
+
+                }
+                return json;
+            }).catch((error) => {
+                console.error(error);
+            }).finally(() => {
+                this.setState({ isloading: false })
+            });
+
+    }
+    else {
+        toast.error('Please add Category first!');
+    }
+}
+
+
+
+edit =()=>{
+  //   alert("sfghsdf")
+    if(this.state.new_category_name!="")
+    { 
+      fetch(global.api+'edit_category', { 
+          method: 'POST',
+            headers: {    
+                Accept: 'application/json',  
+                  'Content-Type': 'application/json'  ,
+                  'Authorization': this.context.token
+                 }, 
+                  body: JSON.stringify({   
+                      name: this.state.new_category_name,
+                      category_id:this.state.category_id,
+                      status: this.state.status
+                          })}).then((response) => response.json())
+                          .then((json) => {
+                              // console.warn(json)
+                              if(!json.status)
+                              {
+                                  var msg=json.msg;
+                                  toast.success(msg);
+                              }
+                              else{
+                                this.setState({openedit: false,new_category_name:'' });
+                                toast.success(json.msg)
+                                this.fetchCategories();
+                              
+                              }
+                             return json;    
+                         }).catch((error) => {  
+                                 console.error(error);   
+                              }).finally(() => {
+                                 this.setState({isloading:false})
+                              });
+      
+    }
+    else{
+      toast.error('Please add Category first!');
+    }
+}
+
   render() {
     return (
       <>
@@ -42,7 +160,11 @@ export class Categorylist extends Component {
                   </a>
                 </div>
               </div>
+              {
+                (!this.state.is_loding) ? (
+              
               <div className="card">
+                {this.state.category.length>0?
                 <div className="card-body">
                   <div className="table-responsive">
                     <table className="table  datanew">
@@ -54,42 +176,53 @@ export class Categorylist extends Component {
                         </tr>
                       </thead>
                       <tbody>
+                        {
+                          this.state.category.map((item,index)=>(
                         <tr>
                           <td className="productimgname">
                             <a
                               href="javascript:void(0);"
                               className="product-img"
                             >
-                              <img
+                              {/* <img
                                 src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product1.jpg"
                                 alt="product"
-                              />
+                              /> */}
                             </a>
-                            <a href="javascript:void(0);">Macbook pro</a>
+                            <a href="javascript:void(0);">{item.name}</a>
                           </td>
-                          <td>12</td>
+                          <td>{item.products_count}</td>
                           <td>
                             <a
                               className="me-3"
                               onClick={() => {
-                                this.setState({ openedit: true });
+                                this.setState({ openedit: true,category_id:item.id,new_category_name:item.name});
                               }}
                             >
                               <img src={edit_icon} alt="img" />
                             </a>
-                            <a
+                            {/* <a
                               className="confirm-text"
                               href="javascript:void(0);"
                             >
                               <img src={delete_icon} alt="img" />
-                            </a>
+                            </a> */}
                           </td>
                         </tr>
+                          ))
+                        }
+
                       </tbody>
                     </table>
                   </div>
-                </div>
+                </div>:
+                <>No category Found</>
+  }
               </div>
+                )
+                :
+                <h2>Loading</h2>
+                            }
             </div>
           </div>
         </div>
@@ -113,15 +246,18 @@ export class Categorylist extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Category Name</label>
-                      <input type="text" />
+                      <input type="text" onChange={(e)=>{this.setState(
+                        {new_category_name:e.target.value}
+                      )}} />
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     <a
                       href="javascript:void(0);"
+                      onClick={()=>{this.add()}}
                       className="btn btn-submit me-2"
                     >
-                      Submit
+                      Add Category
                     </a>
                   </div>
                 </div>
@@ -149,15 +285,19 @@ export class Categorylist extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>Category Name</label>
-                      <input type="text" />
+                      <input type="text" onChange={(e)=>{this.setState(
+                        {new_category_name:e.target.value})}}
+                        value={this.state.new_category_name}
+                        />
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     <a
                       href="javascript:void(0);"
+                      onClick={()=>{this.edit()}}
                       className="btn btn-submit me-2"
                     >
-                      Submit
+                      Update Category
                     </a>
                   </div>
                 </div>

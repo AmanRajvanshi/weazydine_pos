@@ -39,11 +39,11 @@ export class App extends Component {
       this.get_profile(items.token);
       global.vendor = items.vendor_id;
       global.step = this.state.step;
-      global.msg = "Welcome Back";
+      // global.msg = "Welcome Back";
     } else {
       this.logout();
     }
-    toast.success(global.msg);
+    // toast.success(global.msg);
   }
 
   login = (step, token) => {

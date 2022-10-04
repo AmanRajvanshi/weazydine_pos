@@ -16,7 +16,8 @@ class Login extends Component {
       phoneNumber: "",
       otp: "",
       otpButton: false,
-      heading: "Please login to your account",
+      heading:"Log in",
+      subheading:'Continue to WeazyDine Dashboard',
     };
   }
 
@@ -49,10 +50,7 @@ class Login extends Component {
         .then((json) => {
           if (json.msg === "ok") {
             // this.resend();
-            this.setState({
-              otpButton: true,
-              heading: "Please enter the OTP sent to your mobile number",
-            });
+            this.setState({ otpButton: true,heading:'Verify OTP',subheading:'Please enter the OTP sent to your mobile number' });
             toast.success("OTP sent successfully");
           } else {
             toast.error(json.msg);
@@ -167,30 +165,28 @@ class Login extends Component {
                             />
                           </div>
 
-                          <div
-                            className="login-userheading"
-                            style={{
-                              marginBottom: "20px",
-                            }}
-                          >
-                            <h3>Verify Contact Number</h3>
-                            <h4>{this.state.heading}</h4>
+                          <div className="login-userheading">
+                            <h3>{this.state.heading}</h3>
+                            <h4>{this.state.subheading}</h4>
                           </div>
                           {this.state.otpButton ? (
                             <>
                               <p
                                 onClick={() => {
-                                  this.setState({ otpButton: false });
+                                  this.setState({   heading:"Log in",
+                                  subheading:'Continue to WeazyDine Dashboard', otpButton: false });
                                 }}
                                 style={{
                                   cursor: "pointer",
                                   textDecoration: "underline",
+                                  marginTop:-20
                                 }}
                               >
                                 Edit Mobile Number:{" "}
                                 <span>{this.state.phoneNumber}</span>
                               </p>
                               <div className="form-login">
+                               
                                 <div className="pass-group d-flex justify-content-center my-3">
                                   <OtpInput
                                     value={this.state.otp}
@@ -214,7 +210,7 @@ class Login extends Component {
                                     this.otpVerification();
                                   }}
                                 >
-                                  Login
+                                  Verify OTP
                                 </div>
                               </div>
                               <Timer
@@ -222,8 +218,9 @@ class Login extends Component {
                                 minutes={0}
                                 resend={() => this.mobileVerify()}
                                 text={"Resend OTP in"}
-                                buttonColor={"#eda332"}
+                                buttonColor={"#222"}
                                 background={"#fff"}
+                                ButtonText={"Didn't get the code? Resend OTP"}
                               />
                             </>
                           ) : (
@@ -243,8 +240,9 @@ class Login extends Component {
                                     }
                                   />
                                   <img
-                                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/mail.svg"
+                                    src="https://img.icons8.com/ios/50/000000/phone.png"
                                     alt="img"
+                                    style={{width:25,height:25,marginTop:-8}}
                                   />
                                 </div>
                               </div>
@@ -255,7 +253,7 @@ class Login extends Component {
                                     this.mobileVerify();
                                   }}
                                 >
-                                  Send Otp
+                                  Continue
                                 </div>
                               </div>
                             </>

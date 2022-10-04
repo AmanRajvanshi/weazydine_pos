@@ -15,15 +15,17 @@ export class Productlist extends Component {
       products: [],
       active_cat: 0,
       is_loding: true,
+      product_loding: true,
     };
   }
 
   componentDidMount() {
     this.fetchCategories();
+    this.fetchProducts(0, 1);
   }
 
   active_cat = (id) => {
-    this.setState({ active_cat: id });
+    this.setState({ active_cat: id,product_loding:true });
     this.fetchProducts(id, 1);
   };
 
@@ -54,7 +56,7 @@ export class Productlist extends Component {
             this.setState({ products: json.data });
           }
         }
-        this.setState({ isloading: false, load_data: false });
+        this.setState({ product_loding: false, load_data: false });
         return json;
       })
       .catch((error) => {
@@ -78,7 +80,7 @@ export class Productlist extends Component {
       .then((json) => {
         // console.warn(json.data)
         this.setState({ category: json.data });
-        this.fetchProducts(0, 1);
+       
         return json;
       })
       .catch((error) => console.error(error))
@@ -93,10 +95,7 @@ export class Productlist extends Component {
         <Header />
         <div className="page-wrapper">
           <div className="content">
-            <Category
-              category={this.state.category}
-              fetch_product={this.active_cat}
-            />
+           
             <div className="page-header">
               <div className="page-title">
                 <h4>Product List</h4>
@@ -113,7 +112,17 @@ export class Productlist extends Component {
                 </Link>
               </div>
             </div>
-            <div className="card">
+
+            <Category
+              category={this.state.category}
+              fetch_product={this.active_cat}
+            />
+
+{
+  !this.state.product_loding?
+     <div className="card">
+              {
+                this.state.products.length > 0 ? 
               <div className="card-body">
                 <div className="table-responsive">
                   <table className="table  datanew">
@@ -122,60 +131,91 @@ export class Productlist extends Component {
                         <th>Product Name</th>
                         <th>Market Price</th>
                         <th>Our Price</th>
+                        <th>Category</th>
+                        <th>Veg/NonVeg</th>
                         <th>Status</th>
                         <th style={{ textAlign: "end" }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="productimgname">
-                          <Link to="/productdetails/1" className="product-img">
-                            <img
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/product/product2.jpg"
-                              alt="product"
-                            />
-                          </Link>
-                          <Link to="/productdetails/1">Orange</Link>
-                        </td>
-                        <td>
-                          <BiRupee />
-                          12
-                        </td>
-                        <td>
-                          <BiRupee />
-                          10
-                        </td>
-                        <td>
-                          <div className="status-toggle">
-                            <input
-                              type="checkbox"
-                              id="status_1"
-                              className="check"
-                              isChecked
-                            />
-                            <label
-                              htmlFor="status_1"
-                              className="checktoggle"
-                            ></label>
-                          </div>
-                        </td>
-                        <td style={{ textAlign: "end" }}>
-                          <a className="me-3">
-                            <img src={edit_icon} alt="img" />
-                          </a>
-                          <a
-                            className="confirm-text"
-                            href="javascript:void(0);"
-                          >
-                            <img src={delete_icon} alt="img" />
-                          </a>
-                        </td>
-                      </tr>
+                      {
+                        this.state.products.map((item, index) => {
+                          return(
+                            <tr>
+                            <td className="productimgname">
+                              <Link to="/productdetails/1" className="product-img">
+                                <img
+                                  src={item.product_img}
+                                  alt="product"
+                                />
+                              </Link>
+                              <Link to="/productdetails/1">{item.product_name}</Link>
+                            </td>
+                            <td>
+                              <BiRupee />
+                              {item.market_price}
+                            </td>
+                            <td>
+                              <BiRupee />
+                              {item.our_price}
+                            </td>
+                            <td>
+                              {
+                                item.category.name
+                              }
+                            </td>
+                            <td>
+                              {
+                                (item.is_veg)?
+                                <>Veg</>
+                                :
+                                <> Non-Veg</>
+                              }
+                            </td>
+                           
+                            <td>
+                              <div className="status-toggle">
+                                <input
+                                  type="checkbox"
+                                  id="status_1"
+                                  className="check"
+                                  isChecked
+                                />
+                                <label
+                                  htmlFor="status_1"
+                                  className="checktoggle"
+                                ></label>
+                              </div>
+                            </td>
+                            <td style={{ textAlign: "end" }}>
+                              <a className="me-3">
+                                <img src={edit_icon} alt="img" />
+                              </a>
+                              <a
+                                className="confirm-text"
+                                href="javascript:void(0);"
+                              >
+                                <img src={delete_icon} alt="img" />
+                              </a>
+                            </td>
+                          </tr>
+                          )
+                        })
+                      }
+                     
                     </tbody>
                   </table>
                 </div>
               </div>
+              :
+              <h4>No Products Found</h4>
+            }
+           
             </div>
+            :
+            <h3>Loading</h3>
+          }
+           
           </div>
         </div>
       </div>
@@ -207,7 +247,7 @@ class Category extends Component {
                   }}
                 >
                   <div className="product-details">
-                    <h6>{item.name}</h6>
+                    <h6>{item.name}({item.products_count}) </h6>
                   </div>
                 </li>
               );
