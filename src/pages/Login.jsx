@@ -16,8 +16,8 @@ class Login extends Component {
       phoneNumber: "",
       otp: "",
       otpButton: false,
-      heading:"Log in",
-      subheading:'Continue to WeazyDine Dashboard',
+      heading: "Log in",
+      subheading: "Continue to WeazyDine Dashboard",
     };
   }
 
@@ -50,7 +50,11 @@ class Login extends Component {
         .then((json) => {
           if (json.msg === "ok") {
             // this.resend();
-            this.setState({ otpButton: true,heading:'Verify OTP',subheading:'Please enter the OTP sent to your mobile number' });
+            this.setState({
+              otpButton: true,
+              heading: "Verify OTP",
+              subheading: "Please enter the OTP sent to your mobile number",
+            });
             toast.success("OTP sent successfully");
           } else {
             toast.error(json.msg);
@@ -67,62 +71,67 @@ class Login extends Component {
 
   otpVerification = () => {
     this.setState({ isLoadingOtp: true });
-    fetch(global.api + "otp-verification", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contact: this.state.phoneNumber,
-        otp: this.state.otp,
-        verification_type: "user",
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.msg === "ok") {
-          toast.success("OTP verified successfully");
-          global.vendor = json.usr;
-          global.token = json.token;
-          global.msg = "Welcome";
-
-          if (json.user_type == "login") {
-            const data = {
-              token: json.token,
-              vendor_id: json.usr,
-              use_type: "done",
-            };
-            localStorage.setItem("@auth_login", JSON.stringify(data));
-            global.msg = "Welcome Back";
-          } else {
-            const data = {
-              token: json.token,
-              vendor_id: json.usr,
-              use_type: "steps",
-            };
-            localStorage.setItem("@auth_login", JSON.stringify(data));
-
+    if (this.state.otp === "") {
+      toast.error("OTP is required");
+      this.setState({ isLoadingOtp: false });
+    } else {
+      fetch(global.api + "otp-verification", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contact: this.state.phoneNumber,
+          otp: this.state.otp,
+          verification_type: "vendor",
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.msg === "ok") {
+            toast.success("OTP verified successfully");
+            global.vendor = json.usr;
+            // global.token = json.token;
             global.msg = "Welcome";
+
+            if (json.user_type == "login") {
+              const data = {
+                token: json.token,
+                vendor_id: json.usr,
+                use_type: "done",
+              };
+              localStorage.setItem("@auth_login", JSON.stringify(data));
+              global.msg = "Welcome Back";
+            } else {
+              const data = {
+                token: json.token,
+                vendor_id: json.usr,
+                use_type: "steps",
+              };
+              localStorage.setItem("@auth_login", JSON.stringify(data));
+
+              global.msg = "Welcome";
+            }
+
+            this.context.login("done", json.token);
+            const path = this.props.location.state?.path || "/";
+
+            this.props.navigate(path, { replace: true });
+          } else {
+            toast.error(json.error);
+            this.setState({
+              otp: "",
+            });
           }
-
-          this.context.login("done", json.token);
-          const path = this.props.location.state?.path || "/";
-
-          this.props.navigate(path, { replace: true });
-        } else {
-          toast.error(json.msg);
-          this.setState({
-            otp: "",
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        this.setState({ isLoadingOtp: false });
-      });
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isLoadingOtp: false });
+        });
+    }
   };
 
   revealOtp = () => {
@@ -173,20 +182,23 @@ class Login extends Component {
                             <>
                               <p
                                 onClick={() => {
-                                  this.setState({   heading:"Log in",
-                                  subheading:'Continue to WeazyDine Dashboard', otpButton: false });
+                                  this.setState({
+                                    heading: "Log in",
+                                    subheading:
+                                      "Continue to WeazyDine Dashboard",
+                                    otpButton: false,
+                                  });
                                 }}
                                 style={{
                                   cursor: "pointer",
                                   textDecoration: "underline",
-                                  marginTop:-20
+                                  marginTop: -20,
                                 }}
                               >
                                 Edit Mobile Number:{" "}
                                 <span>{this.state.phoneNumber}</span>
                               </p>
                               <div className="form-login">
-                               
                                 <div className="pass-group d-flex justify-content-center my-3">
                                   <OtpInput
                                     value={this.state.otp}
@@ -242,7 +254,11 @@ class Login extends Component {
                                   <img
                                     src="https://img.icons8.com/ios/50/000000/phone.png"
                                     alt="img"
-                                    style={{width:25,height:25,marginTop:-8}}
+                                    style={{
+                                      width: 25,
+                                      height: 25,
+                                      marginTop: -8,
+                                    }}
                                   />
                                 </div>
                               </div>

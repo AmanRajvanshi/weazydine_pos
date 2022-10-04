@@ -2,70 +2,58 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Header from "../othercomponent/Header";
 import { BiRupee } from "react-icons/bi";
-
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
+import { Bars } from "react-loader-spinner";
 import { AuthContext } from "../AuthContextProvider";
 import moment from "moment";
 
 class Orderlist extends Component {
   static contextType = AuthContext;
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       data: [],
       is_loading: true,
       load_data: false,
       page: 1,
-
-    }
-
+    };
   }
   componentDidMount() {
     this.fetch_order(1);
   }
-    fetch_order = (page_id) => {
-
-      fetch(global.api + 'get_orders_vendor', {
-          method: 'POST',
-          headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': this.context.token,
-          },
-          body: JSON.stringify({
-              page: page_id
-
-          })
-      }).then((response) => response.json())
-          .then((json) => {
-              if (!json.status) {
-
-
-              }
-              else {
-                  // var refresh = setInterval(() => {
-                  //     this.fetch_order(1);
-                  // }, 20000);
-                  this.setState({ data: json.data.data });
-                  // if (json.data.data.length >= 0) {
-                  //     clearInterval(refresh);
-                  // }
-                  // this.props.navigation.navigate("More")
-
-              }
-              this.setState({ is_loading: false })
-              return json;
-          }).catch((error) => {
-              console.error(error);
-          }).finally(() => {
-           
-
-          });
-
-
-
-  }
+  fetch_order = (page_id) => {
+    fetch(global.api + "get_orders_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        page: page_id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+        } else {
+          // var refresh = setInterval(() => {
+          //     this.fetch_order(1);
+          // }, 20000);
+          console.log(json.data);
+          this.setState({ data: json.data.data });
+          // if (json.data.data.length >= 0) {
+          //     clearInterval(refresh);
+          // }
+          // this.props.navigation.navigate("More")
+        }
+        this.setState({ is_loading: false });
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  };
 
   render() {
     return (
@@ -92,63 +80,177 @@ class Orderlist extends Component {
                           Home
                         </a>
                       </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                        >
+                          Pending
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                        >
+                          Confirmed
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                        >
+                          OnGoing
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                        >
+                          Completed
+                        </a>
+                      </li>
                     </ul>
                   </div>
                 </div>
               </section>
             </div>
-            {
-              (!this.state.is_loading)?
-<div className="card">
-  {
-    this.state.data.length>0?
-             <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table  datanew">
-                    <thead>
-                      <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Order Price</th>
-                        <th>Date</th>
-                        <th>Order Type</th>
-                        <th>Status</th>
-                        <th style={{ textAlign: "end" }}>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        this.state.data.map((item, index) => (
+            {!this.state.is_loading ? (
+              <div className="card">
+                {this.state.data.length > 0 ? (
+                  <div className="card-body">
+                    <div className="table-responsive">
+                      <table className="table  datanew">
+                        <thead>
                           <tr>
-                          <Link to="/orderdetails">
-                            <td>{item.order_code}</td>
-                          </Link>
-                          <td>{item.user.name}</td>
-                          <td>{item.total_amount}</td>
-                          <td>{item.created_at}</td>
-                          <td>{ (item.order_type != 'TakeAway' || item.order_type != 'Delivery')?
-                          <>Dine-In</>:
-                          <>{item.order_type}</>
-                        }</td>
-                          <td>{item.order_status}</td>
-                          <td style={{ display: "flex", justifyContent: "end" }}>
-                            View
-                          </td>
-                        </tr>
-                        ))
-                      }
-                     
-                    </tbody>
-                  </table>
-                </div>
+                            <th>S.no</th>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Order Price</th>
+                            <th>Date</th>
+                            <th>Order Type</th>
+                            <th>Status</th>
+                            <th style={{ textAlign: "end" }}>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.data.map((item, index) => (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item.order_code}</td>
+                              <td>{item.user.name}</td>
+                              <td>
+                                <BiRupee />
+                                {item.total_amount}
+                              </td>
+                              <td>
+                                {moment(item.created_at).format("llll")}
+                                {}
+                              </td>
+                              <td>
+                                {item.order_type != "TakeAway" ||
+                                item.order_type != "Delivery" ? (
+                                  <>Dine-In</>
+                                ) : (
+                                  <>{item.order_type}</>
+                                )}
+                              </td>
+                              <td>
+                                {item.order_status == "Pending" ? (
+                                  <span
+                                    style={{
+                                      // color: {item.order_status == "Pending"?"red":{item.order_status == "Pending"?}"green"},
+                                      color: "red",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    {item.order_status}
+                                  </span>
+                                ) : item.order_status == "Confirmed" ? (
+                                  <span
+                                    style={{
+                                      color: "#eda332",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    {item.order_status}
+                                  </span>
+                                ) : item.order_status == "ongoing" ? (
+                                  <span
+                                    style={{
+                                      color: "#eda332",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    {item.order_status}
+                                  </span>
+                                ) : item.order_status == "completed" ? (
+                                  <span
+                                    style={{
+                                      color: "green",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    {item.order_status}
+                                  </span>
+                                ) : (
+                                  <span className="badge bg-danger">
+                                    {item.status}
+                                  </span>
+                                )}
+                              </td>
+                              <td
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "end",
+                                }}
+                              >
+                                <Link to={"/orderdetails/" + item.order_code}>
+                                  <button
+                                    className="btn btn-primary"
+                                    style={{
+                                      marginRight: "10px",
+                                      padding: "2px 6px",
+                                    }}
+                                  >
+                                    <i className="fa fa-eye"></i>
+                                  </button>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ) : (
+                  <>no data found</>
+                )}
               </div>
-              :
-              <>no data found</>
-                          }
-            </div>:
-            <>No Loading</>
-            }
-            
+            ) : (
+              <div
+                className="main_loader"
+                style={{
+                  height: "60vh",
+                }}
+              >
+                <Bars
+                  height="80"
+                  width="80"
+                  color="#eda332"
+                  ariaLabel="bars-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

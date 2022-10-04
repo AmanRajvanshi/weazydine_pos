@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Header from "../othercomponent/Header";
 import { AuthContext } from "../AuthContextProvider";
+import { Bars } from "react-loader-spinner";
 class Pos extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -9,7 +10,7 @@ class Pos extends Component {
       category: [],
       products: [],
       active_cat: 0,
-      is_loding: true,
+      isloading: true,
     };
   }
 
@@ -49,7 +50,7 @@ class Pos extends Component {
             this.setState({ products: json.data });
           }
         }
-        this.setState({ isloading: false, load_data: false });
+        // this.setState({ isloading: false, load_data: false });
         return json;
       })
       .catch((error) => {
@@ -87,40 +88,54 @@ class Pos extends Component {
       <>
         <div className="main-wrappers">
           <Header />
-          <div className="page-wrapper" id="sidebar">
-            <div className="content">
-              <div>
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Search Here...."
-                  style={{
-                    width: "100%",
-                    height: "40px",
-                    borderRadius: "5px",
-                    border: "1px solid #ccc",
-                    padding: "0 10px",
-                    position: "relative",
-                    margin: "10px 0 30px",
-                  }}
-                />
-              </div>
-              <Category
-                category={this.state.category}
-                fetch_product={this.active_cat}
+          {this.state.isloading ? (
+            <div className="main_loader">
+              <Bars
+                height="80"
+                width="80"
+                color="#eda332"
+                ariaLabel="bars-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
               />
-              <div className="row">
-                <div className="col-lg-8 col-sm-12 tabs_wrapper">
-                  <Products data={this.state.products} />
+            </div>
+          ) : (
+            <div className="page-wrapper" id="sidebar">
+              <div className="content">
+                <div>
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Search Here...."
+                    style={{
+                      width: "100%",
+                      height: "40px",
+                      borderRadius: "5px",
+                      border: "1px solid #ccc",
+                      padding: "0 10px",
+                      position: "relative",
+                      margin: "10px 0 30px",
+                    }}
+                  />
                 </div>
+                <Category
+                  category={this.state.category}
+                  fetch_product={this.active_cat}
+                />
+                <div className="row">
+                  <div className="col-lg-8 col-sm-12 tabs_wrapper">
+                    <Products data={this.state.products} />
+                  </div>
 
-                <div className="col-lg-4 col-sm-12 sidebar_scroll">
-                  <PosAdd />
+                  <div className="col-lg-4 col-sm-12 sidebar_scroll">
+                    <PosAdd />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </>
     );

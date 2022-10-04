@@ -5,6 +5,7 @@ import { BiRupee } from "react-icons/bi";
 import delete_icon from "../assets/images/icons/delete.svg";
 import edit_icon from "../assets/images/icons/edit.svg";
 import { AuthContext } from "../AuthContextProvider";
+import { Bars } from "react-loader-spinner";
 
 export class Productlist extends Component {
   static contextType = AuthContext;
@@ -15,7 +16,6 @@ export class Productlist extends Component {
       products: [],
       active_cat: 0,
       is_loding: true,
-      product_loding: true,
     };
   }
 
@@ -25,7 +25,7 @@ export class Productlist extends Component {
   }
 
   active_cat = (id) => {
-    this.setState({ active_cat: id,product_loding:true });
+    this.setState({ active_cat: id, product_loding: true });
     this.fetchProducts(id, 1);
   };
 
@@ -56,14 +56,13 @@ export class Productlist extends Component {
             this.setState({ products: json.data });
           }
         }
-        this.setState({ product_loding: false, load_data: false });
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {
-        this.setState({ isloading: false });
+        this.setState({ is_loding: false });
       });
   };
 
@@ -80,144 +79,136 @@ export class Productlist extends Component {
       .then((json) => {
         // console.warn(json.data)
         this.setState({ category: json.data });
-       
+
         return json;
       })
       .catch((error) => console.error(error))
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
+      .finally(() => {});
   };
 
   render() {
     return (
       <div className="main-wrapper">
         <Header />
-        <div className="page-wrapper">
-          <div className="content">
-           
-            <div className="page-header">
-              <div className="page-title">
-                <h4>Product List</h4>
-                <h6>Manage your products</h6>
-              </div>
-              <div className="page-btn">
-                <Link to="/addproduct" className="btn btn-added">
-                  <img
-                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                    alt="img"
-                    className="me-1"
-                  />
-                  Add New Product
-                </Link>
-              </div>
-            </div>
 
-            <Category
-              category={this.state.category}
-              fetch_product={this.active_cat}
+        {this.state.is_loding ? (
+          <div className="main_loader">
+            <Bars
+              height="80"
+              width="80"
+              color="#eda332"
+              ariaLabel="bars-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
             />
-
-{
-  !this.state.product_loding?
-     <div className="card">
-              {
-                this.state.products.length > 0 ? 
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table  datanew">
-                    <thead>
-                      <tr>
-                        <th>Product Name</th>
-                        <th>Market Price</th>
-                        <th>Our Price</th>
-                        <th>Category</th>
-                        <th>Veg/NonVeg</th>
-                        <th>Status</th>
-                        <th style={{ textAlign: "end" }}>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        this.state.products.map((item, index) => {
-                          return(
-                            <tr>
-                            <td className="productimgname">
-                              <Link to="/productdetails/1" className="product-img">
-                                <img
-                                  src={item.product_img}
-                                  alt="product"
-                                />
-                              </Link>
-                              <Link to="/productdetails/1">{item.product_name}</Link>
-                            </td>
-                            <td>
-                              <BiRupee />
-                              {item.market_price}
-                            </td>
-                            <td>
-                              <BiRupee />
-                              {item.our_price}
-                            </td>
-                            <td>
-                              {
-                                item.category.name
-                              }
-                            </td>
-                            <td>
-                              {
-                                (item.is_veg)?
-                                <>Veg</>
-                                :
-                                <> Non-Veg</>
-                              }
-                            </td>
-                           
-                            <td>
-                              <div className="status-toggle">
-                                <input
-                                  type="checkbox"
-                                  id="status_1"
-                                  className="check"
-                                  isChecked
-                                />
-                                <label
-                                  htmlFor="status_1"
-                                  className="checktoggle"
-                                ></label>
-                              </div>
-                            </td>
-                            <td style={{ textAlign: "end" }}>
-                              <a className="me-3">
-                                <img src={edit_icon} alt="img" />
-                              </a>
-                              <a
-                                className="confirm-text"
-                                href="javascript:void(0);"
-                              >
-                                <img src={delete_icon} alt="img" />
-                              </a>
-                            </td>
-                          </tr>
-                          )
-                        })
-                      }
-                     
-                    </tbody>
-                  </table>
+          </div>
+        ) : (
+          <div className="page-wrapper">
+            <div className="content">
+              <div className="page-header">
+                <div className="page-title">
+                  <h4>Product List</h4>
+                  <h6>Manage your products</h6>
+                </div>
+                <div className="page-btn">
+                  <Link to="/addproduct" className="btn btn-added">
+                    <img
+                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
+                      alt="img"
+                      className="me-1"
+                    />
+                    Add New Product
+                  </Link>
                 </div>
               </div>
-              :
-              <h4>No Products Found</h4>
-            }
-           
+              <Category
+                category={this.state.category}
+                fetch_product={this.active_cat}
+              />
+              <div className="card">
+                {this.state.products.length > 0 ? (
+                  <div className="card-body">
+                    <div className="table-responsive">
+                      <table className="table  datanew">
+                        <thead>
+                          <tr>
+                            <th>Product Name</th>
+                            <th>Market Price</th>
+                            <th>Our Price</th>
+                            <th>Category</th>
+                            <th>Veg/NonVeg</th>
+                            <th>Status</th>
+                            <th style={{ textAlign: "end" }}>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.products.map((item, index) => {
+                            return (
+                              <tr>
+                                <td className="productimgname">
+                                  <Link
+                                    to="/productdetails/1"
+                                    className="product-img"
+                                  >
+                                    <img src={item.product_img} alt="product" />
+                                  </Link>
+                                  <Link to="/productdetails/1">
+                                    {item.product_name}
+                                  </Link>
+                                </td>
+                                <td>
+                                  <BiRupee />
+                                  {item.market_price}
+                                </td>
+                                <td>
+                                  <BiRupee />
+                                  {item.our_price}
+                                </td>
+                                <td>{item.category.name}</td>
+                                <td>
+                                  {item.is_veg ? <>Veg</> : <> Non-Veg</>}
+                                </td>
+
+                                <td>
+                                  <div className="status-toggle">
+                                    <input
+                                      type="checkbox"
+                                      id="status_1"
+                                      className="check"
+                                      isChecked
+                                    />
+                                    <label
+                                      htmlFor="status_1"
+                                      className="checktoggle"
+                                    ></label>
+                                  </div>
+                                </td>
+                                <td style={{ textAlign: "end" }}>
+                                  <a className="me-3">
+                                    <img src={edit_icon} alt="img" />
+                                  </a>
+                                  <a
+                                    className="confirm-text"
+                                    href="javascript:void(0);"
+                                  >
+                                    <img src={delete_icon} alt="img" />
+                                  </a>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ) : (
+                  <h4>No Products Found</h4>
+                )}
+              </div>
             </div>
-            :
-            <h3>Loading</h3>
-          }
-           
           </div>
-        </div>
+        )}
       </div>
     );
   }
@@ -247,7 +238,9 @@ class Category extends Component {
                   }}
                 >
                   <div className="product-details">
-                    <h6>{item.name}({item.products_count}) </h6>
+                    <h6>
+                      {item.name}({item.products_count}){" "}
+                    </h6>
                   </div>
                 </li>
               );

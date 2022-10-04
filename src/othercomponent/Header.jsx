@@ -11,13 +11,17 @@ export class Header extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log(this.context.token);
+  }
+
   logOut = () => {
     fetch(global.api + "logout_vendor", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: global.token,
+        Authorization: this.context.token,
       },
       body: JSON.stringify({}),
     })
@@ -263,7 +267,7 @@ export class Header extends Component {
                       <span className="status online" />
                     </span>
                     <div className="profilesets">
-                      <h6>{this.context.user.name}</h6>
+                      {/* <h6>{this.context.user.name}</h6> */}
                       <h5>Admin</h5>
                     </div>
                   </div>
@@ -422,6 +426,18 @@ export class Header extends Component {
                   >
                     <i className="fa-solid fa-list"></i>
                     {this.state.sidebarText ? <span>Category List</span> : ""}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    id="sidebar_text"
+                    className={({ isActive }) =>
+                      isActive ? "active" : "not-active"
+                    }
+                    to="/dineinlisting"
+                  >
+                    <i className="fa-solid fa-table"></i>
+                    {this.state.sidebarText ? <span>Dine In </span> : ""}
                   </NavLink>
                 </li>
               </ul>

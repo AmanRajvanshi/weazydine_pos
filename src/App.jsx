@@ -19,6 +19,7 @@ import Editproduct from "./pages/Editproduct.jsx";
 import Editprofile from "./pages/Editprofile.jsx";
 import { toast, ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DineinList from "./pages/DineinList.jsx";
 
 global.api = "https://weazydine.healthyrabbit.in/api/";
 export class App extends Component {
@@ -63,7 +64,6 @@ export class App extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (json.message == "Unauthenticated.") {
           this.logout();
         }
@@ -172,7 +172,7 @@ export class App extends Component {
                 />
                 <Route
                   exact
-                  path="/orderdetails"
+                  path="/orderdetails/:id"
                   element={
                     <RequireAuth>
                       <Orderdetails />
@@ -181,7 +181,7 @@ export class App extends Component {
                 />
                 <Route
                   exact
-                  path="/tableorderdetails"
+                  path="/tableorderdetails/:id"
                   element={
                     <RequireAuth>
                       <TableOrderDetails />
@@ -212,6 +212,15 @@ export class App extends Component {
                   element={
                     <RequireAuth>
                       <Editprofile />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  exact
+                  path="/dineinlisting"
+                  element={
+                    <RequireAuth>
+                      <DineinList />
                     </RequireAuth>
                   }
                 />
