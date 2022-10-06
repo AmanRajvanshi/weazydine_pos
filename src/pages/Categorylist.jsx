@@ -7,6 +7,7 @@ import edit_icon from "../assets/images/icons/edit.svg";
 import { AuthContext } from "../AuthContextProvider";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
+import Swal from "sweetalert2";
 
 export class Categorylist extends Component {
   static contextType = AuthContext;
@@ -18,6 +19,7 @@ export class Categorylist extends Component {
       is_loding: true,
       category: [],
       new_category_name: "",
+      is_buttonloding: false,
     };
   }
 
@@ -47,6 +49,7 @@ export class Categorylist extends Component {
 
   add = () => {
     if (this.state.new_category_name != "") {
+      this.setState({ is_buttonloding: true });
       fetch(global.api + "create_category_vendor", {
         method: "POST",
         headers: {
@@ -76,7 +79,7 @@ export class Categorylist extends Component {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ isloading: false });
+          this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
       toast.error("Please add Category first!");
@@ -86,6 +89,7 @@ export class Categorylist extends Component {
   edit = () => {
     //   alert("sfghsdf")
     if (this.state.new_category_name != "") {
+      this.setState({ is_buttonloding: true });
       fetch(global.api + "edit_category", {
         method: "POST",
         headers: {
@@ -116,11 +120,45 @@ export class Categorylist extends Component {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ isloading: false });
+          this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
       toast.error("Please add Category first!");
     }
+  };
+
+  delete = (id, name) => {
+    console.warn(id);
+    fetch(global.api + "update_category_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        category_id: id,
+        category_name: name,
+        category_status: "delete",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          // Toast.show(msg);
+        } else {
+          toast.success("Category deleted");
+          this.fetchCategories();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
   };
 
   render() {
@@ -194,12 +232,26 @@ export class Categorylist extends Component {
                                   >
                                     <img src={edit_icon} alt="img" />
                                   </a>
-                                  {/* <a
-                              className="confirm-text"
-                              href="javascript:void(0);"
-                            >
-                              <img src={delete_icon} alt="img" />
-                            </a> */}
+                                  <a
+                                    className="confirm-text"
+                                    onClick={() => {
+                                      Swal.fire({
+                                        title: "Are you sure?",
+                                        text: "You won't be able to revert this!",
+                                        icon: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#3085d6",
+                                        cancelButtonColor: "#d33",
+                                        confirmButtonText: "Yes, delete it!",
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          this.delete(item.id, item.name);
+                                        }
+                                      });
+                                    }}
+                                  >
+                                    <img src={delete_icon} alt="img" />
+                                  </a>
                                 </td>
                               </tr>
                             ))}
@@ -244,15 +296,31 @@ export class Categorylist extends Component {
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
-                    <a
-                      href="javascript:void(0);"
-                      onClick={() => {
-                        this.add();
-                      }}
-                      className="btn btn-submit me-2"
-                    >
-                      Add Category
-                    </a>
+                    {this.state.is_buttonloding ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Adding
+                      </button>
+                    ) : (
+                      <a
+                        href="javascript:void(0);"
+                        onClick={() => {
+                          this.add();
+                        }}
+                        className="btn btn-submit me-2"
+                      >
+                        Add Category
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -289,15 +357,31 @@ export class Categorylist extends Component {
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
-                    <a
-                      href="javascript:void(0);"
-                      onClick={() => {
-                        this.edit();
-                      }}
-                      className="btn btn-submit me-2"
-                    >
-                      Update Category
-                    </a>
+                    {this.state.is_buttonloding ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      <a
+                        href="javascript:void(0);"
+                        onClick={() => {
+                          this.edit();
+                        }}
+                        className="btn btn-submit me-2"
+                      >
+                        Update Category
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

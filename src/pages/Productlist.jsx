@@ -6,7 +6,9 @@ import delete_icon from "../assets/images/icons/delete.svg";
 import edit_icon from "../assets/images/icons/edit.svg";
 import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
-import {Toggle} from '../othercomponent/Toggle';
+import { Toggle } from "../othercomponent/Toggle";
+import Skeletonloader from "../othercomponent/Skeletonloader";
+import no_img from "../assets/images/no_products_found.png";
 
 export class Productlist extends Component {
   static contextType = AuthContext;
@@ -17,6 +19,7 @@ export class Productlist extends Component {
       products: [],
       active_cat: 0,
       is_loding: true,
+      category_loding: true,
     };
   }
 
@@ -30,10 +33,8 @@ export class Productlist extends Component {
     this.fetchProducts(id, 1);
   };
 
-
-
-
   fetchProducts = (category_id, page) => {
+    this.setState({ is_loding: true });
     fetch(global.api + "vendor_get_vendor_product", {
       method: "POST",
       headers: {
@@ -87,125 +88,155 @@ export class Productlist extends Component {
         return json;
       })
       .catch((error) => console.error(error))
-      .finally(() => {});
+      .finally(() => {
+        this.setState({ category_loding: false });
+      });
   };
-
-
-  
-
 
   render() {
     return (
       <div className="main-wrapper">
         <Header />
 
-        {this.state.is_loding ? (
-          <div className="main_loader">
-            <Bars
-              height="80"
-              width="80"
-              color="#eda332"
-              ariaLabel="bars-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              visible={true}
-            />
-          </div>
-        ) : (
-          <div className="page-wrapper">
-            <div className="content">
-              <div className="page-header">
-                <div className="page-title">
-                  <h4>Product List</h4>
-                  <h6>Manage your products</h6>
-                </div>
-                <div className="page-btn">
-                  <Link to="/addproduct" className="btn btn-added">
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                      alt="img"
-                      className="me-1"
-                    />
-                    Add New Product
-                  </Link>
-                </div>
+        <div className="page-wrapper">
+          <div className="content">
+            <div className="page-header">
+              <div className="page-title">
+                <h4>Product List</h4>
+                <h6>Manage your products</h6>
               </div>
+              <div className="page-btn">
+                <Link to="/addproduct" className="btn btn-added">
+                  <img
+                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
+                    alt="img"
+                    className="me-1"
+                  />
+                  Add New Product
+                </Link>
+              </div>
+            </div>
+            {this.state.category_loding ? (
+              <Skeletonloader count={1} height={50} />
+            ) : (
               <Category
                 category={this.state.category}
                 fetch_product={this.active_cat}
               />
-              <div className="card">
-                {this.state.products.length > 0 ? (
-                  <div className="card-body">
-                    <div className="table-responsive">
-                      <table className="table  datanew">
-                        <thead>
-                          <tr>
-                            <th>Product Name</th>
-                            <th>Market Price</th>
-                            <th>Our Price</th>
-                            <th>Category</th>
-                            <th>Veg/NonVeg</th>
-                            <th>Status</th>
-                            <th style={{ textAlign: "end" }}>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.products.map((item, index) => {
-                            return (
-                              <tr>
-                                <td className="productimgname">
-                                  <Link
-                                    to="/productdetails/1"
-                                    className="product-img"
-                                  >
-                                    <img src={item.product_img} alt="product" />
-                                  </Link>
-                                  <Link to="/productdetails/1">
-                                    {item.product_name}
-                                  </Link>
-                                </td>
-                                <td>
-                                  <BiRupee />
-                                  {item.market_price}
-                                </td>
-                                <td>
-                                  <BiRupee />
-                                  {item.our_price}
-                                </td>
-                                <td>{item.category.name}</td>
-                                <td>
-                                  {item.is_veg ? <>Veg</> : <> Non-Veg</>}
-                                </td>
+            )}
 
-                                <td>
-                                 <Toggle status={item.status} product_id={item.id} action_type='product'/>
-                                </td>
-                                <td style={{ textAlign: "end" }}>
-                                  <Link to={"/Editproduct/"+item.id} className="me-3">
-                                    <img src={edit_icon} alt="img" />
-                                  </Link>
-                                  <a
-                                    className="confirm-text"
-                                    href="javascript:void(0);"
-                                  >
-                                    <img src={delete_icon} alt="img" />
-                                  </a>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+            {this.state.is_loding ? (
+              <div
+                className="main_loader"
+                style={{
+                  height: "50vh",
+                }}
+              >
+                <Bars
+                  height="80"
+                  width="80"
+                  color="#eda332"
+                  ariaLabel="bars-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </div>
+            ) : (
+              <>
+                {this.state.products.length > 0 ? (
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="table-responsive">
+                        <table className="table  datanew">
+                          <thead>
+                            <tr>
+                              <th>Product Name</th>
+                              <th>Market Price</th>
+                              <th>Our Price</th>
+                              <th>Category</th>
+                              <th>Veg/NonVeg</th>
+                              <th>Status</th>
+                              <th style={{ textAlign: "end" }}>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.products.map((item, index) => {
+                              return (
+                                <tr>
+                                  <td className="productimgname">
+                                    <Link
+                                      to="/productdetails/1"
+                                      className="product-img"
+                                    >
+                                      <img
+                                        src={item.product_img}
+                                        alt="product"
+                                        className="product-img"
+                                      />
+                                    </Link>
+                                    <Link to="/productdetails/1">
+                                      {item.product_name}
+                                    </Link>
+                                  </td>
+                                  <td>
+                                    <BiRupee />
+                                    {item.market_price}
+                                  </td>
+                                  <td>
+                                    <BiRupee />
+                                    {item.our_price}
+                                  </td>
+                                  <td>{item.category.name}</td>
+                                  <td>
+                                    {item.is_veg ? <>Veg</> : <> Non-Veg</>}
+                                  </td>
+
+                                  <td>
+                                    <Toggle
+                                      status={item.status}
+                                      product_id={item.id}
+                                      action_type="product"
+                                    />
+                                  </td>
+                                  <td style={{ textAlign: "end" }}>
+                                    <Link
+                                      to={"/Editproduct/" + item.id}
+                                      className="me-3"
+                                    >
+                                      <img src={edit_icon} alt="img" />
+                                    </Link>
+                                    <a
+                                      className="confirm-text"
+                                      href="javascript:void(0);"
+                                    >
+                                      <img src={delete_icon} alt="img" />
+                                    </a>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 ) : (
-                  <h4>No Products Found</h4>
+                  <div className="d-flex align-items-center justify-content-center flex-column">
+                    <img
+                      src={no_img}
+                      alt=""
+                      style={{
+                        height: "250px",
+                      }}
+                    />
+                    <h4>No Products Found</h4>
+                  </div>
                 )}
-              </div>
-            </div>
+              </>
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -221,12 +252,15 @@ class Category extends Component {
               this.props.fetch_product(0);
             }}
           >
-            <div className="product-details">
+            <div
+              className="product-details active"
+              href="#solid-rounded-justified-tab1"
+              data-bs-toggle="tab"
+            >
               <h6>All</h6>
             </div>
           </li>
-
-          {this.props.category.length > 0 ? (
+          {this.props.category.length > 0 &&
             this.props.category.map((item, index) => {
               return (
                 <li
@@ -234,24 +268,22 @@ class Category extends Component {
                     this.props.fetch_product(item.id);
                   }}
                 >
-                  <div className="product-details">
+                  <div
+                    className="product-details"
+                    href="#solid-rounded-justified-tab2"
+                    data-bs-toggle="tab"
+                  >
                     <h6>
                       {item.name}({item.products_count}){" "}
                     </h6>
                   </div>
                 </li>
               );
-            })
-          ) : (
-            <></>
-          )}
+            })}
         </ul>
       </div>
     );
   }
 }
-
-
-
 
 export default Productlist;

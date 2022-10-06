@@ -5081,6 +5081,8 @@ span.select-container.select-container--default.select-container--open {
 
 .productimgname img {
   margin-right: 10px;
+  /* width: 50px;
+  height: 50px; */
 }
 .productimgname a {
   color: #1a181e;
@@ -8052,4 +8054,8 @@ span.select-container.select-container--default.select-container--open {
 
 .border-none{
   border: none !important;
+}
+
+.react-responsive-modal-modal{
+  width: 600px !important;
 }

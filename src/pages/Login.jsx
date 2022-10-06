@@ -18,6 +18,8 @@ class Login extends Component {
       otpButton: false,
       heading: "Log in",
       subheading: "Continue to WeazyDine Dashboard",
+      sendotploading: false,
+      verifyotploading: false,
     };
   }
 
@@ -26,13 +28,13 @@ class Login extends Component {
   }
 
   mobileVerify = () => {
-    this.setState({ isLoading: true });
+    this.setState({ sendotploading: true, isLoading: true });
     var phoneNumber = this.state.phoneNumber;
     let rjx = /^[0]?[6789]\d{9}$/;
     let isValid = rjx.test(phoneNumber);
     if (!isValid) {
       toast.error("Please enter valid mobile number");
-      this.setState({ isLoading: false });
+      this.setState({ sendotploading: false, isLoading: false });
     } else {
       fetch(global.api + "mobile-verification", {
         method: "POST",
@@ -64,16 +66,16 @@ class Login extends Component {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ isLoading: false });
+          this.setState({ sendotploading: false, isLoading: false });
         });
     }
   };
 
   otpVerification = () => {
-    this.setState({ isLoadingOtp: true });
+    this.setState({ verifyotploading: true });
     if (this.state.otp === "") {
       toast.error("OTP is required");
-      this.setState({ isLoadingOtp: false });
+      this.setState({ verifyotploading: false });
     } else {
       fetch(global.api + "otp-verification", {
         method: "POST",
@@ -129,7 +131,7 @@ class Login extends Component {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ isLoadingOtp: false });
+          this.setState({ verifyotploading: false });
         });
     }
   };
@@ -216,14 +218,24 @@ class Login extends Component {
                                 </div>
                               </div>
                               <div className="form-login">
-                                <div
-                                  className="btn btn-login"
-                                  onClick={() => {
-                                    this.otpVerification();
-                                  }}
-                                >
-                                  Verify OTP
-                                </div>
+                                {this.state.verifyotploading ? (
+                                  <button class="btn btn-login" disabled="">
+                                    <span
+                                      class="spinner-border spinner-border-sm me-2"
+                                      role="status"
+                                    ></span>
+                                    Verifying OTP
+                                  </button>
+                                ) : (
+                                  <div
+                                    className="btn btn-login"
+                                    onClick={() => {
+                                      this.otpVerification();
+                                    }}
+                                  >
+                                    Verify OTP
+                                  </div>
+                                )}
                               </div>
                               <Timer
                                 seconds={30}
@@ -263,14 +275,24 @@ class Login extends Component {
                                 </div>
                               </div>
                               <div className="form-login">
-                                <div
-                                  className="btn btn-login"
-                                  onClick={() => {
-                                    this.mobileVerify();
-                                  }}
-                                >
-                                  Continue
-                                </div>
+                                {this.state.sendotploading ? (
+                                  <button class="btn btn-login" disabled="">
+                                    <span
+                                      class="spinner-border spinner-border-sm me-2"
+                                      role="status"
+                                    ></span>
+                                    Continue
+                                  </button>
+                                ) : (
+                                  <div
+                                    className="btn btn-login"
+                                    onClick={() => {
+                                      this.mobileVerify();
+                                    }}
+                                  >
+                                    Continue
+                                  </div>
+                                )}
                               </div>
                             </>
                           )}

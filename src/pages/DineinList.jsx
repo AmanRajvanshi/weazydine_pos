@@ -15,6 +15,7 @@ export class DineinList extends Component {
     this.state = {
       data: [],
       isLoading: true,
+      adding_table: false,
     };
   }
 
@@ -78,33 +79,94 @@ export class DineinList extends Component {
       });
   };
 
+  add = () => {
+    this.setState({ table_load: true, adding_table: true });
+    fetch(global.api + "add_new_table_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          // Toast.show(msg);
+        } else {
+          toast.success(json.msg);
+
+          this.fetch_table_vendors();
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ table_load: false, adding_table: false });
+      });
+  };
+
   render() {
     return (
       <>
         <div className="main-wrapper">
           <Header />
-          {this.state.isLoading ? (
-            <div className="main_loader">
-              <Bars
-                height="80"
-                width="80"
-                color="#eda332"
-                ariaLabel="bars-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            </div>
-          ) : (
-            <>
-              {this.state.data.length > 0 ? (
-                <div className="page-wrapper">
-                  <div className="content">
-                    <div className="page-header">
-                      <div className="page-title">
-                        <h4>Dine In</h4>
-                      </div>
-                    </div>
+          <div className="page-wrapper">
+            <div className="content">
+              <div className="page-header">
+                <div className="page-title d-flex align-items-center justify-content-between w-100">
+                  <h4>Dine In</h4>
+                  {this.state.adding_table ? (
+                    <button
+                      className="btn btn-primary me-2"
+                      style={{
+                        pointerEvents: "none",
+                        opacity: "0.8",
+                      }}
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></span>
+                      Adding
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        this.add();
+                      }}
+                    >
+                      Add Dine in
+                    </button>
+                  )}
+                </div>
+              </div>
+              {this.state.isLoading ? (
+                <div
+                  className="main_loader"
+                  style={{
+                    height: "60vh",
+                  }}
+                >
+                  <Bars
+                    height="80"
+                    width="80"
+                    color="#eda332"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div>
+              ) : (
+                <>
+                  {this.state.data.length > 0 ? (
                     <div className="card">
                       <div className="card-body">
                         <div className="table-responsive">
@@ -164,7 +226,6 @@ export class DineinList extends Component {
                                           cursor: "pointer",
                                         }}
                                         onClick={() => {
-                                          // this.delete_table(item.table_uu_id);
                                           Swal.fire({
                                             title: "Are you sure?",
                                             text: "You won't be able to revert this!",
@@ -193,27 +254,27 @@ export class DineinList extends Component {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="page-wrapper">
-                  <div
-                    className="content"
-                    style={{
-                      height: "92vh",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <img src={no_order} alt="" />
-                    <h3>No Order Found</h3>
-                  </div>
-                </div>
+                  ) : (
+                    <div className="page-wrapper">
+                      <div
+                        className="content"
+                        style={{
+                          height: "60vh",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <img src={no_order} alt="" />
+                        <h3>No DineIn data Found</h3>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
-            </>
-          )}
+            </div>
+          </div>
         </div>
       </>
     );

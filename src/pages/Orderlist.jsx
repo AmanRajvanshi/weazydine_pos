@@ -5,6 +5,7 @@ import { BiRupee } from "react-icons/bi";
 import { Bars } from "react-loader-spinner";
 import { AuthContext } from "../AuthContextProvider";
 import moment from "moment";
+import no_order from "../assets/images/no_orders.webp";
 
 class Orderlist extends Component {
   static contextType = AuthContext;
@@ -230,7 +231,22 @@ class Orderlist extends Component {
                     </div>
                   </div>
                 ) : (
-                  <>no data found</>
+                  <div className="page-wrapper">
+                    <div
+                      className="content"
+                      style={{
+                        height: "60vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        margin: "40px 0",
+                      }}
+                    >
+                      <img src={no_order} alt="" />
+                      <h3>No Order Found</h3>
+                    </div>
+                  </div>
                 )}
               </div>
             ) : (

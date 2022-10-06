@@ -4,6 +4,7 @@ import { Bars } from "react-loader-spinner";
 import { BiRupee } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider.js";
+import Skeletonloader from "../othercomponent/Skeletonloader";
 export class Dashboard extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -11,12 +12,11 @@ export class Dashboard extends Component {
     this.state = {
       data: [],
       isloading: true,
-      item:{"total_earnning":0,"orders":0,"shop_visit":0,"customer":0},
+      item: { total_earnning: 0, orders: 0, shop_visit: 0, customer: 0 },
     };
   }
 
-  componentDidMount ()
-  {
+  componentDidMount() {
     this.get_vendor_data();
   }
   loader = (value) => {
@@ -24,30 +24,31 @@ export class Dashboard extends Component {
   };
 
   get_vendor_data = () => {
-    fetch(global.api + 'get_vendor_data', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: this.context.token,
-        },
-        body: JSON.stringify({
-        })
-    }).then((response) => response.json())
-        .then((json) => {
-            if (json.status) {
-
-                this.setState({ item: json.data })
-                //   console.warn(json.data)
-                //    alert(this.state.item.shop_visit)
-            }
-            return json;
-        }).catch((error) => {
-            console.error(error);
-        }).finally(() => {
-            this.setState({ isloading: false })
-        });
-}
+    fetch(global.api + "get_vendor_data", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status) {
+          this.setState({ item: json.data });
+          //   console.warn(json.data)
+          //    alert(this.state.item.shop_visit)
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
+  };
 
   render() {
     let { item } = this.state;
@@ -55,8 +56,8 @@ export class Dashboard extends Component {
       <>
         <div className="main-wrappers">
           <Header />
-          
-            {/* <div className="main_loader">
+
+          {/* <div className="main_loader">
               <Bars
                 height="80"
                 width="80"
@@ -67,101 +68,110 @@ export class Dashboard extends Component {
                 visible={true}
               />
             </div> */}
-        
-            <div className="page-wrapper">
-              <div className="content">
-                <div className="row">
-                  <div className="col-lg-3 col-sm-3 col-12">
-                    <div className="dash-widget">
-                      <div className="dash-widgetimg">
-                        <span>
-                          <img
-                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash1.svg"
-                            alt="img"
-                          />
-                        </span>
-                      </div>
-                      <div className="dash-widgetcontent">
-                        <h5>
-                          <span className="counters" data-count={307144.0}>
-                          {item.orders} 
-                          </span>
-                        </h5>
-                        <h6>Total Orders</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-3 col-sm-3 col-12">
-                    <div className="dash-widget dash1">
-                      <div className="dash-widgetimg">
-                        <span>
-                          <img
-                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                            alt="img"
-                          />
-                        </span>
-                      </div>
-                      <div className="dash-widgetcontent">
-                        <h5>
-                          <BiRupee />
-                          <span className="counters" data-count={4385.0}>
-                          {item.total_earnning}
-                          </span>
-                        </h5>
-                        <h6>Total Sales</h6>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="col-lg-3 col-sm-3 col-12">
-                    <div className="dash-widget dash1">
-                      <div className="dash-widgetimg">
-                        <span>
-                          <img
-                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                            alt="img"
-                          />
-                        </span>
-                      </div>
-                      <div className="dash-widgetcontent">
-                        <h5>
-                          
-                          <span className="counters" data-count={4385.0}>
-                          {item.shop_visit}
-                          </span>
-                        </h5>
-                        <h6>Site Visit</h6>
-                      </div>
+          <div className="page-wrapper">
+            <div className="content">
+              <div className="row">
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash1.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
+                          <span className="counters">{item.orders}</span>
+                        )}
+                      </h5>
+                      <h6>Total Orders</h6>
                     </div>
                   </div>
-
-                  <div className="col-lg-3 col-sm-3 col-12">
-                    <div className="dash-widget dash1">
-                      <div className="dash-widgetimg">
-                        <span>
-                          <img
-                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                            alt="img"
-                          />
-                        </span>
-                      </div>
-                      <div className="dash-widgetcontent">
-                        <h5>
-                        
-                          <span className="counters" data-count={4385.0}>
-                           {item.customer}
-                          </span>
-                        </h5>
-                        <h6>Total Customers</h6>
-                      </div>
-                    </div>
-                  </div>
-
-                  <Tables isloading={this.loader} />
                 </div>
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
+                          <>
+                            <BiRupee />
+                            <span className="counters">
+                              {item.total_earnning}
+                            </span>
+                          </>
+                        )}
+                      </h5>
+                      <h6>Total Sales</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
+                          <span className="counters">{item.shop_visit}</span>
+                        )}
+                      </h5>
+                      <h6>Site Visit</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
+                          <span className="counters">{item.customer}</span>
+                        )}
+                      </h5>
+                      <h6>Total Customers</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <Tables isloading={this.loader} />
               </div>
             </div>
-      
+          </div>
         </div>
       </>
     );
@@ -174,7 +184,7 @@ class Tables extends Component {
     super(props);
     this.state = {
       data: [],
-      is_loading:true
+      is_loading: true,
     };
   }
 
@@ -182,7 +192,6 @@ class Tables extends Component {
     this.fetch_table_vendors();
   }
 
-  
   fetch_table_vendors = () => {
     fetch(global.api + "fetch_table_vendors", {
       method: "POST",
@@ -202,67 +211,62 @@ class Tables extends Component {
             this.setState({ data: json.data });
           }
         }
-        this.setState({is_loading:false});
+        this.setState({ is_loading: false });
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
-      .finally(() => {
-        
-      });
+      .finally(() => {});
   };
 
   render() {
     return (
       <>
-      {
-        this.state.is_loading ? (
-          <h4>Loading</h4>
-        ) : (
-          this.state.data.length > 0 ? (
-          <>
-            <h4>Dine-In</h4>
-            <div className="row" style={{ marginTop: 10 }}>
-              {this.state.data.map((item, index) => {
-                return (
-                  <div className="col-lg-3 col-sm-6 col-12">
-                    <Link
-                      to={"/tableorderdetails/" + item.table_uu_id}
-                      className=" d-flex w-100"
-                    >
-                      <div
-                        className={
-                          item.table_status == "active"
-                            ? "dash-count1"
-                            : "dash-count"
-                        }
+        <h4>Dine-In</h4>
+        <div className="row" style={{ marginTop: 10 }}>
+          {this.state.is_loading ? (
+            <Skeletonloader count={1} height={100} />
+          ) : (
+            <>
+              {this.state.data.length > 0 ? (
+                this.state.data.map((item, index) => {
+                  return (
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <Link
+                        to={"/tableorderdetails/" + item.table_uu_id}
+                        className=" d-flex w-100"
                       >
-                        <div className="dash-counts">
-                          <h4>{item.table_name}</h4>
-                          <h6
-                            style={{
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            {item.table_status}
-                          </h6>
+                        <div
+                          className={
+                            item.table_status == "active"
+                              ? "dash-count1"
+                              : "dash-count"
+                          }
+                        >
+                          <div className="dash-counts">
+                            <h4>{item.table_name}</h4>
+                            <h6
+                              style={{
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {item.table_status}
+                            </h6>
 
-                          {/* <a href={item.qr_link}>Download QR</a> */}
+                            {/* <a href={item.qr_link}>Download QR</a> */}
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        ) : (
-          <></>
-        )
-        )
-  }
-        <></>
+                      </Link>
+                    </div>
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </>
+          )}
+        </div>
       </>
     );
   }
