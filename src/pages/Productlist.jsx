@@ -6,6 +6,7 @@ import delete_icon from "../assets/images/icons/delete.svg";
 import edit_icon from "../assets/images/icons/edit.svg";
 import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
+import {Toggle} from '../othercomponent/Toggle';
 
 export class Productlist extends Component {
   static contextType = AuthContext;
@@ -28,6 +29,9 @@ export class Productlist extends Component {
     this.setState({ active_cat: id, product_loding: true });
     this.fetchProducts(id, 1);
   };
+
+
+
 
   fetchProducts = (category_id, page) => {
     fetch(global.api + "vendor_get_vendor_product", {
@@ -85,6 +89,10 @@ export class Productlist extends Component {
       .catch((error) => console.error(error))
       .finally(() => {});
   };
+
+
+  
+
 
   render() {
     return (
@@ -171,23 +179,12 @@ export class Productlist extends Component {
                                 </td>
 
                                 <td>
-                                  <div className="status-toggle">
-                                    <input
-                                      type="checkbox"
-                                      id="status_1"
-                                      className="check"
-                                      isChecked
-                                    />
-                                    <label
-                                      htmlFor="status_1"
-                                      className="checktoggle"
-                                    ></label>
-                                  </div>
+                                 <Toggle status={item.status} product_id={item.id} action_type='product'/>
                                 </td>
                                 <td style={{ textAlign: "end" }}>
-                                  <a className="me-3">
+                                  <Link to={"/Editproduct/"+item.id} className="me-3">
                                     <img src={edit_icon} alt="img" />
-                                  </a>
+                                  </Link>
                                   <a
                                     className="confirm-text"
                                     href="javascript:void(0);"
@@ -253,5 +250,8 @@ class Category extends Component {
     );
   }
 }
+
+
+
 
 export default Productlist;

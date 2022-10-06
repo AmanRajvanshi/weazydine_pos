@@ -11,19 +11,52 @@ export class Dashboard extends Component {
     this.state = {
       data: [],
       isloading: true,
+      item:{"total_earnning":0,"orders":0,"shop_visit":0,"customer":0},
     };
   }
 
+  componentDidMount ()
+  {
+    this.get_vendor_data();
+  }
   loader = (value) => {
     this.setState({ isloading: value });
   };
+
+  get_vendor_data = () => {
+    fetch(global.api + 'get_vendor_data', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+            if (json.status) {
+
+                this.setState({ item: json.data })
+                //   console.warn(json.data)
+                //    alert(this.state.item.shop_visit)
+            }
+            return json;
+        }).catch((error) => {
+            console.error(error);
+        }).finally(() => {
+            this.setState({ isloading: false })
+        });
+}
+
   render() {
+    let { item } = this.state;
     return (
       <>
         <div className="main-wrappers">
           <Header />
-          {this.state.isloading ? (
-            <div className="main_loader">
+          
+            {/* <div className="main_loader">
               <Bars
                 height="80"
                 width="80"
@@ -33,8 +66,8 @@ export class Dashboard extends Component {
                 wrapperClass=""
                 visible={true}
               />
-            </div>
-          ) : (
+            </div> */}
+        
             <div className="page-wrapper">
               <div className="content">
                 <div className="row">
@@ -51,7 +84,7 @@ export class Dashboard extends Component {
                       <div className="dash-widgetcontent">
                         <h5>
                           <span className="counters" data-count={307144.0}>
-                            1200
+                          {item.orders} 
                           </span>
                         </h5>
                         <h6>Total Orders</h6>
@@ -72,7 +105,7 @@ export class Dashboard extends Component {
                         <h5>
                           <BiRupee />
                           <span className="counters" data-count={4385.0}>
-                            4,385.00
+                          {item.total_earnning}
                           </span>
                         </h5>
                         <h6>Total Sales</h6>
@@ -92,12 +125,12 @@ export class Dashboard extends Component {
                       </div>
                       <div className="dash-widgetcontent">
                         <h5>
-                          <BiRupee />
+                          
                           <span className="counters" data-count={4385.0}>
-                            4,385.00
+                          {item.shop_visit}
                           </span>
                         </h5>
-                        <h6>Total Sales</h6>
+                        <h6>Site Visit</h6>
                       </div>
                     </div>
                   </div>
@@ -114,12 +147,12 @@ export class Dashboard extends Component {
                       </div>
                       <div className="dash-widgetcontent">
                         <h5>
-                          <BiRupee />
+                        
                           <span className="counters" data-count={4385.0}>
-                            4,385.00
+                           {item.customer}
                           </span>
                         </h5>
-                        <h6>Total Sales</h6>
+                        <h6>Total Customers</h6>
                       </div>
                     </div>
                   </div>
@@ -128,7 +161,7 @@ export class Dashboard extends Component {
                 </div>
               </div>
             </div>
-          )}
+      
         </div>
       </>
     );
@@ -141,6 +174,7 @@ class Tables extends Component {
     super(props);
     this.state = {
       data: [],
+      is_loading:true
     };
   }
 
@@ -148,6 +182,7 @@ class Tables extends Component {
     this.fetch_table_vendors();
   }
 
+  
   fetch_table_vendors = () => {
     fetch(global.api + "fetch_table_vendors", {
       method: "POST",
@@ -167,20 +202,25 @@ class Tables extends Component {
             this.setState({ data: json.data });
           }
         }
+        this.setState({is_loading:false});
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {
-        this.props.isloading(false);
+        
       });
   };
 
   render() {
     return (
       <>
-        {this.state.data.length > 0 ? (
+      {
+        this.state.is_loading ? (
+          <h4>Loading</h4>
+        ) : (
+          this.state.data.length > 0 ? (
           <>
             <h4>Dine-In</h4>
             <div className="row" style={{ marginTop: 10 }}>
@@ -219,7 +259,10 @@ class Tables extends Component {
           </>
         ) : (
           <></>
-        )}
+        )
+        )
+  }
+        <></>
       </>
     );
   }

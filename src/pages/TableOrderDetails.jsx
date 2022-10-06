@@ -175,7 +175,7 @@ export class TableOrderDetails extends Component {
                             }}
                           >
                             <div>
-                              <h5>Order ID: {this.props.id}</h5>
+                              <h5>Order ID: {this.state.data[0].order_code}</h5>
                               <h6 className="order_date mt-2">
                                 {moment(this.state.data.updated_at).format(
                                   "llll"
@@ -617,7 +617,7 @@ export class TableOrderDetails extends Component {
                         this.mark_complete();
                       }}
                     >
-                      Complete Order and Generate Bill
+                      Complete Order 
                     </a>
                   </div>
                 </div>
