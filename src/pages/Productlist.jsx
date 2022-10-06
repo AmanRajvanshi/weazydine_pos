@@ -166,7 +166,7 @@ export class Productlist extends Component {
                                 <tr>
                                   <td className="productimgname">
                                     <Link
-                                      to="/productdetails/1"
+                                      to={"/productdetails/" + item.id}
                                       className="product-img"
                                     >
                                       <img
@@ -175,7 +175,7 @@ export class Productlist extends Component {
                                         className="product-img"
                                       />
                                     </Link>
-                                    <Link to="/productdetails/1">
+                                    <Link to={"/productdetails/" + item.id}>
                                       {item.product_name}
                                     </Link>
                                   </td>
@@ -270,7 +270,7 @@ class Category extends Component {
                 >
                   <div
                     className="product-details"
-                    href="#solid-rounded-justified-tab2"
+                    href="#solid-rounded-justified-tab1"
                     data-bs-toggle="tab"
                   >
                     <h6>
