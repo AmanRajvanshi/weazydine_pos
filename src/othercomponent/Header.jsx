@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
-import logo from "../assets/images/main_logo.png";
+
+import profile from "../assets/images/profile.png";
 import { AuthContext } from "../AuthContextProvider";
 export class Header extends Component {
   static contextType = AuthContext;
@@ -12,7 +13,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token);
+
   }
 
   logOut = () => {
@@ -72,7 +73,7 @@ export class Header extends Component {
           <ul className="nav user-menu">
             <li className="nav-item dropdown">
               <a
-                href="javascript:void(0);"
+                href="return false;"
                 className="dropdown-toggle nav-link"
                 data-bs-toggle="dropdown"
               >
@@ -85,7 +86,7 @@ export class Header extends Component {
               <div className="dropdown-menu notifications">
                 <div className="topnav-dropdown-header">
                   <span className="notification-title">Notifications</span>
-                  <a href="javascript:void(0)" className="clear-noti">
+                  <a href="return false" className="clear-noti">
                     {" "}
                     Clear All{" "}
                   </a>
@@ -244,14 +245,15 @@ export class Header extends Component {
 
             <li className="nav-item dropdown has-arrow main-drop">
               <a
-                href="javascript:void(0);"
+                href="return false;"
                 className="dropdown-toggle nav-link userset"
                 data-bs-toggle="dropdown"
               >
                 <span className="user-img">
                   <img
-                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avator1.jpg"
+                   src={this.context.user.profile_pic == null? profile:this.context.user.profile_pic}
                     alt=""
+                    style={{ width: "40px", height: "40px" }}
                   />
                   <span className="status online" />
                 </span>
@@ -261,13 +263,13 @@ export class Header extends Component {
                   <div className="profileset">
                     <span className="user-img">
                       <img
-                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avator1.jpg"
+                        src={this.context.user.profile_pic == null? profile:this.context.user.profile_pic}
                         alt=""
                       />
                       <span className="status online" />
                     </span>
                     <div className="profilesets">
-                      {/* <h6>{this.context.user.name}</h6> */}
+                      <h6>{this.context.user.name}</h6>
                       <h5>Admin</h5>
                     </div>
                   </div>
@@ -310,7 +312,7 @@ export class Header extends Component {
           </ul>
           <div className="dropdown mobile-user-menu">
             <a
-              href="javascript:void(0);"
+              href="return false;"
               className="nav-link dropdown-toggle"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -388,7 +390,7 @@ export class Header extends Component {
                     }
                     to="/orderlist"
                   >
-                    <i class="fa-brands fa-algolia"></i>
+                    <i className="fa-brands fa-algolia"></i>
                     {this.state.sidebarText ? <span>Orders</span> : ""}
                   </NavLink>
                 </li>

@@ -121,6 +121,7 @@ export class Productlist extends Component {
             ) : (
               <Category
                 category={this.state.category}
+                active_cat={this.state.active_cat}
                 fetch_product={this.active_cat}
               />
             )}
@@ -253,7 +254,7 @@ class Category extends Component {
             }}
           >
             <div
-              className="product-details active"
+              className={"product-details"+ (this.props.active_cat == 0 ? " active" : "")}
               href="#solid-rounded-justified-tab1"
               data-bs-toggle="tab"
             >
@@ -269,7 +270,7 @@ class Category extends Component {
                   }}
                 >
                   <div
-                    className="product-details"
+                    className={"product-details" + (this.props.active_cat == item.id ? " active" : "")}
                     href="#solid-rounded-justified-tab1"
                     data-bs-toggle="tab"
                   >

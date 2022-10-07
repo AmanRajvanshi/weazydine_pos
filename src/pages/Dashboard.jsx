@@ -232,7 +232,7 @@ class Tables extends Component {
               {this.state.data.length > 0 ? (
                 this.state.data.map((item, index) => {
                   return (
-                    <div className="col-lg-3 col-sm-6 col-12">
+                    <div key={index} className="col-lg-3 col-sm-6 col-12">
                       <Link
                         to={"/tableorderdetails/" + item.table_uu_id}
                         className=" d-flex w-100"

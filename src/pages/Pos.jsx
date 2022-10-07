@@ -17,11 +17,13 @@ class Pos extends Component {
       active_cat: 0,
       isloading: true,
       cart: [],
+      load_item:true,
     };
   }
 
   componentDidMount() {
     this.fetchCategories();
+    this.fetchProducts(0,1);
   }
 
   active_cat = (id) => {
@@ -30,6 +32,7 @@ class Pos extends Component {
   };
 
   fetchProducts = (category_id, page) => {
+    this.setState({load_item:true})
     fetch(global.api + "vendor_get_vendor_product", {
       method: "POST",
       headers: {
@@ -56,14 +59,14 @@ class Pos extends Component {
             this.setState({ products: json.data });
           }
         }
-        // this.setState({ isloading: false, load_data: false });
+        this.setState({ load_item: false });
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {
-        this.setState({ isloading: false });
+        
       });
   };
 
@@ -85,19 +88,52 @@ class Pos extends Component {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        this.setState({ isLoading: false });
+        this.setState({ isloading: false });
       });
   };
 
   add_to_cart = (product, vv_id, addons) => {
+
+    var bb=[];
+    addons.map((item, index) => {
+      bb.push(item);
+    });
+
     var match = false;
     var key = 0;
+    var breaknow = false;
     for (var i = 0; i < this.state.cart.length; i++) {
       var item = this.state.cart[i];
       if (item.product.id == product.id && item.variant_id == vv_id) {
-        match = true;
-        key = i;
-        break;
+
+        if(bb.length == 0 && item.cart_addon.length == 0){
+          key = i;
+          match=true;
+          break;
+        }
+        else
+        {
+          if(bb.length == item.cart_addon.length)
+          {
+            for (var j = 0; j < bb.length; j++) {
+              var item1 = bb[j];
+              if(item.cart_addon.includes(item1)){
+                key = i;
+                match=true;
+              }
+              else
+              {
+                match=false;
+                break;
+              }
+          }
+        }
+        }
+    
+        if (breaknow) {
+          break;
+        }
+        
       }
     }
     if (match) {
@@ -121,14 +157,16 @@ class Pos extends Component {
         }
       });
 
+      
       var cart = {
         product_id: product.id,
         product: product,
         variant_id: vv_id,
-        addons: addons,
+        cart_addon: bb,
         quantity: 1,
         price: total,
       };
+
       this.setState({ cart: [...this.state.cart, cart] });
     }
   };
@@ -230,6 +268,7 @@ class Pos extends Component {
 
                     {this.state.category.length > 0 ? (
                       <Category
+                      active_cat={this.state.active_cat}
                         category={this.state.category}
                         fetch_product={this.active_cat}
                       />
@@ -247,18 +286,24 @@ class Pos extends Component {
                       <div className="tabs_container">
                         <div className="tab_content active" data-tab="fruits">
                           <div className="row">
-                            {this.state.products.length > 0 ? (
+                            {
+                           !this.state.load_item?
+                            this.state.products.length > 0 ? (
                               this.state.products.map((item, index) => {
                                 return (
                                   <Products
+                                  key={index}
                                     data={item}
                                     cart={this.add_to_cart}
                                   />
                                 );
                               })
                             ) : (
-                              <></>
-                            )}
+                              <h3>No Product Found.</h3>
+                            )
+                          :
+                          <h3>Loading</h3>
+                          }
                           </div>
                         </div>
                       </div>
@@ -348,7 +393,7 @@ class PosAdd extends React.Component {
             <div className="totalitem">
               <h4>Total items : {this.props.cart.length}</h4>
               <a
-                href="javascript:void(0);"
+                href="#!"
                 onClick={() => {
                   this.props.clear();
                 }}
@@ -357,10 +402,14 @@ class PosAdd extends React.Component {
               </a>
             </div>
             <div className="product-table" style={{ height: "50vh" }}>
-              {this.props.cart.length > 0 ? (
+              {
+            
+              this.props.cart.length > 0 ? (
+               
                 this.props.cart.map((item, index) => {
+             
                   return (
-                    <ul className="product-lists">
+                    <ul key={index} className="product-lists">
                       <li>
                         <div className="productimg">
                           <div className="productcontet">
@@ -369,26 +418,27 @@ class PosAdd extends React.Component {
 
                               {item.product.variants.map((i, index) => {
                                 if (i.id == item.variant_id) {
-                                  return <p>- {i.variants_name}</p>;
+                                  return <p key={index}>- {i.variants_name}</p>;
                                 }
                               })}
                             </h4>
                             <div className="productlinkset">
-                              {item.product.addon_map.map((i, index) => {
-                                if (item.addons.includes(i.id)) {
-                                  return <h5>{i.addon_name}</h5>;
+                             
+                              {item.product.addon_map.map((i, key) => {
+                                if (item.cart_addon.includes(i.id)) {
+                                  return <h5 key={key}>{i.addon_name}</h5>;
                                 }
                               })}
                             </div>
-                            <div class="row">
-                              <div class="col-6">
+                            <div className="row">
+                              <div className="col-6">
                                 <AddDelete
                                   key_id={index}
                                   quantity={item.quantity}
                                   update_cart={this.props.update_cart}
                                 />
                               </div>
-                              <div class="col-6">
+                              <div className="col-6">
                                 <p style={{ marginTop: "10px" }}>
                                   X {(item.price / item.quantity).toFixed(2)}
                                 </p>
@@ -399,7 +449,7 @@ class PosAdd extends React.Component {
                       </li>
                       <li>{item.price}</li>
                       <li>
-                        <a className="confirm-text" href="javascript:void(0);">
+                        <a className="confirm-text" href="#!">
                           <img
                             src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/delete-2.svg"
                             alt="img"
@@ -413,7 +463,7 @@ class PosAdd extends React.Component {
                   );
                 })
               ) : (
-                <h5>No Cart</h5>
+                <h5>No Item Added</h5>
               )}
             </div>
           </div>
@@ -496,6 +546,7 @@ class AddDelete extends React.Component {
     super(props);
     this.state = {
       count: 0,
+      quantity:this.props.quantity
     };
   }
   render() {
@@ -518,6 +569,7 @@ class AddDelete extends React.Component {
             type="text"
             name="child"
             value={this.props.quantity}
+            onChange={(e)=>{this.setState({quantity:e.target.value})}}
             className="quantity-field"
           />
           <input
@@ -548,7 +600,7 @@ class Category extends Component {
               this.props.fetch_product(0);
             }}
           >
-            <div className="product-details">
+            <div className={"product-details"+ (this.props.active_cat == 0 ? " active" : "")}>
               <h6>All</h6>
             </div>
           </li>
@@ -557,12 +609,13 @@ class Category extends Component {
             this.props.category.map((item, index) => {
               return (
                 <li
+                key={index}
                   onClick={() => {
                     this.props.fetch_product(item.id);
                   }}
                 >
-                  <div className="product-details">
-                    <h6>{item.name}</h6>
+                  <div className={"product-details" + (this.props.active_cat == item.id ? " active" : "")}>
+                    <h6>{item.name} ({item.products_count})</h6>
                   </div>
                 </li>
               );
@@ -677,16 +730,16 @@ class Products extends Component {
                   Variant
                 </h5>
                 <RadioGroup
-                  value={this.state.variants_id}
+                  value={this.state.variants_id.toString()}
                   onChange={(value) => {
                     this.setState({ variants_id: value, count: 0 });
                     //this.setState({ variants_id: value });
                   }}
                 >
-                  {this.props.data.variants.map((values) => {
+                  {this.props.data.variants.map((values,key) => {
                     return (
                       <RadioButton
-                        value={values.id}
+                        value={values.id.toString()}
                         pointColor="#f3c783"
                         iconSize={20}
                         rootColor="#37474f"
@@ -695,6 +748,8 @@ class Products extends Component {
                         props={{
                           className: "radio-button",
                         }}
+
+                        key={key}
                       >
                         <div className="d-flex justify-content-between align-items-center radio_button_text">
                           <p className="m-0">{values.variants_name}</p>
@@ -721,21 +776,22 @@ class Products extends Component {
                 <h5 className="title-color font-sm fw-600 text-align-center mt-3 mb-3">
                   Addon
                 </h5>
-                {this.props.data.addon_map.map((values) => {
+                {this.props.data.addon_map.map((values,index) => {
                   return (
-                    <div className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3">
+                    <div key={index} className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3">
                       <input
                         type="checkbox"
                         id={values.id}
                         name={values.id}
                         value={values.id}
                         className="checkbox"
+                        checked={this.state.addon.includes(values.id)}
                         onChange={() => {
                           this.select_addon(values.id);
                         }}
                       />
                       <label
-                        for={values.id}
+                        htmlFor={values.id}
                         className="checkbox_text d-flex justify-content-between align-items-center"
                       >
                         <p className="m-0 mx-3">{values.addon_name}</p>
@@ -760,7 +816,7 @@ class Products extends Component {
                     this.state.addon
                   );
                 }}
-                class="btn btn-primary"
+                className="btn btn-primary"
               >
                 Add Item
               </a>

@@ -219,9 +219,9 @@ class Login extends Component {
                               </div>
                               <div className="form-login">
                                 {this.state.verifyotploading ? (
-                                  <button class="btn btn-login" disabled="">
+                                  <button className="btn btn-login" disabled="">
                                     <span
-                                      class="spinner-border spinner-border-sm me-2"
+                                      className="spinner-border spinner-border-sm me-2"
                                       role="status"
                                     ></span>
                                     Verifying OTP
@@ -276,9 +276,9 @@ class Login extends Component {
                               </div>
                               <div className="form-login">
                                 {this.state.sendotploading ? (
-                                  <button class="btn btn-login" disabled="">
+                                  <button className="btn btn-login" disabled="">
                                     <span
-                                      class="spinner-border spinner-border-sm me-2"
+                                      className="spinner-border spinner-border-sm me-2"
                                       role="status"
                                     ></span>
                                     Continue
