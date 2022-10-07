@@ -155,7 +155,7 @@ class Orderlist extends Component {
                                 {}
                               </td>
                               <td>
-                                {item.order_type != "TakeAway" ||
+                                {item.order_type != "TakeAway" &&
                                 item.order_type != "Delivery" ? (
                                   <>Dine-In</>
                                 ) : (
@@ -201,8 +201,11 @@ class Orderlist extends Component {
                                     {item.order_status}
                                   </span>
                                 ) : (
-                                  <span className="badge bg-danger">
-                                    {item.status}
+                                  <span  style={{
+                                    color: "green",
+                                    textTransform: "capitalize",
+                                  }}>
+                                    {item.order_status}
                                   </span>
                                 )}
                               </td>

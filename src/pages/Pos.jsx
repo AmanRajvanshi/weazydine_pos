@@ -4,12 +4,14 @@ import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
 import { BiRupee } from "react-icons/bi";
 import { Modal } from "react-responsive-modal";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "react-responsive-modal/styles.css";
 import { RadioButton, RadioGroup } from "react-radio-buttons";
 import Skeletonloader from "../othercomponent/Skeletonloader";
 import no_cart from "../assets/images/cart_empty.png";
 import no_product from "../assets/images/no_products_found.png";
-
+import { toStatement } from "@babel/types";
+import { toast } from "react-toastify";
 class Pos extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -24,10 +26,24 @@ class Pos extends Component {
       grandTotal: 0,
       subTotal: 0,
       taxes: 0,
+      isModalOpen: false,
+      is_buttonloding:false,
+      contact:'',
+      user_id:'',
+      name:'',
+      payment_step:0,
+      order_method:'TakeAway',
+      show_table:false,
+      table_no:0,
     };
   }
 
   componentDidMount() {
+
+    if(this.props.table_id != undefined)
+    {
+      this.setState({table_no:this.props.table_id,order_method:'DineIn'})
+    }
     this.fetchCategories();
     this.fetchProducts(0, 1);
   }
@@ -97,6 +113,9 @@ class Pos extends Component {
   };
 
   add_to_cart = (product, vv_id, addons) => {
+    var final_price = 0;
+
+
     var bb = [];
     addons.map((item, index) => {
       bb.push(item);
@@ -105,6 +124,8 @@ class Pos extends Component {
     var match = false;
     var key = 0;
     var breaknow = false;
+
+
     for (var i = 0; i < this.state.cart.length; i++) {
       var item = this.state.cart[i];
       if (item.product.id == product.id && item.variant_id == vv_id) {
@@ -132,13 +153,23 @@ class Pos extends Component {
         }
       }
     }
+    
+    var cart = this.state.cart;
+
+    this.state.cart.map((item, index) => {
+      final_price=final_price+item.price;
+    });
+
     if (match) {
-      cart = this.state.cart;
+     
       var quantity = cart[key].quantity + 1;
       var price = cart[key].price / cart[key].quantity;
+      final_price=(final_price-cart[key].price)+(price * quantity);
       cart[key].quantity = quantity;
+      
       cart[key].price = price * quantity;
       this.setState({ cart: cart });
+
     } else {
       let total = parseFloat(product.our_price);
       product.variants.map((item, index) => {
@@ -152,13 +183,8 @@ class Pos extends Component {
           total = total + item.addon_price;
         }
       });
-
-      var cart2 = this.state.cart;
-      var finalPrice = 0;
-      cart2.map((item, index) => {
-        finalPrice = finalPrice + item.price;
-      });
-      var cart = {
+      
+      var cart2 = {
         product_id: product.id,
         product: product,
         variant_id: vv_id,
@@ -167,16 +193,16 @@ class Pos extends Component {
         price: total,
       };
 
-      this.setState({ cart: [...this.state.cart, cart] });
+      final_price=(final_price+total);
+      this.setState({ cart: [...this.state.cart, cart2] });
     }
-    this.calculateTotal();
+
+
+    this.calculateTotal(final_price);
   };
 
-  calculateTotal = () => {
-    var finalPrice = 0;
-    this.state.cart.map((item, index) => {
-      finalPrice = finalPrice + item.price;
-    });
+  calculateTotal = (finalPrice) => {
+  
     if (this.context.user.gstin != null) {
       var gst = (finalPrice * 5) / 100;
       this.setState({
@@ -194,18 +220,26 @@ class Pos extends Component {
   };
 
   update_cart = (key_id, quantity) => {
-    // alert(key_id + " " + quantity);
+    var final_price=this.state.subTotal;
+
     if (quantity == 0) {
       var cart = this.state.cart;
+       final_price=final_price- cart[key_id].price; 
+
       cart.splice(key_id, 1);
       this.setState({ cart: cart });
     } else {
       var cart = this.state.cart;
       var price = cart[key_id].price / cart[key_id].quantity;
+      final_price=(final_price-cart[key_id].price)+(price * quantity);
+
+      
       cart[key_id].quantity = quantity;
       cart[key_id].price = price * quantity;
       this.setState({ cart: cart });
     }
+
+    this.calculateTotal(final_price);
   };
 
   clear_cart = () => {
@@ -249,6 +283,150 @@ class Pos extends Component {
       this.fetchProducts(this.state.active_cat, 1);
     }
   };
+  
+verifyCustomer = () => {
+  this.setState({is_buttonloding:true})
+    fetch(global.api + "verify_contact", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        contact: this.state.contact,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+         
+           this.setState({user_id:json.data.id});
+          if(json.data.name == null || json.data.name == ""){
+          
+            this.setState({payment_step:1});
+          }else{
+
+            this.setState({name:json.data.name,payment_step:2});
+          }
+          toast.success("done");
+        }
+        this.setState({is_buttonloding:false})
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
+  };
+
+
+  updateCustomer = () => {
+    this.setState({is_buttonloding:true})
+    fetch(global.api + "update_customer_name", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        contact: this.state.contact,
+        name:this.state.name,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          this.setState({payment_step:2});
+        
+          toast.success("done");
+        }
+        this.setState({is_buttonloding:false})
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
+  }
+
+
+  update_order_method = (method) => {
+   if(method=="DineIn"){
+      this.setState({order_method:method,show_table:true});
+   }
+   else
+   {
+    this.setState({ order_method: method,show_table:false });
+   }
+    
+  }
+
+  next_step=()=>{
+    this.setState({isModalOpen:true});
+  }
+
+  place_order = (payment_method) => {
+
+    this.setState({is_buttonloding:true})
+
+    var order_method=this.state.order_method;
+    if(this.state.order_method != 'TakeAway' && this.state.order_method != 'Delivery'){
+      var order_method=this.state.table_no;
+    }
+
+    fetch(global.api + "place_pos_order", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        user_id: this.state.user_id,
+        cart: this.state.cart,
+        method: order_method,
+        payment_method: payment_method,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          this.setState({payment_step:0,isModalOpen:false,cart:[],subTotal:0,taxes:0,grandTotal:0});
+          toast.success("Order Placed");
+        }
+        this.setState({is_buttonloding:false})
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
+  }
+
+update_order_type = (table_uu_id) => {
+    this.setState({order_method:'DineIn',table_no:table_uu_id,show_table:false});
+  }
+
   render() {
     return (
       <>
@@ -270,6 +448,15 @@ class Pos extends Component {
             <div className="page-wrapper" id="sidebar">
               <div className="content">
                 <div className="row">
+
+{
+  this.state.show_table?
+  <div className="col-lg-8 col-sm-12 ">
+  <Tables update_order_type={this.update_order_type}/>
+  </div>:
+
+
+
                   <div className="col-lg-8 col-sm-12 ">
                     <input
                       type="text"
@@ -345,7 +532,7 @@ class Pos extends Component {
                       </div>
                     </div>
                   </div>
-
+                }
                   <div className="col-lg-4 col-sm-12 sidebar_scroll">
                     <div
                       style={{
@@ -356,12 +543,15 @@ class Pos extends Component {
                       }}
                     >
                       <PosAdd
+                      order_method={this.state.order_method}
+                      next_step={this.next_step}
                         clear={this.clear_cart}
                         cart={this.state.cart}
                         update_cart={this.update_cart}
                         subTotal={this.state.subTotal}
                         grandTotal={this.state.grandTotal}
                         taxes={this.state.taxes}
+                        update_order_method={this.update_order_method}
                       />
                     </div>
                   </div>
@@ -369,6 +559,183 @@ class Pos extends Component {
               </div>
             </div>
           )}
+
+<Modal
+          open={this.state.isModalOpen}
+          onClose={() => this.setState({ isModalOpen: false })}
+          center
+          classNames={{
+            modal: "customModal",
+          }}
+        >
+          <div className="content">
+            <div className="page-header">
+              <div className="page-title">
+                <h4>Place POS Order</h4>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body">
+
+                {this.state.payment_step == 0 ? (
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Customer Contact</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ contact: e.target.value });
+                        }}
+                        value={this.state.contact}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.is_buttonloding ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      <a
+                        // href="javascript:void(0);"
+                        onClick={() => {
+                          this.verifyCustomer();
+                        }}
+                        className="btn btn-submit me-2"
+                      >
+                       Verify Customer
+                      </a>
+                    )}
+                  </div>
+                </div>):
+                this.state.payment_step == 1 ? (
+                  <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Customer Contact</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ contact: e.target.value });
+                        }}
+                        value={this.state.contact}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Customer Name</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ name: e.target.value });
+                        }}
+                        value={this.state.name}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.is_buttonloding ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      <a
+                        // href="javascript:void(0);"
+                        onClick={() => {
+                          this.updateCustomer();
+                        }}
+                        className="btn btn-submit me-2"
+                      >
+                       Update Customer
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                ) : (
+<div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                    <h3>Hello, {this.state.name}</h3>
+                   
+                      <label style={{marginTop:'20px'}}>Select Payment Method</label>
+
+                      {this.state.is_buttonloding ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      
+                      <div className="setvaluecash">
+                      <ul>
+                      <li>
+                      <a onClick={()=>{ this.place_order('offline-cash')}} href="javascript:void(0);" className="paymentmethod">
+                      <img src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/cash.svg" alt="img" className="me-2" />
+                      Cash
+                      </a>
+                      </li>
+                      <li>
+                      <a href="javascript:void(0);" onClick={()=>{ this.place_order('offline-card')}} className="paymentmethod">
+                      <img src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/debitcard.svg" alt="img" className="me-2" />
+                      Debit
+                      </a>
+                      </li>
+                      <li>
+                      <a href="javascript:void(0);" onClick={()=>{ this.place_order('offline-UPI')}} className="paymentmethod">
+                    
+                      <img src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg" alt="img" className="me-2" />
+                      Scan
+                      </a>
+                      </li>
+                      </ul>
+                      </div>
+                   
+                    )}
+                   
+                   
+              
+                </div>
+                  </div>
+                  </div>
+                )
+                      }
+              </div>
+            </div>
+          </div>
+        </Modal>
+
         </div>
       </>
     );
@@ -388,24 +755,20 @@ class PosAdd extends React.Component {
         <div className="card card-order h-100">
           <div className="card-header">
             <RadioGroup
-              // value={this.state.is_veg}
+              value={this.props.order_method}
+             // value={this.state.is_veg}
               // onChange={(e) => {
-              //   this.setState({ is_veg: e });
+              // this.props.update_order_method(e.target.value);
               // }}
+
+              // value={this.state.is_veg}
+              onChange={(e) => {
+                this.props.update_order_method(e);
+              }}
               horizontal
             >
-              <RadioButton
-                value="1"
-                pointColor="#f3c783"
-                iconSize={20}
-                rootColor="#065f0a"
-                iconInnerSize={10}
-                padding={8}
-              >
-                Home Delivery
-              </RadioButton>
-              <RadioButton
-                value="0"
+               <RadioButton
+                value="TakeAway"
                 pointColor="#f3c783"
                 iconSize={20}
                 rootColor="#bf370d"
@@ -413,6 +776,27 @@ class PosAdd extends React.Component {
                 padding={8}
               >
                 TakeAway
+              </RadioButton>
+              <RadioButton
+                value="Delivery"
+                pointColor="#f3c783"
+                iconSize={20}
+                rootColor="#065f0a"
+                iconInnerSize={10}
+                padding={8}
+              >
+                 Delivery
+              </RadioButton>
+             
+              <RadioButton
+                value="DineIn"
+                pointColor="#f3c783"
+                iconSize={20}
+                rootColor="#bf370d"
+                iconInnerSize={10}
+                padding={8}
+              >
+                DineIn
               </RadioButton>
             </RadioGroup>
           </div>
@@ -526,7 +910,7 @@ class PosAdd extends React.Component {
                   className="btn btn-primary"
                   style={{ width: "100%" }}
                   onClick={() => {
-                    this.setState({ isModalOpen: true });
+                    this.props.next_step();
                   }}
                 >
                   <h5>Place Order</h5>
@@ -540,67 +924,7 @@ class PosAdd extends React.Component {
             </div>
           )}
         </div>
-        <Modal
-          open={this.state.isModalOpen}
-          onClose={() => this.setState({ isModalOpen: false })}
-          center
-          classNames={{
-            modal: "customModal",
-          }}
-        >
-          <div className="content">
-            <div className="page-header">
-              <div className="page-title">
-                <h4>Place POS Order</h4>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Category Name</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
-                        }}
-                        value={this.state.new_category_name}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-12 d-flex justify-content-end">
-                    {this.state.is_buttonloding ? (
-                      <button
-                        className="btn btn-submit me-2"
-                        style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
-                        }}
-                      >
-                        <span
-                          class="spinner-border spinner-border-sm me-2"
-                          role="status"
-                        ></span>
-                        Updating
-                      </button>
-                    ) : (
-                      <a
-                        href="javascript:void(0);"
-                        onClick={() => {
-                          this.edit();
-                        }}
-                        className="btn btn-submit me-2"
-                      >
-                        Update Category
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
+       
       </>
     );
   }
@@ -727,7 +1051,7 @@ class Products extends Component {
 
   add_cart(product) {
     if (product.addon_map.length > 0 || product.variants.length > 0) {
-      this.setState({ openModal: true });
+      this.setState({ openModal: true, });
     } else {
       this.props.cart(product, this.state.variants_id, this.state.addon);
     }
@@ -891,6 +1215,7 @@ class Products extends Component {
             <div className="d-flex align-items-center justify-content-end">
               <a
                 onClick={() => {
+                  this.setState({ openModal: false });
                   this.props.cart(
                     this.props.data,
                     this.state.variants_id,
@@ -909,4 +1234,118 @@ class Products extends Component {
   }
 }
 
-export default Pos;
+
+class Tables extends Component {
+  static contextType = AuthContext;
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      is_loading: true,
+    };
+  }
+
+  componentDidMount() {
+    this.fetch_table_vendors();
+  }
+
+  fetch_table_vendors = () => {
+    fetch(global.api + "fetch_table_vendors", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+        } else {
+          if (json.data.length > 0) {
+            this.setState({ data: json.data });
+          }
+        }
+        this.setState({ is_loading: false });
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  };
+
+  render() {
+    return (
+      <>
+        <h4>Dine-In</h4>
+        <div className="row" style={{ marginTop: 10 }}>
+          {this.state.is_loading ? (
+            <Skeletonloader count={1} height={100} />
+          ) : (
+            <>
+              {this.state.data.length > 0 ? (
+                this.state.data.map((item, index) => {
+                  return (
+                    <div key={index} className="col-lg-3 col-sm-6 col-12">
+                      <a
+                       onClick={()=>{this.props.update_order_type(item.table_uu_id)}}
+                        // to={"/tableorderdetails/" + item.table_uu_id}
+                        className=" d-flex w-100"
+                      >
+                        <div
+                          className={
+                            item.table_status == "active"
+                              ? "dash-count1"
+                              : "dash-count"
+                          }
+                        >
+                          <div className="dash-counts">
+                            <h4>{item.table_name}</h4>
+                            <h6
+                              style={{
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {item.table_status}
+                            </h6>
+
+                            {/* <a href={item.qr_link}>Download QR</a> */}
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </>
+          )}
+        </div>
+      </>
+    );
+  }
+}
+
+
+
+
+
+function Navigate(props) {
+  const abcd = useNavigate();
+  const location = useLocation();
+  return (
+    <Pos
+      {...props}
+      {...useParams()}
+      navigate={abcd}
+      location={location}
+    />
+  );
+}
+
+export default (props) => <Navigate {...props} />;
+

@@ -125,6 +125,17 @@ export class App extends Component {
                     </RequireAuth>
                   }
                 />
+
+<Route
+                  exact
+                  path="/pos/:table_id"
+                  element={
+                    <RequireAuth>
+                     <Pos />
+                    </RequireAuth>
+                  }
+                />
+
                 <Route
                   exact
                   path="/kot"

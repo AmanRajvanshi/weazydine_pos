@@ -4,7 +4,7 @@ import moment from "moment";
 import { BiRupee } from "react-icons/bi";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation,Link} from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
 import no_order from "../assets/images/no_orders.webp";
@@ -164,8 +164,17 @@ export class TableOrderDetails extends Component {
                   <div className="page-header">
                     <div className="page-title">
                       <h4>Order Details</h4>
+                      
                     </div>
                   </div>
+
+                  <Link
+                    className="btn btn-submit me-2"
+                    to={"/pos/"+this.props.id}
+                  >
+                    Add More Item
+                  </Link>
+
                   <section className="comp-section comp-cards">
                     <div className="row">
                       <div className="col-8">
@@ -516,6 +525,13 @@ export class TableOrderDetails extends Component {
                 >
                   <img src={no_order} alt="" />
                   <h3>No Order Found</h3>
+
+                  <Link
+                    className="btn btn-submit me-2"
+                    to={"/pos/"+this.props.id}
+                  >
+                    Create a new order
+                  </Link>
                 </div>
               </div>
             )}
