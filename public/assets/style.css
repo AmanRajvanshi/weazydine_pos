@@ -7091,6 +7091,9 @@ span.select-container.select-container--default.select-container--open {
   color: #000;
   font-weight: 600;
   margin-bottom: 5px;
+  display: flex;
+  justify-content: start;
+
 }
 .productimg .productcontet h4 img {
   opacity: 0;
@@ -7111,7 +7114,7 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .product-table {
-  height: 34vh;
+  height: 50vh;
   overflow: auto;
 }
 @media (max-width: 991px) {
@@ -7575,7 +7578,9 @@ span.select-container.select-container--default.select-container--open {
 
 .productset {
   border: 1px solid #f8f8f8;
-  box-shadow: 0px 4px 4px 0px #ededed40;
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.25);
   background: #fff;
   margin: 0 0 25px;
   border-radius: 5px;
@@ -7597,9 +7602,9 @@ span.select-container.select-container--default.select-container--open {
   background: #eda332;
   border-radius: 4px 0;
 }
-.productset.active {
+/* .productset.active {
   border: 1px solid #eda332;
-}
+} */
 .productset:hover .productsetimg img {
   transform: scale(1.2);
 }
@@ -7609,6 +7614,7 @@ span.select-container.select-container--default.select-container--open {
 .productset .productsetimg {
   position: relative;
   overflow: hidden;
+  padding: 10px 0;
 }
 .productset .productsetimg img {
   transition: all 0.5s;
@@ -8052,10 +8058,27 @@ span.select-container.select-container--default.select-container--open {
   border-right: none;
 }
 
-.border-none{
+.border-none {
   border: none !important;
 }
 
-.react-responsive-modal-modal{
+.react-responsive-modal-modal {
   width: 600px !important;
+}
+
+.pos_add_div {
+  margin: 10px;
+  margin-bottom: 13px;
+  padding-bottom: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid #6c6c6c;
+  border-radius: 5px;
+  padding: 16px 8px;
+  width: 96%;
+}
+
+.pos_add_div:last-child {
+  border-bottom: none;
 }

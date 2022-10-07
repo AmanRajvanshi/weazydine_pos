@@ -28,6 +28,8 @@ export class TableOrderDetails extends Component {
       order_code: "",
       bill: [],
       payment: "",
+      generate_order_buttonLoading: false,
+      mark_complete_buttonLoading: false,
     };
   }
 
@@ -68,6 +70,7 @@ export class TableOrderDetails extends Component {
   };
 
   genrate_bill = () => {
+    this.setState({ generate_order_buttonLoading: true });
     fetch(global.api + "generate_bill_by_table", {
       method: "POST",
       headers: {
@@ -97,10 +100,13 @@ export class TableOrderDetails extends Component {
       .catch((error) => {
         console.error(error);
       })
-      .finally(() => {});
+      .finally(() => {
+        this.setState({ generate_order_buttonLoading: false });
+      });
   };
 
   mark_complete = () => {
+    this.setState({ mark_complete_buttonLoading: true });
     fetch(global.api + "update_order_status_by_vendor", {
       method: "POST",
       headers: {
@@ -125,14 +131,13 @@ export class TableOrderDetails extends Component {
           this.props.navigate(-1);
           toast.success("Order Completed");
         }
-        this.setState({ isloading: false });
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {
-        this.setState({ isloading: false });
+        this.setState({ mark_complete_buttonLoading: false });
       });
   };
   render() {
@@ -182,15 +187,31 @@ export class TableOrderDetails extends Component {
                                 )}
                               </h6>
                             </div>
-                            <button
-                              className="btn btn-primary btn-sm"
-                              onClick={() => {
-                                this.genrate_bill();
-                              }}
-                            >
-                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                              Generate Bill
-                            </button>
+                            {this.state.generate_order_buttonLoading ? (
+                              <button
+                                className="btn btn-primary btn-sm"
+                                style={{
+                                  pointerEvents: "none",
+                                  opacity: "0.8",
+                                }}
+                              >
+                                <span
+                                  class="spinner-border spinner-border-sm me-2"
+                                  role="status"
+                                ></span>
+                                Generating Bill
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => {
+                                  this.genrate_bill();
+                                }}
+                              >
+                                <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                Generate Bill
+                              </button>
+                            )}
                           </div>
                           <div className="card-body">
                             <h5 className="card-title">
@@ -611,14 +632,30 @@ export class TableOrderDetails extends Component {
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
-                    <a
-                      className="btn btn-submit btn-sm"
-                      onClick={() => {
-                        this.mark_complete();
-                      }}
-                    >
-                      Complete Order 
-                    </a>
+                    {this.state.mark_complete_buttonLoading ? (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Please wait
+                      </button>
+                    ) : (
+                      <a
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.mark_complete();
+                        }}
+                      >
+                        Complete Order
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

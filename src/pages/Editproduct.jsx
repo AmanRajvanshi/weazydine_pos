@@ -8,6 +8,8 @@ import { RadioGroup, RadioButton } from "react-radio-buttons";
 import { BiRupee } from "react-icons/bi";
 import { toast } from "react-toastify";
 import { AuthContext } from "../AuthContextProvider";
+import { Bars } from "react-loader-spinner";
+import Skeletonloader from "../othercomponent/Skeletonloader";
 export class Editproduct extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -25,7 +27,7 @@ export class Editproduct extends Component {
       market_price: "",
       our_price: "",
       description: "",
-      type: "product",
+      type: "",
       is_veg: 1,
       is_loading: true,
       v_data: [],
@@ -272,7 +274,7 @@ export class Editproduct extends Component {
                   </div>
                   <a
                     className="btn btn-submit me-2"
-                    onClick={() => this.update_product_variant()}
+                    onClick={() => this.create()}
                   >
                     Save
                   </a>
@@ -322,7 +324,7 @@ export class Editproduct extends Component {
                             {this.state.category.length > 0 ? (
                               this.state.category.map((item, index) => {
                                 return (
-                                  <option value={item.id}>{item.name}aa</option>
+                                  <option value={item.id}>{item.name}</option>
                                 );
                               })
                             ) : (
@@ -355,7 +357,7 @@ export class Editproduct extends Component {
                           />
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-3">
                         <div className="form-group">
                           <label>VEG/NON-VEG</label>
                           <RadioGroup
@@ -371,7 +373,7 @@ export class Editproduct extends Component {
                               iconSize={20}
                               rootColor="#065f0a"
                               iconInnerSize={10}
-                              padding={10}
+                              padding={8}
                             >
                               VEG
                             </RadioButton>
@@ -381,23 +383,37 @@ export class Editproduct extends Component {
                               iconSize={20}
                               rootColor="#bf370d"
                               iconInnerSize={10}
-                              padding={10}
+                              padding={8}
                             >
                               NON-VEG
                             </RadioButton>
                           </RadioGroup>
                         </div>
                       </div>
-                      <div className="col-lg-12">
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label>Product/Combos</label>
+                          <select
+                            onChange={(e) => {
+                              this.setState({ type: e.target.value });
+                            }}
+                            className="select-container"
+                          >
+                            <option value="product">Product</option>
+                            <option value="package">Combos</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-lg-6">
                         <div className="form-group">
                           <label>Description</label>
-                          <textarea
+                          <input
+                            type="text"
                             value={this.state.description}
                             onChange={(e) => {
                               this.setState({ description: e.target.value });
                             }}
                             className="form-control"
-                            defaultValue={""}
                           />
                         </div>
                       </div>
@@ -468,7 +484,17 @@ export class Editproduct extends Component {
               />
             </div>
           ) : (
-            <h3>Loading</h3>
+            <div className="main_loader">
+              <Bars
+                height="80"
+                width="80"
+                color="#eda332"
+                ariaLabel="bars-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
           )}
         </div>
         <Modal
@@ -530,6 +556,9 @@ class Variants extends Component {
       addon_name: "",
       addon_price: "",
       object: [],
+      add_on_loading: false,
+      add_on_dataLoading: true,
+      newaddon: false,
     };
   }
 
@@ -566,8 +595,7 @@ class Variants extends Component {
         } else {
           this.setState({ add_data: json.data });
         }
-
-        this.setState({ isLoading: false });
+        this.setState({ add_on_dataLoading: false });
         return json;
       })
       .catch((error) => {
@@ -606,7 +634,7 @@ class Variants extends Component {
     if (this.state.addon_name == "" || this.state.addon_price == "") {
       toast.error("All field is required!");
     } else {
-      this.setState({ isLoading: true });
+      this.setState({ newaddonLoading: true });
       fetch(global.api + "add_product_addon", {
         method: "POST",
         headers: {
@@ -626,7 +654,12 @@ class Variants extends Component {
             toast.error(json.msg);
           } else {
             this.fetch_addon();
-            this.setState({ addon_name: "", addon_price: "", newaddon: false });
+            this.setState({
+              addon_name: "",
+              addon_price: "",
+              newaddonLoading: false,
+              newaddon: false,
+            });
             toast.success(json.msg);
           }
 
@@ -799,7 +832,9 @@ class Variants extends Component {
             </div>
             <div className="row">
               <div className="col-mg-12">
-                {this.state.add_data.length > 0 ? (
+                {this.state.add_on_dataLoading ? (
+                  <Skeletonloader height={43} count={3} />
+                ) : this.state.add_data.length > 0 ? (
                   this.state.add_data.map((item, index) => {
                     return (
                       <div className="checkbox_addon">
@@ -866,15 +901,31 @@ class Variants extends Component {
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
-                    <a
-                      onClick={() => {
-                        this.create_addon();
-                      }}
-                      href="javascript:void(0);"
-                      className="btn btn-submit me-2"
-                    >
-                      Add New Addon
-                    </a>
+                    {this.state.newaddonLoading ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Adding
+                      </button>
+                    ) : (
+                      <a
+                        onClick={() => {
+                          this.create_addon();
+                        }}
+                        href="javascript:void(0);"
+                        className="btn btn-submit me-2"
+                      >
+                        Add New Addon
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

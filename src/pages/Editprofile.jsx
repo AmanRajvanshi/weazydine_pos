@@ -10,6 +10,7 @@ export class Editprofile extends Component {
     super(props);
     this.state = {
       is_loading: true,
+      submit_buttonLoading: false,
       shop_name: "",
       email: "",
       website: "",
@@ -59,12 +60,15 @@ export class Editprofile extends Component {
   };
 
   save = () => {
+    this.setState({ submit_buttonLoading: true });
     // let numberValidation = /^[0]?[6789]\d{9}$/;
     // let isnumValid = numberValidation.test(this.state.whatsapp);
     if (this.state.shop_name == "") {
       toast.error("All fields are required !");
+      this.setState({ submit_buttonLoading: false });
     } else if (this.state.name == "") {
       toast.error("Enter your Shop Name!");
+      this.setState({ submit_buttonLoading: false });
       // } else if (this.state.whatsapp != "" && !isnumValid) {
       //   toast.error("Enter valid whatsapp number!");
     } else {
@@ -93,13 +97,14 @@ export class Editprofile extends Component {
             toast.success(json.msg);
             // this.props.navigation.navigate("More");
           }
+          this.setState({ submit_buttonLoading: false });
           return json;
         })
         .catch((error) => {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ is_loading: false });
+          this.setState({ submit_buttonLoading: false });
         });
     }
   };
@@ -275,17 +280,30 @@ export class Editprofile extends Component {
                       </div>
                     </div>
                     <div className="col-12 d-flex align-items-center justify-content-end">
-                      <a
-                        onClick={() => {
-                          this.save();
-                        }}
-                        className="btn btn-submit me-2"
-                      >
-                        Submit
-                      </a>
-                      <a href="javascript:void(0);" className="btn btn-cancel">
-                        Cancel
-                      </a>
+                      {this.state.submit_buttonLoading ? (
+                        <button
+                          className="btn btn-submit me-2"
+                          style={{
+                            pointerEvents: "none",
+                            opacity: "0.8",
+                          }}
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Please Wait
+                        </button>
+                      ) : (
+                        <a
+                          onClick={() => {
+                            this.save();
+                          }}
+                          className="btn btn-submit me-2"
+                        >
+                          Submit
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>

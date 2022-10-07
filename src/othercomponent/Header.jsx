@@ -13,7 +13,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-
+    console.log(this.context.token);
   }
 
   logOut = () => {
@@ -251,7 +251,11 @@ export class Header extends Component {
               >
                 <span className="user-img">
                   <img
-                   src={this.context.user.profile_pic == null? profile:this.context.user.profile_pic}
+                    src={
+                      this.context.user.profile_pic == null
+                        ? profile
+                        : this.context.user.profile_pic
+                    }
                     alt=""
                     style={{ width: "40px", height: "40px" }}
                   />
@@ -263,7 +267,11 @@ export class Header extends Component {
                   <div className="profileset">
                     <span className="user-img">
                       <img
-                        src={this.context.user.profile_pic == null? profile:this.context.user.profile_pic}
+                        src={
+                          this.context.user.profile_pic == null
+                            ? profile
+                            : this.context.user.profile_pic
+                        }
                         alt=""
                       />
                       <span className="status online" />

@@ -98,10 +98,10 @@ export class Productdetails extends Component {
                             <h4>Name</h4>
                             <h6>{this.state.product.product_name}</h6>
                           </li>
-                          <li>
+                          {/* <li>
                             <h4>Category</h4>
                             <h6>Computers</h6>
-                          </li>
+                          </li> */}
                           {/* <li>
                           <h4>Unit</h4>
                           <h6>Piece</h6>

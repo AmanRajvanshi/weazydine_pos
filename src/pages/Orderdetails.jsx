@@ -363,15 +363,17 @@ export class Orderdetails extends Component {
                       <div className="card-body">
                         <div className=" d-flex align-items-start justify-content-between pb-4">
                           <h5>Notes</h5>
-                          <a
-                            className="btn btn-added"
-                            style={{
-                              color: "#eda332",
-                            }}
-                            onClick={() => this.setState({ open: true })}
-                          >
-                            Add
-                          </a>
+                          {this.state.data.order_status != "completed" && (
+                            <a
+                              className="btn btn-added"
+                              style={{
+                                color: "#eda332",
+                              }}
+                              onClick={() => this.setState({ open: true })}
+                            >
+                              Add
+                            </a>
+                          )}
                         </div>
                         <p>{this.state.additional_note}</p>
                       </div>
@@ -433,6 +435,9 @@ export class Orderdetails extends Component {
                     <a
                       href="javascript:void(0);"
                       className="btn btn-submit btn-sm"
+                      onClick={() => {
+                        this.setState({ open: false });
+                      }}
                     >
                       Submit
                     </a>

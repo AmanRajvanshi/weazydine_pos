@@ -64,7 +64,7 @@ export class DineinList extends Component {
         console.warn(json);
         if (!json.status) {
           var msg = json.msg;
-          toast.error(msg);
+          toast.error("Something went wrong! Please try again later.");
         } else {
           toast.success(json.msg);
           this.fetch_table_vendors();
@@ -218,7 +218,30 @@ export class DineinList extends Component {
                                         QR Code
                                       </a>
                                     </td>
-                                    <td style={{ textAlign: "end" }}>
+                                    <td
+                                      style={{
+                                        textAlign: "end",
+                                        display: "flex",
+                                        alingItems: "center",
+                                        justifyContent: "flex-end",
+                                      }}
+                                    >
+                                      <Link
+                                        to={
+                                          "/tableorderdetails/" +
+                                          item.table_uu_id
+                                        }
+                                      >
+                                        <button
+                                          className="btn btn-primary"
+                                          style={{
+                                            marginRight: "10px",
+                                            padding: "2px 6px",
+                                          }}
+                                        >
+                                          <i className="fa fa-eye"></i>
+                                        </button>
+                                      </Link>
                                       <img
                                         src={delete_icon}
                                         alt="img"

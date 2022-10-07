@@ -9,6 +9,8 @@ import { Bars } from "react-loader-spinner";
 import { Toggle } from "../othercomponent/Toggle";
 import Skeletonloader from "../othercomponent/Skeletonloader";
 import no_img from "../assets/images/no_products_found.png";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 export class Productlist extends Component {
   static contextType = AuthContext;
@@ -90,6 +92,40 @@ export class Productlist extends Component {
       .catch((error) => console.error(error))
       .finally(() => {
         this.setState({ category_loding: false });
+      });
+  };
+
+  delete_product = (id) => {
+    fetch(global.api + "update_status_product_offer", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        action_id: id,
+        type: "product",
+        status: "delete",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn("delete_product",json)
+        if (!json.status) {
+          var msg = json.msg;
+          // Toast.show(msg);
+          toast.success(msg);
+        } else {
+          toast.success("Product Deleted Successfully");
+          this.fetchProducts(this.state.active_cat, 1);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
       });
   };
 
@@ -202,14 +238,31 @@ export class Productlist extends Component {
                                   </td>
                                   <td style={{ textAlign: "end" }}>
                                     <Link
-                                      to={"/Editproduct/" + item.id}
+                                      to={"/editproduct/" + item.id}
                                       className="me-3"
                                     >
                                       <img src={edit_icon} alt="img" />
                                     </Link>
                                     <a
                                       className="confirm-text"
-                                      href="javascript:void(0);"
+                                      // onClick={() => {
+                                      //   this.delete_product(item.id);
+                                      // }}
+                                      onClick={() =>
+                                        Swal.fire({
+                                          title: "Are you sure?",
+                                          text: "You won't be able to revert this!",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#3085d6",
+                                          cancelButtonColor: "#d33",
+                                          confirmButtonText: "Yes, delete it!",
+                                        }).then((result) => {
+                                          if (result.isConfirmed) {
+                                            this.delete_product(item.id);
+                                          }
+                                        })
+                                      }
                                     >
                                       <img src={delete_icon} alt="img" />
                                     </a>
@@ -254,7 +307,10 @@ class Category extends Component {
             }}
           >
             <div
-              className={"product-details"+ (this.props.active_cat == 0 ? " active" : "")}
+              className={
+                "product-details" +
+                (this.props.active_cat == 0 ? " active" : "")
+              }
               href="#solid-rounded-justified-tab1"
               data-bs-toggle="tab"
             >
@@ -270,7 +326,10 @@ class Category extends Component {
                   }}
                 >
                   <div
-                    className={"product-details" + (this.props.active_cat == item.id ? " active" : "")}
+                    className={
+                      "product-details" +
+                      (this.props.active_cat == item.id ? " active" : "")
+                    }
                     href="#solid-rounded-justified-tab1"
                     data-bs-toggle="tab"
                   >

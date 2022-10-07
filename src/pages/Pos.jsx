@@ -6,6 +6,9 @@ import { BiRupee } from "react-icons/bi";
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import { RadioButton, RadioGroup } from "react-radio-buttons";
+import Skeletonloader from "../othercomponent/Skeletonloader";
+import no_cart from "../assets/images/cart_empty.png";
+import no_product from "../assets/images/no_products_found.png";
 
 class Pos extends Component {
   static contextType = AuthContext;
@@ -17,13 +20,16 @@ class Pos extends Component {
       active_cat: 0,
       isloading: true,
       cart: [],
-      load_item:true,
+      load_item: true,
+      grandTotal: 0,
+      subTotal: 0,
+      taxes: 0,
     };
   }
 
   componentDidMount() {
     this.fetchCategories();
-    this.fetchProducts(0,1);
+    this.fetchProducts(0, 1);
   }
 
   active_cat = (id) => {
@@ -32,7 +38,7 @@ class Pos extends Component {
   };
 
   fetchProducts = (category_id, page) => {
-    this.setState({load_item:true})
+    this.setState({ load_item: true });
     fetch(global.api + "vendor_get_vendor_product", {
       method: "POST",
       headers: {
@@ -65,9 +71,7 @@ class Pos extends Component {
       .catch((error) => {
         console.error(error);
       })
-      .finally(() => {
-        
-      });
+      .finally(() => {});
   };
 
   fetchCategories = () => {
@@ -93,8 +97,7 @@ class Pos extends Component {
   };
 
   add_to_cart = (product, vv_id, addons) => {
-
-    var bb=[];
+    var bb = [];
     addons.map((item, index) => {
       bb.push(item);
     });
@@ -105,35 +108,28 @@ class Pos extends Component {
     for (var i = 0; i < this.state.cart.length; i++) {
       var item = this.state.cart[i];
       if (item.product.id == product.id && item.variant_id == vv_id) {
-
-        if(bb.length == 0 && item.cart_addon.length == 0){
+        if (bb.length == 0 && item.cart_addon.length == 0) {
           key = i;
-          match=true;
+          match = true;
           break;
-        }
-        else
-        {
-          if(bb.length == item.cart_addon.length)
-          {
+        } else {
+          if (bb.length == item.cart_addon.length) {
             for (var j = 0; j < bb.length; j++) {
               var item1 = bb[j];
-              if(item.cart_addon.includes(item1)){
+              if (item.cart_addon.includes(item1)) {
                 key = i;
-                match=true;
-              }
-              else
-              {
-                match=false;
+                match = true;
+              } else {
+                match = false;
                 break;
               }
+            }
           }
         }
-        }
-    
+
         if (breaknow) {
           break;
         }
-        
       }
     }
     if (match) {
@@ -157,7 +153,11 @@ class Pos extends Component {
         }
       });
 
-      
+      var cart2 = this.state.cart;
+      var finalPrice = 0;
+      cart2.map((item, index) => {
+        finalPrice = finalPrice + item.price;
+      });
       var cart = {
         product_id: product.id,
         product: product,
@@ -168,6 +168,28 @@ class Pos extends Component {
       };
 
       this.setState({ cart: [...this.state.cart, cart] });
+    }
+    this.calculateTotal();
+  };
+
+  calculateTotal = () => {
+    var finalPrice = 0;
+    this.state.cart.map((item, index) => {
+      finalPrice = finalPrice + item.price;
+    });
+    if (this.context.user.gstin != null) {
+      var gst = (finalPrice * 5) / 100;
+      this.setState({
+        subTotal: finalPrice,
+        taxes: gst,
+        grandTotal: finalPrice + gst,
+      });
+    } else {
+      this.setState({
+        subTotal: finalPrice,
+        taxes: 0,
+        grandTotal: finalPrice,
+      });
     }
   };
 
@@ -268,7 +290,7 @@ class Pos extends Component {
 
                     {this.state.category.length > 0 ? (
                       <Category
-                      active_cat={this.state.active_cat}
+                        active_cat={this.state.active_cat}
                         category={this.state.category}
                         fetch_product={this.active_cat}
                       />
@@ -285,25 +307,39 @@ class Pos extends Component {
                     >
                       <div className="tabs_container">
                         <div className="tab_content active" data-tab="fruits">
-                          <div className="row">
-                            {
-                           !this.state.load_item?
-                            this.state.products.length > 0 ? (
-                              this.state.products.map((item, index) => {
-                                return (
-                                  <Products
-                                  key={index}
-                                    data={item}
-                                    cart={this.add_to_cart}
+                          <div
+                            className="row m-0"
+                            style={{
+                              paddingTop: "20px",
+                            }}
+                          >
+                            {!this.state.load_item ? (
+                              this.state.products.length > 0 ? (
+                                this.state.products.map((item, index) => {
+                                  return (
+                                    <Products
+                                      key={index}
+                                      data={item}
+                                      cart={this.add_to_cart}
+                                    />
+                                  );
+                                })
+                              ) : (
+                                <div className="d-flex align-items-center justify-content-center flex-column">
+                                  <img
+                                    src={no_product}
+                                    alt=""
+                                    style={{
+                                      height: "300px",
+                                      paddingBottom: "20px",
+                                    }}
                                   />
-                                );
-                              })
+                                  <h6>No Product Found.</h6>
+                                </div>
+                              )
                             ) : (
-                              <h3>No Product Found.</h3>
-                            )
-                          :
-                          <h3>Loading</h3>
-                          }
+                              <Skeletonloader height={210} count={2} />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -312,12 +348,20 @@ class Pos extends Component {
 
                   <div className="col-lg-4 col-sm-12 sidebar_scroll">
                     <div
-                      style={{ position: "fixed", zIndex: 99, width: "30%" }}
+                      style={{
+                        position: "fixed",
+                        zIndex: 99,
+                        width: "30%",
+                        height: "89%",
+                      }}
                     >
                       <PosAdd
                         clear={this.clear_cart}
                         cart={this.state.cart}
                         update_cart={this.update_cart}
+                        subTotal={this.state.subTotal}
+                        grandTotal={this.state.grandTotal}
+                        taxes={this.state.taxes}
                       />
                     </div>
                   </div>
@@ -332,210 +376,231 @@ class Pos extends Component {
 }
 
 class PosAdd extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isModalOpen: true,
+    };
+  }
   render() {
     return (
       <>
-        {/* <div className="order-list"> */}
-        {/* <div className="orderid"> */}
-        {/* <h4>Order List</h4> */}
-        {/* <h5>Transaction id : #65565</h5> */}
-        {/* </div> */}
-        {/* <div className="actionproducts">
-            <ul>
-              <li>
-                <a href="javascript:void(0);" className="deletebg confirm-text">
-                  <img
-                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/delete-2.svg"
-                    alt="img"
-                  />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="javascript:void(0);"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  className="dropset"
-                >
-                  <img
-                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/ellipise1.svg"
-                    alt="img"
-                  />
-                </a>
-                <ul
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                  data-popper-placement="bottom-end"
-                >
-                  <li>
-                    <a href="#" className="dropdown-item">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="dropdown-item">
-                      Another Action
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="dropdown-item">
-                      Something Elses
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div> */}
-        {/* </div> */}
-        <div className="card card-order">
-          <div className="split-card" />
-          <div className="card-body pt-0">
-            <div className="totalitem">
-              <h4>Total items : {this.props.cart.length}</h4>
-              <a
-                href="#!"
-                onClick={() => {
-                  this.props.clear();
-                }}
+        <div className="card card-order h-100">
+          <div className="card-header">
+            <RadioGroup
+              // value={this.state.is_veg}
+              // onChange={(e) => {
+              //   this.setState({ is_veg: e });
+              // }}
+              horizontal
+            >
+              <RadioButton
+                value="1"
+                pointColor="#f3c783"
+                iconSize={20}
+                rootColor="#065f0a"
+                iconInnerSize={10}
+                padding={8}
               >
-                Clear all
-              </a>
-            </div>
-            <div className="product-table" style={{ height: "50vh" }}>
-              {
-            
-              this.props.cart.length > 0 ? (
-               
-                this.props.cart.map((item, index) => {
-             
-                  return (
-                    <ul key={index} className="product-lists">
-                      <li>
-                        <div className="productimg">
-                          <div className="productcontet">
-                            <h4>
-                              {item.product.product_name}
+                Home Delivery
+              </RadioButton>
+              <RadioButton
+                value="0"
+                pointColor="#f3c783"
+                iconSize={20}
+                rootColor="#bf370d"
+                iconInnerSize={10}
+                padding={8}
+              >
+                TakeAway
+              </RadioButton>
+            </RadioGroup>
+          </div>
 
-                              {item.product.variants.map((i, index) => {
-                                if (i.id == item.variant_id) {
-                                  return <p key={index}>- {i.variants_name}</p>;
-                                }
-                              })}
-                            </h4>
-                            <div className="productlinkset">
-                             
-                              {item.product.addon_map.map((i, key) => {
-                                if (item.cart_addon.includes(i.id)) {
-                                  return <h5 key={key}>{i.addon_name}</h5>;
-                                }
-                              })}
-                            </div>
-                            <div className="row">
-                              <div className="col-6">
-                                <AddDelete
-                                  key_id={index}
-                                  quantity={item.quantity}
-                                  update_cart={this.props.update_cart}
-                                />
+          {this.props.cart.length > 0 ? (
+            <>
+              <div className="card-body py-0">
+                <div className="totalitem">
+                  <h4>Total items : {this.props.cart.length}</h4>
+                  <a
+                    style={{
+                      cursor: "pointer",
+                      textDecoration: "underline",
+                      color: "red",
+                    }}
+                    onClick={() => {
+                      this.props.clear();
+                    }}
+                  >
+                    Remove all
+                  </a>
+                </div>
+                <div className="product-table w-100">
+                  {this.props.cart.map((item, index) => {
+                    return (
+                      <ul key={index} className="product-lists pos_add_div">
+                        <li>
+                          <div className="productimg">
+                            <div className="productcontet">
+                              <h4 className="text-start">
+                                {item.product.product_name}
+                                {item.product.variants.map((i, index) => {
+                                  if (i.id == item.variant_id) {
+                                    return (
+                                      <p key={index}>- {i.variants_name}</p>
+                                    );
+                                  }
+                                })}
+                              </h4>
+                              <div className="productlinkset">
+                                {item.product.addon_map.map((i, key) => {
+                                  if (item.cart_addon.includes(i.id)) {
+                                    return <h5 key={key}>{i.addon_name}</h5>;
+                                  }
+                                })}
                               </div>
-                              <div className="col-6">
-                                <p style={{ marginTop: "10px" }}>
-                                  X {(item.price / item.quantity).toFixed(2)}
-                                </p>
+                              <div className="row">
+                                <div className="col-6">
+                                  <AddDelete
+                                    key_id={index}
+                                    quantity={item.quantity}
+                                    update_cart={this.props.update_cart}
+                                  />
+                                </div>
+                                <div className="col-6">
+                                  <p style={{ marginTop: "10px" }}>
+                                    X {(item.price / item.quantity).toFixed(2)}
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </li>
-                      <li>{item.price}</li>
-                      <li>
-                        <a className="confirm-text" href="#!">
-                          <img
-                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/delete-2.svg"
-                            alt="img"
-                            onClick={() => {
-                              this.props.update_cart(index, 0);
-                            }}
-                          />
-                        </a>
-                      </li>
-                    </ul>
-                  );
-                })
-              ) : (
-                <h5>No Item Added</h5>
-              )}
+                        </li>
+                        <li>{item.price}</li>
+                        <li className="d-flex align-items-start">
+                          <a className="confirm-text" href="#!">
+                            <img
+                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/delete-2.svg"
+                              alt="img"
+                              onClick={() => {
+                                this.props.update_cart(index, 0);
+                              }}
+                            />
+                          </a>
+                        </li>
+                      </ul>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="card-footer pt-0 pb-2">
+                <div className="setvalue">
+                  <ul>
+                    <li>
+                      <h5>Subtotal</h5>
+                      <h6>
+                        {" "}
+                        <BiRupee />
+                        {this.props.subTotal}
+                      </h6>
+                    </li>
+                    <li>
+                      <h5>Tax</h5>
+                      <h6>
+                        {" "}
+                        <BiRupee />
+                        {this.props.taxes}
+                      </h6>
+                    </li>
+                    <li className="total-value">
+                      <h5>Total</h5>
+                      <h6>
+                        {" "}
+                        <BiRupee />
+                        {this.props.grandTotal}
+                      </h6>
+                    </li>
+                  </ul>
+                </div>
+                <div
+                  className="btn btn-primary"
+                  style={{ width: "100%" }}
+                  onClick={() => {
+                    this.setState({ isModalOpen: true });
+                  }}
+                >
+                  <h5>Place Order</h5>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="card-body pt-0 d-flex align-items-center justify-content-center flex-column">
+              <img src={no_cart} alt="" />
+              <h5>No Product Added.</h5>
             </div>
-          </div>
-          <div className="split-card" />
-          <div className="card-body pt-0 pb-2">
-            <div className="setvalue">
-              <ul>
-                <li>
-                  <h5>Subtotal</h5>
-                  <h6>
-                    {" "}
-                    <BiRupee />
-                    55.00
-                  </h6>
-                </li>
-                <li>
-                  <h5>Tax</h5>
-                  <h6>
-                    {" "}
-                    <BiRupee />
-                    5.00
-                  </h6>
-                </li>
-                <li className="total-value">
-                  <h5>Total</h5>
-                  <h6>
-                    {" "}
-                    <BiRupee />
-                    60.00
-                  </h6>
-                </li>
-              </ul>
-            </div>
-            {/* <div className="setvaluecash">
-              <ul>
-                <li>
-                  <a href="javascript:void(0);" className="paymentmethod">
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/cash.svg"
-                      alt="img"
-                      className="me-2"
-                    />
-                    Cash
-                  </a>
-                </li>
-                <li>
-                  <a href="javascript:void(0);" className="paymentmethod">
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/debitcard.svg"
-                      alt="img"
-                      className="me-2"
-                    />
-                    Debit
-                  </a>
-                </li>
-                <li>
-                  <a href="javascript:void(0);" className="paymentmethod">
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
-                      alt="img"
-                      className="me-2"
-                    />
-                    Scan
-                  </a>
-                </li>
-              </ul>
-            </div> */}
-            <div className="btn btn-primary" style={{ width: "100%" }}>
-              <h5>Place Order</h5>
-            </div>
-          </div>
+          )}
         </div>
+        <Modal
+          open={this.state.isModalOpen}
+          onClose={() => this.setState({ isModalOpen: false })}
+          center
+          classNames={{
+            modal: "customModal",
+          }}
+        >
+          <div className="content">
+            <div className="page-header">
+              <div className="page-title">
+                <h4>Place POS Order</h4>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Category Name</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ new_category_name: e.target.value });
+                        }}
+                        value={this.state.new_category_name}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.is_buttonloding ? (
+                      <button
+                        className="btn btn-submit me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      <a
+                        href="javascript:void(0);"
+                        onClick={() => {
+                          this.edit();
+                        }}
+                        className="btn btn-submit me-2"
+                      >
+                        Update Category
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
       </>
     );
   }
@@ -546,7 +611,7 @@ class AddDelete extends React.Component {
     super(props);
     this.state = {
       count: 0,
-      quantity:this.props.quantity
+      quantity: this.props.quantity,
     };
   }
   render() {
@@ -569,7 +634,9 @@ class AddDelete extends React.Component {
             type="text"
             name="child"
             value={this.props.quantity}
-            onChange={(e)=>{this.setState({quantity:e.target.value})}}
+            onChange={(e) => {
+              this.setState({ quantity: e.target.value });
+            }}
             className="quantity-field"
           />
           <input
@@ -600,7 +667,12 @@ class Category extends Component {
               this.props.fetch_product(0);
             }}
           >
-            <div className={"product-details"+ (this.props.active_cat == 0 ? " active" : "")}>
+            <div
+              className={
+                "product-details" +
+                (this.props.active_cat == 0 ? " active" : "")
+              }
+            >
               <h6>All</h6>
             </div>
           </li>
@@ -609,13 +681,20 @@ class Category extends Component {
             this.props.category.map((item, index) => {
               return (
                 <li
-                key={index}
+                  key={index}
                   onClick={() => {
                     this.props.fetch_product(item.id);
                   }}
                 >
-                  <div className={"product-details" + (this.props.active_cat == item.id ? " active" : "")}>
-                    <h6>{item.name} ({item.products_count})</h6>
+                  <div
+                    className={
+                      "product-details" +
+                      (this.props.active_cat == item.id ? " active" : "")
+                    }
+                  >
+                    <h6>
+                      {item.name} ({item.products_count})
+                    </h6>
                   </div>
                 </li>
               );
@@ -687,9 +766,9 @@ class Products extends Component {
                 className="product_image"
               />
               {/* <h6>Qty: 5</h6> */}
-              <div className="check-product">
+              {/* <div className="check-product">
                 <i className="fa fa-check" />
-              </div>
+              </div> */}
             </div>
             <div className="productsetcontent">
               <div>
@@ -736,7 +815,7 @@ class Products extends Component {
                     //this.setState({ variants_id: value });
                   }}
                 >
-                  {this.props.data.variants.map((values,key) => {
+                  {this.props.data.variants.map((values, key) => {
                     return (
                       <RadioButton
                         value={values.id.toString()}
@@ -748,7 +827,6 @@ class Products extends Component {
                         props={{
                           className: "radio-button",
                         }}
-
                         key={key}
                       >
                         <div className="d-flex justify-content-between align-items-center radio_button_text">
@@ -776,9 +854,12 @@ class Products extends Component {
                 <h5 className="title-color font-sm fw-600 text-align-center mt-3 mb-3">
                   Addon
                 </h5>
-                {this.props.data.addon_map.map((values,index) => {
+                {this.props.data.addon_map.map((values, index) => {
                   return (
-                    <div key={index} className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3">
+                    <div
+                      key={index}
+                      className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3"
+                    >
                       <input
                         type="checkbox"
                         id={values.id}

@@ -27,7 +27,7 @@ export class Addproduct extends Component {
       market_price: "",
       our_price: "",
       description: "",
-      type: "product",
+      type: "",
       is_veg: 1,
       save_and_continue: false,
       add_category_loading: false,
@@ -269,7 +269,7 @@ export class Addproduct extends Component {
                           />
                         </div>
                       </div>
-                      <div className="col-md-4">
+                      <div className="col-md-3">
                         <div className="form-group">
                           <label>VEG/NON-VEG</label>
                           <RadioGroup
@@ -302,7 +302,21 @@ export class Addproduct extends Component {
                           </RadioGroup>
                         </div>
                       </div>
-                      <div className="col-lg-8">
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label>Product/Combos</label>
+                          <select
+                            onChange={(e) => {
+                              this.setState({ type: e.target.value });
+                            }}
+                            className="select-container"
+                          >
+                            <option value="product">Product</option>
+                            <option value="package">Combos</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-lg-6">
                         <div className="form-group">
                           <label>Description</label>
                           <input
@@ -336,7 +350,7 @@ export class Addproduct extends Component {
                               />
                             )}
 
-                            {this.state.images.length > 0 ? (
+                            {this.state.images.length > 0 &&
                               this.state.images.map((item, index) => {
                                 return (
                                   <img
@@ -348,10 +362,7 @@ export class Addproduct extends Component {
                                     }}
                                   />
                                 );
-                              })
-                            ) : (
-                              <></>
-                            )}
+                              })}
                           </div>
                         </div>
                       </div>
