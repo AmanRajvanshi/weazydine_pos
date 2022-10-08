@@ -5,6 +5,7 @@ import { BiRupee } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider.js";
 import Skeletonloader from "../othercomponent/Skeletonloader";
+import moment from "moment";
 export class Dashboard extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -13,6 +14,7 @@ export class Dashboard extends Component {
       data: [],
       isloading: true,
       item: { total_earnning: 0, orders: 0, shop_visit: 0, customer: 0 },
+      orders: [],
     };
   }
 
@@ -167,7 +169,12 @@ export class Dashboard extends Component {
                     </div>
                   </div>
                 </div>
-
+                <div className="row">
+                  <div className="col-md-6">
+                    <OngoingOrders isloading={this.loader} />
+                  </div>
+                  <div className="col-md-6"></div>
+                </div>
                 <Tables isloading={this.loader} />
               </div>
             </div>
@@ -268,6 +275,103 @@ class Tables extends Component {
           )}
         </div>
       </>
+    );
+  }
+}
+
+class OngoingOrders extends Component {
+  static contextType = AuthContext;
+  constructor(props) {
+    super(props);
+    this.state = {
+      orders: [],
+    };
+  }
+
+  componentDidMount() {
+    this.fetch_order(1);
+  }
+
+  fetch_order = (page_id) => {
+    fetch(global.api + "get_orders_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        page: page_id,
+        status: "placed",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          this.setState({ orders: [] });
+        } else {
+          console.log(json.data);
+          this.setState({ orders: json.data.data });
+        }
+        this.setState({ is_loading: false });
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  };
+  render() {
+    return (
+      <div className="d-flex">
+        <div className="card flex-fill">
+          <div className="card-header pb-0 d-flex justify-content-between align-items-center">
+            <h4>Pending Orders</h4>
+          </div>
+          <div className="card-body">
+            <div className="table-responsive dataview">
+              <table className="table datatable ">
+                <thead>
+                  <tr>
+                    <th>Sno</th>
+                    <th>Order ID</th>
+                    <th>Order Type</th>
+                    <th>Time</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.orders.length > 0 &&
+                    this.state.orders.map((values, index) => {
+                      return (
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>
+                            <Link to={"/orderdetails/" + values.order_code}>
+                              {values.order_code}
+                            </Link>
+                          </td>
+                          <td
+                            style={{
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            {values.order_status}
+                          </td>
+                          <td>{moment(values.updated_at).format("llll")}</td>
+                          <td>
+                            <BiRupee />
+                            {values.total_amount}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }

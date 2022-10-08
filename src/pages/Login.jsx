@@ -197,7 +197,7 @@ class Login extends Component {
                                   marginTop: -20,
                                 }}
                               >
-                                Edit Mobile Number:{" "}
+                                <i className="fa fa-edit" />{" "}
                                 <span>{this.state.phoneNumber}</span>
                               </p>
                               <div className="form-login">
@@ -242,7 +242,7 @@ class Login extends Component {
                                 minutes={0}
                                 resend={() => this.mobileVerify()}
                                 text={"Resend OTP in"}
-                                buttonColor={"#222"}
+                                buttonColor={"#eda332"}
                                 background={"#fff"}
                                 ButtonText={"Didn't get the code? Resend OTP"}
                               />

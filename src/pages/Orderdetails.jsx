@@ -7,6 +7,7 @@ import { Modal } from "react-responsive-modal";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
+import { toast } from "react-toastify";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 export class Orderdetails extends Component {
@@ -57,6 +58,43 @@ export class Orderdetails extends Component {
       .finally(() => {});
   };
 
+  change_order_status = (status) => {
+    this.setState({ mark_complete_buttonLoading: true });
+    fetch(global.api + "update_order_status_by_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        order_id: this.state.data.id,
+        order_status: status,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          // this.setState({
+
+          // })
+          this.orderDetails(this.props.id);
+          toast.success("Order Status Updated Successfully");
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ mark_complete_buttonLoading: false });
+      });
+  };
+
   render() {
     return (
       <div className="main-wrapper">
@@ -95,21 +133,65 @@ export class Orderdetails extends Component {
                         }}
                       >
                         <div>
-                          <h5>Order ID: {this.props.id}</h5>
+                          <h5>
+                            Order ID: {this.props.id} -{" "}
+                            {this.state.data.order_type != "TakeAway" &&
+                            this.state.data.order_type != "Delivery" ? (
+                              <span
+                                style={{
+                                  color: "#eda332",
+                                }}
+                              >
+                                Dine-In ({this.state.data.table.table_name})
+                              </span>
+                            ) : (
+                              <span
+                                style={{
+                                  color: "#eda332",
+                                }}
+                              >
+                                {this.state.data.order_type}
+                              </span>
+                            )}
+                          </h5>
+
                           <h6 className="order_date mt-2">
-                            {moment(this.state.data.updated_at).format("llll")}
+                            {moment(this.state.data.updated_at).format("llll")}{" "}
+                            <span
+                              style={{
+                                color: "#eda332",
+                                textTransform: "capitalize",
+                                fontSize: "17px",
+                              }}
+                            >
+                              Order Status: {this.state.data.order_status}
+                            </span>
                           </h6>
                         </div>
-
-                        {/* <button
-                          className="btn btn-primary btn-sm"
-                          onClick={() => {
-                            this.setState({ generateBillModal: true });
-                          }}
-                        >
-                          <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                          Generate Bill
-                        </button> */}
+                        <div>
+                          <button
+                            className="btn btn-primary btn-sm mx-2"
+                            onClick={() => {
+                              this.setState({ generateBillModal: true });
+                            }}
+                          >
+                            <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                            Generate Bill
+                          </button>
+                          {this.state.data.order_status == "ongoing" &&
+                            this.state.data.order_type != "TakeAway" &&
+                            this.state.data.order_type != "Delivery" && (
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => {
+                                  this.setState({ generateBillModal: true });
+                                }}
+                              >
+                                <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                Generate Bill
+                              </button>
+                            )}
+                        </div>
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">
@@ -313,6 +395,95 @@ export class Orderdetails extends Component {
                     {/* user details */}
                   </div>
                   <div className="col-4">
+                    {this.state.data.order_status == "placed" ? (
+                      <div className="d-flex align-items-center justify-content-around my-2">
+                        <h6
+                          className="text-danger"
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          Cancel Order
+                        </h6>
+                        <a
+                          href="javascript:void(0);"
+                          className="btn btn-primary mx-2"
+                          onClick={() => {
+                            this.change_order_status("confirmed");
+                          }}
+                        >
+                          <p>Accept Order</p>
+                        </a>
+                      </div>
+                    ) : this.state.data.order_status == "confirmed" ? (
+                      <div className="d-flex align-items-center justify-content-around my-2">
+                        <h6
+                          className="text-danger"
+                          style={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          Cancel Order
+                        </h6>
+                        <a
+                          href="javascript:void(0);"
+                          className="btn btn-primary mx-2"
+                          onClick={() => {
+                            this.change_order_status("processed");
+                          }}
+                        >
+                          <p>Order In Progress</p>
+                        </a>
+                      </div>
+                    ) : this.state.data.order_status == "processed" ? (
+                      this.state.data.order_type == "Delivery" ? (
+                        <div className="d-flex align-items-center justify-content-around my-2">
+                          <h6
+                            className="text-danger"
+                            style={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            Cancel Order
+                          </h6>
+                          <a
+                            href="javascript:void(0);"
+                            className="btn btn-primary mx-2"
+                            onClick={() => {
+                              this.change_order_status("out for delivery");
+                            }}
+                          >
+                            <p>Out for Delivery</p>
+                          </a>
+                        </div>
+                      ) : (
+                        <div className="d-flex align-items-center justify-content-around my-2">
+                          <a
+                            href="javascript:void(0);"
+                            className="btn btn-primary mx-2"
+                            onClick={() => {
+                              this.change_order_status("completed");
+                            }}
+                          >
+                            <p>Completed</p>
+                          </a>
+                        </div>
+                      )
+                    ) : this.state.data.order_status == "out for delivery" ? (
+                      <div className="d-flex align-items-center justify-content-around my-2">
+                        <a
+                          href="javascript:void(0);"
+                          className="btn btn-primary mx-2"
+                          onClick={() => {
+                            this.change_order_status("completed");
+                          }}
+                        >
+                          <p>Completed</p>
+                        </a>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     <div className="card flex-fill bg-white">
                       <div className="card-header order_details">
                         <div className=" d-flex align-items-center justify-content-between">
@@ -321,7 +492,7 @@ export class Orderdetails extends Component {
                       </div>
                       <div className="card-body">
                         <div className="row">
-                          <div className="col-lg-6 col-12">
+                          <div className="col-lg-8 col-12">
                             <div className="form-group">
                               <label>Customer Name</label>
                               <input
@@ -332,11 +503,12 @@ export class Orderdetails extends Component {
                                   border: "none",
                                   borderBottom: "1px solid black",
                                   borderRadius: 0,
+                                  paddingLeft: "0px",
                                 }}
                               />
                             </div>
                           </div>
-                          <div className="col-lg-6 col-12">
+                          <div className="col-lg-4 col-12">
                             <div className="form-group">
                               <label>Mobile</label>
                               <input
@@ -347,6 +519,7 @@ export class Orderdetails extends Component {
                                   border: "none",
                                   borderBottom: "1px solid black",
                                   borderRadius: 0,
+                                  paddingLeft: "0px",
                                 }}
                               />
                             </div>
