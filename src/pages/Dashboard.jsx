@@ -170,10 +170,10 @@ export class Dashboard extends Component {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-12">
                     <OngoingOrders isloading={this.loader} />
                   </div>
-                  <div className="col-md-6"></div>
+                  {/* <div className="col-md-6"></div> */}
                 </div>
                 <Tables isloading={this.loader} />
               </div>
@@ -356,7 +356,7 @@ class OngoingOrders extends Component {
                               textTransform: "capitalize",
                             }}
                           >
-                            {values.order_status}
+                            {values.order_type}
                           </td>
                           <td>{moment(values.updated_at).format("llll")}</td>
                           <td>

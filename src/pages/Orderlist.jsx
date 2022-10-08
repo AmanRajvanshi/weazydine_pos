@@ -19,9 +19,10 @@ class Orderlist extends Component {
     };
   }
   componentDidMount() {
-    this.fetch_order(1);
+    this.fetch_order(1, "");
   }
-  fetch_order = (page_id) => {
+
+  fetch_order = (page_id, status) => {
     fetch(global.api + "get_orders_vendor", {
       method: "POST",
       headers: {
@@ -31,21 +32,18 @@ class Orderlist extends Component {
       },
       body: JSON.stringify({
         page: page_id,
+        status: status,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
+          if (page_id == 1) {
+            this.setState({ data: [], is_loading: false });
+          }
         } else {
-          // var refresh = setInterval(() => {
-          //     this.fetch_order(1);
-          // }, 20000);
           console.log(json.data);
           this.setState({ data: json.data.data });
-          // if (json.data.data.length >= 0) {
-          //     clearInterval(refresh);
-          // }
-          // this.props.navigation.navigate("More")
         }
         this.setState({ is_loading: false });
         return json;
@@ -77,8 +75,12 @@ class Orderlist extends Component {
                           className="nav-link active"
                           href="#solid-rounded-justified-tab1"
                           data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "");
+                          }}
                         >
-                          Home
+                          All
                         </a>
                       </li>
                       <li className="nav-item">
@@ -86,6 +88,10 @@ class Orderlist extends Component {
                           className="nav-link"
                           href="#solid-rounded-justified-tab1"
                           data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "placed");
+                          }}
                         >
                           Pending
                         </a>
@@ -95,6 +101,10 @@ class Orderlist extends Component {
                           className="nav-link"
                           href="#solid-rounded-justified-tab1"
                           data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "confirmed");
+                          }}
                         >
                           Confirmed
                         </a>
@@ -104,6 +114,10 @@ class Orderlist extends Component {
                           className="nav-link"
                           href="#solid-rounded-justified-tab1"
                           data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "processed");
+                          }}
                         >
                           OnGoing
                         </a>
@@ -113,8 +127,25 @@ class Orderlist extends Component {
                           className="nav-link"
                           href="#solid-rounded-justified-tab1"
                           data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "completed");
+                          }}
                         >
                           Completed
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "cancelled");
+                          }}
+                        >
+                          Cancelled
                         </a>
                       </li>
                     </ul>
@@ -201,10 +232,12 @@ class Orderlist extends Component {
                                     {item.order_status}
                                   </span>
                                 ) : (
-                                  <span  style={{
-                                    color: "green",
-                                    textTransform: "capitalize",
-                                  }}>
+                                  <span
+                                    style={{
+                                      color: "green",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
                                     {item.order_status}
                                   </span>
                                 )}

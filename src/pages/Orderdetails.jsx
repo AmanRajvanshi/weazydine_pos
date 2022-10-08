@@ -402,6 +402,7 @@ export class Orderdetails extends Component {
                           style={{
                             cursor: "pointer",
                           }}
+                          onClick={() => this.changeStatus("cancelled")}
                         >
                           Cancel Order
                         </h6>
@@ -422,6 +423,7 @@ export class Orderdetails extends Component {
                           style={{
                             cursor: "pointer",
                           }}
+                          onClick={() => this.changeStatus("cancelled")}
                         >
                           Cancel Order
                         </h6>
@@ -443,6 +445,7 @@ export class Orderdetails extends Component {
                             style={{
                               cursor: "pointer",
                             }}
+                            onClick={() => this.changeStatus("cancelled")}
                           >
                             Cancel Order
                           </h6>
