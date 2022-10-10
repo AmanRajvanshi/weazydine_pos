@@ -4,10 +4,11 @@ import moment from "moment";
 import { BiRupee } from "react-icons/bi";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
 import { toast } from "react-toastify";
+import { RadioGroup, RadioButton } from "react-radio-buttons";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 export class Orderdetails extends Component {
@@ -22,6 +23,11 @@ export class Orderdetails extends Component {
       user: [],
       isLoading: true,
       additional_note: "",
+      generateBillModal: false,
+      generate_order_buttonLoading: false,
+      bill: [],
+      cart_new: [],
+      payment: "",
     };
   }
 
@@ -95,6 +101,78 @@ export class Orderdetails extends Component {
       });
   };
 
+  genrate_bill = (id) => {
+    this.setState({ generate_order_buttonLoading: true });
+    fetch(global.api + "generate_bill_by_table", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        table_id: this.state.data.table.table_uu_id,
+        order_id: id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+        } else {
+          if (json.data.length > 0) {
+            this.setState({ bill: json.data[0] });
+            this.setState({ cart_new: json.data[0].cart });
+          }
+          this.setState({ generateBillModal: true });
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ generate_order_buttonLoading: false });
+      });
+  };
+
+  mark_complete = () => {
+    this.setState({ mark_complete_buttonLoading: true });
+    fetch(global.api + "update_order_status_by_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        order_id: this.state.bill.id,
+        payment_method: this.state.payment,
+        order_status: "completed",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        console.warn(json);
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          this.setState({ generateBillModal: false });
+          this.props.navigate(-1);
+          toast.success("Order Completed");
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ mark_complete_buttonLoading: false });
+      });
+  };
+
   render() {
     return (
       <div className="main-wrapper">
@@ -136,13 +214,20 @@ export class Orderdetails extends Component {
                           <h5>
                             Order ID: {this.props.id} -{" "}
                             {this.state.data.order_type != "TakeAway" &&
-                            this.state.data.order_type != "Delivery" ? (
+                            this.state.data.order_type != "delivery" ? (
                               <span
                                 style={{
                                   color: "#eda332",
                                 }}
                               >
-                                Dine-In ({this.state.data.table.table_name})
+                                Dine-In{" "}
+                                {this.state.data.table == null ? (
+                                  ""
+                                ) : (
+                                  <span>
+                                    {this.state.data.table.table_name}
+                                  </span>
+                                )}
                               </span>
                             ) : (
                               <span
@@ -169,28 +254,34 @@ export class Orderdetails extends Component {
                           </h6>
                         </div>
                         <div>
-                          <button
-                            className="btn btn-primary btn-sm mx-2"
-                            onClick={() => {
-                              this.setState({ generateBillModal: true });
-                            }}
-                          >
-                            <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                            Generate Bill
-                          </button>
                           {this.state.data.order_status == "ongoing" &&
-                            this.state.data.order_type != "TakeAway" &&
-                            this.state.data.order_type != "Delivery" && (
+                            this.state.data.order_type != "takeAway" &&
+                            this.state.data.order_type != "delivery" &&
+                            (this.state.generate_order_buttonLoading ? (
+                              <button
+                                className="btn btn-primary btn-sm"
+                                style={{
+                                  pointerEvents: "none",
+                                  opacity: "0.8",
+                                }}
+                              >
+                                <span
+                                  class="spinner-border spinner-border-sm me-2"
+                                  role="status"
+                                ></span>
+                                Generating Bill
+                              </button>
+                            ) : (
                               <button
                                 className="btn btn-primary btn-sm"
                                 onClick={() => {
-                                  this.setState({ generateBillModal: true });
+                                  this.genrate_bill(this.props.id);
                                 }}
                               >
                                 <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                                 Generate Bill
                               </button>
-                            )}
+                            ))}
                         </div>
                       </div>
                       <div className="card-body">
@@ -402,7 +493,7 @@ export class Orderdetails extends Component {
                           style={{
                             cursor: "pointer",
                           }}
-                          onClick={() => this.changeStatus("cancelled")}
+                          onClick={() => this.change_order_status("cancelled")}
                         >
                           Cancel Order
                         </h6>
@@ -423,7 +514,7 @@ export class Orderdetails extends Component {
                           style={{
                             cursor: "pointer",
                           }}
-                          onClick={() => this.changeStatus("cancelled")}
+                          onClick={() => this.change_order_status("cancelled")}
                         >
                           Cancel Order
                         </h6>
@@ -445,7 +536,9 @@ export class Orderdetails extends Component {
                             style={{
                               cursor: "pointer",
                             }}
-                            onClick={() => this.changeStatus("cancelled")}
+                            onClick={() =>
+                              this.change_order_status("cancelled")
+                            }
                           >
                             Cancel Order
                           </h6>
@@ -623,9 +716,118 @@ export class Orderdetails extends Component {
             </div>
           </div>
         </Modal>
+
+        <Modal
+          open={this.state.generateBillModal}
+          onClose={() => this.setState({ generateBillModal: false })}
+          center
+          classNames={{
+            modal: "customModal",
+          }}
+        >
+          <div className="content">
+            <div className="page-header m-0 text-center">
+              <div className="page-title text-center">
+                <h4>Generating Bill</h4>
+                <p>
+                  Total Bill Amount - <BiRupee /> {this.state.total_amount}
+                </p>
+              </div>
+            </div>
+            <div className="card border-none">
+              <div className="card-body p-0 pt-4">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      {/* <label>VEG/NON-VEG</label> */}
+                      <div>
+                        <RadioGroup
+                          onChange={(value) => {
+                            this.setState({ payment: value });
+                          }}
+                          value={this.state.payment}
+                        >
+                          <RadioButton
+                            value="upi"
+                            pointColor="#eda332"
+                            iconSize={20}
+                            rootColor="#f3c783"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Google Pay/Paytm/UPI
+                          </RadioButton>
+                          <RadioButton
+                            value="card"
+                            pointColor="#eda332"
+                            iconSize={20}
+                            rootColor="#f3c783"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Credit/Debit Card
+                          </RadioButton>
+                          <RadioButton
+                            value="cash"
+                            pointColor="#eda332"
+                            iconSize={20}
+                            rootColor="#f3c783"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Cash
+                          </RadioButton>
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.mark_complete_buttonLoading ? (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Please wait
+                      </button>
+                    ) : (
+                      <a
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.mark_complete();
+                        }}
+                      >
+                        Complete Order
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }
 }
 
-export default (props) => <Orderdetails {...useParams()} {...props} />;
+function Navigate(props) {
+  const abcd = useNavigate();
+  const location = useLocation();
+  return (
+    <Orderdetails
+      {...props}
+      {...useParams()}
+      navigate={abcd}
+      location={location}
+    />
+  );
+}
+
+export default (props) => <Navigate {...props} />;

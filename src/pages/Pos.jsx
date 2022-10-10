@@ -277,41 +277,47 @@ class Pos extends Component {
 
   verifyCustomer = () => {
     this.setState({ is_buttonloding: true });
-    fetch(global.api + "verify_contact", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: this.context.token,
-      },
-      body: JSON.stringify({
-        contact: this.state.contact,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        // console.warn(json);
-        if (!json.status) {
-          var msg = json.msg;
-          toast.error(msg);
-        } else {
-          this.setState({ user_id: json.data.id });
-          if (json.data.name == null || json.data.name == "") {
-            this.setState({ payment_step: 1 });
+    var phoneNumber = this.state.contact;
+    let rjx = /^[0]?[6789]\d{9}$/;
+    let isValid = rjx.test(phoneNumber);
+    if (!isValid) {
+      toast.error("Please enter valid mobile number");
+      this.setState({ is_buttonloding: false });
+    } else {
+      fetch(global.api + "verify_contact", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          contact: this.state.contact,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // console.warn(json);
+          if (!json.status) {
+            var msg = json.msg;
+            toast.error(msg);
           } else {
-            this.setState({ name: json.data.name, payment_step: 2 });
+            this.setState({ user_id: json.data.id });
+            if (json.data.name == null || json.data.name == "") {
+              this.setState({ payment_step: 1 });
+            } else {
+              this.setState({ name: json.data.name, payment_step: 2 });
+            }
+            toast.success("done");
           }
-          toast.success("done");
-        }
-        this.setState({ is_buttonloding: false });
-        return json;
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        this.setState({ isloading: false });
-      });
+          this.setState({ is_buttonloding: false });
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {});
+    }
   };
 
   updateCustomer = () => {
@@ -531,7 +537,8 @@ class Pos extends Component {
                         position: "fixed",
                         zIndex: 99,
                         width: "30%",
-                        height: "89%",
+                        height: "90%",
+                        overflowY: "scroll",
                       }}
                     >
                       <PosAdd
@@ -579,6 +586,7 @@ class Pos extends Component {
                               this.setState({ contact: e.target.value });
                             }}
                             value={this.state.contact}
+                            maxLength="10"
                           />
                         </div>
                       </div>
@@ -1090,7 +1098,7 @@ class Products extends Component {
     return (
       <>
         <div
-          className="col-lg-2 d-flex"
+          className="col-pos-div d-flex"
           onClick={() => {
             this.add_cart(this.props.data);
           }}
@@ -1301,7 +1309,7 @@ class Tables extends Component {
               {this.state.data.length > 0 ? (
                 this.state.data.map((item, index) => {
                   return (
-                    <div key={index} className="col-lg-3 col-sm-6 col-12">
+                    <div key={index} className="col-lg-4">
                       <a
                         onClick={() => {
                           this.props.update_order_type(item.table_uu_id);

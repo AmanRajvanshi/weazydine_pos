@@ -187,26 +187,17 @@ class Orderlist extends Component {
                               </td>
                               <td>
                                 {item.order_type != "TakeAway" &&
-                                item.order_type != "Delivery" ? (
+                                item.order_type != "delivery" ? (
                                   <>Dine-In</>
                                 ) : (
                                   <>{item.order_type}</>
                                 )}
                               </td>
                               <td>
-                                {item.order_status == "Pending" ? (
+                                {item.order_status == "placed" ? (
                                   <span
                                     style={{
                                       // color: {item.order_status == "Pending"?"red":{item.order_status == "Pending"?}"green"},
-                                      color: "red",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    {item.order_status}
-                                  </span>
-                                ) : item.order_status == "Confirmed" ? (
-                                  <span
-                                    style={{
                                       color: "#eda332",
                                       textTransform: "capitalize",
                                     }}
@@ -217,6 +208,15 @@ class Orderlist extends Component {
                                   <span
                                     style={{
                                       color: "#eda332",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    {item.order_status}
+                                  </span>
+                                ) : item.order_status == "processed" ? (
+                                  <span
+                                    style={{
+                                      color: "yellow",
                                       textTransform: "capitalize",
                                     }}
                                   >
@@ -234,7 +234,7 @@ class Orderlist extends Component {
                                 ) : (
                                   <span
                                     style={{
-                                      color: "green",
+                                      color: "red",
                                       textTransform: "capitalize",
                                     }}
                                   >
