@@ -91,168 +91,158 @@ export class App extends Component {
   render() {
     return (
       <>
-        {this.state.loading ? (
-          <div>
-            <p>loading</p>
-          </div>
-        ) : (
-          <>
-            <AuthContext.Provider
-              value={{
-                login: this.login,
-                logout: this.logout,
-                is_login: this.state.is_login,
-                token: this.state.token,
-                user: this.state.user,
-              }}
-            >
-              <Routes>
-                <Route
-                  exact
-                  path="/"
-                  element={
-                    <RequireAuth>
-                      <Dashboard />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/pos"
-                  element={
-                    <RequireAuth>
-                      <Pos />
-                    </RequireAuth>
-                  }
-                />
-
-<Route
-                  exact
-                  path="/pos/:table_id"
-                  element={
-                    <RequireAuth>
-                     <Pos />
-                    </RequireAuth>
-                  }
-                />
-
-                <Route
-                  exact
-                  path="/kot"
-                  element={
-                    <RequireAuth>
-                      <Kot />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/productlist"
-                  element={
-                    <RequireAuth>
-                      <Productlist />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/categorylist"
-                  element={
-                    <RequireAuth>
-                      <Categorylist />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/addproduct"
-                  element={
-                    <RequireAuth>
-                      <Addproduct />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/orderlist"
-                  element={
-                    <RequireAuth>
-                      <Orderlist />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/orderdetails/:id"
-                  element={
-                    <RequireAuth>
-                      <Orderdetails />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/tableorderdetails/:id"
-                  element={
-                    <RequireAuth>
-                      <TableOrderDetails />
-                    </RequireAuth>
-                  }
-                />{" "}
-                <Route
-                  exact
-                  path="/productdetails/:id"
-                  element={
-                    <RequireAuth>
-                      <Productdetails />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/editproduct/:id"
-                  element={
-                    <RequireAuth>
-                      <Editproduct />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/editprofile"
-                  element={
-                    <RequireAuth>
-                      <Editprofile />
-                    </RequireAuth>
-                  }
-                />
-                <Route
-                  exact
-                  path="/dineinlisting"
-                  element={
-                    <RequireAuth>
-                      <DineinList />
-                    </RequireAuth>
-                  }
-                />
-                <Route path="*" element={<Pagenotfound />} />
-                <Route exact path="/login" element={<Login />} />
-              </Routes>
-            </AuthContext.Provider>
-            <ToastContainer
-              position="bottom-center"
-              autoClose={2000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              transition={Flip}
+        <AuthContext.Provider
+          value={{
+            login: this.login,
+            logout: this.logout,
+            is_login: this.state.is_login,
+            token: this.state.token,
+            user: this.state.user,
+          }}
+        >
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={
+                <RequireAuth>
+                  <Dashboard />
+                </RequireAuth>
+              }
             />
-          </>
-        )}
+            <Route
+              exact
+              path="/pos"
+              element={
+                <RequireAuth>
+                  <Pos />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/pos/:table_id"
+              element={
+                <RequireAuth>
+                  <Pos />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/kot"
+              element={
+                <RequireAuth>
+                  <Kot />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/productlist"
+              element={
+                <RequireAuth>
+                  <Productlist />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/categorylist"
+              element={
+                <RequireAuth>
+                  <Categorylist />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/addproduct"
+              element={
+                <RequireAuth>
+                  <Addproduct />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/orderlist"
+              element={
+                <RequireAuth>
+                  <Orderlist />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/orderdetails/:id"
+              element={
+                <RequireAuth>
+                  <Orderdetails />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/tableorderdetails/:id"
+              element={
+                <RequireAuth>
+                  <TableOrderDetails />
+                </RequireAuth>
+              }
+            />{" "}
+            <Route
+              exact
+              path="/productdetails/:id"
+              element={
+                <RequireAuth>
+                  <Productdetails />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/editproduct/:id"
+              element={
+                <RequireAuth>
+                  <Editproduct />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/editprofile"
+              element={
+                <RequireAuth>
+                  <Editprofile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/dineinlisting"
+              element={
+                <RequireAuth>
+                  <DineinList />
+                </RequireAuth>
+              }
+            />
+            <Route path="*" element={<Pagenotfound />} />
+            <Route exact path="/login" element={<Login />} />
+          </Routes>
+        </AuthContext.Provider>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          transition={Flip}
+        />
       </>
     );
   }
