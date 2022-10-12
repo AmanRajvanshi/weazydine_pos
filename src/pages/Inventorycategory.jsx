@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
 import Swal from "sweetalert2";
 
-export class Categorylist extends Component {
+class Inventorycategory extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -395,4 +395,4 @@ export class Categorylist extends Component {
   }
 }
 
-export default Categorylist;
+export default Inventorycategory;

@@ -188,6 +188,7 @@ export class Productlist extends Component {
                         <table className="table  datanew">
                           <thead>
                             <tr>
+                              <th>S.no</th>
                               <th>Product Name</th>
                               <th>Market Price</th>
                               <th>Our Price</th>
@@ -201,6 +202,7 @@ export class Productlist extends Component {
                             {this.state.products.map((item, index) => {
                               return (
                                 <tr>
+                                  <td>{index + 1}</td>
                                   <td className="productimgname">
                                     <Link
                                       to={"/productdetails/" + item.id}

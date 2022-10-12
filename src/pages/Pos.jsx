@@ -79,7 +79,7 @@ class Pos extends Component {
             this.setState({ products: json.data });
           }
         }
-        this.setState({ load_item: false });
+        this.setState({ load_item: false, isloading: false });
         return json;
       })
       .catch((error) => {
@@ -106,7 +106,7 @@ class Pos extends Component {
       })
       .catch((error) => console.error(error))
       .finally(() => {
-        this.setState({ isloading: false });
+        // this.setState({ isloading: false });
       });
   };
 
@@ -352,7 +352,7 @@ class Pos extends Component {
         console.error(error);
       })
       .finally(() => {
-        this.setState({ isloading: false });
+        // this.setState({ isloading: false });
       });
   };
 
@@ -417,7 +417,7 @@ class Pos extends Component {
         console.error(error);
       })
       .finally(() => {
-        this.setState({ isloading: false });
+        // this.setState({ isloading: false });
       });
   };
 
@@ -433,9 +433,9 @@ class Pos extends Component {
     return (
       <>
         <div className="main-wrappers">
-          <Header />
+          <Header sidebar={false} />
           {this.state.isloading ? (
-            <div className="main_loader">
+            <div className="main_loader" style={{ marginLeft: "0px" }}>
               <Bars
                 height="80"
                 width="80"
@@ -447,7 +447,13 @@ class Pos extends Component {
               />
             </div>
           ) : (
-            <div className="page-wrapper" id="sidebar">
+            <div
+              className="page-wrapper"
+              id="sidebar"
+              style={{
+                margin: "0 0 0 20px",
+              }}
+            >
               <div className="content">
                 <div className="row">
                   {this.state.show_table ? (
@@ -1005,7 +1011,7 @@ class AddDelete extends React.Component {
 class Category extends Component {
   render() {
     return (
-      <div className="row">
+      <div className="row m-0">
         <ul className="tabs horizontal_scroll">
           <li
             onClick={() => {

@@ -54,6 +54,99 @@ class Orderlist extends Component {
       .finally(() => {});
   };
 
+  // columns = [
+  //   {
+  //     dataField: "index",
+  //     text: "S.No",
+  //   },
+  //   {
+  //     dataField: "order_id",
+  //     text: "Order Id",
+  //   },
+  //   {
+  //     dataField: "customer",
+  //     text: "Customer",
+  //   },
+  //   {
+  //     dataField: "order_price",
+  //     text: "Order Price",
+  //   },
+  //   {
+  //     dataField: "date",
+  //     text: "Date",
+  //   },
+  //   {
+  //     dataField: "order_type",
+  //     text: "Order Type",
+  //   },
+  //   {
+  //     dataField: "status",
+  //     text: "Status",
+  //   },
+  //   {
+  //     dataField: "action",
+  //     text: "Action",
+  //   },
+  // ];
+  // sortableColumn = [
+  //   {
+  //     dataField: "index",
+  //     text: "S.No",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "order_id",
+  //     text: "Order Id",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "customer",
+  //     text: "Customer",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "order_price",
+  //     text: "Order Price",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "date",
+  //     text: "Date",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "order_type",
+  //     text: "Order Type",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "status",
+  //     text: "Status",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "action",
+  //     text: "Action",
+  //     sort: true,
+  //   },
+  // ];
+
+  // paginationOptions = {
+  //   // custom: true,
+  //   paginationSize: 5,
+  //   pageStartIndex: 1,
+  //   firstPageText: "First",
+  //   prePageText: "Back",
+  //   nextPageText: "Next",
+  //   lastPageText: "Last",
+  //   nextPageTitle: "First page",
+  //   prePageTitle: "Pre page",
+  //   firstPageTitle: "Next page",
+  //   lastPageTitle: "Last page",
+  //   showTotal: true,
+  //   totalSize: this.state.data.length,
+  // };
+
   render() {
     return (
       <div className="main-wrapper">

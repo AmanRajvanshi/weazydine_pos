@@ -189,6 +189,7 @@ class Login extends Component {
                                     subheading:
                                       "Continue to WeazyDine Dashboard",
                                     otpButton: false,
+                                    otp: "",
                                   });
                                 }}
                                 style={{

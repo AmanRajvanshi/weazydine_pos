@@ -8,7 +8,8 @@ export class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sidebarText: false,
+      sidebarText: true,
+      dropdown: false,
     };
   }
 
@@ -58,9 +59,15 @@ export class Header extends Component {
         <div className="header">
           <div className="header-left border-0">
             <div className="logo">
-              <h4>
-                <strong>{this.context.user.name}</strong>
-              </h4>
+              <a>
+                <h4
+                  onClick={() => {
+                    this.props.navigate(-1);
+                  }}
+                >
+                  <strong>{this.context.user.name}</strong>
+                </h4>
+              </a>
             </div>
           </div>
           <a id="mobile_btn" className="mobile_btn" href="#sidebar">
@@ -349,111 +356,161 @@ export class Header extends Component {
             </div>
           </div>
         </div>
-        <div
-          className="sidebar"
-          id="sidebar"
-          onMouseEnter={() => {
-            document.getElementById("sidebar").style.width = "250px";
-            this.setState({ sidebarText: true });
-          }}
-          onMouseLeave={() => {
-            document.getElementById("sidebar").style.width = "100px";
-            this.setState({ sidebarText: false });
-          }}
-        >
-          <div className="sidebar-inner slimscroll">
-            <div id="sidebar-menu" className="sidebar-menu">
-              <ul>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    end={true}
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/"
-                  >
-                    <i className="fa-solid fa-gauge"></i>
-                    {this.state.sidebarText ? <span>Dashboard</span> : ""}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/pos"
-                    title="POS"
-                  >
-                    <i className="fa-solid fa-signs-post"></i>
-                    {this.state.sidebarText ? <span>POS</span> : ""}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/orderlist"
-                  >
-                    <i className="fa-brands fa-algolia"></i>
-                    {this.state.sidebarText ? <span>Orders</span> : ""}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/kot"
-                  >
-                    <i className="fa-solid fa-kitchen-set"></i>
-                    {this.state.sidebarText ? <span>KOT</span> : ""}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/productlist"
-                  >
-                    <i className="fa-solid fa-clipboard-list"></i>
-                    {this.state.sidebarText ? <span>Product List</span> : ""}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/categorylist"
-                  >
-                    <i className="fa-solid fa-list"></i>
-                    {this.state.sidebarText ? <span>Category List</span> : ""}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    id="sidebar_text"
-                    className={({ isActive }) =>
-                      isActive ? "active" : "not-active"
-                    }
-                    to="/dineinlisting"
-                  >
-                    <i className="fa-solid fa-table"></i>
-                    {this.state.sidebarText ? <span>Dine In </span> : ""}
-                  </NavLink>
-                </li>
-              </ul>
+        {/* /sidebar */}
+        {this.props.sidebar != false && (
+          <div className="sidebar" id="sidebar">
+            <div className="sidebar-inner slimscroll">
+              <div id="sidebar-menu" className="sidebar-menu">
+                <ul>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      end={true}
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/"
+                    >
+                      <i className="fa-solid fa-gauge"></i>
+                      {this.state.sidebarText ? <span>Dashboard</span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/pos"
+                      title="POS"
+                    >
+                      <i className="fa-solid fa-signs-post"></i>
+                      {this.state.sidebarText ? <span>POS</span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/orderlist"
+                    >
+                      <i className="fa-brands fa-algolia"></i>
+                      {this.state.sidebarText ? <span>Orders</span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/kot"
+                    >
+                      <i className="fa-solid fa-kitchen-set"></i>
+                      {this.state.sidebarText ? <span>KOT</span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/productlist"
+                    >
+                      <i className="fa-solid fa-clipboard-list"></i>
+                      {this.state.sidebarText ? <span>Product List</span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/categorylist"
+                    >
+                      <i className="fa-solid fa-list"></i>
+                      {this.state.sidebarText ? <span>Category List</span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      to="/dineinlisting"
+                    >
+                      <i className="fa-solid fa-table"></i>
+                      {this.state.sidebarText ? <span>Dine In </span> : ""}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <a
+                      id="sidebar_text"
+                      className={({ isActive }) =>
+                        isActive ? "active" : "not-active"
+                      }
+                      onClick={() => {
+                        this.setState({ dropdown: !this.state.dropdown });
+                      }}
+                    >
+                      <i className="fa-solid fa-warehouse"></i>
+                      {this.state.sidebarText ? <span>Inventory</span> : ""}
+                      {this.state.dropdown ? (
+                        <span
+                          className="menu-arrow"
+                          style={{
+                            transform: "rotate(90deg)",
+                          }}
+                        />
+                      ) : (
+                        <span className="menu-arrow" />
+                      )}
+                    </a>
+                    {this.state.dropdown && (
+                      <ul>
+                        <li>
+                          <NavLink
+                            id="sidebar_text"
+                            end={true}
+                            className={({ isActive }) =>
+                              isActive ? "active" : "not-active"
+                            }
+                            to="/inventorycategory"
+                          >
+                            <i className="fa-solid fa-gauge"></i>
+                            {this.state.sidebarText ? (
+                              <span>Inventory Category</span>
+                            ) : (
+                              ""
+                            )}
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            id="sidebar_text"
+                            className={({ isActive }) =>
+                              isActive ? "active" : "not-active"
+                            }
+                            to="/pos"
+                            title="POS"
+                          >
+                            <i className="fa-solid fa-signs-post"></i>
+                            {this.state.sidebarText ? <span>POS</span> : ""}
+                          </NavLink>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </>
     );
   }

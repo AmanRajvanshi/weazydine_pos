@@ -20,6 +20,7 @@ import Editprofile from "./pages/Editprofile.jsx";
 import { toast, ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DineinList from "./pages/DineinList.jsx";
+import Inventorycategory from "./pages/Inventorycategory.jsx";
 
 global.api = "https://weazydine.healthyrabbit.in/api/";
 export class App extends Component {
@@ -89,7 +90,9 @@ export class App extends Component {
   };
 
   render() {
-    return (
+    return this.state.loading ? (
+      <></>
+    ) : (
       <>
         <AuthContext.Provider
           value={{
@@ -224,6 +227,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <DineinList />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/inventorycategory"
+              element={
+                <RequireAuth>
+                  <Inventorycategory />
                 </RequireAuth>
               }
             />
