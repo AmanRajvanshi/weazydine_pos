@@ -1987,8 +1987,10 @@ a:hover {
 }
 .form-group input[type="text"],
 .form-group input[type="password"],
+.react-date-picker__wrapper,
+.select-container,
 .form-group input[type="email"] {
-  border: 1px solid rgba(145, 158, 171, 0.32);
+  border: 1px solid rgba(145, 158, 171, 0.32) !important;
   height: 40px;
   width: 100%;
   font-size: 14px;
@@ -4398,12 +4400,12 @@ span.select-container.select-container--default.select-container--open {
   width: 18px;
 }
 .sidebar .sidebar-menu > ul > li > a:hover {
-  background: #eda332a6;
+  background: #eda332;
   color: #fff;
   border-radius: 7px;
 }
 .sidebar .sidebar-menu > ul > li > ul > li > a:hover {
-  background: #eda332a6;
+  background: #eda332;
   color: #fff;
   border-radius: 7px;
 }
@@ -4420,12 +4422,12 @@ span.select-container.select-container--default.select-container--open {
   color: #fff;
 }
 .sidebar .sidebar-menu > ul > li > a.active {
-  background: #eda332a6;
+  background: #eda332;
   color: #fff;
   border-radius: 7px;
 }
 .sidebar .sidebar-menu > ul > li > ul > li > a.active {
-  background: #eda332a6;
+  background: #eda332;
   color: #fff;
   border-radius: 7px;
 }
@@ -8136,4 +8138,8 @@ span.select-container.select-container--default.select-container--open {
 
 .cursor_pointer {
   cursor: pointer;
+}
+
+.react-date-picker{
+  width: 100%;
 }
