@@ -371,7 +371,7 @@ export class Header extends Component {
                       }
                       to="/"
                     >
-                      <i className="fa-solid fa-gauge"></i>
+                      {/* <i className="fa-solid fa-gauge"></i> */}
                       {this.state.sidebarText ? <span>Dashboard</span> : ""}
                     </NavLink>
                   </li>
@@ -384,7 +384,7 @@ export class Header extends Component {
                       to="/pos"
                       title="POS"
                     >
-                      <i className="fa-solid fa-signs-post"></i>
+                      {/* <i className="fa-solid fa-signs-post"></i> */}
                       {this.state.sidebarText ? <span>POS</span> : ""}
                     </NavLink>
                   </li>
@@ -396,7 +396,7 @@ export class Header extends Component {
                       }
                       to="/orderlist"
                     >
-                      <i className="fa-brands fa-algolia"></i>
+                      {/* <i className="fa-brands fa-algolia"></i> */}
                       {this.state.sidebarText ? <span>Orders</span> : ""}
                     </NavLink>
                   </li>
@@ -408,33 +408,70 @@ export class Header extends Component {
                       }
                       to="/kot"
                     >
-                      <i className="fa-solid fa-kitchen-set"></i>
+                      {/* <i className="fa-solid fa-kitchen-set"></i> */}
                       {this.state.sidebarText ? <span>KOT</span> : ""}
                     </NavLink>
                   </li>
+
                   <li>
-                    <NavLink
+                    <a
                       id="sidebar_text"
                       className={({ isActive }) =>
                         isActive ? "active" : "not-active"
                       }
-                      to="/productlist"
+                      onClick={() => {
+                        this.setState({ dropdown: !this.state.dropdown });
+                      }}
                     >
-                      <i className="fa-solid fa-clipboard-list"></i>
-                      {this.state.sidebarText ? <span>Product List</span> : ""}
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      id="sidebar_text"
-                      className={({ isActive }) =>
-                        isActive ? "active" : "not-active"
-                      }
-                      to="/categorylist"
-                    >
-                      <i className="fa-solid fa-list"></i>
-                      {this.state.sidebarText ? <span>Category List</span> : ""}
-                    </NavLink>
+                      {/* <i className="fa-solid fa-warehouse"></i> */}
+                      {this.state.sidebarText ? <span>Catalogue</span> : ""}
+                      {this.state.dropdown ? (
+                        <span
+                          className="menu-arrow"
+                          style={{
+                            transform: "rotate(90deg)",
+                          }}
+                        />
+                      ) : (
+                        <span className="menu-arrow" />
+                      )}
+                    </a>
+                    {this.state.dropdown && (
+                      <ul>
+                        <li>
+                          <NavLink
+                            id="sidebar_text"
+                            className={({ isActive }) =>
+                              isActive ? "active" : "not-active"
+                            }
+                            to="/productlist"
+                          >
+                            {/* <i className="fa-solid fa-clipboard-list"></i> */}
+                            {this.state.sidebarText ? (
+                              <span>Product List</span>
+                            ) : (
+                              ""
+                            )}
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            id="sidebar_text"
+                            className={({ isActive }) =>
+                              isActive ? "active" : "not-active"
+                            }
+                            to="/categorylist"
+                          >
+                            {/* <i className="fa-solid fa-list"></i> */}
+                            {this.state.sidebarText ? (
+                              <span>Category List</span>
+                            ) : (
+                              ""
+                            )}
+                          </NavLink>
+                        </li>
+                      </ul>
+                    )}
                   </li>
                   <li>
                     <NavLink
@@ -444,7 +481,7 @@ export class Header extends Component {
                       }
                       to="/dineinlisting"
                     >
-                      <i className="fa-solid fa-table"></i>
+                      {/* <i className="fa-solid fa-table"></i> */}
                       {this.state.sidebarText ? <span>Dine In </span> : ""}
                     </NavLink>
                   </li>
@@ -458,7 +495,7 @@ export class Header extends Component {
                         this.setState({ dropdown: !this.state.dropdown });
                       }}
                     >
-                      <i className="fa-solid fa-warehouse"></i>
+                      {/* <i className="fa-solid fa-warehouse"></i> */}
                       {this.state.sidebarText ? <span>Inventory</span> : ""}
                       {this.state.dropdown ? (
                         <span
@@ -481,12 +518,11 @@ export class Header extends Component {
                               isActive ? "active" : "not-active"
                             }
                             to="/inventorycategory"
+                            title="Inventory Category"
                           >
-                            <i className="fa-solid fa-gauge"></i>
-                            {this.state.sidebarText ? (
+                            {/* <i className="fa-solid fa-gauge"></i> */}
+                            {this.state.sidebarText && (
                               <span>Inventory Category</span>
-                            ) : (
-                              ""
                             )}
                           </NavLink>
                         </li>
@@ -496,11 +532,28 @@ export class Header extends Component {
                             className={({ isActive }) =>
                               isActive ? "active" : "not-active"
                             }
-                            to="/pos"
-                            title="POS"
+                            to="/inventoryproducts"
+                            title="Inventory Products"
                           >
-                            <i className="fa-solid fa-signs-post"></i>
-                            {this.state.sidebarText ? <span>POS</span> : ""}
+                            {/* <i className="fa-solid fa-signs-post"></i> */}
+                            {this.state.sidebarText && (
+                              <span>Inventory Products</span>
+                            )}
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            id="sidebar_text"
+                            className={({ isActive }) =>
+                              isActive ? "active" : "not-active"
+                            }
+                            to="/releaseinventory"
+                            title="Release Inventory"
+                          >
+                            {/* <i className="fa-solid fa-signs-post"></i> */}
+                            {this.state.sidebarText && (
+                              <span>Release Inventory</span>
+                            )}
                           </NavLink>
                         </li>
                       </ul>

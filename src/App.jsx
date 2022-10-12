@@ -21,6 +21,7 @@ import { toast, ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DineinList from "./pages/DineinList.jsx";
 import Inventorycategory from "./pages/Inventorycategory.jsx";
+import Inventoryproducts from "./pages/Inventoryproducts.jsx";
 
 global.api = "https://weazydine.healthyrabbit.in/api/";
 export class App extends Component {
@@ -236,6 +237,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Inventorycategory />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/inventoryproducts"
+              element={
+                <RequireAuth>
+                  <Inventoryproducts />
                 </RequireAuth>
               }
             />

@@ -183,8 +183,8 @@ class Inventorycategory extends Component {
               <div className="content">
                 <div className="page-header">
                   <div className="page-title">
-                    <h4>Category List</h4>
-                    <h6>Manage your categories</h6>
+                    <h4>Inventory Category List</h4>
+                    <h6>Manage the categories of your inventory</h6>
                   </div>
                   <div className="page-btn">
                     <a
