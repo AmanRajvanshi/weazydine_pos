@@ -92,6 +92,7 @@ export class Editproduct extends Component {
           this.setState({ product_image: obj.product_img });
           this.setState({ v_data: obj.variants });
           this.setState({ addon: obj.addon_map });
+          this.setState({ type: obj.type });
         }
 
         this.setState({ is_loading: false });
@@ -155,7 +156,7 @@ export class Editproduct extends Component {
     if (
       this.state.name == "" ||
       this.state.market_price == "" ||
-      this.state.image == "" ||
+      this.state.product_img == "" ||
       this.state.our_price == "" ||
       this.state.description == ""
     ) {
@@ -179,20 +180,17 @@ export class Editproduct extends Component {
 
       var form = new FormData();
       form.append("product_name", this.state.name);
-      // form.append("token",global.token);
       form.append("vendor_category_id", this.state.c_id);
       form.append("market_price", this.state.market_price);
       form.append("price", this.state.our_price);
       form.append("description", this.state.description);
       form.append("type", this.state.type);
       form.append("product_id", this.state.product_id);
-
       if (this.state.images.length > 0) {
         this.state.images.map((item, index) => {
           form.append("product_img", item);
         });
       }
-
       form.append("is_veg", this.state.is_veg);
       fetch(global.api + "vendor_update_product", {
         method: "POST",

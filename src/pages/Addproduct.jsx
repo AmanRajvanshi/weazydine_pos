@@ -234,6 +234,7 @@ export class Addproduct extends Component {
                           <select
                             onChange={(e) => {
                               this.setState({ c_id: e.target.value });
+                              // alert(e.target.value);
                             }}
                             className="select-container"
                           >

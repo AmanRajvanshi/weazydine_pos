@@ -22,20 +22,21 @@ export class Productlist extends Component {
       active_cat: 0,
       is_loding: true,
       category_loding: true,
+      type: "product",
     };
   }
 
   componentDidMount() {
     this.fetchCategories();
-    this.fetchProducts(0, 1);
+    this.fetchProducts(0, this.state.type, 1);
   }
 
   active_cat = (id) => {
     this.setState({ active_cat: id, product_loding: true });
-    this.fetchProducts(id, 1);
+    this.fetchProducts(id, this.state.type, 1);
   };
 
-  fetchProducts = (category_id, page) => {
+  fetchProducts = (category_id, type, page) => {
     this.setState({ is_loding: true });
     fetch(global.api + "vendor_get_vendor_product", {
       method: "POST",
@@ -46,7 +47,7 @@ export class Productlist extends Component {
       },
       body: JSON.stringify({
         vendor_category_id: category_id,
-        product_type: "product",
+        product_type: type,
         page: page,
       }),
     })
@@ -162,6 +163,42 @@ export class Productlist extends Component {
               />
             )}
 
+            <div className="comp-sec-wrapper mt-20">
+              <section className="comp-section">
+                <div className="row pb-4">
+                  <div className="col-md-12">
+                    <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetchProducts(0, "product", 1);
+                          }}
+                        >
+                          Product
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetchProducts(0, "package", 1);
+                          }}
+                        >
+                          Combos
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+            </div>
             {this.state.is_loding ? (
               <div
                 className="main_loader"
@@ -193,6 +230,7 @@ export class Productlist extends Component {
                               <th>Market Price</th>
                               <th>Our Price</th>
                               <th>Category</th>
+                              <th>Type</th>
                               <th>Veg/NonVeg</th>
                               <th>Status</th>
                               <th style={{ textAlign: "end" }}>Action</th>
@@ -227,6 +265,7 @@ export class Productlist extends Component {
                                     {item.our_price}
                                   </td>
                                   <td>{item.category.name}</td>
+                                  <td>{item.type}</td>
                                   <td>
                                     {item.is_veg ? <>Veg</> : <> Non-Veg</>}
                                   </td>

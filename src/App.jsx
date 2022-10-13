@@ -23,8 +23,14 @@ import DineinList from "./pages/DineinList.jsx";
 import Inventorycategory from "./pages/Inventorycategory.jsx";
 import Inventoryproducts from "./pages/Inventoryproducts.jsx";
 import Releaseinventory from "./pages/Releaseinventory.jsx";
+import LoginPassword from "./pages/LoginPassword.jsx";
 
-global.api = "https://weazydine.healthyrabbit.in/api/";
+//for Release point
+global.api = "https://dine-api.weazy.in/api/";
+
+//for Testing point
+// global.api = "https://weazydine.healthyrabbit.in/api/";
+
 export class App extends Component {
   constructor(props) {
     super(props);
@@ -260,7 +266,8 @@ export class App extends Component {
               }
             />
             <Route path="*" element={<Pagenotfound />} />
-            <Route exact path="/login" element={<Login />} />
+            {/* <Route exact path="/login" element={<Login />} /> */}
+            <Route exact path="/loginpassword" element={<LoginPassword />} />
           </Routes>
         </AuthContext.Provider>
         <ToastContainer
