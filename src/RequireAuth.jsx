@@ -8,7 +8,7 @@ export const RequireAuth = ({ children }) => {
 
   if (!is_login) {
     // return <Navigate to="/login" state={{ path: location.pathname }} />;
-    return <Navigate to="/loginpassword" state={{ path: location.pathname }} />;
+    return <Navigate to="/login" state={{ path: location.pathname }} />;
   }
 
   return children;

@@ -324,6 +324,8 @@ class OngoingOrders extends Component {
   render() {
     return (
       <div className="d-flex">
+        {
+          this.state.orders.length > 0?
         <div className="card flex-fill">
           <div className="card-header pb-0 d-flex justify-content-between align-items-center">
             <h4>Pending Orders</h4>
@@ -371,6 +373,9 @@ class OngoingOrders extends Component {
             </div>
           </div>
         </div>
+        :
+        <></>
+                  }
       </div>
     );
   }

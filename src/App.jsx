@@ -26,10 +26,10 @@ import Releaseinventory from "./pages/Releaseinventory.jsx";
 import LoginPassword from "./pages/LoginPassword.jsx";
 
 //for Release point
-global.api = "https://dine-api.weazy.in/api/";
+//global.api = "https://dine-api.weazy.in/api/";
 
 //for Testing point
-// global.api = "https://weazydine.healthyrabbit.in/api/";
+global.api = "https://beta-dine-api.weazy.in/api/";
 
 export class App extends Component {
   constructor(props) {
@@ -266,8 +266,8 @@ export class App extends Component {
               }
             />
             <Route path="*" element={<Pagenotfound />} />
-            {/* <Route exact path="/login" element={<Login />} /> */}
-            <Route exact path="/loginpassword" element={<LoginPassword />} />
+            <Route exact path="/login" element={<Login />} />
+            {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
         </AuthContext.Provider>
         <ToastContainer

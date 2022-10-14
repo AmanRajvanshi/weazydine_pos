@@ -4,7 +4,7 @@ import moment from "moment";
 import { BiRupee } from "react-icons/bi";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import { useParams, useNavigate, useLocation,Link} from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider";
 import { Bars } from "react-loader-spinner";
 import no_order from "../assets/images/no_orders.webp";
@@ -54,6 +54,7 @@ export class TableOrderDetails extends Component {
         // console.warn(json)
         if (!json.status) {
           this.setState({ isLoading: false, data: [] });
+          this.props.navigate("/pos/" + this.props.id, { replace: true });
         } else {
           this.setState({
             data: json.data,
@@ -164,16 +165,15 @@ export class TableOrderDetails extends Component {
                   <div className="page-header">
                     <div className="page-title">
                       <h4>Order Details</h4>
-                      
                     </div>
-                  </div>
 
-                  <Link
-                    className="btn btn-submit me-2"
-                    to={"/pos/"+this.props.id}
-                  >
-                    Add More Item
-                  </Link>
+                    <Link
+                      className="btn btn-primary btn-sm me-2"
+                      to={"/pos/" + this.props.id}
+                    >
+                      Add More Item
+                    </Link>
+                  </div>
 
                   <section className="comp-section comp-cards">
                     <div className="row">
@@ -528,7 +528,7 @@ export class TableOrderDetails extends Component {
 
                   <Link
                     className="btn btn-submit me-2"
-                    to={"/pos/"+this.props.id}
+                    to={"/pos/" + this.props.id}
                   >
                     Create a new order
                   </Link>

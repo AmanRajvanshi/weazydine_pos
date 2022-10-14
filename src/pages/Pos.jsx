@@ -99,9 +99,16 @@ class Pos extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
+        if(!json.status)
+        {
+
+        }else
+        {
+          this.setState({ category: json.data });
+          this.fetchProducts(0, 1);
+        }
         // console.warn(json.data)
-        this.setState({ category: json.data });
-        this.fetchProducts(0, 1);
+        
         return json;
       })
       .catch((error) => console.error(error))
@@ -683,10 +690,15 @@ class Pos extends Component {
                       <div className="col-lg-12">
                         <div className="form-group">
                           <h3>Hello, {this.state.name}</h3>
-
-                          <label style={{ marginTop: "20px" }}>
+{
+  this.state.order_method !="DineIn"?
+  <label style={{ marginTop: "20px" }}>
                             Select Payment Method
-                          </label>
+                          </label>:
+                          <label style={{ marginTop: "20px" }}>
+                            Confirm Order </label>
+}
+                          
 
                           {this.state.is_buttonloding ? (
                             <button
@@ -704,7 +716,9 @@ class Pos extends Component {
                             </button>
                           ) : (
                             <div className="setvaluecash">
-                              <ul>
+                              {
+                                this.state.order_method !="DineIn"?(
+<ul>
                                 <li>
                                   <a
                                     onClick={() => {
@@ -753,7 +767,28 @@ class Pos extends Component {
                                     Scan
                                   </a>
                                 </li>
+                              </ul>):
+                              <ul style={{justifyContent:"center"}}>
+                              <li>
+                                <a
+                                  onClick={() => {
+                                    this.place_order("offline-cash");
+                                  }}
+                                  href="javascript:void(0);"
+                                  className="paymentmethod"
+                                >
+                                  <img
+                                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/cash.svg"
+                                    alt="img"
+                                    className="me-2"
+                                  />
+                                  Confirm  Order
+                                </a>
+                              </li>
                               </ul>
+                                
+                              }
+                              
                             </div>
                           )}
                         </div>
