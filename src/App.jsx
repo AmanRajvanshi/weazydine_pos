@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Router, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Addproduct from "./pages/Addproduct.jsx";
 import Categorylist from "./pages/Categorylist.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -17,7 +17,7 @@ import { RequireAuth } from "./RequireAuth";
 import Productdetails from "./pages/Productdetails.jsx";
 import Editproduct from "./pages/Editproduct.jsx";
 import Editprofile from "./pages/Editprofile.jsx";
-import { toast, ToastContainer, Flip } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DineinList from "./pages/DineinList.jsx";
 import Inventorycategory from "./pages/Inventorycategory.jsx";
@@ -26,7 +26,7 @@ import Releaseinventory from "./pages/Releaseinventory.jsx";
 import LoginPassword from "./pages/LoginPassword.jsx";
 
 //for Release point
-//global.api = "https://dine-api.weazy.in/api/";
+// global.api = "https://dine-api.weazy.in/api/";
 
 //for Testing point
 global.api = "https://beta-dine-api.weazy.in/api/";
@@ -43,6 +43,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
+    console.log("textingENv", process.env.REACT_APP_ACCESS_KEY);
     const items = JSON.parse(localStorage.getItem("@auth_login"));
     if (items != null) {
       this.login(items.use_type, items.token);
@@ -73,7 +74,7 @@ export class App extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.message == "Unauthenticated.") {
+        if (json.message === "Unauthenticated.") {
           this.logout();
         }
         if (!json.status) {

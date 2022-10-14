@@ -27,7 +27,7 @@ export class Addproduct extends Component {
       market_price: "",
       our_price: "",
       description: "",
-      type: "",
+      type: "product",
       is_veg: 1,
       save_and_continue: false,
       add_category_loading: false,
@@ -238,6 +238,7 @@ export class Addproduct extends Component {
                             }}
                             className="select-container"
                           >
+                            <option>Choose Category</option>
                             {this.state.category.length > 0 ? (
                               this.state.category.map((item, index) => (
                                 <option value={item.id}>{item.name}</option>
@@ -310,6 +311,7 @@ export class Addproduct extends Component {
                             onChange={(e) => {
                               this.setState({ type: e.target.value });
                             }}
+                            value={this.state.type}
                             className="select-container"
                           >
                             <option value="product">Product</option>

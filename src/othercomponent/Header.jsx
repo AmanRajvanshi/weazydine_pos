@@ -14,7 +14,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token);
+    // console.log(this.context.token);
   }
 
   logOut = () => {

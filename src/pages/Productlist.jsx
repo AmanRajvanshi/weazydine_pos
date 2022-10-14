@@ -85,8 +85,11 @@ export class Productlist extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
-        this.setState({ category: json.data });
+        if (json.status) {
+          this.setState({ category: json.data });
+        } else {
+          this.setState({ category: [] });
+        }
 
         return json;
       })
@@ -163,42 +166,6 @@ export class Productlist extends Component {
               />
             )}
 
-            <div className="comp-sec-wrapper mt-20">
-              <section className="comp-section">
-                <div className="row pb-4">
-                  <div className="col-md-12">
-                    <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
-                      <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetchProducts(0, "product", 1);
-                          }}
-                        >
-                          Product
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetchProducts(0, "package", 1);
-                          }}
-                        >
-                          Combos
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </section>
-            </div>
             {this.state.is_loding ? (
               <div
                 className="main_loader"
@@ -219,105 +186,149 @@ export class Productlist extends Component {
             ) : (
               <>
                 {this.state.products.length > 0 ? (
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="table-responsive">
-                        <table className="table  datanew">
-                          <thead>
-                            <tr>
-                              <th>S.no</th>
-                              <th>Product Name</th>
-                              <th>Market Price</th>
-                              <th>Our Price</th>
-                              <th>Category</th>
-                              <th>Type</th>
-                              <th>Veg/NonVeg</th>
-                              <th>Status</th>
-                              <th style={{ textAlign: "end" }}>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {this.state.products.map((item, index) => {
-                              return (
-                                <tr>
-                                  <td>{index + 1}</td>
-                                  <td className="productimgname">
-                                    <Link
-                                      to={"/productdetails/" + item.id}
-                                      className="product-img"
-                                    >
-                                      <img
-                                        src={item.product_img}
-                                        alt="product"
+                  <>
+                    <div className="comp-sec-wrapper mt-20">
+                      <section className="comp-section">
+                        <div className="row pb-4">
+                          <div className="col-md-12">
+                            <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
+                              <li className="nav-item">
+                                <a
+                                  className="nav-link active"
+                                  href="#solid-rounded-justified-tab1"
+                                  data-bs-toggle="tab"
+                                  onClick={() => {
+                                    this.setState({ is_loading: true });
+                                    this.fetchProducts(0, "product", 1);
+                                  }}
+                                >
+                                  Product
+                                </a>
+                              </li>
+                              <li className="nav-item">
+                                <a
+                                  className="nav-link"
+                                  href="#solid-rounded-justified-tab1"
+                                  data-bs-toggle="tab"
+                                  onClick={() => {
+                                    this.setState({ is_loading: true });
+                                    this.fetchProducts(0, "package", 1);
+                                  }}
+                                >
+                                  Combos
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="table-responsive">
+                          <table className="table  datanew">
+                            <thead>
+                              <tr>
+                                <th>S.no</th>
+                                <th>Product Name</th>
+                                <th>Market Price</th>
+                                <th>Our Price</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Veg/NonVeg</th>
+                                <th>Status</th>
+                                <th style={{ textAlign: "end" }}>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.products.map((item, index) => {
+                                return (
+                                  <tr>
+                                    <td>{index + 1}</td>
+                                    <td className="productimgname">
+                                      <Link
+                                        to={"/productdetails/" + item.id}
                                         className="product-img"
-                                      />
-                                    </Link>
-                                    <Link to={"/productdetails/" + item.id}>
-                                      {item.product_name}
-                                    </Link>
-                                  </td>
-                                  <td>
-                                    <BiRupee />
-                                    {item.market_price}
-                                  </td>
-                                  <td>
-                                    <BiRupee />
-                                    {item.our_price}
-                                  </td>
-                                  <td>{item.category.name}</td>
-                                  <td>{item.type}</td>
-                                  <td>
-                                    {item.is_veg ? <>Veg</> : <> Non-Veg</>}
-                                  </td>
+                                      >
+                                        <img
+                                          src={item.product_img}
+                                          alt="product"
+                                          className="product-img"
+                                        />
+                                      </Link>
+                                      <Link to={"/productdetails/" + item.id}>
+                                        {item.product_name}
+                                      </Link>
+                                    </td>
+                                    <td>
+                                      <BiRupee />
+                                      {item.market_price}
+                                    </td>
+                                    <td>
+                                      <BiRupee />
+                                      {item.our_price}
+                                    </td>
+                                    <td>{item.category.name}</td>
+                                    <td>{item.type}</td>
+                                    <td>
+                                      {item.is_veg ? <>Veg</> : <> Non-Veg</>}
+                                    </td>
 
-                                  <td>
-                                    <Toggle
-                                      status={item.status}
-                                      product_id={item.id}
-                                      action_type="product"
-                                    />
-                                  </td>
-                                  <td style={{ textAlign: "end" }}>
-                                    <Link
-                                      to={"/editproduct/" + item.id}
-                                      className="me-3"
-                                    >
-                                      <img src={edit_icon} alt="img" />
-                                    </Link>
-                                    <a
-                                      className="confirm-text"
-                                      // onClick={() => {
-                                      //   this.delete_product(item.id);
-                                      // }}
-                                      onClick={() =>
-                                        Swal.fire({
-                                          title: "Are you sure?",
-                                          text: "You won't be able to revert this!",
-                                          icon: "warning",
-                                          showCancelButton: true,
-                                          confirmButtonColor: "#3085d6",
-                                          cancelButtonColor: "#d33",
-                                          confirmButtonText: "Yes, delete it!",
-                                        }).then((result) => {
-                                          if (result.isConfirmed) {
-                                            this.delete_product(item.id);
-                                          }
-                                        })
-                                      }
-                                    >
-                                      <img src={delete_icon} alt="img" />
-                                    </a>
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
+                                    <td>
+                                      <Toggle
+                                        status={item.status}
+                                        product_id={item.id}
+                                        action_type="product"
+                                      />
+                                    </td>
+                                    <td style={{ textAlign: "end" }}>
+                                      <Link
+                                        to={"/editproduct/" + item.id}
+                                        className="me-3"
+                                      >
+                                        <img src={edit_icon} alt="img" />
+                                      </Link>
+                                      <a
+                                        className="confirm-text"
+                                        // onClick={() => {
+                                        //   this.delete_product(item.id);
+                                        // }}
+                                        onClick={() =>
+                                          Swal.fire({
+                                            title: "Are you sure?",
+                                            text: "You won't be able to revert this!",
+                                            icon: "warning",
+                                            showCancelButton: true,
+                                            confirmButtonColor: "#3085d6",
+                                            cancelButtonColor: "#d33",
+                                            confirmButtonText:
+                                              "Yes, delete it!",
+                                          }).then((result) => {
+                                            if (result.isConfirmed) {
+                                              this.delete_product(item.id);
+                                            }
+                                          })
+                                        }
+                                      >
+                                        <img src={delete_icon} alt="img" />
+                                      </a>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : (
-                  <div className="d-flex align-items-center justify-content-center flex-column">
+                  <div
+                    className="d-flex align-items-center justify-content-center flex-column"
+                    style={{
+                      height: "70vh",
+                    }}
+                  >
                     <img
                       src={no_img}
                       alt=""
@@ -341,25 +352,25 @@ class Category extends Component {
   render() {
     return (
       <div className="row">
-        <ul className="tabs horizontal_scroll">
-          <li
-            onClick={() => {
-              this.props.fetch_product(0);
-            }}
-          >
-            <div
-              className={
-                "product-details" +
-                (this.props.active_cat == 0 ? " active" : "")
-              }
-              href="#solid-rounded-justified-tab1"
-              data-bs-toggle="tab"
+        {this.props.category.length > 0 && (
+          <ul className="tabs horizontal_scroll">
+            <li
+              onClick={() => {
+                this.props.fetch_product(0);
+              }}
             >
-              <h6>All</h6>
-            </div>
-          </li>
-          {this.props.category.length > 0 &&
-            this.props.category.map((item, index) => {
+              <div
+                className={
+                  "product-details" +
+                  (this.props.active_cat == 0 ? " active" : "")
+                }
+                href="#solid-rounded-justified-tab1"
+                data-bs-toggle="tab"
+              >
+                <h6>All</h6>
+              </div>
+            </li>
+            {this.props.category.map((item, index) => {
               return (
                 <li
                   onClick={() => {
@@ -381,7 +392,8 @@ class Category extends Component {
                 </li>
               );
             })}
-        </ul>
+          </ul>
+        )}
       </div>
     );
   }

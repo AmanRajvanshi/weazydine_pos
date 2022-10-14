@@ -278,20 +278,18 @@ export class DineinList extends Component {
                       </div>
                     </div>
                   ) : (
-                    <div className="page-wrapper">
-                      <div
-                        className="content"
-                        style={{
-                          height: "60vh",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <img src={no_order} alt="" />
-                        <h3>No DineIn data Found</h3>
-                      </div>
+                    <div
+                      className="content"
+                      style={{
+                        height: "60vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <img src={no_order} alt="" />
+                      <h3>No DineIn data Found</h3>
                     </div>
                   )}
                 </>

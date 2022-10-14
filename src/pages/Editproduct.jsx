@@ -319,6 +319,7 @@ export class Editproduct extends Component {
                             }}
                             className="select-container"
                           >
+                            <option>Choose Category</option>
                             {this.state.category.length > 0 ? (
                               this.state.category.map((item, index) => {
                                 return (

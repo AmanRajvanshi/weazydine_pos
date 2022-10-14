@@ -7,7 +7,7 @@ export const RequireAuth = ({ children }) => {
   const { is_login } = React.useContext(AuthContext);
 
   if (!is_login) {
-    // return <Navigate to="/login" state={{ path: location.pathname }} />;
+    // return <Navigate to="/loginpassword" state={{ path: location.pathname }} />;
     return <Navigate to="/login" state={{ path: location.pathname }} />;
   }
 

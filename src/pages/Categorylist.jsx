@@ -8,6 +8,7 @@ import { AuthContext } from "../AuthContextProvider";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
 import Swal from "sweetalert2";
+import no_img from "../assets/images/no_products_found.png";
 
 export class Categorylist extends Component {
   static contextType = AuthContext;
@@ -38,9 +39,11 @@ export class Categorylist extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
-        this.setState({ category: json.data });
-        this.setState({ is_loding: false });
+        if (json.status) {
+          this.setState({ category: json.data, is_loding: false });
+        } else {
+          this.setState({ is_loding: false, category: [] });
+        }
         return json;
       })
       .catch((error) => console.error(error))
@@ -166,42 +169,47 @@ export class Categorylist extends Component {
       <>
         <div className="main-wrapper">
           <Header />
-          {this.state.is_loding ? (
-            <div className="main_loader">
-              <Bars
-                height="80"
-                width="80"
-                color="#eda332"
-                ariaLabel="bars-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            </div>
-          ) : (
-            <div className="page-wrapper">
-              <div className="content">
-                <div className="page-header">
-                  <div className="page-title">
-                    <h4>Category List</h4>
-                    <h6>Manage your categories</h6>
-                  </div>
-                  <div className="page-btn">
-                    <a
-                      className="btn btn-added"
-                      onClick={() => {
-                        this.setState({ open: true });
-                      }}
-                    >
-                      <img
-                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                        alt="img"
-                        className="me-1"
-                      />
-                      Add New Category
-                    </a>
-                  </div>
+          <div className="page-wrapper">
+            <div className="content">
+              <div className="page-header">
+                <div className="page-title">
+                  <h4>Category List</h4>
+                  <h6>Manage your categories</h6>
                 </div>
+                <div className="page-btn">
+                  <a
+                    className="btn btn-added"
+                    onClick={() => {
+                      this.setState({ open: true });
+                    }}
+                  >
+                    <img
+                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
+                      alt="img"
+                      className="me-1"
+                    />
+                    Add New Category
+                  </a>
+                </div>
+              </div>
+              {this.state.is_loding ? (
+                <div
+                  className="main_loader"
+                  style={{
+                    height: "50vh",
+                  }}
+                >
+                  <Bars
+                    height="80"
+                    width="80"
+                    color="#eda332"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div>
+              ) : (
                 <div className="card">
                   {this.state.category.length > 0 ? (
                     <div className="card-body">
@@ -262,12 +270,26 @@ export class Categorylist extends Component {
                       </div>
                     </div>
                   ) : (
-                    <>No category Found</>
+                    <div
+                      className="d-flex align-items-center justify-content-center flex-column"
+                      style={{
+                        height: "70vh",
+                      }}
+                    >
+                      <img
+                        src={no_img}
+                        alt=""
+                        style={{
+                          height: "250px",
+                        }}
+                      />
+                      <h4>No Category Found</h4>
+                    </div>
                   )}
                 </div>
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
         <Modal
           open={this.state.open}
