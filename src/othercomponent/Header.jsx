@@ -243,11 +243,11 @@ export class Header extends Component {
                     </li>
                   </ul>
                 </div>
-                <div className="topnav-dropdown-footer">
+                {/* <div className="topnav-dropdown-footer">
                   <a href="https://dreamspos.dreamguystech.com/html/template/activities.html">
                     View all Notifications
                   </a>
-                </div>
+                </div> */}
               </div>
             </li>
 
@@ -542,7 +542,7 @@ export class Header extends Component {
                             )}
                           </NavLink>
                         </li>
-                        <li>
+                        {/* <li>
                           <NavLink
                             id="sidebar_text"
                             className={({ isActive }) =>
@@ -551,12 +551,11 @@ export class Header extends Component {
                             to="/releaseinventory"
                             title="Release Inventory"
                           >
-                            {/* <i className="fa-solid fa-signs-post"></i> */}
                             {this.state.sidebarText && (
                               <span>Release Inventory</span>
                             )}
                           </NavLink>
-                        </li>
+                        </li> */}
                       </ul>
                     )}
                   </li>

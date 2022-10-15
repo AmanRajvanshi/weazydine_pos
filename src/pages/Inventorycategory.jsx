@@ -23,7 +23,7 @@ class Inventorycategory extends Component {
       category_id: "",
       is_buttonloding: false,
       parent_category_id: "",
-      category_status: "",
+      category_status: "active",
       parent_category_id_edit: "",
     };
   }
@@ -100,8 +100,9 @@ class Inventorycategory extends Component {
   };
 
   edit = () => {
-    //   alert("sfghsdf")
-    if (
+    if (this.state.category_id == this.state.parent_category_id_edit) {
+      toast.error("Category can not be parent of itself!");
+    } else if (
       this.state.new_category_name != "" ||
       this.state.parent_category_id_edit != ""
     ) {
@@ -232,7 +233,7 @@ class Inventorycategory extends Component {
                               <th>S.no</th>
                               <th>Category</th>
                               <th>Parent</th>
-                              <th>Products</th>
+                              <th>Products Count</th>
                               <th>Status</th>
                               <th>Action</th>
                             </tr>
@@ -244,7 +245,15 @@ class Inventorycategory extends Component {
                                 <td>{item.category_name}</td>
                                 <td>{item.category_parent}</td>
                                 <td>{item.products_count}</td>
-                                <td>{item.category_status}</td>
+                                <td
+                                  className={
+                                    item.category_status == "active"
+                                      ? "text-success text-capitalize"
+                                      : "text-danger text-capitalize"
+                                  }
+                                >
+                                  {item.category_status}
+                                </td>
                                 <td>
                                   <a
                                     className="me-3"
@@ -262,11 +271,12 @@ class Inventorycategory extends Component {
                                     className="confirm-text"
                                     onClick={() => {
                                       Swal.fire({
-                                        title: "Are you sure?",
-                                        text: "You won't be able to revert this!",
+                                        title:
+                                          "Are you sure you want to delete this category?",
+                                        text: "All the products under this category will also be deleted",
                                         icon: "warning",
                                         showCancelButton: true,
-                                        confirmButtonColor: "#3085d6",
+                                        confirmButtonColor: "#ff9900",
                                         cancelButtonColor: "#d33",
                                         confirmButtonText: "Yes, delete it!",
                                       }).then((result) => {

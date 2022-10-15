@@ -23,20 +23,21 @@ class Inventoryproducts extends Component {
       products: [],
       active_cat: 0,
       is_loding: true,
+      is_button_loading_add: false,
       category_loding: true,
       opencategory: false,
       open: false,
+      is_buttonloding: false,
       openedit: false,
       new_category_name: "",
       category_id: "",
       inventory_product_add_name: "",
       invenroty_product_add_category_id: "",
-      inventory_product_add_price: "",
       inventory_prodduct_add_model: "",
       inventory_add_purchase_unit: "",
       inventory_add_purchase_subunit_quantity: "",
       inventory_add_purchase_sub_unit: "",
-      inventory_add_status: "",
+      inventory_add_status: "active",
     };
   }
 
@@ -46,13 +47,12 @@ class Inventoryproducts extends Component {
   }
 
   active_cat = (id) => {
-    this.setState({ active_cat: id, product_loding: true });
+    this.setState({ active_cat: id, product_loding: true, is_loding: true });
     this.fetchProducts(id, 1);
   };
 
-  fetchProducts = (category_id, page) => {
-    this.setState({ is_loding: true });
-    fetch(global.api + "vendor_get_vendor_product", {
+  fetchProducts = (id, page) => {
+    fetch(global.api + "fetch_inventory_products", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -60,22 +60,20 @@ class Inventoryproducts extends Component {
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        vendor_category_id: category_id,
-        product_type: "product",
         page: page,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
-        //  console.warn(json);
+        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
             this.setState({ products: [] });
           }
         } else {
-          if (json.data.length > 0) {
-            this.setState({ products: json.data });
+          if (json.data.data.length > 0) {
+            this.setState({ products: json.data.data });
           }
         }
         return json;
@@ -114,7 +112,7 @@ class Inventoryproducts extends Component {
   };
 
   delete_product = (id) => {
-    fetch(global.api + "update_status_product_offer", {
+    fetch(global.api + "delete_inventory_product", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -122,9 +120,7 @@ class Inventoryproducts extends Component {
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        action_id: id,
-        type: "product",
-        status: "delete",
+        product_id: id,
       }),
     })
       .then((response) => response.json())
@@ -152,7 +148,7 @@ class Inventoryproducts extends Component {
       this.state.new_category_name != "" ||
       this.state.parent_category_id != ""
     ) {
-      this.setState({ is_buttonloding: true });
+      this.setState({ is_button_loading_add: true });
       fetch(global.api + "create_inventory_category", {
         method: "POST",
         headers: {
@@ -187,6 +183,69 @@ class Inventoryproducts extends Component {
         });
     } else {
       toast.error("Please fill all required fields!");
+    }
+  };
+
+  add_product = () => {
+    this.setState({ is_button_loading_add: true });
+    if (
+      this.state.inventory_product_add_name != "" ||
+      this.state.invenroty_product_add_category_id != "" ||
+      this.state.inventory_prodduct_add_model != "" ||
+      this.state.inventory_add_purchase_unit != "" ||
+      this.state.inventory_add_purchase_subunit_quantity != "" ||
+      this.state.inventory_add_purchase_sub_unit != ""
+    ) {
+      this.setState({ is_button_loading_add: true });
+      fetch(global.api + "add_inventory_product", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          inventory_product_name: this.state.inventory_product_add_name,
+          inventory_category_id: this.state.invenroty_product_add_category_id,
+          model: this.state.inventory_prodduct_add_model,
+          purchase_unit: this.state.inventory_add_purchase_unit,
+          purchase_subunit_quantity:
+            this.state.inventory_add_purchase_subunit_quantity,
+          purchase_sub_unit: this.state.inventory_add_purchase_sub_unit,
+          status: this.state.inventory_add_status,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // console.warn(json)
+          if (!json.status) {
+            var msg = json.msg;
+            toast.error(msg);
+          } else {
+            this.setState({
+              open: false,
+              inventory_product_add_name: "",
+              invenroty_product_add_category_id: "",
+              inventory_prodduct_add_model: "",
+              inventory_add_purchase_unit: "",
+              inventory_add_purchase_subunit_quantity: "",
+              inventory_add_purchase_sub_unit: "",
+              inventory_add_status: "",
+            });
+            toast.success(json.msg);
+            this.fetchProducts(this.state.active_cat, 1);
+          }
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ is_button_loading_add: false });
+        });
+    } else {
+      toast.error("Please fill all required fields!");
+      this.setState({ is_button_loading_add: false });
     }
   };
 
@@ -255,10 +314,11 @@ class Inventoryproducts extends Component {
                               <tr>
                                 <th>S.no</th>
                                 <th>Product Name</th>
-                                <th>Price</th>
+                                <th>Model</th>
+                                <th>Purchase Unit</th>
+                                <th>Purchase Sub Unit</th>
+                                <th>Purchase Subunit Quantity</th>
                                 <th>Category</th>
-                                <th>Unit</th>
-                                <th>Quantity</th>
                                 <th style={{ textAlign: "end" }}>Action</th>
                               </tr>
                             </thead>
@@ -267,14 +327,12 @@ class Inventoryproducts extends Component {
                                 return (
                                   <tr>
                                     <td>{index + 1}</td>
-                                    <td>{item.product_name}</td>
-                                    <td>
-                                      <BiRupee />
-                                      {item.market_price}
-                                    </td>
-                                    <td>{item.category.name}</td>
-                                    <td>{item.category.name}</td>
-                                    <td>10</td>
+                                    <td>{item.inventory_product_name}</td>
+                                    <td>{item.model}</td>
+                                    <td>{item.purchase_unit}</td>
+                                    <td>{item.purchase_sub_unit}</td>
+                                    <td>{item.purchase_subunit_quantity}</td>
+                                    <td>{item.category.category_name}</td>
                                     <td style={{ textAlign: "end" }}>
                                       <img
                                         src={edit_icon}
@@ -496,7 +554,7 @@ class Inventoryproducts extends Component {
                   </div>
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Purchase SubUnit Quantity</label>
+                      <label>Purchase Sub-Unit Quantity</label>
                       <input
                         type="text"
                         onChange={(e) => {
@@ -508,19 +566,8 @@ class Inventoryproducts extends Component {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-6">
-                    <div className="form-group">
-                      <label>Price</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-6 d-flex justify-content-end align-items-center">
-                    {this.state.is_buttonloding ? (
+                  <div className="col-lg-12 d-flex justify-content-end align-items-center">
+                    {this.state.is_button_loading_add ? (
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
@@ -538,7 +585,7 @@ class Inventoryproducts extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.add();
+                          this.add_product();
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
