@@ -14,7 +14,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.context.token);
+    console.log(this.context.token);
   }
 
   logOut = () => {
@@ -32,6 +32,7 @@ export class Header extends Component {
         global.token = null;
         this.context.logout();
         this.props.navigate("/login", { replace: true });
+        // this.props.navigate("/loginpassword", { replace: true });
       })
       .catch((error) => {
         console.error(error);

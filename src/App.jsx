@@ -31,6 +31,9 @@ import LoginPassword from "./pages/LoginPassword.jsx";
 //for Testing point
 global.api = "https://beta-dine-api.weazy.in/api/";
 
+//for local
+// global.api = "http://172.16.1.111:8000/api/";
+
 export class App extends Component {
   constructor(props) {
     super(props);

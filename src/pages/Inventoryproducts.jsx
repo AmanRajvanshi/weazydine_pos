@@ -27,6 +27,16 @@ class Inventoryproducts extends Component {
       opencategory: false,
       open: false,
       openedit: false,
+      new_category_name: "",
+      category_id: "",
+      inventory_product_add_name: "",
+      invenroty_product_add_category_id: "",
+      inventory_product_add_price: "",
+      inventory_prodduct_add_model: "",
+      inventory_add_purchase_unit: "",
+      inventory_add_purchase_subunit_quantity: "",
+      inventory_add_purchase_sub_unit: "",
+      inventory_add_status: "",
     };
   }
 
@@ -79,7 +89,7 @@ class Inventoryproducts extends Component {
   };
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_vendor_category", {
+    fetch(global.api + "fetch_inventory_category", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -89,8 +99,11 @@ class Inventoryproducts extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
-        this.setState({ category: json.data });
+        if (json.status) {
+          this.setState({ category: json.data.data });
+        } else {
+          this.setState({ category: [] });
+        }
 
         return json;
       })
@@ -132,6 +145,49 @@ class Inventoryproducts extends Component {
       .finally(() => {
         this.setState({ isloading: false });
       });
+  };
+
+  addCategory = () => {
+    if (
+      this.state.new_category_name != "" ||
+      this.state.parent_category_id != ""
+    ) {
+      this.setState({ is_buttonloding: true });
+      fetch(global.api + "create_inventory_category", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          category_name: this.state.new_category_name,
+          category_status: "active",
+          category_parent: this.state.parent_category_id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // console.warn(json)
+          if (!json.status) {
+            var msg = json.msg;
+            toast.error(msg);
+          } else {
+            this.setState({ opencategory: false, new_category_name: "" });
+            toast.success(json.msg);
+            this.fetchCategories();
+          }
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isloading: false, is_buttonloding: false });
+        });
+    } else {
+      toast.error("Please fill all required fields!");
+    }
   };
 
   render() {
@@ -261,7 +317,12 @@ class Inventoryproducts extends Component {
                       </div>
                     </div>
                   ) : (
-                    <div className="d-flex align-items-center justify-content-center flex-column">
+                    <div
+                      className="d-flex align-items-center justify-content-center flex-column"
+                      style={{
+                        height: "70vh",
+                      }}
+                    >
                       <img
                         src={no_img}
                         alt=""
@@ -301,8 +362,11 @@ class Inventoryproducts extends Component {
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({
+                            inventory_product_add_name: e.target.value,
+                          });
                         }}
+                        value={this.state.inventory_product_add_name}
                       />
                     </div>
                   </div>
@@ -328,46 +392,118 @@ class Inventoryproducts extends Component {
                       </div>
                       <select
                         onChange={(e) => {
-                          this.setState({ c_id: e.target.value });
+                          this.setState({
+                            invenroty_product_add_category_id: e.target.value,
+                          });
                         }}
                         className="select-container"
                       >
-                        {this.state.category.length > 0 ? (
+                        <option>Please Choose Category</option>
+                        {this.state.category.length > 0 &&
                           this.state.category.map((item, index) => (
-                            <option value={item.id}>{item.name}</option>
-                          ))
-                        ) : (
-                          <></>
-                        )}
+                            <option id={index} value={item.id}>
+                              {item.category_name}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Select Unit</label>
-                      <select
-                        onChange={(e) => {
-                          this.setState({ c_id: e.target.value });
-                        }}
-                        className="select-container"
-                      >
-                        {this.state.category.length > 0 ? (
-                          this.state.category.map((item, index) => (
-                            <option value={item.id}>{item.name}</option>
-                          ))
-                        ) : (
-                          <></>
-                        )}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="form-group">
-                      <label>Quantity</label>
+                      <label>Modal</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({
+                            inventory_prodduct_add_model: e.target.value,
+                          });
+                        }}
+                        value={this.state.inventory_prodduct_add_model}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Purchase Unit</label>
+                      <select
+                        onChange={(e) => {
+                          this.setState({
+                            inventory_add_purchase_unit: e.target.value,
+                          });
+                        }}
+                        className="select-container"
+                      >
+                        <option>Please Choose Unit</option>
+                        <option value="kg">KG</option>
+                        <option value="gm">GM</option>
+                        <option value="ltr">LTR</option>
+                        <option value="ml">ML</option>
+                        <option value="pcs">PCS</option>
+                        <option value="bori">Bori</option>
+                        <option value="dozen">Dozen</option>
+                        <option value="box">Box</option>
+                        <option value="pack">Pack</option>
+                        <option value="bundle">Bundle</option>
+                        <option value="bag">Bag</option>
+                        <option value="bottle">Bottle</option>
+                        <option value="carton">Carton</option>
+                        <option value="coil">Coil</option>
+                        <option value="drum">Drum</option>
+                        <option value="pair">Pair</option>
+                        <option value="ream">Ream</option>
+                        <option value="roll">Roll</option>
+                        <option value="set">Set</option>
+                        <option value="tube">Tube</option>
+                        <option value="unit">Unit</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Purchase Sub-Unit</label>
+                      <select
+                        onChange={(e) => {
+                          this.setState({
+                            inventory_add_purchase_sub_unit: e.target.value,
+                          });
+                        }}
+                        className="select-container"
+                      >
+                        <option>Please Choose Sub-Unit</option>
+                        <option value="kg">KG</option>
+                        <option value="gm">GM</option>
+                        <option value="ltr">LTR</option>
+                        <option value="ml">ML</option>
+                        <option value="pcs">PCS</option>
+                        <option value="bori">Bori</option>
+                        <option value="dozen">Dozen</option>
+                        <option value="box">Box</option>
+                        <option value="pack">Pack</option>
+                        <option value="bundle">Bundle</option>
+                        <option value="bag">Bag</option>
+                        <option value="bottle">Bottle</option>
+                        <option value="carton">Carton</option>
+                        <option value="coil">Coil</option>
+                        <option value="drum">Drum</option>
+                        <option value="pair">Pair</option>
+                        <option value="ream">Ream</option>
+                        <option value="roll">Roll</option>
+                        <option value="set">Set</option>
+                        <option value="tube">Tube</option>
+                        <option value="unit">Unit</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Purchase SubUnit Quantity</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({
+                            inventory_add_purchase_subunit_quantity:
+                              e.target.value,
+                          });
                         }}
                       />
                     </div>
@@ -438,8 +574,11 @@ class Inventoryproducts extends Component {
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({
+                            inventory_product_add_name: e.target.value,
+                          });
                         }}
+                        value={this.state.inventory_product_add_name}
                       />
                     </div>
                   </div>
@@ -465,46 +604,118 @@ class Inventoryproducts extends Component {
                       </div>
                       <select
                         onChange={(e) => {
-                          this.setState({ c_id: e.target.value });
+                          this.setState({
+                            invenroty_product_add_category_id: e.target.value,
+                          });
                         }}
                         className="select-container"
                       >
-                        {this.state.category.length > 0 ? (
+                        <option>Please Choose Category</option>
+                        {this.state.category.length > 0 &&
                           this.state.category.map((item, index) => (
-                            <option value={item.id}>{item.name}</option>
-                          ))
-                        ) : (
-                          <></>
-                        )}
+                            <option id={index} value={item.id}>
+                              {item.category_name}
+                            </option>
+                          ))}
                       </select>
                     </div>
                   </div>
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Select Unit</label>
-                      <select
-                        onChange={(e) => {
-                          this.setState({ c_id: e.target.value });
-                        }}
-                        className="select-container"
-                      >
-                        {this.state.category.length > 0 ? (
-                          this.state.category.map((item, index) => (
-                            <option value={item.id}>{item.name}</option>
-                          ))
-                        ) : (
-                          <></>
-                        )}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
-                    <div className="form-group">
-                      <label>Quantity</label>
+                      <label>Modal</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({
+                            inventory_prodduct_add_model: e.target.value,
+                          });
+                        }}
+                        value={this.state.inventory_prodduct_add_model}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Purchase Unit</label>
+                      <select
+                        onChange={(e) => {
+                          this.setState({
+                            inventory_add_purchase_unit: e.target.value,
+                          });
+                        }}
+                        className="select-container"
+                      >
+                        <option>Please Choose Unit</option>
+                        <option value="kg">KG</option>
+                        <option value="gm">GM</option>
+                        <option value="ltr">LTR</option>
+                        <option value="ml">ML</option>
+                        <option value="pcs">PCS</option>
+                        <option value="bori">Bori</option>
+                        <option value="dozen">Dozen</option>
+                        <option value="box">Box</option>
+                        <option value="pack">Pack</option>
+                        <option value="bundle">Bundle</option>
+                        <option value="bag">Bag</option>
+                        <option value="bottle">Bottle</option>
+                        <option value="carton">Carton</option>
+                        <option value="coil">Coil</option>
+                        <option value="drum">Drum</option>
+                        <option value="pair">Pair</option>
+                        <option value="ream">Ream</option>
+                        <option value="roll">Roll</option>
+                        <option value="set">Set</option>
+                        <option value="tube">Tube</option>
+                        <option value="unit">Unit</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Purchase Sub-Unit</label>
+                      <select
+                        onChange={(e) => {
+                          this.setState({
+                            inventory_add_purchase_sub_unit: e.target.value,
+                          });
+                        }}
+                        className="select-container"
+                      >
+                        <option>Please Choose Sub-Unit</option>
+                        <option value="kg">KG</option>
+                        <option value="gm">GM</option>
+                        <option value="ltr">LTR</option>
+                        <option value="ml">ML</option>
+                        <option value="pcs">PCS</option>
+                        <option value="bori">Bori</option>
+                        <option value="dozen">Dozen</option>
+                        <option value="box">Box</option>
+                        <option value="pack">Pack</option>
+                        <option value="bundle">Bundle</option>
+                        <option value="bag">Bag</option>
+                        <option value="bottle">Bottle</option>
+                        <option value="carton">Carton</option>
+                        <option value="coil">Coil</option>
+                        <option value="drum">Drum</option>
+                        <option value="pair">Pair</option>
+                        <option value="ream">Ream</option>
+                        <option value="roll">Roll</option>
+                        <option value="set">Set</option>
+                        <option value="tube">Tube</option>
+                        <option value="unit">Unit</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Purchase SubUnit Quantity</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({
+                            inventory_add_purchase_subunit_quantity:
+                              e.target.value,
+                          });
                         }}
                       />
                     </div>
@@ -533,7 +744,7 @@ class Inventoryproducts extends Component {
                           class="spinner-border spinner-border-sm me-2"
                           role="status"
                         ></span>
-                        Adding
+                        Editing...
                       </button>
                     ) : (
                       <a
@@ -543,7 +754,7 @@ class Inventoryproducts extends Component {
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
-                        Add Product
+                        Edit Product
                       </a>
                     )}
                   </div>
@@ -572,7 +783,9 @@ class Inventoryproducts extends Component {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <label>Category Name</label>
+                      <label>
+                        Category Name <span className="text-danger">*</span>
+                      </label>
                       <input
                         type="text"
                         onChange={(e) => {
@@ -581,10 +794,34 @@ class Inventoryproducts extends Component {
                       />
                     </div>
                   </div>
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>
+                        Choose Parent Categry{" "}
+                        <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        onChange={(e) => {
+                          this.setState({ parent_category_id: e.target.value });
+                          // alert(e.target.value);
+                        }}
+                        className="select-container"
+                      >
+                        <option>Choose Parent Category</option>
+                        <option value={0}>Parent Category</option>
+                        {this.state.category.length > 0 &&
+                          this.state.category.map((item, index) => (
+                            <option value={item.id}>
+                              {item.category_name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -600,9 +837,9 @@ class Inventoryproducts extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.add();
+                          this.addCategory();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Add Category
                       </a>
@@ -622,25 +859,25 @@ class Category extends Component {
   render() {
     return (
       <div className="row">
-        <ul className="tabs horizontal_scroll">
-          <li
-            onClick={() => {
-              this.props.fetch_product(0);
-            }}
-          >
-            <div
-              className={
-                "product-details" +
-                (this.props.active_cat == 0 ? " active" : "")
-              }
-              href="#solid-rounded-justified-tab1"
-              data-bs-toggle="tab"
+        {this.props.category.length > 0 && (
+          <ul className="tabs horizontal_scroll">
+            <li
+              onClick={() => {
+                this.props.fetch_product(0);
+              }}
             >
-              <h6>All</h6>
-            </div>
-          </li>
-          {this.props.category.length > 0 &&
-            this.props.category.map((item, index) => {
+              <div
+                className={
+                  "product-details" +
+                  (this.props.active_cat == 0 ? " active" : "")
+                }
+                href="#solid-rounded-justified-tab1"
+                data-bs-toggle="tab"
+              >
+                <h6>All</h6>
+              </div>
+            </li>
+            {this.props.category.map((item, index) => {
               return (
                 <li
                   onClick={() => {
@@ -656,13 +893,14 @@ class Category extends Component {
                     data-bs-toggle="tab"
                   >
                     <h6>
-                      {item.name}({item.products_count}){" "}
+                      {item.category_name}({item.products_count}){" "}
                     </h6>
                   </div>
                 </li>
               );
             })}
-        </ul>
+          </ul>
+        )}
       </div>
     );
   }
