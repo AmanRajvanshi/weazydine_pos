@@ -8147,3 +8147,9 @@ span.select-container.select-container--default.select-container--open {
 .mt-20{
   margin-top: 20px;
 }
+
+.sub_text_heading{
+  line-height: 2.8rem;
+  color: #eda332;
+  font-size: 2.2em;
+}

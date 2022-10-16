@@ -24,6 +24,7 @@ import Inventorycategory from "./pages/Inventorycategory.jsx";
 import Inventoryproducts from "./pages/Inventoryproducts.jsx";
 import Releaseinventory from "./pages/Releaseinventory.jsx";
 import LoginPassword from "./pages/LoginPassword.jsx";
+import Subscription from "./pages/Subscription.jsx";
 
 //for Release point
 // global.api = "https://dine-api.weazy.in/api/";
@@ -266,6 +267,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Releaseinventory />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/subscription"
+              element={
+                <RequireAuth>
+                  <Subscription />
                 </RequireAuth>
               }
             />
