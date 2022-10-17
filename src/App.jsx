@@ -24,16 +24,22 @@ import Inventorycategory from "./pages/Inventorycategory.jsx";
 import Inventoryproducts from "./pages/Inventoryproducts.jsx";
 import Releaseinventory from "./pages/Releaseinventory.jsx";
 import LoginPassword from "./pages/LoginPassword.jsx";
-import Subscription from "./pages/Subscription.jsx";
 
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+import OneSignal from 'react-onesignal';
+
+OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
+ 
 //for Release point
 // global.api = "https://dine-api.weazy.in/api/";
 
 //for Testing point
-global.api = "https://beta-dine-api.weazy.in/api/";
+//global.api = "https://beta-dine-api.weazy.in/api/";
 
 //for local
-// global.api = "http://172.16.1.111:8000/api/";
+ global.api = "http://172.16.1.111:8000/api/";
 
 export class App extends Component {
   constructor(props) {
@@ -47,10 +53,8 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    console.log("textingENv", process.env.REACT_APP_ACCESS_KEY);
     const items = JSON.parse(localStorage.getItem("@auth_login"));
     if (items != null) {
-      this.login(items.use_type, items.token);
       this.get_profile(items.token);
       global.vendor = items.vendor_id;
       global.step = this.state.step;
@@ -61,9 +65,36 @@ export class App extends Component {
     // toast.success(global.msg);
   }
 
-  login = (step, token) => {
-    this.setState({ is_login: true, step: step, token: token, loading: false });
-    this.get_profile(token);
+  login = (step,user, token) => {
+
+    this.setState({ is_login: true, step: step,user:user,token:token,loading: false });
+    
+    OneSignal.sendTag("id", '' + user.id);
+    OneSignal.sendTag("account_type", "vendor-bmguj1sfd77232927ns");
+
+
+    window.Pusher = Pusher;
+    // console.log(Pusher);
+     window.Echo = new Echo({
+         broadcaster: 'pusher',
+         key: "b8ba8023ac2fc3612e90",
+         cluster: "mt",
+         wsHost:'websockets.webixun.com',
+         wsPort: 6001,
+         forceTLS: false,
+        disableStats: true,
+         authEndpoint: global.api+'broadcasting/auth',
+         auth: {
+           headers: {
+             Accept: 'application/json',
+             "Authorization":token,
+           }
+         },
+     });
+    
+     window.Echo.private(`checkTableStatus.1`).listen('.server.created', (e) => {
+      console.log(e);
+    });
   };
 
   get_profile = (token) => {
@@ -83,8 +114,8 @@ export class App extends Component {
         }
         if (!json.status) {
         } else {
-          // this.login("done", token);
-          this.setState({ user: json.data[0] });
+           this.login(json.step,json.data[0], token);
+          //this.setState({ user: json.data[0] });
         }
         return json;
       })
@@ -104,7 +135,7 @@ export class App extends Component {
 
   render() {
     return this.state.loading ? (
-      <></>
+      <p>WeazyDine Loading...</p>
     ) : (
       <>
         <AuthContext.Provider
@@ -267,15 +298,6 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Releaseinventory />
-                </RequireAuth>
-              }
-            />
-            <Route
-              exact
-              path="/subscription"
-              element={
-                <RequireAuth>
-                  <Subscription />
                 </RequireAuth>
               }
             />

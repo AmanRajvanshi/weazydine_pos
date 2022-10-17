@@ -63,7 +63,7 @@ export class Header extends Component {
               <a>
                 <h4
                   onClick={() => {
-                    this.props.navigate(-1);
+                    this.props.navigate("/");
                   }}
                 >
                   <strong>{this.context.user.name}</strong>

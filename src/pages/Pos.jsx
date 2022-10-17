@@ -64,6 +64,7 @@ class Pos extends Component {
         vendor_category_id: category_id,
         product_type: "product",
         page: page,
+        status:'active'
       }),
     })
       .then((response) => response.json())
