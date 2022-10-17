@@ -33,6 +33,12 @@ export class Orderdetails extends Component {
 
   componentDidMount() {
     this.orderDetails(this.props.id);
+    window.Echo.private(`orderstatus.` + this.props.id).listen(
+      ".order.status",
+      (e) => {
+        console.log(e);
+      }
+    );
   }
 
   orderDetails = (id) => {
@@ -80,7 +86,6 @@ export class Orderdetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           toast.error(msg);
@@ -214,7 +219,7 @@ export class Orderdetails extends Component {
                           <h5>
                             Order ID: {this.props.id} -{" "}
                             {this.state.data.order_type != "TakeAway" &&
-                            this.state.data.order_type != "delivery" ? (
+                            this.state.data.order_type != "Delivery" ? (
                               <span
                                 style={{
                                   color: "#eda332",
@@ -255,8 +260,8 @@ export class Orderdetails extends Component {
                         </div>
                         <div>
                           {this.state.data.order_status == "ongoing" &&
-                            this.state.data.order_type != "takeAway" &&
-                            this.state.data.order_type != "delivery" &&
+                            this.state.data.order_type != "TakeAway" &&
+                            this.state.data.order_type != "Delivery" &&
                             (this.state.generate_order_buttonLoading ? (
                               <button
                                 className="btn btn-primary btn-sm"
@@ -599,7 +604,7 @@ export class Orderdetails extends Component {
                                   border: "none",
                                   borderBottom: "1px solid black",
                                   borderRadius: 0,
-                                  paddingLeft: "0px",
+                                  // paddingLeft: "0px",
                                 }}
                               />
                             </div>
@@ -615,7 +620,7 @@ export class Orderdetails extends Component {
                                   border: "none",
                                   borderBottom: "1px solid black",
                                   borderRadius: 0,
-                                  paddingLeft: "0px",
+                                  // paddingLeft: "0px",
                                 }}
                               />
                             </div>

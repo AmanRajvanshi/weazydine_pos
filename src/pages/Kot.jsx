@@ -8,6 +8,7 @@ import moment from "moment";
 import no_order from "../assets/images/no_orders.webp";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import { toast } from "react-toastify";
 
 export class Kot extends Component {
   static contextType = AuthContext;
@@ -20,6 +21,45 @@ export class Kot extends Component {
       page: 1,
     };
   }
+
+  componentDidMount() {
+    this.fetch_order(this.state.page);
+    window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
+      ".kot.status",
+      (e) => {
+        console.log(e);
+      }
+    );
+  }
+
+  fetch_order = (page_id) => {
+    fetch(global.api + "fetch_kot_orders", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        page: page_id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          this.setState({ is_loading: false });
+        } else {
+          this.setState({ data: json.data.data });
+        }
+        this.setState({ is_loading: false });
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  };
+
   render() {
     return (
       <>
@@ -86,28 +126,30 @@ export class Kot extends Component {
                   </div>
                 </section>
               </div>
-              {this.state.is_loading ? (
-                <div className="row">
-                  <Order dat={this.state.data} />
-                </div>
+              {!this.state.is_loading ? (
+                <>
+                  {this.state.data.length > 0 ? (
+                    <div className="row">
+                      <Order dat={this.state.data} />
+                    </div>
+                  ) : (
+                    <div
+                      className="content"
+                      style={{
+                        height: "60vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        margin: "40px 0",
+                      }}
+                    >
+                      <img src={no_order} alt="" />
+                      <h3>No Order Found</h3>
+                    </div>
+                  )}
+                </>
               ) : (
-                // <div className="page-wrapper">
-                //   <div
-                //     className="content"
-                //     style={{
-                //       height: "60vh",
-                //       display: "flex",
-                //       justifyContent: "center",
-                //       alignItems: "center",
-                //       flexDirection: "column",
-                //       margin: "40px 0",
-                //     }}
-                //   >
-                //     <img src={no_order} alt="" />
-                //     <h3>No Order Found</h3>
-                //   </div>
-                // </div>
-
                 <div className="main_loader" style={{ marginLeft: "0px" }}>
                   <Bars
                     height="80"
@@ -129,164 +171,221 @@ export class Kot extends Component {
 }
 
 class Order extends React.Component {
+  static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
-      data: props.data,
+      is_buttonloding: false,
+      data: props.dat,
       open: false,
       openupdate: false,
       time: 5,
+      id: "",
     };
   }
+
+  change_order_status = (id, status) => {
+    this.setState({ is_buttonloding: true });
+    fetch(global.api + "update_order_status_by_vendor", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        order_id: id,
+        order_status: status,
+        time: this.state.time,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          toast.success("Order Status Updated Successfully");
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ is_buttonloding: false });
+      });
+  };
+  componentDidMount() {}
   render() {
     return (
       <>
-        <div className="col-md-4">
-          <div
-            className="card flex-fill bg-white cursor_pointer"
-            onClick={() => this.setState({ open: true })}
-          >
-            <div
-              className="card-header order_details"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                borderBottom: "1px solid #e5e5e5",
-                padding: "10px 15px",
-                backgroundColor: "#eda332",
-                color: "#fff",
-              }}
-            >
-              <div>
-                {/* <h6
-                style={{
-                  fontSize: "15px",
-                }}
+        {this.state.data.map((values, index) => {
+          return (
+            <div className="col-md-4">
+              <div
+                className="card flex-fill bg-white cursor_pointer"
+                onClick={() =>
+                  values.order_status == "in_progress"
+                    ? this.setState({ open: true, id: values.id })
+                    : this.setState({ openupdate: true, id: values.id })
+                }
               >
-                Order ID: WD-121211 -{" "}
-                {this.state.data.order_type != "TakeAway" &&
-                this.state.data.order_type != "delivery" ? (
-                  <span>
-                    Dine-In{" "}
-                    {this.state.data.table != null ? (
-                      ""
-                    ) : (
-                      // <span>{this.state.data.table.table_name}</span>
-                      <span>12</span>
-                    )}
-                  </span>
-                ) : (
-                  <span>{this.state.data.order_type}</span>
-                )}
-              </h6>
-
-              <h6
-                className="mt-2"
-                style={{
-                  fontSize: "14px",
-                }}
-              >
-                {moment(this.state.data.updated_at).format("lll")}{" "}
-                <span
+                <div
+                  className="card-header order_details"
                   style={{
-                    textTransform: "capitalize",
-                    fontSize: "14px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderBottom: "1px solid #e5e5e5",
+                    padding: "10px 15px",
+                    backgroundColor:
+                      values.order_status == "in_progress"
+                        ? "#eda332"
+                        : "#009000",
+                    color: "#fff",
                   }}
                 >
-                  Order Status: {this.state.data.order_status}
-                </span>
-              </h6> */}
-              </div>
-            </div>
-            <div className="card-body">
-              <section
-                className="item-section"
-                style={{
-                  padding: "20px 0 0!important",
-                }}
-              >
-                <div className="item_row">
-                  <div
-                    className="sno_column_heading"
-                    style={{
-                      width: "15%",
-                    }}
-                  >
-                    No.
-                  </div>
-                  <div
-                    className="item_name_column_heading"
-                    style={{
-                      width: "70%",
-                    }}
-                  >
-                    Item
-                  </div>
-                  <div
-                    className="qty_column_heading"
-                    style={{
-                      width: "15%",
-                    }}
-                  >
-                    Qty.
-                  </div>
-                </div>
-                <div className="single_item_row">
-                  <div
-                    className="sno_column"
-                    style={{
-                      width: "15%",
-                    }}
-                  >
-                    {1}
-                  </div>
-                  <div
-                    className="item_name_column"
-                    style={{
-                      width: "70%",
-                    }}
-                  >
-                    <span
+                  <div>
+                    <h6
                       style={{
-                        fontWeight: "600px",
-                        marginRight: "10px",
+                        fontSize: "15px",
                       }}
                     >
-                      Pizza
-                    </span>
+                      Order ID: {values.order_code} -{" "}
+                      {values.order_type != "TakeAway" &&
+                      values.order_type != "Delivery" ? (
+                        <span>
+                          Dine-In{" "}
+                          {values.table != null ? (
+                            ""
+                          ) : (
+                            <span>{values.table.table_name}</span>
+                          )}
+                        </span>
+                      ) : (
+                        <span>{values.order_type}</span>
+                      )}
+                    </h6>
 
-                    {/* {item.variant != null && ( */}
-                    <span>
-                      <strong>Variant</strong> - aaa
-                    </span>
-                    {/* )} */}
-
-                    <div className="media-body-cart">
-                      {/* {item.addons.length > 0 && ( */}
-                      <>
-                        <strong>AddOns: </strong>
-                        {/* {item.addons.map((items) => { */}
-                        return (<span className="addon_text_order">aa</span>
-                        );
-                        {/* })} */}
-                      </>
-                      {/* )} */}
-                    </div>
+                    <h6
+                      className="mt-2"
+                      style={{
+                        fontSize: "14px",
+                      }}
+                    >
+                      {moment(values.updated_at).format("lll")}{" "}
+                      <span
+                        style={{
+                          textTransform: "capitalize",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Order Status: {values.order_status}
+                      </span>
+                    </h6>
                   </div>
-                  <div
-                    className="qty_column"
+                  {/* {values.estimate_prepare_time} */}
+                  {values.order_status == "in_progress" && <h6>aaa</h6>}
+                </div>
+                <div className="card-body">
+                  <section
+                    className="item-section"
                     style={{
-                      width: "15%",
+                      padding: "20px 0 0!important",
                     }}
                   >
-                    x {3}
-                  </div>
+                    <div className="item_row">
+                      <div
+                        className="sno_column_heading"
+                        style={{
+                          width: "15%",
+                        }}
+                      >
+                        No.
+                      </div>
+                      <div
+                        className="item_name_column_heading"
+                        style={{
+                          width: "70%",
+                        }}
+                      >
+                        Item
+                      </div>
+                      <div
+                        className="qty_column_heading"
+                        style={{
+                          width: "15%",
+                        }}
+                      >
+                        Qty.
+                      </div>
+                    </div>
+                    {values.product.map((values, index) => {
+                      return (
+                        <div className="single_item_row">
+                          <div
+                            className="sno_column"
+                            style={{
+                              width: "15%",
+                            }}
+                          >
+                            {index + 1}
+                          </div>
+                          <div
+                            className="item_name_column"
+                            style={{
+                              width: "70%",
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontWeight: "600px",
+                                marginRight: "10px",
+                              }}
+                            >
+                              {values.product.product_name}
+                            </span>
+
+                            {values.variant != null && (
+                              <span>
+                                <strong>Variant</strong> -{" "}
+                                {values.variant.variants_name}
+                              </span>
+                            )}
+
+                            <div className="media-body-cart">
+                              {values.addons.length > 0 && (
+                                <>
+                                  <strong>AddOns: </strong>
+                                  {values.addons.map((items) => {
+                                    return (
+                                      <span className="addon_text_order">
+                                        {items.addon_name}
+                                      </span>
+                                    );
+                                  })}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className="qty_column"
+                            style={{
+                              width: "15%",
+                            }}
+                          >
+                            x {values.product_quantity}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </section>
                 </div>
-              </section>
+              </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
         <Modal
           open={this.state.open}
           onClose={() => this.setState({ open: false })}
@@ -365,7 +464,7 @@ class Order extends React.Component {
                     ) : (
                       <a
                         onClick={() => {
-                          this.add();
+                          this.change_order_status(this.state.id, "in_process");
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >

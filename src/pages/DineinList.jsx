@@ -21,6 +21,13 @@ export class DineinList extends Component {
 
   componentDidMount() {
     this.fetch_table_vendors();
+
+    window.Echo.private(`checkTableStatus.` + this.context.user.id).listen(
+      ".server.created",
+      (e) => {
+        this.setState({ data: e.tables });
+      }
+    );
   }
 
   fetch_table_vendors = () => {
@@ -97,7 +104,8 @@ export class DineinList extends Component {
           var msg = json.msg;
           // Toast.show(msg);
         } else {
-          toast.success(json.msg);
+          // toast.success(json.msg);
+          toast.success("Dine In Added Successfully");
 
           this.fetch_table_vendors();
         }

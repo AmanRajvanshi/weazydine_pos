@@ -345,7 +345,7 @@ export class Addproduct extends Component {
                             ) : (
                               <input
                                 type={"file"}
-                                accept=".png, .jpg, .jpeg,.svg"
+                                accept=".png, .jpg, .jpeg,.svg,.webp"
                                 className="upload"
                                 onChange={(e) => {
                                   this.uploadImage(e);

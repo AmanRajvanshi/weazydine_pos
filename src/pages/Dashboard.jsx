@@ -197,6 +197,12 @@ class Tables extends Component {
 
   componentDidMount() {
     this.fetch_table_vendors();
+    window.Echo.private(`checkTableStatus.` + this.context.user.id).listen(
+      ".server.created",
+      (e) => {
+        this.setState({ data: e.tables });
+      }
+    );
   }
 
   fetch_table_vendors = () => {
@@ -310,7 +316,6 @@ class OngoingOrders extends Component {
         if (!json.status) {
           this.setState({ orders: [] });
         } else {
-          console.log(json.data);
           this.setState({ orders: json.data.data });
         }
         this.setState({ is_loading: false });
@@ -324,58 +329,57 @@ class OngoingOrders extends Component {
   render() {
     return (
       <div className="d-flex">
-        {
-          this.state.orders.length > 0?
-        <div className="card flex-fill">
-          <div className="card-header pb-0 d-flex justify-content-between align-items-center">
-            <h4>Pending Orders</h4>
-          </div>
-          <div className="card-body">
-            <div className="table-responsive dataview">
-              <table className="table datatable ">
-                <thead>
-                  <tr>
-                    <th>Sno</th>
-                    <th>Order ID</th>
-                    <th>Order Type</th>
-                    <th>Time</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.orders.length > 0 &&
-                    this.state.orders.map((values, index) => {
-                      return (
-                        <tr>
-                          <td>{index + 1}</td>
-                          <td>
-                            <Link to={"/orderdetails/" + values.order_code}>
-                              {values.order_code}
-                            </Link>
-                          </td>
-                          <td
-                            style={{
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            {values.order_type}
-                          </td>
-                          <td>{moment(values.updated_at).format("llll")}</td>
-                          <td>
-                            <BiRupee />
-                            {values.total_amount}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
+        {this.state.orders.length > 0 ? (
+          <div className="card flex-fill">
+            <div className="card-header pb-0 d-flex justify-content-between align-items-center">
+              <h4>Pending Orders</h4>
+            </div>
+            <div className="card-body">
+              <div className="table-responsive dataview">
+                <table className="table datatable ">
+                  <thead>
+                    <tr>
+                      <th>Sno</th>
+                      <th>Order ID</th>
+                      <th>Order Type</th>
+                      <th>Time</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.orders.length > 0 &&
+                      this.state.orders.map((values, index) => {
+                        return (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>
+                              <Link to={"/orderdetails/" + values.order_code}>
+                                {values.order_code}
+                              </Link>
+                            </td>
+                            <td
+                              style={{
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {values.order_type}
+                            </td>
+                            <td>{moment(values.updated_at).format("llll")}</td>
+                            <td>
+                              <BiRupee />
+                              {values.total_amount}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-        :
-        <></>
-                  }
+        ) : (
+          <></>
+        )}
       </div>
     );
   }

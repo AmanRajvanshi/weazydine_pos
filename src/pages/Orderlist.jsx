@@ -20,6 +20,12 @@ class Orderlist extends Component {
   }
   componentDidMount() {
     this.fetch_order(1, "");
+    window.Echo.private(`orderstatus.(order_id)`).listen(
+      ".order.status",
+      (e) => {
+        console.log(e);
+      }
+    );
   }
 
   fetch_order = (page_id, status) => {
@@ -280,7 +286,7 @@ class Orderlist extends Component {
                               </td>
                               <td>
                                 {item.order_type != "TakeAway" &&
-                                item.order_type != "delivery" ? (
+                                item.order_type != "Delivery" ? (
                                   <>Dine-In</>
                                 ) : (
                                   <>{item.order_type}</>

@@ -32,12 +32,12 @@ export class Productlist extends Component {
   }
 
   active_cat = (id) => {
+    this.setState({ is_loding: true });
     this.setState({ active_cat: id, product_loding: true });
     this.fetchProducts(id, this.state.type, 1);
   };
 
   fetchProducts = (category_id, type, page) => {
-    this.setState({ is_loding: true });
     fetch(global.api + "vendor_get_vendor_product", {
       method: "POST",
       headers: {
@@ -122,7 +122,7 @@ export class Productlist extends Component {
           toast.success(msg);
         } else {
           toast.success("Product Deleted Successfully");
-          this.fetchProducts(this.state.active_cat, 1);
+          this.fetchProducts(this.state.active_cat, this.state.type, 1);
         }
       })
       .catch((error) => {

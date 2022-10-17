@@ -1,20 +1,31 @@
 import React, { Component } from "react";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Bars, Circles } from "react-loader-spinner";
 import profile from "../assets/images/profile.png";
 import { AuthContext } from "../AuthContextProvider";
+import blackLogo from "../assets/images/logoBlack.png";
+import moment from "moment";
+
 export class Header extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
+      page: 1,
+      data: [],
       sidebarText: true,
       dropdown: false,
+      is_loading: true,
+      next_page: "",
+      total_count: "",
     };
   }
 
   componentDidMount() {
-    console.log(this.context.token);
+    // console.log(this.context.token);
+    this.fetch_notifications(this.state.page);
   }
 
   logOut = () => {
@@ -54,6 +65,49 @@ export class Header extends Component {
     // this.props.navigation.navigate("MobileLogin")
   };
 
+  fetch_notifications = (page) => {
+    this.setState({ page: page, load_more: true });
+    fetch(global.api + "fetch_vendor_notification", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        page: page,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          toast.error(json.msg);
+        } else {
+          this.setState({
+            total_count: json.data.total,
+            next_page: json.data.next_page_url,
+          });
+          if (page == 1) {
+            this.setState({ data: json.data.data });
+          } else {
+            {
+              this.state.next_page
+                ? this.setState({
+                    data: [...this.state.data, ...json.data.data],
+                    page: this.state.page + 1,
+                  })
+                : this.setState({
+                    data: json.data.data,
+                  });
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   render() {
     return (
       <>
@@ -80,167 +134,99 @@ export class Header extends Component {
           </a>
           <ul className="nav user-menu">
             <li className="nav-item dropdown">
-              <a
-                href="return false;"
-                className="dropdown-toggle nav-link"
-                data-bs-toggle="dropdown"
-              >
-                <img
-                  src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/notification-bing.svg"
-                  alt="img"
-                />{" "}
-                <span className="badge rounded-pill">4</span>
-              </a>
+              {this.state.data.length > 0 ? (
+                <a
+                  href="return false;"
+                  className="dropdown-toggle nav-link"
+                  data-bs-toggle="dropdown"
+                >
+                  <img
+                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/notification-bing.svg"
+                    alt="img"
+                  />
+                  <span className="badge rounded-pill">
+                    {this.state.total_count}
+                  </span>
+                </a>
+              ) : (
+                <a
+                  onClick={() => {
+                    toast.error("No Notifications");
+                  }}
+                >
+                  <img
+                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/notification-bing.svg"
+                    alt="img"
+                  />
+                </a>
+              )}
+
               <div className="dropdown-menu notifications">
                 <div className="topnav-dropdown-header">
                   <span className="notification-title">Notifications</span>
-                  <a href="return false" className="clear-noti">
+                  {/* <a href="return false" className="clear-noti">
                     {" "}
                     Clear All{" "}
-                  </a>
+                  </a> */}
                 </div>
                 <div className="noti-content">
                   <ul className="notification-list">
-                    <li className="notification-message">
-                      <a href="https://dreamspos.dreamguystech.com/html/template/activities.html">
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <img
-                              alt=""
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avatar-02.jpg"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              <span className="noti-title">John Doe</span> added
-                              new task{" "}
-                              <span className="noti-title">
-                                Patient appointment booking
-                              </span>
-                            </p>
-                            <p className="noti-time">
-                              <span className="notification-time">
-                                4 mins ago
-                              </span>
-                            </p>
-                          </div>
+                    <InfiniteScroll
+                      dataLength={this.state.data.length}
+                      next={() => {
+                        this.fetch_notifications(this.state.page + 1);
+                        this.setState({
+                          loadMore: true,
+                        });
+                      }}
+                      hasMore={
+                        this.state.next_page !== null &&
+                        this.state.data.length > 0
+                      }
+                      loader={
+                        <div className="d-flex align-items-center justify-content-center w-full mt-xl">
+                          <Bars
+                            height="20"
+                            width="20"
+                            color="#ff9900"
+                            ariaLabel="bars-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                            visible={true}
+                          />
                         </div>
-                      </a>
-                    </li>
-                    <li className="notification-message">
-                      <a href="https://dreamspos.dreamguystech.com/html/template/activities.html">
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <img
-                              alt=""
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avatar-03.jpg"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              <span className="noti-title">
-                                Tarah Shropshire
-                              </span>
-                              changed the task name{" "}
-                              <span className="noti-title">
-                                Appointment booking with payment gateway
-                              </span>
-                            </p>
-                            <p className="noti-time">
-                              <span className="notification-time">
-                                6 mins ago
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li className="notification-message">
-                      <a href="https://dreamspos.dreamguystech.com/html/template/activities.html">
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <img
-                              alt=""
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avatar-06.jpg"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              <span className="noti-title">Misty Tison</span>
-                              added{" "}
-                              <span className="noti-title">
-                                Domenic Houston
-                              </span>{" "}
-                              and{" "}
-                              <span className="noti-title">Claire Mapes</span>{" "}
-                              to project{" "}
-                              <span className="noti-title">
-                                Doctor available module
-                              </span>
-                            </p>
-                            <p className="noti-time">
-                              <span className="notification-time">
-                                8 mins ago
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li className="notification-message">
-                      <a href="https://dreamspos.dreamguystech.com/html/template/activities.html">
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <img
-                              alt=""
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avatar-17.jpg"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              <span className="noti-title">Rolland Webber</span>
-                              completed task{" "}
-                              <span className="noti-title">
-                                Patient and Doctor video conferencing
-                              </span>
-                            </p>
-                            <p className="noti-time">
-                              <span className="notification-time">
-                                12 mins ago
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li className="notification-message">
-                      <a href="https://dreamspos.dreamguystech.com/html/template/activities.html">
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <img
-                              alt=""
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/profiles/avatar-13.jpg"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              <span className="noti-title">
-                                Bernardo Galaviz
-                              </span>
-                              added new task{" "}
-                              <span className="noti-title">
-                                Private chat module
-                              </span>
-                            </p>
-                            <p className="noti-time">
-                              <span className="notification-time">
-                                2 days ago
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
+                      }
+                    >
+                      <>
+                        {this.state.data.map((item, index) => {
+                          return (
+                            <li className="notification-message">
+                              <Link to={"/" + item.notification_url}>
+                                <div className="media d-flex">
+                                  <span className="avatar flex-shrink-0">
+                                    <img alt="" src={blackLogo} />
+                                  </span>
+                                  <div className="media-body flex-grow-1">
+                                    <p className="noti-details">
+                                      {item.notification_title}
+                                    </p>
+                                    <p>{item.notification_description}</p>
+                                    <p className="noti-time">
+                                      <span className="notification-time">
+                                        {moment(item.created_at)
+                                          .local()
+                                          .startOf("seconds")
+                                          .fromNow()}
+                                      </span>
+                                    </p>
+                                  </div>
+                                </div>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </>
+                    </InfiniteScroll>
                   </ul>
                 </div>
                 {/* <div className="topnav-dropdown-footer">

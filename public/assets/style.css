@@ -1314,7 +1314,7 @@ div#global-loader,
   color: #fff;
   display: inline-block;
   font-weight: 500;
-  height: 34px;
+  height: 40px;
   line-height: 38px;
   text-align: center;
   text-decoration: none;
@@ -8152,4 +8152,8 @@ span.select-container.select-container--default.select-container--open {
   line-height: 2.8rem;
   color: #eda332;
   font-size: 2.2em;
+}
+
+.mb-20{
+  margin-bottom: 20px;
 }
