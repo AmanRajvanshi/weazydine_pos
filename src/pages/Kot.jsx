@@ -205,6 +205,7 @@ class Order extends React.Component {
           var msg = json.msg;
           toast.error(msg);
         } else {
+          this.setState({ open: false, openupdate: false });
           toast.success("Order Status Updated Successfully");
         }
         return json;
@@ -226,9 +227,9 @@ class Order extends React.Component {
               <div
                 className="card flex-fill bg-white cursor_pointer"
                 onClick={() =>
-                  values.order_status == "in_progress"
-                    ? this.setState({ open: true, id: values.id })
-                    : this.setState({ openupdate: true, id: values.id })
+                  values.order_status == "in_process"
+                    ? this.setState({ openupdate: true, id: values.id })
+                    : this.setState({ open: true, id: values.id })
                 }
               >
                 <div
@@ -240,9 +241,9 @@ class Order extends React.Component {
                     borderBottom: "1px solid #e5e5e5",
                     padding: "10px 15px",
                     backgroundColor:
-                      values.order_status == "in_progress"
-                        ? "#eda332"
-                        : "#009000",
+                      values.order_status == "in_process"
+                        ? "#009000"
+                        : "#eda332",
                     color: "#fff",
                   }}
                 >
@@ -285,8 +286,13 @@ class Order extends React.Component {
                       </span>
                     </h6>
                   </div>
-                  {/* {values.estimate_prepare_time} */}
-                  {values.order_status == "in_progress" && <h6>aaa</h6>}
+
+                  {values.order_status === "in_process" && (
+                    <h6>
+                      ({moment().format("LTS")}-
+                      {moment(values.estimate_prepare_time).format("LTS")})
+                    </h6>
+                  )}
                 </div>
                 <div className="card-body">
                   <section
@@ -528,7 +534,7 @@ class Order extends React.Component {
                     ) : (
                       <a
                         onClick={() => {
-                          this.add();
+                          this.change_order_status(this.state.id, "processed");
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >

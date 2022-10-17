@@ -75,15 +75,14 @@ class Pos extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        //  console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
             this.setState({ products: [] });
           }
         } else {
-          if (json.data.length > 0) {
-            this.setState({ products: json.data });
+          if (json.data.data.length > 0) {
+            this.setState({ products: json.data.data });
           }
         }
         this.setState({ load_item: false, isloading: false });
@@ -1127,7 +1126,6 @@ class Category extends Component {
 class Products extends Component {
   constructor(props) {
     super(props);
-
     if (this.props.data.variants.length > 0) {
       var vv = this.props.data.variants[0].id;
     } else {
