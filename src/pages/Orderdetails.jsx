@@ -72,7 +72,7 @@ export class Orderdetails extends Component {
 
   change_order_status = (status) => {
     this.setState({ mark_complete_buttonLoading: true });
-    fetch(global.api + "update_order_status_by_vendor", {
+    fetch(global.api + "update_order_status", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -80,8 +80,8 @@ export class Orderdetails extends Component {
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        order_id: this.state.data.id,
-        order_status: status,
+        order_id: this.state.data.order_code,
+        status: status,
       }),
     })
       .then((response) => response.json())

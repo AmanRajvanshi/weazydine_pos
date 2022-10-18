@@ -40,7 +40,7 @@ OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
 global.api = "https://beta-dine-api.weazy.in/api/";
 
 //for local
-// global.api = "http://172.16.1.111:8000/api/";
+//global.api = "http://127.0.0.1:8000/api/";
 
 export class App extends Component {
   constructor(props) {

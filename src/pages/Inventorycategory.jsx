@@ -243,7 +243,10 @@ class Inventorycategory extends Component {
                               <tr>
                                 <td>{index + 1}</td>
                                 <td>{item.category_name}</td>
-                                <td>{item.category_parent}</td>
+                                <td>
+                                  {(item.parent != null)?
+                                  item.parent.category_name:"None"}
+                                </td>
                                 <td>{item.products_count}</td>
                                 <td
                                   className={
@@ -361,7 +364,7 @@ class Inventorycategory extends Component {
                         className="select-container"
                       >
                         <option>Choose Parent Category</option>
-                        <option value={0}>Parent Category</option>
+                        <option value={0}>None</option>
                         {this.state.category.length > 0 &&
                           this.state.category.map((item, index) => (
                             <option value={item.id}>

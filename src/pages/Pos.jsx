@@ -43,13 +43,10 @@ class Pos extends Component {
   componentDidMount() {
     if (this.props.table_id != undefined) {
       this.setState({ table_no: this.props.table_id, order_method: "DineIn" });
+      this.orderDetails(this.props.table_id);
     }
     this.fetchCategories();
     this.fetchProducts(0, this.state.type, 1);
-
-    window.Echo.private(`checkTableStatus.1`).listen(".server.created", (e) => {
-      console.log(e);
-    });
   }
 
   active_cat = (id) => {
@@ -375,6 +372,15 @@ class Pos extends Component {
   };
 
   next_step = () => {
+    
+    if(this.state.contact != null && this.state.contact != "" && this.state.order_method == 'DineIn'){
+      this.setState({payment_step: 2})
+    }
+    else
+    {
+      this.setState({user_id:'',contact:'',name:''})
+    }
+
     this.setState({ isModalOpen: true });
   };
 
@@ -432,6 +438,7 @@ class Pos extends Component {
   };
 
   update_order_type = (table_uu_id) => {
+    this.orderDetails(table_uu_id);
     this.setState({
       order_method: "DineIn",
       table_no: table_uu_id,
@@ -439,6 +446,36 @@ class Pos extends Component {
     });
   };
 
+
+
+  orderDetails = (id) => {
+    fetch(global.api + "fetch_ongoing_order_for_table", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        table_id: id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json)
+        if (!json.status) {
+          this.setState({ isLoading: false, data: [] });
+        } else {
+          this.setState({
+            name: json.data[0].user.name,
+            user_id: json.data[0].user.id,
+            contact:json.data[0].user.contact
+          });
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+  };
   render() {
     return (
       <div className="main-wrappers">

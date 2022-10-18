@@ -27,7 +27,7 @@ export class Kot extends Component {
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
       ".kot.status",
       (e) => {
-        console.log(e);
+        this.setState({data:e.orders})
       }
     );
   }
@@ -185,8 +185,9 @@ class Order extends React.Component {
   }
 
   change_order_status = (id, status) => {
+
     this.setState({ is_buttonloding: true });
-    fetch(global.api + "update_order_status_by_vendor", {
+    fetch(global.api + "update_order_status", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -195,8 +196,8 @@ class Order extends React.Component {
       },
       body: JSON.stringify({
         order_id: id,
-        order_status: status,
-        time: this.state.time,
+        status: status,
+        prepare_time: this.state.time,
       }),
     })
       .then((response) => response.json())
@@ -228,8 +229,8 @@ class Order extends React.Component {
                 className="card flex-fill bg-white cursor_pointer"
                 onClick={() =>
                   values.order_status == "in_process"
-                    ? this.setState({ openupdate: true, id: values.id })
-                    : this.setState({ open: true, id: values.id })
+                    ? this.setState({ openupdate: true, id: values.order_code })
+                    : this.setState({ open: true, id: values.order_code })
                 }
               >
                 <div
