@@ -27,7 +27,7 @@ export class Kot extends Component {
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
       ".kot.status",
       (e) => {
-        this.setState({data:e.orders})
+        this.setState({ data: e.orders });
       }
     );
   }
@@ -47,7 +47,7 @@ export class Kot extends Component {
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
-          this.setState({ is_loading: false });
+          this.setState({ is_loading: false, data: [] });
         } else {
           this.setState({ data: json.data.data });
         }
@@ -185,7 +185,6 @@ class Order extends React.Component {
   }
 
   change_order_status = (id, status) => {
-
     this.setState({ is_buttonloding: true });
     fetch(global.api + "update_order_status", {
       method: "POST",
@@ -222,7 +221,7 @@ class Order extends React.Component {
   render() {
     return (
       <>
-        {this.state.data.map((values, index) => {
+        {this.props.dat.map((values, index) => {
           return (
             <div className="col-md-4">
               <div
