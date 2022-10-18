@@ -49,7 +49,7 @@ export class Kot extends Component {
         if (!json.status) {
           this.setState({ is_loading: false, data: [] });
         } else {
-          this.setState({ data: json.data.data });
+          this.setState({ data: json.data });
         }
         this.setState({ is_loading: false });
         return json;

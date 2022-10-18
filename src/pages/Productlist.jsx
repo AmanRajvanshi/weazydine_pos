@@ -60,8 +60,8 @@ export class Productlist extends Component {
             this.setState({ products: [] });
           }
         } else {
-          if (json.data.length > 0) {
-            this.setState({ products: json.data });
+          if (json.data.data.length > 0) {
+            this.setState({ products: json.data.data });
           }
         }
         return json;
