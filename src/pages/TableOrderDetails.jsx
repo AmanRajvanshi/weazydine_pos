@@ -489,7 +489,7 @@ export class TableOrderDetails extends Component {
                                 Add
                               </a>
                             </div>
-                            <p>{this.state.additional_note}</p>
+                            <p>{this.state.data[0].instruction}</p>
                           </div>
                         </div>
                         <a

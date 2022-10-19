@@ -215,12 +215,27 @@ class Orderlist extends Component {
                           data-bs-toggle="tab"
                           onClick={() => {
                             this.setState({ is_loading: true });
+                            this.fetch_order(1, "in_process");
+                          }}
+                        >
+                          In Process
+                        </a>
+                      </li>
+
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
                             this.fetch_order(1, "processed");
                           }}
                         >
-                          OnGoing
+                          Processed
                         </a>
                       </li>
+
                       <li className="nav-item">
                         <a
                           className="nav-link"
@@ -315,7 +330,7 @@ class Orderlist extends Component {
                                 ) : item.order_status == "processed" ? (
                                   <span
                                     style={{
-                                      color: "yellow",
+                                      color: "#eda332",
                                       textTransform: "capitalize",
                                     }}
                                   >
