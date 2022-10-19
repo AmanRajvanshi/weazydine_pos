@@ -9,6 +9,7 @@ import no_order from "../assets/images/no_orders.webp";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { toast } from "react-toastify";
+import Countdown from "react-countdown";
 
 export class Kot extends Component {
   static contextType = AuthContext;
@@ -23,7 +24,7 @@ export class Kot extends Component {
   }
 
   componentDidMount() {
-    this.fetch_order(this.state.page);
+    this.fetch_order(this.state.page, "all");
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
       ".kot.status",
       (e) => {
@@ -32,7 +33,7 @@ export class Kot extends Component {
     );
   }
 
-  fetch_order = (page_id) => {
+  fetch_order = (page_id, status) => {
     fetch(global.api + "fetch_kot_orders", {
       method: "POST",
       headers: {
@@ -41,6 +42,7 @@ export class Kot extends Component {
         Authorization: this.context.token,
       },
       body: JSON.stringify({
+        status: status,
         page: page_id,
       }),
     })
@@ -89,7 +91,7 @@ export class Kot extends Component {
                             data-bs-toggle="tab"
                             onClick={() => {
                               this.setState({ is_loading: true });
-                              this.fetch_order(1, "");
+                              this.fetch_order(1, "all");
                             }}
                           >
                             All
@@ -102,10 +104,10 @@ export class Kot extends Component {
                             data-bs-toggle="tab"
                             onClick={() => {
                               this.setState({ is_loading: true });
-                              this.fetch_order(1, "placed");
+                              this.fetch_order(1, "pending");
                             }}
                           >
-                            Processing
+                            Pending
                           </a>
                         </li>
                         <li className="nav-item">
@@ -115,10 +117,10 @@ export class Kot extends Component {
                             data-bs-toggle="tab"
                             onClick={() => {
                               this.setState({ is_loading: true });
-                              this.fetch_order(1, "confirmed");
+                              this.fetch_order(1, "in_process");
                             }}
                           >
-                            Processed
+                            In Process
                           </a>
                         </li>
                       </ul>
@@ -236,8 +238,7 @@ class Order extends React.Component {
                   className="card-header order_details"
                   style={{
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
                     borderBottom: "1px solid #e5e5e5",
                     padding: "10px 15px",
                     backgroundColor:
@@ -247,6 +248,27 @@ class Order extends React.Component {
                     color: "#fff",
                   }}
                 >
+                  <div className="row">
+                    {values.order_status === "in_process" && (
+                      <h6 className=" d-flex align-items-end justify-content-end">
+                        <Countdown
+                          date={moment(values.estimate_prepare_time).format(
+                            "YYYY-MM-DD HH:mm:ss"
+                          )}
+                          zeroPadDays={0}
+                          zeroPadHours={0}
+                          zeroPadMinutes={2}
+                          zeroPadSeconds={2}
+                          overtime={true}
+                          // renderer={(props) => (
+                          //   <span>
+                          //     {props.minutes}: {props.seconds}
+                          //   </span>
+                          // )}
+                        />
+                      </h6>
+                    )}
+                  </div>
                   <div>
                     <h6
                       style={{
@@ -286,13 +308,6 @@ class Order extends React.Component {
                       </span>
                     </h6>
                   </div>
-
-                  {values.order_status === "in_process" && (
-                    <h6>
-                      ({moment().format("LTS")}-
-                      {moment(values.estimate_prepare_time).format("LTS")})
-                    </h6>
-                  )}
                 </div>
                 <div className="card-body">
                   <section

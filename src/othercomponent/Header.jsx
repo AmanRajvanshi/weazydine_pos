@@ -469,7 +469,11 @@ export class Header extends Component {
                       to="/dineinlisting"
                     >
                       {/* <i className="fa-solid fa-table"></i> */}
-                      {this.state.sidebarText ? <span>Dine In </span> : ""}
+                      {this.state.sidebarText ? (
+                        <span>Dine In Management</span>
+                      ) : (
+                        ""
+                      )}
                     </NavLink>
                   </li>
                   <li>

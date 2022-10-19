@@ -128,7 +128,7 @@ export class DineinList extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title d-flex align-items-center justify-content-between w-100">
-                  <h4>Dine In</h4>
+                  <h4>Dine In Management</h4>
                   {this.state.adding_table ? (
                     <button
                       className="btn btn-primary me-2"

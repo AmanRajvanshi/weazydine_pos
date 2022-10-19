@@ -12,6 +12,7 @@ import no_cart from "../assets/images/cart_empty.png";
 import no_product from "../assets/images/no_products_found.png";
 import { toStatement } from "@babel/types";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 class Pos extends Component {
   static contextType = AuthContext;
@@ -372,13 +373,14 @@ class Pos extends Component {
   };
 
   next_step = () => {
-    
-    if(this.state.contact != null && this.state.contact != "" && this.state.order_method == 'DineIn'){
-      this.setState({payment_step: 2})
-    }
-    else
-    {
-      this.setState({user_id:'',contact:'',name:''})
+    if (
+      this.state.contact != null &&
+      this.state.contact != "" &&
+      this.state.order_method == "DineIn"
+    ) {
+      this.setState({ payment_step: 2 });
+    } else {
+      this.setState({ user_id: "", contact: "", name: "" });
     }
 
     this.setState({ isModalOpen: true });
@@ -425,6 +427,21 @@ class Pos extends Component {
             grandTotal: 0,
           });
           toast.success("Order Placed");
+          Swal.fire({
+            title: "Order Placed",
+            text: "Order Placed Successfully",
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Print KOT",
+            cancelButtonText: "View Order",
+            showCloseButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.print_kot(json.data.id);
+            } else {
+              this.props.navigate("/orderdetails/" + json.data.order_code);
+            }
+          });
         }
         this.setState({ is_buttonloding: false });
         return json;
@@ -445,8 +462,6 @@ class Pos extends Component {
       show_table: false,
     });
   };
-
-
 
   orderDetails = (id) => {
     fetch(global.api + "fetch_ongoing_order_for_table", {
@@ -469,7 +484,7 @@ class Pos extends Component {
           this.setState({
             name: json.data[0].user.name,
             user_id: json.data[0].user.id,
-            contact:json.data[0].user.contact
+            contact: json.data[0].user.contact,
           });
         }
       })

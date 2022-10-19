@@ -6,7 +6,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
+import { Bars, TailSpin } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { RadioGroup, RadioButton } from "react-radio-buttons";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -28,11 +28,17 @@ export class Orderdetails extends Component {
       bill: [],
       cart_new: [],
       payment: "",
+      openNew: false,
+      openupdate: false,
+      time: 5,
+      id: "",
+      instruction: "",
     };
   }
 
   componentDidMount() {
     this.orderDetails(this.props.id);
+    console.log(this.context.token);
     window.Echo.private(`orderstatus.` + this.props.id).listen(
       ".order.status",
       (e) => {
@@ -63,6 +69,7 @@ export class Orderdetails extends Component {
             cart: json.data[0].cart,
             user: json.data[0].user,
             isLoading: false,
+            instruction: json.data[0].instruction,
           });
         }
       })
@@ -82,6 +89,7 @@ export class Orderdetails extends Component {
       body: JSON.stringify({
         order_id: this.state.data.order_code,
         status: status,
+        prepare_time: this.state.time,
       }),
     })
       .then((response) => response.json())
@@ -93,6 +101,7 @@ export class Orderdetails extends Component {
           // this.setState({
 
           // })
+          this.setState({ openNew: false });
           this.orderDetails(this.props.id);
           toast.success("Order Status Updated Successfully");
         }
@@ -491,7 +500,27 @@ export class Orderdetails extends Component {
                     {/* user details */}
                   </div>
                   <div className="col-4">
-                    {this.state.data.order_status == "placed" ? (
+                    {this.state.mark_complete_buttonLoading ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "40px",
+                        }}
+                      >
+                        <TailSpin
+                          height="38"
+                          width="38"
+                          color="#eda332"
+                          ariaLabel="tail-spin-loading"
+                          radius="1"
+                          wrapperStyle={{}}
+                          wrapperClass=""
+                          visible={true}
+                        />
+                      </div>
+                    ) : this.state.data.order_status == "placed" ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <h6
                           className="text-danger"
@@ -527,10 +556,34 @@ export class Orderdetails extends Component {
                           href="javascript:void(0);"
                           className="btn btn-primary mx-2"
                           onClick={() => {
-                            this.change_order_status("processed");
+                            // this.change_order_status("processed");
+                            this.setState({
+                              openNew: true,
+                            });
                           }}
                         >
                           <p>Order In Progress</p>
+                        </a>
+                      </div>
+                    ) : this.state.data.order_status == "in_process" ? (
+                      <div className="d-flex align-items-center justify-content-around my-2">
+                        <h6
+                          className="text-danger"
+                          style={{
+                            cursor: "pointer",
+                          }}
+                          onClick={() => this.change_order_status("cancelled")}
+                        >
+                          Cancel Order
+                        </h6>
+                        <a
+                          href="javascript:void(0);"
+                          className="btn btn-primary mx-2"
+                          onClick={() => {
+                            this.change_order_status("processed");
+                          }}
+                        >
+                          <p>Order Processed</p>
                         </a>
                       </div>
                     ) : this.state.data.order_status == "processed" ? (
@@ -585,6 +638,7 @@ export class Orderdetails extends Component {
                     ) : (
                       <></>
                     )}
+
                     <div className="card flex-fill bg-white">
                       <div className="card-header order_details">
                         <div className=" d-flex align-items-center justify-content-between">
@@ -637,7 +691,7 @@ export class Orderdetails extends Component {
                       <div className="card-body">
                         <div className=" d-flex align-items-start justify-content-between pb-4">
                           <h5>Notes</h5>
-                          {this.state.data.order_status != "completed" && (
+                          {/* {this.state.data.order_status != "completed" && (
                             <a
                               className="btn btn-added"
                               style={{
@@ -647,9 +701,9 @@ export class Orderdetails extends Component {
                             >
                               Add
                             </a>
-                          )}
+                          )} */}
                         </div>
-                        <p>{this.state.additional_note}</p>
+                        <p>{this.state.instruction}</p>
                       </div>
                     </div>
                     <a
@@ -699,9 +753,9 @@ export class Orderdetails extends Component {
                         className="form-control"
                         placeholder="Enter Notes"
                         onChange={(e) =>
-                          this.setState({ additional_note: e.target.value })
+                          this.setState({ instruction: e.target.value })
                         }
-                        value={this.state.additional_note}
+                        value={this.state.instruction}
                       ></textarea>
                     </div>
                   </div>
@@ -809,6 +863,97 @@ export class Orderdetails extends Component {
                         }}
                       >
                         Complete Order
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+        <Modal
+          open={this.state.openNew}
+          onClose={() => this.setState({ openNew: false })}
+          center
+          classNames={{
+            modal: "customModal",
+          }}
+        >
+          <div className="content">
+            <div className="page-header">
+              <div className="page-title">
+                <h4>Edit Order Status</h4>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Time to prepare the order.</label>
+                      <div className="d-flex align-items-center">
+                        {this.state.time <= 5 ? (
+                          <a className="btn btn-primary mx-2 disabled">
+                            <i className="fa-solid fa-minus"></i>
+                          </a>
+                        ) : (
+                          <a
+                            className="btn btn-primary mx-2"
+                            onClick={() => {
+                              this.setState({ time: this.state.time - 1 });
+                            }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </a>
+                        )}
+                        <input
+                          type="text"
+                          className="text-center mx-2"
+                          onChange={(e) => {
+                            this.setState({
+                              time: e.target.value,
+                            });
+                          }}
+                          value={this.state.time}
+                          readOnly
+                        />
+                        <h6>Minutes</h6>
+                        <a
+                          className="btn btn-primary mx-2"
+                          onClick={() => {
+                            this.setState({
+                              time: this.state.time + 1,
+                            });
+                          }}
+                        >
+                          <i className="fa-solid fa-add"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.mark_complete_buttonLoading ? (
+                      <button
+                        className="btn btn-primary btn-sm me-2"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      <a
+                        onClick={() => {
+                          this.change_order_status("in_process");
+                        }}
+                        className="btn btn-primary btn-sm me-2"
+                      >
+                        Update Status
                       </a>
                     )}
                   </div>

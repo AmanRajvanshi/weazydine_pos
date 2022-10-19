@@ -37,10 +37,10 @@ OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
 // global.api = "https://dine-api.weazy.in/api/";
 
 //for Testing point
-global.api = "https://beta-dine-api.weazy.in/api/";
+// global.api = "https://beta-dine-api.weazy.in/api/";
 
 //for local
-//global.api = "http://127.0.0.1:8000/api/";
+global.api = "http://172.16.1.111:8000/api/";
 
 export class App extends Component {
   constructor(props) {
@@ -56,7 +56,6 @@ export class App extends Component {
   componentDidMount() {
     const items = JSON.parse(localStorage.getItem("@auth_login"));
     if (items != null) {
-      console.log("aa", items.token);
       this.get_profile(items.token);
       global.vendor = items.vendor_id;
       global.step = this.state.step;
