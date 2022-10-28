@@ -1231,10 +1231,6 @@ class Products extends Component {
                 alt="img"
                 className="product_image"
               />
-              {/* <h6>Qty: 5</h6> */}
-              {/* <div className="check-product">
-                <i className="fa fa-check" />
-              </div> */}
             </div>
             <div className="productsetcontent">
               <div>

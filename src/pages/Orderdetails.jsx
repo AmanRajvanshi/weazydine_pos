@@ -10,6 +10,7 @@ import { Bars } from "react-loader-spinner";
 import { toast } from "react-toastify";
 import { RadioGroup, RadioButton } from "react-radio-buttons";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { render, Printer, Text } from "react-thermal-printer";
 
 export class Orderdetails extends Component {
   static contextType = AuthContext;
@@ -28,9 +29,9 @@ export class Orderdetails extends Component {
       bill: [],
       cart_new: [],
       payment: "",
-      time:5,
-      total_amount:'',
-      is_buttonloding:false
+      time: 5,
+      total_amount: "",
+      is_buttonloding: false,
     };
   }
 
@@ -43,6 +44,14 @@ export class Orderdetails extends Component {
       }
     );
   }
+
+  data = () => {
+    render(
+      <Printer type="epson">
+        <Text>Hello World</Text>
+      </Printer>
+    );
+  };
 
   orderDetails = (id) => {
     fetch(global.api + "get_orders_details_vendor", {
@@ -85,7 +94,7 @@ export class Orderdetails extends Component {
       body: JSON.stringify({
         order_id: this.state.data.order_code,
         status: status,
-        prepare_time:this.state.time
+        prepare_time: this.state.time,
       }),
     })
       .then((response) => response.json())
@@ -95,8 +104,8 @@ export class Orderdetails extends Component {
           toast.error(msg);
         } else {
           this.setState({
-            open:false
-          })
+            open: false,
+          });
           this.orderDetails(this.props.id);
           toast.success("Order Status Updated Successfully");
         }
@@ -131,7 +140,10 @@ export class Orderdetails extends Component {
           var msg = json.msg;
         } else {
           if (json.data.length > 0) {
-            this.setState({ total_amount:json.data[0].total_amount,bill: json.data[0] });
+            this.setState({
+              total_amount: json.data[0].total_amount,
+              bill: json.data[0],
+            });
             this.setState({ cart_new: json.data[0].cart });
           }
           this.setState({ generateBillModal: true });
@@ -263,8 +275,7 @@ export class Orderdetails extends Component {
                           </h6>
                         </div>
                         <div>
-                          {
-                            this.state.data.order_type != "TakeAway" &&
+                          {this.state.data.order_type != "TakeAway" &&
                             this.state.data.order_type != "Delivery" &&
                             (this.state.generate_order_buttonLoading ? (
                               <button
@@ -495,10 +506,9 @@ export class Orderdetails extends Component {
                     {/* user details */}
                   </div>
                   <div className="col-4">
-                    {(this.state.mark_complete_buttonLoading)?
-                    <p>Please Wait...</p>
-                    :
-                    this.state.data.order_status == "placed" ? (
+                    {this.state.mark_complete_buttonLoading ? (
+                      <p>Please Wait...</p>
+                    ) : this.state.data.order_status == "placed" ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <h6
                           className="text-danger"
@@ -533,19 +543,16 @@ export class Orderdetails extends Component {
                         <a
                           href="javascript:void(0);"
                           className="btn btn-primary mx-2"
-                          onClick={() => this.setState({ open: true})
-                          }
+                          onClick={() => this.setState({ open: true })}
                           // onClick={() => {
-                            
+
                           //   this.change_order_status("in_process");
                           // }}
                         >
                           <p>Order In-Process</p>
                         </a>
                       </div>
-                    ) :
-                    
-                    this.state.data.order_status == "in_process" ? (
+                    ) : this.state.data.order_status == "in_process" ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <h6
                           className="text-danger"
@@ -566,8 +573,7 @@ export class Orderdetails extends Component {
                           <p>Order Processed</p>
                         </a>
                       </div>
-                    ) 
-                    : this.state.data.order_status == "processed" ? (
+                    ) : this.state.data.order_status == "processed" ? (
                       this.state.data.order_type == "Delivery" ? (
                         <div className="d-flex align-items-center justify-content-around my-2">
                           <h6
@@ -592,18 +598,18 @@ export class Orderdetails extends Component {
                           </a>
                         </div>
                       ) : (
-                        (this.state.data.order_type == 'TakeAway'&&
-                        <div className="d-flex align-items-center justify-content-around my-2">
-                          <a
-                            href="javascript:void(0);"
-                            className="btn btn-primary mx-2"
-                            onClick={() => {
-                              this.change_order_status("completed");
-                            }}
-                          >
-                            <p>Completed</p>
-                          </a>
-                        </div>
+                        this.state.data.order_type == "TakeAway" && (
+                          <div className="d-flex align-items-center justify-content-around my-2">
+                            <a
+                              href="javascript:void(0);"
+                              className="btn btn-primary mx-2"
+                              onClick={() => {
+                                this.change_order_status("completed");
+                              }}
+                            >
+                              <p>Completed</p>
+                            </a>
+                          </div>
                         )
                       )
                     ) : this.state.data.order_status == "out for delivery" ? (
@@ -664,7 +670,7 @@ export class Orderdetails extends Component {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div
                       className="card flex-fill bg-white"
                       style={{
@@ -710,7 +716,7 @@ export class Orderdetails extends Component {
           </div>
         )}
 
-<Modal
+        <Modal
           open={this.state.open}
           onClose={() => this.setState({ open: false })}
           center
@@ -801,8 +807,6 @@ export class Orderdetails extends Component {
             </div>
           </div>
         </Modal>
-
-       
 
         <Modal
           open={this.state.generateBillModal}

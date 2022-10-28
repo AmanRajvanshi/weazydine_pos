@@ -44,7 +44,7 @@ class Login extends Component {
         },
         body: JSON.stringify({
           contact: phoneNumber,
-          verification_type: "user",
+          verification_type: "vendor",
           request_type: "send",
         }),
       })
@@ -134,6 +134,33 @@ class Login extends Component {
           this.setState({ verifyotploading: false });
         });
     }
+  };
+
+  resendOtp = () => {
+    toast.success("OTP Resend successfully");
+    fetch(global.api + "mobile-verification", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contact: this.state.phoneNumber,
+        verification_type: "vendor",
+        request_type: "resend",
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.msg === "ok") {
+        } else {
+          toast.error(json.msg);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
   };
 
   revealOtp = () => {
@@ -241,7 +268,7 @@ class Login extends Component {
                               <Timer
                                 seconds={30}
                                 minutes={0}
-                                resend={() => this.mobileVerify()}
+                                resend={() => this.resendOtp()}
                                 text={"Resend OTP in"}
                                 buttonColor={"#eda332"}
                                 background={"#fff"}
