@@ -690,7 +690,7 @@ class Pos extends Component {
                     <div className="col-lg-12 d-flex justify-content-end">
                       {this.state.is_buttonloding ? (
                         <button
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{
                             pointerEvents: "none",
                             opacity: "0.8",
@@ -708,7 +708,7 @@ class Pos extends Component {
                           onClick={() => {
                             this.verifyCustomer();
                           }}
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                         >
                           Verify Customer
                         </a>
@@ -744,7 +744,7 @@ class Pos extends Component {
                     <div className="col-lg-12 d-flex justify-content-end">
                       {this.state.is_buttonloding ? (
                         <button
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{
                             pointerEvents: "none",
                             opacity: "0.8",
@@ -762,7 +762,7 @@ class Pos extends Component {
                           onClick={() => {
                             this.updateCustomer();
                           }}
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                         >
                           Update Customer
                         </a>
@@ -786,7 +786,7 @@ class Pos extends Component {
 
                         {this.state.is_buttonloding ? (
                           <button
-                            className="btn btn-submit me-2"
+                            className="btn btn-primary btn-sm me-2"
                             style={{
                               pointerEvents: "none",
                               opacity: "0.8",

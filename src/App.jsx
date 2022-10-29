@@ -30,6 +30,8 @@ import Pusher from "pusher-js";
 
 import OneSignal from "react-onesignal";
 import { Bars } from "react-loader-spinner";
+import Pickuppoint from "./pages/Pickuppoint.jsx";
+import Subscription from "./pages/Subscription.jsx";
 
 OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
 
@@ -309,6 +311,24 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Releaseinventory />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/pickuppoint"
+              element={
+                <RequireAuth>
+                  <Pickuppoint />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/subscription"
+              element={
+                <RequireAuth>
+                  <Subscription />
                 </RequireAuth>
               }
             />

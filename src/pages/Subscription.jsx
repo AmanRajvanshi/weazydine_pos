@@ -44,7 +44,7 @@ export class Subscription extends Component {
                       src={logo}
                       alt="img"
                       style={{
-                        maxWidth: "27%",
+                        maxWidth: "20%",
                         marginBottom: "20px",
                       }}
                     />
@@ -55,51 +55,53 @@ export class Subscription extends Component {
                     continue using WeazyDine.
                   </h3>
                 </div>
-                <div className="col-md-3"></div>
-                <div className="col-md-6">
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="login-content">
-                        <div className="login-userset">
-                          <div className="login-userheading text-center">
-                            <h2>
-                              <strong>Rs. 123479</strong>
-                            </h2>
-                            <h3>{this.state.heading}</h3>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                            <h5 className="my-2">{this.state.subheading}</h5>
-                          </div>
-                          <div className="form-login">
-                            {this.state.sendotploading ? (
-                              <button className="btn btn-login" disabled="">
-                                <span
-                                  className="spinner-border spinner-border-sm me-2"
-                                  role="status"
-                                ></span>
-                                Please Wait
-                              </button>
-                            ) : (
-                              <div
-                                className="btn btn-login"
-                                onClick={() => {
-                                  this.login();
-                                }}
-                              >
-                                Pay now
-                              </div>
-                            )}
+                <div className="row">
+                  <div className="col-md-3"></div>
+                  <div className="col-md-6">
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="login-content p-0">
+                          <div className="login-userset">
+                            <div className="login-userheading text-center">
+                              <h2>
+                                <strong>Rs. 123479</strong>
+                              </h2>
+                              <h3>{this.state.heading}</h3>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                              <h5 className="my-2">{this.state.subheading}</h5>
+                            </div>
+                            <div className="form-login">
+                              {this.state.sendotploading ? (
+                                <button className="btn btn-login" disabled="">
+                                  <span
+                                    className="spinner-border spinner-border-sm me-2"
+                                    role="status"
+                                  ></span>
+                                  Please Wait
+                                </button>
+                              ) : (
+                                <div
+                                  className="btn btn-login"
+                                  onClick={() => {
+                                    this.login();
+                                  }}
+                                >
+                                  Pay now
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div className="col-md-3"></div>
                 </div>
-                <div className="col-md-3"></div>
               </div>
             </div>
           </div>

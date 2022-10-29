@@ -4309,7 +4309,7 @@ span.select-container.select-container--default.select-container--open {
   z-index: 9999;
 }
 
-.sidebar {
+.sidebar1 {
   background-color: transparent;
   border-right: 1px solid transparent;
   margin-top: 0;
@@ -8151,7 +8151,7 @@ span.select-container.select-container--default.select-container--open {
 .sub_text_heading{
   line-height: 2.8rem;
   color: #eda332;
-  font-size: 2.2em;
+  font-size: 1.5em;
 }
 
 .mb-20{

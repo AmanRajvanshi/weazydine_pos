@@ -30,6 +30,11 @@ export class TableOrderDetails extends Component {
       payment: "",
       generate_order_buttonLoading: false,
       mark_complete_buttonLoading: false,
+      total_amount: "",
+      split_bill_amount_other: "",
+      split_bill_amount_cash: "",
+      is_buttonloding: false,
+      splitModal: false,
     };
   }
 
@@ -643,8 +648,113 @@ export class TableOrderDetails extends Component {
                           >
                             Cash
                           </RadioButton>
+                          <RadioButton
+                            value="split"
+                            pointColor="#eda332"
+                            iconSize={20}
+                            rootColor="#f3c783"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Split Payment
+                          </RadioButton>
                         </RadioGroup>
                       </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.mark_complete_buttonLoading ? (
+                      <button
+                        className="btn btn-primary btn-sm"
+                        style={{
+                          pointerEvents: "none",
+                          opacity: "0.8",
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Please wait
+                      </button>
+                    ) : this.state.payment == "split" ? (
+                      <a
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.setState({
+                            splitModal: true,
+                            generateBillModal: false,
+                          });
+                        }}
+                      >
+                        Complete Order
+                      </a>
+                    ) : (
+                      <a
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.mark_complete();
+                        }}
+                      >
+                        Complete Order
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+
+        <Modal
+          open={this.state.splitModal}
+          onClose={() => this.setState({ splitModal: false })}
+          center
+          classNames={{
+            modal: "customModal",
+          }}
+        >
+          <div className="content">
+            <div className="page-header m-0 text-center">
+              <div className="page-title text-center">
+                <h4>Split Bill Amount</h4>
+                <p>
+                  Total Bill Amount - <BiRupee /> {this.state.total_amount}
+                </p>
+              </div>
+            </div>
+            <div className="card border-none">
+              <div className="card-body p-0 pt-4">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <label>Amount Paid by Cash</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({
+                            split_bill_amount_cash: e.target.value,
+                          });
+                        }}
+                        value={this.state.split_bill_amount_cash}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <label>
+                        Amount Paid by Google Pay/Paytm/UPI/Debit Card/Credit
+                        Card
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({
+                            split_bill_amount_other: e.target.value,
+                          });
+                        }}
+                        value={this.state.split_bill_amount_other}
+                      />
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
