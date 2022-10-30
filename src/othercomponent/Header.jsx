@@ -364,9 +364,7 @@ export class Header extends Component {
                         <span>Category List</span>
                       </MenuItem>
                     </SubMenu>
-                    <MenuItem routerLink={<Link to="/dineinlisting" />}>
-                      <span>Dine In Management</span>
-                    </MenuItem>
+                 
                     <SubMenu label="Inventory">
                       <MenuItem routerLink={<Link to="/inventorycategory" />}>
                         <span>Inventory Category</span>
@@ -375,11 +373,7 @@ export class Header extends Component {
                         <span>Inventory Products</span>
                       </MenuItem>
                     </SubMenu>
-                    <SubMenu label="Setup">
-                      <MenuItem routerLink={<Link to="/pickuppoint" />}>
-                        <span>Pickup Point</span>
-                      </MenuItem>
-                    </SubMenu>
+
                     <SubMenu label="Reports">
                       <MenuItem routerLink={<Link to="/salesreport" />}>
                         <span>Sales Report</span>
@@ -391,6 +385,18 @@ export class Header extends Component {
                         <span>Product Report</span>
                       </MenuItem>
                     </SubMenu>
+                    
+                    <SubMenu label="Setup">
+                    <MenuItem routerLink={<Link to="/dineinlisting" />}>
+                      <span>Dine In Management</span>
+                    </MenuItem>
+                      <MenuItem routerLink={<Link to="/pickuppoint" />}>
+                        <span>Pickup Points Management</span>
+                      </MenuItem>
+
+
+                    </SubMenu>
+                 
                   </Menu>
                 </Sidebar>
               </div>

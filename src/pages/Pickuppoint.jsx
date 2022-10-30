@@ -29,7 +29,7 @@ export class Pickuppoint extends Component {
   }
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_vendor_category", {
+    fetch(global.api + "fetch_pickup_point", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -53,7 +53,7 @@ export class Pickuppoint extends Component {
   add = () => {
     if (this.state.new_category_name != "") {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "create_category_vendor", {
+      fetch(global.api + "add_pickup_points", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -61,8 +61,7 @@ export class Pickuppoint extends Component {
           Authorization: this.context.token,
         },
         body: JSON.stringify({
-          category_name: this.state.new_category_name,
-          status: "active",
+          pickuppoint_name: this.state.new_category_name
         }),
       })
         .then((response) => response.json())
@@ -85,7 +84,7 @@ export class Pickuppoint extends Component {
           this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
-      toast.error("Please add Category first!");
+      toast.error("Name is required!");
     }
   };
 
@@ -93,7 +92,7 @@ export class Pickuppoint extends Component {
     //   alert("sfghsdf")
     if (this.state.new_category_name != "") {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "edit_category", {
+      fetch(global.api + "update_pickup_point", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -101,9 +100,8 @@ export class Pickuppoint extends Component {
           Authorization: this.context.token,
         },
         body: JSON.stringify({
-          name: this.state.new_category_name,
-          category_id: this.state.category_id,
-          status: this.state.status,
+          pickup_point_name: this.state.new_category_name,
+          pickup_point_id: this.state.category_id,
         }),
       })
         .then((response) => response.json())
@@ -126,13 +124,13 @@ export class Pickuppoint extends Component {
           this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
-      toast.error("Please add Category first!");
+      toast.error("Please add Pickup Point first!");
     }
   };
 
   delete = (id, name) => {
     console.warn(id);
-    fetch(global.api + "update_category_vendor", {
+    fetch(global.api + "delete_pickup_point", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -140,9 +138,7 @@ export class Pickuppoint extends Component {
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        category_id: id,
-        category_name: name,
-        category_status: "delete",
+        pickup_point_id: id,
       }),
     })
       .then((response) => response.json())
@@ -152,7 +148,7 @@ export class Pickuppoint extends Component {
           var msg = json.msg;
           // Toast.show(msg);
         } else {
-          toast.success("Category deleted");
+          toast.success("Pickup Point deleted");
           this.fetchCategories();
         }
       })
@@ -226,7 +222,7 @@ export class Pickuppoint extends Component {
                             {this.state.category.map((item, index) => (
                               <tr>
                                 <td>{index + 1}</td>
-                                <td>{item.name}</td>
+                                <td>{item.pickuppoint_name}</td>
                                 <td>
                                   <a
                                     className="me-3"

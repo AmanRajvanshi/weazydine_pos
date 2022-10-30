@@ -35,6 +35,8 @@ export class TableOrderDetails extends Component {
       split_bill_amount_cash: "",
       is_buttonloding: false,
       splitModal: false,
+      split_payment:[{amount:0,method:"Cash"},{amount:0,method:"Card"},{amount:0,method:"UPI"}],
+      split_total:0,
     };
   }
 
@@ -124,6 +126,8 @@ export class TableOrderDetails extends Component {
         order_id: this.state.bill.id,
         payment_method: this.state.payment,
         order_status: "completed",
+        split_payment:this.state.split_payment
+
       }),
     })
       .then((response) => response.json())
@@ -146,6 +150,33 @@ export class TableOrderDetails extends Component {
         this.setState({ mark_complete_buttonLoading: false });
       });
   };
+
+
+  add_split_amount = (amount,index) => {
+    if(amount == ""){
+      amount = 0;
+    }
+    var split = this.state.split_payment;
+
+    var tt=0;
+    split.map((item, i) => {
+      if(i!=index){
+       tt=parseFloat(tt)+ parseFloat(item.amount);
+      }
+      else
+      {
+        tt=parseFloat(tt)+parseFloat(amount);
+      }
+    });
+
+
+    split[index].amount = amount;
+    this.setState({ split_payment: split,split_total:tt });
+
+    
+
+  };
+
   render() {
     return (
       <div className="main-wrapper">
@@ -619,7 +650,7 @@ export class TableOrderDetails extends Component {
                           value={this.state.payment}
                         >
                           <RadioButton
-                            value="upi"
+                            value="UPI"
                             pointColor="#eda332"
                             iconSize={20}
                             rootColor="#f3c783"
@@ -629,7 +660,7 @@ export class TableOrderDetails extends Component {
                             Google Pay/Paytm/UPI
                           </RadioButton>
                           <RadioButton
-                            value="card"
+                            value="Card"
                             pointColor="#eda332"
                             iconSize={20}
                             rootColor="#f3c783"
@@ -639,7 +670,7 @@ export class TableOrderDetails extends Component {
                             Credit/Debit Card
                           </RadioButton>
                           <RadioButton
-                            value="cash"
+                            value="Cash"
                             pointColor="#eda332"
                             iconSize={20}
                             rootColor="#f3c783"
@@ -726,37 +757,38 @@ export class TableOrderDetails extends Component {
             <div className="card border-none">
               <div className="card-body p-0 pt-4">
                 <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label>Amount Paid by Cash</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({
-                            split_bill_amount_cash: e.target.value,
-                          });
-                        }}
-                        value={this.state.split_bill_amount_cash}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label>
-                        Amount Paid by Google Pay/Paytm/UPI/Debit Card/Credit
-                        Card
-                      </label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({
-                            split_bill_amount_other: e.target.value,
-                          });
-                        }}
-                        value={this.state.split_bill_amount_other}
-                      />
-                    </div>
-                  </div>
+
+              {
+                              this.state.split_payment.map((item,index)=>{
+                                var tt=item.amount;
+                                return(
+                                  <div className="row">
+                                    <div className="col-lg-6">
+                                      <div className="form-group">
+                                        <label>{item.method} </label>
+                                        </div>
+                                        </div>
+                                        <div className="col-lg-6">
+                                      <div className="form-group">
+                                        <input
+
+                                          type="number"
+                                          onChange={(e) => {
+                                            this.add_split_amount(e.target.value,index);
+                                          }}
+                                          value={this.state[item.amount]}
+                                        />  
+                                        </div>
+                                        </div>
+                                        </div>
+                                )
+                              })
+                            }
+
+                            <h5>Split Total - {this.state.split_total} </h5>
+                           
+                                   
+                            
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.mark_complete_buttonLoading ? (
                       <button
@@ -773,7 +805,8 @@ export class TableOrderDetails extends Component {
                         Please wait
                       </button>
                     ) : (
-                      <a
+                       this.state.split_total==this.state.total_amount&&
+                       <a
                         className="btn btn-primary btn-sm"
                         onClick={() => {
                           this.mark_complete();
@@ -781,6 +814,9 @@ export class TableOrderDetails extends Component {
                       >
                         Complete Order
                       </a>
+
+                       
+                      
                     )}
                   </div>
                 </div>

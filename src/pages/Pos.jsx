@@ -38,6 +38,9 @@ class Pos extends Component {
       show_table: false,
       table_no: 0,
       type: "product",
+      split:false,
+      split_payment:[{amount:0,method:"Cash"},{amount:0,method:"Card"},{amount:0,method:"UPI"}],
+      split_total:0,
     };
   }
 
@@ -409,6 +412,7 @@ class Pos extends Component {
         cart: this.state.cart,
         method: order_method,
         payment_method: payment_method,
+        split_payment:this.state.split_payment
       }),
     })
       .then((response) => response.json())
@@ -491,6 +495,41 @@ class Pos extends Component {
       .catch((error) => console.error(error))
       .finally(() => {});
   };
+  
+  guest = ()=> {
+    this.setState({ user_id: "1", contact: "0000000000", name: "Guest" });
+    this.setState({ payment_step: 2 });
+    this.setState({ isModalOpen: true });
+  }
+
+
+  add_split_amount = (amount,index) => {
+    if(amount == ""){
+      amount = 0;
+    }
+    var split = this.state.split_payment;
+
+    var tt=0;
+    split.map((item, i) => {
+      if(i!=index){
+       tt=parseFloat(tt)+ parseFloat(item.amount);
+      }
+      else
+      {
+        tt=parseFloat(tt)+parseFloat(amount);
+      }
+    });
+
+
+    split[index].amount = amount;
+    this.setState({ split_payment: split,split_total:tt });
+
+    
+
+  };
+
+
+
   render() {
     return (
       <div className="main-wrappers">
@@ -687,7 +726,19 @@ class Pos extends Component {
                         />
                       </div>
                     </div>
-                    <div className="col-lg-12 d-flex justify-content-end">
+                    <div className="col-lg-6 d-flex justify-content-start">
+
+                    <a
+                          // href="javascript:void(0);"
+                          onClick={() => {
+                            this.guest();
+                          }}
+                          className="btn  btn-outline-warning btn-sm me-2"
+                        >
+                            Skip
+                        </a>
+</div>
+                        <div className="col-lg-6 d-flex justify-content-end">
                       {this.state.is_buttonloding ? (
                         <button
                           className="btn btn-primary btn-sm me-2"
@@ -703,6 +754,7 @@ class Pos extends Component {
                           Updating
                         </button>
                       ) : (
+                        
                         <a
                           // href="javascript:void(0);"
                           onClick={() => {
@@ -774,6 +826,7 @@ class Pos extends Component {
                     <div className="col-lg-12">
                       <div className="form-group">
                         <h3>Hello, {this.state.name}</h3>
+                        <h5><b>Total Payable- </b>  <BiRupee />{this.state.grandTotal}</h5>
                         {this.state.order_method != "DineIn" ? (
                           <label style={{ marginTop: "20px" }}>
                             Select Payment Method
@@ -801,11 +854,12 @@ class Pos extends Component {
                         ) : (
                           <div className="setvaluecash">
                             {this.state.order_method != "DineIn" ? (
+                              !this.state.split?
                               <ul>
                                 <li>
                                   <a
                                     onClick={() => {
-                                      this.place_order("offline-cash");
+                                      this.place_order("Cash");
                                     }}
                                     href="javascript:void(0);"
                                     className="paymentmethod"
@@ -822,7 +876,7 @@ class Pos extends Component {
                                   <a
                                     href="javascript:void(0);"
                                     onClick={() => {
-                                      this.place_order("offline-card");
+                                      this.place_order("Card");
                                     }}
                                     className="paymentmethod"
                                   >
@@ -831,14 +885,14 @@ class Pos extends Component {
                                       alt="img"
                                       className="me-2"
                                     />
-                                    Debit
+                                    Card
                                   </a>
                                 </li>
                                 <li>
                                   <a
                                     href="javascript:void(0);"
                                     onClick={() => {
-                                      this.place_order("offline-UPI");
+                                      this.place_order("UPI");
                                     }}
                                     className="paymentmethod"
                                   >
@@ -850,7 +904,68 @@ class Pos extends Component {
                                     Scan
                                   </a>
                                 </li>
-                              </ul>
+
+                                <li>
+                                  <a
+                                    href="javascript:void(0);"
+                                    onClick={() => {
+                                      this.setState({split:true})
+                                      // this.place_order("offline-UPI");
+                                    }}
+                                    className="paymentmethod"
+                                  >
+                                    <img
+                                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
+                                      alt="img"
+                                      className="me-2"
+                                    />
+                                 Split
+                                  </a>
+                                </li>
+
+                              </ul>:
+<>{
+                              this.state.split_payment.map((item,index)=>{
+                                var tt=item.amount;
+                                return(
+                                  <div className="row">
+                                    <div className="col-lg-6">
+                                      <div className="form-group">
+                                        <label>{item.method} </label>
+                                        </div>
+                                        </div>
+                                        <div className="col-lg-6">
+                                      <div className="form-group">
+                                        <input
+
+                                          type="number"
+                                          onChange={(e) => {
+                                            this.add_split_amount(e.target.value,index);
+                                          }}
+                                          value={this.state[item.amount]}
+                                        />  
+                                        </div>
+                                        </div>
+                                        </div>
+                                )
+                              })
+                            }
+
+                            <h5>Total - {this.state.split_total} </h5>
+                            { this.state.split_total==this.state.grandTotal&&
+                             <div
+                             className="btn btn-primary"
+                             style={{ width: "100%" }}
+                             onClick={() => {
+                              this.place_order("split");
+                             }}
+                           >
+                             <h5>Place Order</h5>
+                           </div>
+
+                            }
+                                   
+                            </>
                             ) : (
                               <ul style={{ justifyContent: "center" }}>
                                 <li>
