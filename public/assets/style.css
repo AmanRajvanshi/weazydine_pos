@@ -8157,3 +8157,13 @@ span.select-container.select-container--default.select-container--open {
 .mb-20{
   margin-bottom: 20px;
 }
+
+.date_range_picker_styling{   
+   height: 35px;
+  padding: 0 15px;
+}
+
+.react-daterange-picker__wrapper{
+  border-radius: 5px;
+  padding: 0 10px;
+}

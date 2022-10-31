@@ -6,8 +6,9 @@ import { Bars } from "react-loader-spinner";
 import { AuthContext } from "../AuthContextProvider";
 import moment from "moment";
 import no_order from "../assets/images/no_orders.webp";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
-class Orderlist extends Component {
+export class Orderreport extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -16,7 +17,17 @@ class Orderlist extends Component {
       is_loading: true,
       load_data: false,
       page: 1,
+      value: [new Date(), new Date()],
     };
+  }
+  handleSelect(ranges) {
+    console.log(ranges);
+    // {
+    //   selection: {
+    //     startDate: [native Date Object],
+    //     endDate: [native Date Object],
+    //   }
+    // }
   }
   componentDidMount() {
     this.fetch_order(1, "");
@@ -61,6 +72,11 @@ class Orderlist extends Component {
   };
 
   render() {
+    const selectionRange = {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    };
     return (
       <div className="main-wrapper">
         <Header />
@@ -68,7 +84,7 @@ class Orderlist extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Orders</h4>
+                <h4>Order Report</h4>
               </div>
             </div>
             <div className="comp-sec-wrapper">
@@ -90,84 +106,29 @@ class Orderlist extends Component {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "placed");
-                          }}
-                        >
-                          Pending
-                        </a>
+                        <DateRangePicker
+                          onChange={(value) =>
+                            this.setState({
+                              value: value,
+                            })
+                          }
+                          value={this.state.value}
+                          maxDate={new Date()}
+                          className="date_range_picker_styling"
+                        />
                       </li>
                       <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "confirmed");
+                        <select
+                          onChange={(e) => {
+                            this.setState({
+                              parent_category_id: e.target.value,
+                            });
                           }}
+                          className="select-container"
                         >
-                          Confirmed
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "in_process");
-                          }}
-                        >
-                          In Process
-                        </a>
-                      </li>
-
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "processed");
-                          }}
-                        >
-                          Processed
-                        </a>
-                      </li>
-
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "completed");
-                          }}
-                        >
-                          Completed
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          className="nav-link"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "cancelled");
-                          }}
-                        >
-                          Cancelled
-                        </a>
+                          <option>All</option>
+                          <option value={0}>None</option>
+                        </select>
                       </li>
                     </ul>
                   </div>
@@ -183,11 +144,11 @@ class Orderlist extends Component {
                         <thead>
                           <tr>
                             <th>S.no</th>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Order Price</th>
-                            <th>Date</th>
-                            <th>Order Type</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Channel</th>
+                            <th>Time</th>
+                            <th>Order List</th>
                             <th>Status</th>
                             <th style={{ textAlign: "end" }}>Action</th>
                           </tr>
@@ -331,4 +292,4 @@ class Orderlist extends Component {
   }
 }
 
-export default Orderlist;
+export default Orderreport;

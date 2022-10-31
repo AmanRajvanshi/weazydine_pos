@@ -32,6 +32,9 @@ import OneSignal from "react-onesignal";
 import { Bars } from "react-loader-spinner";
 import Pickuppoint from "./pages/Pickuppoint.jsx";
 import Subscription from "./pages/Subscription.jsx";
+import Salesreport from "./pages/Salesreport.jsx";
+import Orderreport from "./pages/Orderreport.jsx";
+import Productreport from "./pages/Productreport.jsx";
 
 OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
 
@@ -39,10 +42,10 @@ OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
 // global.api = "https://dine-api.weazy.in/api/";
 
 //for Testing point
-global.api = "http://127.0.0.1:8001/api/";
+// global.api = "http://127.0.0.1:8001/api/";
 
 //for local
-// global.api = "https://beta-dine-api.weazy.in/api/";
+global.api = "https://beta-dine-api.weazy.in/api/";
 
 export class App extends Component {
   constructor(props) {
@@ -329,6 +332,33 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Subscription />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/salesreport"
+              element={
+                <RequireAuth>
+                  <Salesreport />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/orderreport"
+              element={
+                <RequireAuth>
+                  <Orderreport />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/productreport"
+              element={
+                <RequireAuth>
+                  <Productreport />
                 </RequireAuth>
               }
             />
