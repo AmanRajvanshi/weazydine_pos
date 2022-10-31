@@ -93,19 +93,6 @@ class Salesreport extends Component {
                   <div className="col-md-12">
                     <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
                       <li className="nav-item">
-                        <a
-                          className="nav-link active"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "");
-                          }}
-                        >
-                          All
-                        </a>
-                      </li>
-                      <li className="nav-item">
                         <DateRangePicker
                           onChange={(value) =>
                             this.setState({
@@ -129,6 +116,19 @@ class Salesreport extends Component {
                           <option>All</option>
                           <option value={0}>None</option>
                         </select>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active mx-4"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "");
+                          }}
+                        >
+                          Search
+                        </a>
                       </li>
                     </ul>
                   </div>
