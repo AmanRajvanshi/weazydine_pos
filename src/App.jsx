@@ -1,42 +1,43 @@
-import React, { Component } from "react";
-import { Route, Routes } from "react-router-dom";
-import Addproduct from "./pages/Addproduct.jsx";
-import Categorylist from "./pages/Categorylist.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import Kot from "./pages/Kot.jsx";
-import Login from "./pages/Login.jsx";
-import Orders from "./pages/Orders.jsx";
-import Pagenotfound from "./pages/Pagenotfound.jsx";
-import Pos from "./pages/Pos.jsx";
-import Productlist from "./pages/Productlist.jsx";
-import Orderlist from "./pages/Orderlist.jsx";
-import Orderdetails from "./pages/Orderdetails.jsx";
-import TableOrderDetails from "./pages/TableOrderDetails.jsx";
-import { AuthContext } from "./AuthContextProvider";
-import { RequireAuth } from "./RequireAuth";
-import Productdetails from "./pages/Productdetails.jsx";
-import Editproduct from "./pages/Editproduct.jsx";
-import Editprofile from "./pages/Editprofile.jsx";
-import { ToastContainer, Flip } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import DineinList from "./pages/DineinList.jsx";
-import Inventorycategory from "./pages/Inventorycategory.jsx";
-import Inventoryproducts from "./pages/Inventoryproducts.jsx";
-import Releaseinventory from "./pages/Releaseinventory.jsx";
-import LoginPassword from "./pages/LoginPassword.jsx";
+import React, { Component } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Addproduct from './pages/Addproduct.jsx';
+import Categorylist from './pages/Categorylist.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import Kot from './pages/Kot.jsx';
+import Login from './pages/Login.jsx';
+import Orders from './pages/Orders.jsx';
+import Pagenotfound from './pages/Pagenotfound.jsx';
+import Pos from './pages/Pos.jsx';
+import Productlist from './pages/Productlist.jsx';
+import Orderlist from './pages/Orderlist.jsx';
+import Orderdetails from './pages/Orderdetails.jsx';
+import TableOrderDetails from './pages/TableOrderDetails.jsx';
+import { AuthContext } from './AuthContextProvider';
+import { RequireAuth } from './RequireAuth';
+import Productdetails from './pages/Productdetails.jsx';
+import Editproduct from './pages/Editproduct.jsx';
+import Editprofile from './pages/Editprofile.jsx';
+import { ToastContainer, Flip } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DineinList from './pages/DineinList.jsx';
+import Inventorycategory from './pages/Inventorycategory.jsx';
+import Inventoryproducts from './pages/Inventoryproducts.jsx';
+import Releaseinventory from './pages/Releaseinventory.jsx';
+import LoginPassword from './pages/LoginPassword.jsx';
 
-import Echo from "laravel-echo";
-import Pusher from "pusher-js";
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
-import OneSignal from "react-onesignal";
-import { Bars } from "react-loader-spinner";
-import Pickuppoint from "./pages/Pickuppoint.jsx";
-import Subscription from "./pages/Subscription.jsx";
-import Salesreport from "./pages/Salesreport.jsx";
-import Orderreport from "./pages/Orderreport.jsx";
-import Productreport from "./pages/Productreport.jsx";
+import OneSignal from 'react-onesignal';
+import { Bars } from 'react-loader-spinner';
+import Pickuppoint from './pages/Pickuppoint.jsx';
+import Subscription from './pages/Subscription.jsx';
+import Salesreport from './pages/Salesreport.jsx';
+import Orderreport from './pages/Orderreport.jsx';
+import Productreport from './pages/Productreport.jsx';
+import Print from './pages/Print.jsx';
 
-OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
+OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
 // global.api = "https://dine-api.weazy.in/api/";
@@ -45,13 +46,13 @@ OneSignal.init({ appId: "49e49fa7-d31e-42d9-b1d5-536c4d3758cc" });
 // global.api = "http://127.0.0.1:8001/api/";
 
 //for local
-global.api = "https://beta-dine-api.weazy.in/api/";
+global.api = 'https://beta-dine-api.weazy.in/api/';
 
 export class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: "",
+      token: '',
       is_login: true,
       loading: true,
       user: [],
@@ -59,7 +60,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    const items = JSON.parse(localStorage.getItem("@auth_login"));
+    const items = JSON.parse(localStorage.getItem('@auth_login'));
     if (items != null) {
       this.get_profile(items.token);
       global.vendor = items.vendor_id;
@@ -80,23 +81,23 @@ export class App extends Component {
       loading: false,
     });
 
-    OneSignal.sendTag("id", "" + user.id);
-    OneSignal.sendTag("account_type", "vendor-bmguj1sfd77232927ns");
+    OneSignal.sendTag('id', '' + user.id);
+    OneSignal.sendTag('account_type', 'vendor-bmguj1sfd77232927ns');
 
     window.Pusher = Pusher;
     // console.log(Pusher);
     window.Echo = new Echo({
-      broadcaster: "pusher",
-      key: "b8ba8023ac2fc3612e90",
-      cluster: "mt",
-      wsHost: "websockets.webixun.com",
+      broadcaster: 'pusher',
+      key: 'b8ba8023ac2fc3612e90',
+      cluster: 'mt',
+      wsHost: 'websockets.webixun.com',
       wsPort: 6001,
       forceTLS: false,
       disableStats: true,
-      authEndpoint: global.api + "broadcasting/auth",
+      authEndpoint: global.api + 'broadcasting/auth',
       auth: {
         headers: {
-          Accept: "application/json",
+          Accept: 'application/json',
           Authorization: token,
         },
       },
@@ -104,18 +105,18 @@ export class App extends Component {
   };
 
   get_profile = (token) => {
-    fetch(global.api + "get_vendor_profile", {
-      method: "POST",
+    fetch(global.api + 'get_vendor_profile', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: token,
       },
       body: JSON.stringify({}),
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.message === "Unauthenticated.") {
+        if (json.message === 'Unauthenticated.') {
           this.logout();
         }
         if (!json.status) {
@@ -136,7 +137,7 @@ export class App extends Component {
 
   logout = () => {
     localStorage.clear();
-    this.setState({ is_login: false, loading: false, token: "", user: [] });
+    this.setState({ is_login: false, loading: false, token: '', user: [] });
   };
 
   render() {
@@ -253,7 +254,7 @@ export class App extends Component {
                   <TableOrderDetails />
                 </RequireAuth>
               }
-            />{" "}
+            />{' '}
             <Route
               exact
               path="/productdetails/:id"
@@ -364,6 +365,7 @@ export class App extends Component {
             />
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
+            <Route exact path="/print" element={<Print />} />
             {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
         </AuthContext.Provider>
