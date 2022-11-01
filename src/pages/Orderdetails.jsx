@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import moment from "moment";
-import { BiRupee } from "react-icons/bi";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
-import { toast } from "react-toastify";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import moment from 'moment';
+import { BiRupee } from 'react-icons/bi';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { AuthContext } from '../AuthContextProvider';
+import { Bars } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import { render, Printer, Text } from "react-thermal-printer";
+import { render, Printer, Text } from 'react-thermal-printer';
 
 export class Orderdetails extends Component {
   static contextType = AuthContext;
@@ -23,16 +23,16 @@ export class Orderdetails extends Component {
       cart: [],
       user: [],
       isLoading: true,
-      additional_note: "",
+      additional_note: '',
       generateBillModal: false,
       generate_order_buttonLoading: false,
       bill: [],
       cart_new: [],
-      payment: "",
+      payment: '',
       time: 5,
-      total_amount: "",
-      split_bill_amount_other: "",
-      split_bill_amount_cash: "",
+      total_amount: '',
+      split_bill_amount_other: '',
+      split_bill_amount_cash: '',
       is_buttonloding: false,
       splitModal: false,
     };
@@ -41,27 +41,19 @@ export class Orderdetails extends Component {
   componentDidMount() {
     this.orderDetails(this.props.id);
     window.Echo.private(`orderstatus.` + this.props.id).listen(
-      ".order.status",
+      '.order.status',
       (e) => {
         console.log(e);
       }
     );
   }
 
-  data = () => {
-    render(
-      <Printer type="epson">
-        <Text>Hello World</Text>
-      </Printer>
-    );
-  };
-
   orderDetails = (id) => {
-    fetch(global.api + "get_orders_details_vendor", {
-      method: "POST",
+    fetch(global.api + 'get_orders_details_vendor', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -87,11 +79,11 @@ export class Orderdetails extends Component {
 
   change_order_status = (status) => {
     this.setState({ mark_complete_buttonLoading: true });
-    fetch(global.api + "update_order_status", {
-      method: "POST",
+    fetch(global.api + 'update_order_status', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -110,7 +102,7 @@ export class Orderdetails extends Component {
             open: false,
           });
           this.orderDetails(this.props.id);
-          toast.success("Order Status Updated Successfully");
+          toast.success('Order Status Updated Successfully');
         }
         return json;
       })
@@ -124,11 +116,11 @@ export class Orderdetails extends Component {
 
   genrate_bill = (id) => {
     this.setState({ generate_order_buttonLoading: true });
-    fetch(global.api + "generate_bill_by_table", {
-      method: "POST",
+    fetch(global.api + 'generate_bill_by_table', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -163,17 +155,17 @@ export class Orderdetails extends Component {
 
   mark_complete = () => {
     this.setState({ mark_complete_buttonLoading: true });
-    fetch(global.api + "update_order_status_by_vendor", {
-      method: "POST",
+    fetch(global.api + 'update_order_status_by_vendor', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         order_id: this.state.bill.id,
         payment_method: this.state.payment,
-        order_status: "completed",
+        order_status: 'completed',
       }),
     })
       .then((response) => response.json())
@@ -185,7 +177,7 @@ export class Orderdetails extends Component {
         } else {
           this.setState({ generateBillModal: false });
           this.props.navigate(-1);
-          toast.success("Order Completed");
+          toast.success('Order Completed');
         }
         return json;
       })
@@ -229,24 +221,24 @@ export class Orderdetails extends Component {
                       <div
                         className="card-header order_details"
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
                         }}
                       >
                         <div>
                           <h5>
-                            Order ID: {this.props.id} -{" "}
-                            {this.state.data.order_type != "TakeAway" &&
-                            this.state.data.order_type != "Delivery" ? (
+                            Order ID: {this.props.id} -{' '}
+                            {this.state.data.order_type != 'TakeAway' &&
+                            this.state.data.order_type != 'Delivery' ? (
                               <span
                                 style={{
-                                  color: "#eda332",
+                                  color: '#eda332',
                                 }}
                               >
-                                Dine-In{" "}
+                                Dine-In{' '}
                                 {this.state.data.table == null ? (
-                                  ""
+                                  ''
                                 ) : (
                                   <span>
                                     {this.state.data.table.table_name}
@@ -256,7 +248,7 @@ export class Orderdetails extends Component {
                             ) : (
                               <span
                                 style={{
-                                  color: "#eda332",
+                                  color: '#eda332',
                                 }}
                               >
                                 {this.state.data.order_type}
@@ -265,12 +257,12 @@ export class Orderdetails extends Component {
                           </h5>
 
                           <h6 className="order_date mt-2">
-                            {moment(this.state.data.updated_at).format("llll")}{" "}
+                            {moment(this.state.data.updated_at).format('llll')}{' '}
                             <span
                               style={{
-                                color: "#eda332",
-                                textTransform: "capitalize",
-                                fontSize: "17px",
+                                color: '#eda332',
+                                textTransform: 'capitalize',
+                                fontSize: '17px',
                               }}
                             >
                               Order Status: {this.state.data.order_status}
@@ -278,15 +270,15 @@ export class Orderdetails extends Component {
                           </h6>
                         </div>
                         <div>
-                          {this.state.data.order_type != "TakeAway" &&
-                            this.state.data.order_type != "Delivery" &&
-                            this.state.data.order_status != "completed" &&
+                          {this.state.data.order_type != 'TakeAway' &&
+                            this.state.data.order_type != 'Delivery' &&
+                            this.state.data.order_status != 'completed' &&
                             (this.state.generate_order_buttonLoading ? (
                               <button
                                 className="btn btn-primary btn-sm"
                                 style={{
-                                  pointerEvents: "none",
-                                  opacity: "0.8",
+                                  pointerEvents: 'none',
+                                  opacity: '0.8',
                                 }}
                               >
                                 <span
@@ -310,8 +302,8 @@ export class Orderdetails extends Component {
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">
-                          {this.state.cart.length}{" "}
-                          {this.state.cart.length > 1 ? "Items" : "Item"}
+                          {this.state.cart.length}{' '}
+                          {this.state.cart.length > 1 ? 'Items' : 'Item'}
                         </h5>
                         <div className="row">
                           <div className="col-md-12">
@@ -360,7 +352,7 @@ export class Orderdetails extends Component {
                             <section
                               className="item-section"
                               style={{
-                                padding: "20px 0 0!important",
+                                padding: '20px 0 0!important',
                               }}
                             >
                               <div className="item_row">
@@ -385,8 +377,8 @@ export class Orderdetails extends Component {
                                     <div className="item_name_column">
                                       <span
                                         style={{
-                                          fontWeight: "600px",
-                                          marginRight: "10px",
+                                          fontWeight: '600px',
+                                          marginRight: '10px',
                                         }}
                                       >
                                         {item.product.product_name}
@@ -394,7 +386,7 @@ export class Orderdetails extends Component {
 
                                       {item.variant != null && (
                                         <span>
-                                          <strong>Variant</strong> -{" "}
+                                          <strong>Variant</strong> -{' '}
                                           {item.variant.variants_name}
                                         </span>
                                       )}
@@ -447,8 +439,8 @@ export class Orderdetails extends Component {
                             <div
                               className="col-md-6"
                               style={{
-                                color: "#28c76f",
-                                margin: "10px 0px 0px",
+                                color: '#28c76f',
+                                margin: '10px 0px 0px',
                               }}
                             >
                               Taxes and other Charges
@@ -457,8 +449,8 @@ export class Orderdetails extends Component {
                               <div
                                 className="d-flex align-items-center"
                                 style={{
-                                  color: "#28c76f",
-                                  margin: "10px 0px 0px",
+                                  color: '#28c76f',
+                                  margin: '10px 0px 0px',
                                 }}
                               >
                                 <BiRupee />
@@ -474,8 +466,8 @@ export class Orderdetails extends Component {
                             <div
                               className="col-md-6"
                               style={{
-                                color: "#ff0000",
-                                margin: "10px 0px 0px",
+                                color: '#ff0000',
+                                margin: '10px 0px 0px',
                               }}
                             >
                               Discount
@@ -484,8 +476,8 @@ export class Orderdetails extends Component {
                               <div
                                 className="d-flex align-items-center"
                                 style={{
-                                  color: "#ff0000",
-                                  margin: "10px 0px 0px",
+                                  color: '#ff0000',
+                                  margin: '10px 0px 0px',
                                 }}
                               >
                                 <BiRupee />
@@ -512,14 +504,14 @@ export class Orderdetails extends Component {
                   <div className="col-4">
                     {this.state.mark_complete_buttonLoading ? (
                       <p>Please Wait...</p>
-                    ) : this.state.data.order_status == "placed" ? (
+                    ) : this.state.data.order_status == 'placed' ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <h6
                           className="text-danger"
                           style={{
-                            cursor: "pointer",
+                            cursor: 'pointer',
                           }}
-                          onClick={() => this.change_order_status("cancelled")}
+                          onClick={() => this.change_order_status('cancelled')}
                         >
                           Cancel Order
                         </h6>
@@ -527,20 +519,20 @@ export class Orderdetails extends Component {
                           href="javascript:void(0);"
                           className="btn btn-primary mx-2"
                           onClick={() => {
-                            this.change_order_status("confirmed");
+                            this.change_order_status('confirmed');
                           }}
                         >
                           <p>Accept Order</p>
                         </a>
                       </div>
-                    ) : this.state.data.order_status == "confirmed" ? (
+                    ) : this.state.data.order_status == 'confirmed' ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <h6
                           className="text-danger"
                           style={{
-                            cursor: "pointer",
+                            cursor: 'pointer',
                           }}
-                          onClick={() => this.change_order_status("cancelled")}
+                          onClick={() => this.change_order_status('cancelled')}
                         >
                           Cancel Order
                         </h6>
@@ -556,14 +548,14 @@ export class Orderdetails extends Component {
                           <p>Order In-Process</p>
                         </a>
                       </div>
-                    ) : this.state.data.order_status == "in_process" ? (
+                    ) : this.state.data.order_status == 'in_process' ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <h6
                           className="text-danger"
                           style={{
-                            cursor: "pointer",
+                            cursor: 'pointer',
                           }}
-                          onClick={() => this.change_order_status("cancelled")}
+                          onClick={() => this.change_order_status('cancelled')}
                         >
                           Cancel Order
                         </h6>
@@ -571,22 +563,22 @@ export class Orderdetails extends Component {
                           href="javascript:void(0);"
                           className="btn btn-primary mx-2"
                           onClick={() => {
-                            this.change_order_status("processed");
+                            this.change_order_status('processed');
                           }}
                         >
                           <p>Order Processed</p>
                         </a>
                       </div>
-                    ) : this.state.data.order_status == "processed" ? (
-                      this.state.data.order_type == "Delivery" ? (
+                    ) : this.state.data.order_status == 'processed' ? (
+                      this.state.data.order_type == 'Delivery' ? (
                         <div className="d-flex align-items-center justify-content-around my-2">
                           <h6
                             className="text-danger"
                             style={{
-                              cursor: "pointer",
+                              cursor: 'pointer',
                             }}
                             onClick={() =>
-                              this.change_order_status("cancelled")
+                              this.change_order_status('cancelled')
                             }
                           >
                             Cancel Order
@@ -595,20 +587,20 @@ export class Orderdetails extends Component {
                             href="javascript:void(0);"
                             className="btn btn-primary mx-2"
                             onClick={() => {
-                              this.change_order_status("out for delivery");
+                              this.change_order_status('out for delivery');
                             }}
                           >
                             <p>Out for Delivery</p>
                           </a>
                         </div>
                       ) : (
-                        this.state.data.order_type == "TakeAway" && (
+                        this.state.data.order_type == 'TakeAway' && (
                           <div className="d-flex align-items-center justify-content-around my-2">
                             <a
                               href="javascript:void(0);"
                               className="btn btn-primary mx-2"
                               onClick={() => {
-                                this.change_order_status("completed");
+                                this.change_order_status('completed');
                               }}
                             >
                               <p>Completed</p>
@@ -616,13 +608,13 @@ export class Orderdetails extends Component {
                           </div>
                         )
                       )
-                    ) : this.state.data.order_status == "out for delivery" ? (
+                    ) : this.state.data.order_status == 'out for delivery' ? (
                       <div className="d-flex align-items-center justify-content-around my-2">
                         <a
                           href="javascript:void(0);"
                           className="btn btn-primary mx-2"
                           onClick={() => {
-                            this.change_order_status("completed");
+                            this.change_order_status('completed');
                           }}
                         >
                           <p>Completed</p>
@@ -647,8 +639,8 @@ export class Orderdetails extends Component {
                                 readOnly
                                 value={this.state.user.name}
                                 style={{
-                                  border: "none",
-                                  borderBottom: "1px solid black",
+                                  border: 'none',
+                                  borderBottom: '1px solid black',
                                   borderRadius: 0,
                                   // paddingLeft: "0px",
                                 }}
@@ -663,8 +655,8 @@ export class Orderdetails extends Component {
                                 readOnly
                                 value={this.state.user.contact}
                                 style={{
-                                  border: "none",
-                                  borderBottom: "1px solid black",
+                                  border: 'none',
+                                  borderBottom: '1px solid black',
                                   borderRadius: 0,
                                   // paddingLeft: "0px",
                                 }}
@@ -678,7 +670,7 @@ export class Orderdetails extends Component {
                     <div
                       className="card flex-fill bg-white"
                       style={{
-                        height: "200px",
+                        height: '200px',
                       }}
                     >
                       <div className="card-body">
@@ -702,6 +694,9 @@ export class Orderdetails extends Component {
                     <a
                       href="javascript:void(0);"
                       className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
+                      onClick={() => {
+                        window.open('/print/' + this.props.id, '_blank');
+                      }}
                     >
                       <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                       <p>Print Receipt</p>
@@ -709,6 +704,9 @@ export class Orderdetails extends Component {
                     <a
                       href="javascript:void(0);"
                       className="btn btn-submit me-2 my-2 w-100 d-flex align-items-center justify-content-center"
+                      onClick={() => {
+                        window.open('/print/' + this.props.id, '_blank');
+                      }}
                     >
                       <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                       <p>Print KOT</p>
@@ -725,7 +723,7 @@ export class Orderdetails extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -785,8 +783,8 @@ export class Orderdetails extends Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -798,7 +796,7 @@ export class Orderdetails extends Component {
                     ) : (
                       <a
                         onClick={() => {
-                          this.change_order_status("in_process");
+                          this.change_order_status('in_process');
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
@@ -817,7 +815,7 @@ export class Orderdetails extends Component {
           onClose={() => this.setState({ generateBillModal: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -891,8 +889,8 @@ export class Orderdetails extends Component {
                       <button
                         className="btn btn-primary btn-sm"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -901,7 +899,7 @@ export class Orderdetails extends Component {
                         ></span>
                         Please wait
                       </button>
-                    ) : this.state.payment == "split" ? (
+                    ) : this.state.payment == 'split' ? (
                       <a
                         className="btn btn-primary btn-sm"
                         onClick={() => {
@@ -935,7 +933,7 @@ export class Orderdetails extends Component {
           onClose={() => this.setState({ splitModal: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -986,8 +984,8 @@ export class Orderdetails extends Component {
                       <button
                         className="btn btn-primary btn-sm"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span

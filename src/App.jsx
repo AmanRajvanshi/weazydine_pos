@@ -24,10 +24,9 @@ import Inventorycategory from './pages/Inventorycategory.jsx';
 import Inventoryproducts from './pages/Inventoryproducts.jsx';
 import Releaseinventory from './pages/Releaseinventory.jsx';
 import LoginPassword from './pages/LoginPassword.jsx';
-
+import Crm from './pages/Crm.jsx';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-
 import OneSignal from 'react-onesignal';
 import { Bars } from 'react-loader-spinner';
 import Pickuppoint from './pages/Pickuppoint.jsx';
@@ -40,13 +39,13 @@ import Print from './pages/Print.jsx';
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
-// global.api = "https://dine-api.weazy.in/api/";
+global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-// global.api = "http://127.0.0.1:8001/api/";
+//global.api = "http://127.0.0.1:8000/api/";
 
 //for local
-global.api = 'https://beta-dine-api.weazy.in/api/';
+// global.api = 'https://beta-dine-api.weazy.in/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -363,9 +362,26 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
+            <Route
+              exact
+              path="/crm"
+              element={
+                <RequireAuth>
+                  <Crm />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/print/:code"
+              element={
+                <RequireAuth>
+                  <Print />
+                </RequireAuth>
+              }
+            />
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
-            <Route exact path="/print" element={<Print />} />
             {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
         </AuthContext.Provider>

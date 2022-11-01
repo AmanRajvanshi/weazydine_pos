@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 .css-equal-content,
 .css-equal-heights {
   display: flex;
@@ -626,11 +626,11 @@ h6 {
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: #1a181e;
   line-height: 1.5;
-  background-color: #f7f7f7;
+  background-color: #fafbfe;
 }
 
 .container {
@@ -1581,13 +1581,13 @@ div#global-loader,
 .fc-toolbar h2 {
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   line-height: 30px;
   text-transform: uppercase;
 }
 
 .fc-day-grid-event .fc-time {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .fc-day {
@@ -1686,13 +1686,13 @@ div#global-loader,
 .fc-basic-view td.fc-week-number span {
   padding-right: 8px;
   font-weight: 700;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .fc-basic-view td.fc-day-number {
   padding-right: 8px;
   font-weight: 700;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .event-form .input-group .form-control {
@@ -7164,7 +7164,8 @@ span.select-container.select-container--default.select-container--open {
 
 .product-table {
   height: 50vh;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 @media (max-width: 991px) {
   .product-table {
@@ -8192,7 +8193,7 @@ span.select-container.select-container--default.select-container--open {
 #invoice-POS h2 {
   font-size: 0.9em;
   font-weight: 600;
-  padding-left:4px
+  padding-left: 4px;
 }
 #invoice-POS h3 {
   font-size: 1.2em;
@@ -8231,9 +8232,9 @@ span.select-container.select-container--default.select-container--open {
 #invoice-POS #top {
   min-height: 20px;
 }
-#invoice-POS #mid {
+/* #invoice-POS #mid {
   margin-top: 10px;
-}
+} */
 #invoice-POS #bot {
   min-height: 50px;
 }
@@ -8279,7 +8280,7 @@ span.select-container.select-container--default.select-container--open {
 #invoice-POS .itemtext {
   font-size: 0.4em;
   line-height: 1.5em;
-  padding-left:5px
+  padding-left: 5px;
 }
 #invoice-POS #legalcopy {
   margin-top: 5mm;
@@ -8348,15 +8349,14 @@ span.select-container.select-container--default.select-container--open {
   line-height: 1.5em;
 }
 
-
-.kot_dT{
-      /* display: flex; */
-    /* align-items: center; */
-    width: 100%;
-    font-size: 0.5em !important;
-    text-align: center;
+.kot_dT {
+  /* display: flex; */
+  /* align-items: center; */
+  width: 100%;
+  font-size: 0.5em !important;
+  text-align: center;
 }
 
-.mt-10{
+.mt-10 {
   margin-top: 10px;
 }

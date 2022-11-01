@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import moment from "moment";
-import { BiRupee } from "react-icons/bi";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
-import no_order from "../assets/images/no_orders.webp";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
-import { toast } from "react-toastify";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import moment from 'moment';
+import { BiRupee } from 'react-icons/bi';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { AuthContext } from '../AuthContextProvider';
+import { Bars } from 'react-loader-spinner';
+import no_order from '../assets/images/no_orders.webp';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { toast } from 'react-toastify';
 
 export class TableOrderDetails extends Component {
   static contextType = AuthContext;
@@ -22,21 +22,25 @@ export class TableOrderDetails extends Component {
       cart: [],
       user: [],
       isLoading: true,
-      additional_note: "",
+      additional_note: '',
       generateBillModal: false,
-      total_amount: "",
-      order_code: "",
+      total_amount: '',
+      order_code: '',
       bill: [],
-      payment: "",
+      payment: '',
       generate_order_buttonLoading: false,
       mark_complete_buttonLoading: false,
-      total_amount: "",
-      split_bill_amount_other: "",
-      split_bill_amount_cash: "",
+      total_amount: '',
+      split_bill_amount_other: '',
+      split_bill_amount_cash: '',
       is_buttonloding: false,
       splitModal: false,
-      split_payment:[{amount:0,method:"Cash"},{amount:0,method:"Card"},{amount:0,method:"UPI"}],
-      split_total:0,
+      split_payment: [
+        { amount: 0, method: 'Cash' },
+        { amount: 0, method: 'Card' },
+        { amount: 0, method: 'UPI' },
+      ],
+      split_total: 0,
     };
   }
 
@@ -45,11 +49,11 @@ export class TableOrderDetails extends Component {
   }
 
   orderDetails = (id) => {
-    fetch(global.api + "fetch_ongoing_order_for_table", {
-      method: "POST",
+    fetch(global.api + 'fetch_ongoing_order_for_table', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -61,7 +65,7 @@ export class TableOrderDetails extends Component {
         // console.warn(json)
         if (!json.status) {
           this.setState({ isLoading: false, data: [] });
-          this.props.navigate("/pos/" + this.props.id, { replace: true });
+          this.props.navigate('/pos/' + this.props.id, { replace: true });
         } else {
           this.setState({
             data: json.data,
@@ -79,11 +83,11 @@ export class TableOrderDetails extends Component {
 
   genrate_bill = () => {
     this.setState({ generate_order_buttonLoading: true });
-    fetch(global.api + "generate_bill_by_table", {
-      method: "POST",
+    fetch(global.api + 'generate_bill_by_table', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -115,19 +119,18 @@ export class TableOrderDetails extends Component {
 
   mark_complete = () => {
     this.setState({ mark_complete_buttonLoading: true });
-    fetch(global.api + "update_order_status_by_vendor", {
-      method: "POST",
+    fetch(global.api + 'update_order_status_by_vendor', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         order_id: this.state.bill.id,
         payment_method: this.state.payment,
-        order_status: "completed",
-        split_payment:this.state.split_payment
-
+        order_status: 'completed',
+        split_payment: this.state.split_payment,
       }),
     })
       .then((response) => response.json())
@@ -139,7 +142,7 @@ export class TableOrderDetails extends Component {
         } else {
           this.setState({ modalVisible: false });
           this.props.navigate(-1);
-          toast.success("Order Completed");
+          toast.success('Order Completed');
         }
         return json;
       })
@@ -151,30 +154,23 @@ export class TableOrderDetails extends Component {
       });
   };
 
-
-  add_split_amount = (amount,index) => {
-    if(amount == ""){
+  add_split_amount = (amount, index) => {
+    if (amount == '') {
       amount = 0;
     }
     var split = this.state.split_payment;
 
-    var tt=0;
+    var tt = 0;
     split.map((item, i) => {
-      if(i!=index){
-       tt=parseFloat(tt)+ parseFloat(item.amount);
-      }
-      else
-      {
-        tt=parseFloat(tt)+parseFloat(amount);
+      if (i != index) {
+        tt = parseFloat(tt) + parseFloat(item.amount);
+      } else {
+        tt = parseFloat(tt) + parseFloat(amount);
       }
     });
 
-
     split[index].amount = amount;
-    this.setState({ split_payment: split,split_total:tt });
-
-    
-
+    this.setState({ split_payment: split, split_total: tt });
   };
 
   render() {
@@ -205,7 +201,7 @@ export class TableOrderDetails extends Component {
 
                     <Link
                       className="btn btn-primary btn-sm me-2"
-                      to={"/pos/" + this.props.id}
+                      to={'/pos/' + this.props.id}
                     >
                       Add More Item
                     </Link>
@@ -219,16 +215,16 @@ export class TableOrderDetails extends Component {
                           <div
                             className="card-header order_details"
                             style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
                             }}
                           >
                             <div>
                               <h5>Order ID: {this.state.data[0].order_code}</h5>
                               <h6 className="order_date mt-2">
                                 {moment(this.state.data.updated_at).format(
-                                  "llll"
+                                  'llll'
                                 )}
                               </h6>
                             </div>
@@ -236,8 +232,8 @@ export class TableOrderDetails extends Component {
                               <button
                                 className="btn btn-primary btn-sm"
                                 style={{
-                                  pointerEvents: "none",
-                                  opacity: "0.8",
+                                  pointerEvents: 'none',
+                                  opacity: '0.8',
                                 }}
                               >
                                 <span
@@ -260,8 +256,8 @@ export class TableOrderDetails extends Component {
                           </div>
                           <div className="card-body">
                             <h5 className="card-title">
-                              {this.state.cart.length}{" "}
-                              {this.state.cart.length > 1 ? "Items" : "Item"}
+                              {this.state.cart.length}{' '}
+                              {this.state.cart.length > 1 ? 'Items' : 'Item'}
                             </h5>
                             <div className="row">
                               <div className="col-md-12">
@@ -310,7 +306,7 @@ export class TableOrderDetails extends Component {
                                 <section
                                   className="item-section"
                                   style={{
-                                    padding: "20px 0 0!important",
+                                    padding: '20px 0 0!important',
                                   }}
                                 >
                                   <div className="item_row">
@@ -339,8 +335,8 @@ export class TableOrderDetails extends Component {
                                         <div className="item_name_column">
                                           <span
                                             style={{
-                                              fontWeight: "600px",
-                                              marginRight: "10px",
+                                              fontWeight: '600px',
+                                              marginRight: '10px',
                                             }}
                                           >
                                             {item.product.product_name}
@@ -348,7 +344,7 @@ export class TableOrderDetails extends Component {
 
                                           {item.variant != null && (
                                             <span>
-                                              <strong>Variant</strong> -{" "}
+                                              <strong>Variant</strong> -{' '}
                                               {item.variant.variants_name}
                                             </span>
                                           )}
@@ -401,8 +397,8 @@ export class TableOrderDetails extends Component {
                                 <div
                                   className="col-md-6"
                                   style={{
-                                    color: "#28c76f",
-                                    margin: "10px 0px 0px",
+                                    color: '#28c76f',
+                                    margin: '10px 0px 0px',
                                   }}
                                 >
                                   Taxes and other Charges
@@ -411,8 +407,8 @@ export class TableOrderDetails extends Component {
                                   <div
                                     className="d-flex align-items-center"
                                     style={{
-                                      color: "#28c76f",
-                                      margin: "10px 0px 0px",
+                                      color: '#28c76f',
+                                      margin: '10px 0px 0px',
                                     }}
                                   >
                                     <BiRupee />
@@ -429,8 +425,8 @@ export class TableOrderDetails extends Component {
                                 <div
                                   className="col-md-6"
                                   style={{
-                                    color: "#ff0000",
-                                    margin: "10px 0px 0px",
+                                    color: '#ff0000',
+                                    margin: '10px 0px 0px',
                                   }}
                                 >
                                   Discount
@@ -439,8 +435,8 @@ export class TableOrderDetails extends Component {
                                   <div
                                     className="d-flex align-items-center"
                                     style={{
-                                      color: "#ff0000",
-                                      margin: "10px 0px 0px",
+                                      color: '#ff0000',
+                                      margin: '10px 0px 0px',
                                     }}
                                   >
                                     <BiRupee />
@@ -481,8 +477,8 @@ export class TableOrderDetails extends Component {
                                     readOnly
                                     value={this.state.user.name}
                                     style={{
-                                      border: "none",
-                                      borderBottom: "1px solid black",
+                                      border: 'none',
+                                      borderBottom: '1px solid black',
                                       borderRadius: 0,
                                     }}
                                   />
@@ -496,8 +492,8 @@ export class TableOrderDetails extends Component {
                                     readOnly
                                     value={this.state.user.contact}
                                     style={{
-                                      border: "none",
-                                      borderBottom: "1px solid black",
+                                      border: 'none',
+                                      borderBottom: '1px solid black',
                                       borderRadius: 0,
                                     }}
                                   />
@@ -509,7 +505,7 @@ export class TableOrderDetails extends Component {
                         <div
                           className="card flex-fill bg-white"
                           style={{
-                            height: "200px",
+                            height: '200px',
                           }}
                         >
                           <div className="card-body">
@@ -518,7 +514,7 @@ export class TableOrderDetails extends Component {
                               <a
                                 className="btn btn-added"
                                 style={{
-                                  color: "#eda332",
+                                  color: '#eda332',
                                 }}
                                 onClick={() => this.setState({ open: true })}
                               >
@@ -531,6 +527,12 @@ export class TableOrderDetails extends Component {
                         <a
                           href="javascript:void(0);"
                           className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
+                          onClick={() => {
+                            window.open(
+                              '/print/' + this.state.data[0].order_code,
+                              '_blank'
+                            );
+                          }}
                         >
                           <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                           <p>Print Receipt</p>
@@ -538,6 +540,12 @@ export class TableOrderDetails extends Component {
                         <a
                           href="javascript:void(0);"
                           className="btn btn-submit me-2 my-2 w-100 d-flex align-items-center justify-content-center"
+                          onClick={() => {
+                            window.open(
+                              '/print/' + this.state.data[0].order_code,
+                              '_blank'
+                            );
+                          }}
                         >
                           <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                           <p>Print KOT</p>
@@ -552,11 +560,11 @@ export class TableOrderDetails extends Component {
                 <div
                   className="content"
                   style={{
-                    height: "92vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
+                    height: '92vh',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
                   }}
                 >
                   <img src={no_order} alt="" />
@@ -564,7 +572,7 @@ export class TableOrderDetails extends Component {
 
                   <Link
                     className="btn btn-submit me-2"
-                    to={"/pos/" + this.props.id}
+                    to={'/pos/' + this.props.id}
                   >
                     Create a new order
                   </Link>
@@ -578,7 +586,7 @@ export class TableOrderDetails extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -624,7 +632,7 @@ export class TableOrderDetails extends Component {
           onClose={() => this.setState({ generateBillModal: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -698,8 +706,8 @@ export class TableOrderDetails extends Component {
                       <button
                         className="btn btn-primary btn-sm"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -708,7 +716,7 @@ export class TableOrderDetails extends Component {
                         ></span>
                         Please wait
                       </button>
-                    ) : this.state.payment == "split" ? (
+                    ) : this.state.payment == 'split' ? (
                       <a
                         className="btn btn-primary btn-sm"
                         onClick={() => {
@@ -742,7 +750,7 @@ export class TableOrderDetails extends Component {
           onClose={() => this.setState({ splitModal: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -757,45 +765,39 @@ export class TableOrderDetails extends Component {
             <div className="card border-none">
               <div className="card-body p-0 pt-4">
                 <div className="row">
+                  {this.state.split_payment.map((item, index) => {
+                    var tt = item.amount;
+                    return (
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <div className="form-group">
+                            <label>{item.method} </label>
+                          </div>
+                        </div>
+                        <div className="col-lg-6">
+                          <div className="form-group">
+                            <input
+                              type="number"
+                              onChange={(e) => {
+                                this.add_split_amount(e.target.value, index);
+                              }}
+                              value={this.state[item.amount]}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
 
-              {
-                              this.state.split_payment.map((item,index)=>{
-                                var tt=item.amount;
-                                return(
-                                  <div className="row">
-                                    <div className="col-lg-6">
-                                      <div className="form-group">
-                                        <label>{item.method} </label>
-                                        </div>
-                                        </div>
-                                        <div className="col-lg-6">
-                                      <div className="form-group">
-                                        <input
+                  <h5>Split Total - {this.state.split_total} </h5>
 
-                                          type="number"
-                                          onChange={(e) => {
-                                            this.add_split_amount(e.target.value,index);
-                                          }}
-                                          value={this.state[item.amount]}
-                                        />  
-                                        </div>
-                                        </div>
-                                        </div>
-                                )
-                              })
-                            }
-
-                            <h5>Split Total - {this.state.split_total} </h5>
-                           
-                                   
-                            
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.mark_complete_buttonLoading ? (
                       <button
                         className="btn btn-primary btn-sm"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -805,18 +807,16 @@ export class TableOrderDetails extends Component {
                         Please wait
                       </button>
                     ) : (
-                       this.state.split_total==this.state.total_amount&&
-                       <a
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          this.mark_complete();
-                        }}
-                      >
-                        Complete Order
-                      </a>
-
-                       
-                      
+                      this.state.split_total == this.state.total_amount && (
+                        <a
+                          className="btn btn-primary btn-sm"
+                          onClick={() => {
+                            this.mark_complete();
+                          }}
+                        >
+                          Complete Order
+                        </a>
+                      )
                     )}
                   </div>
                 </div>

@@ -18,6 +18,8 @@ export class Productreport extends Component {
       load_data: false,
       page: 1,
       value: [new Date(), new Date()],
+      start_date:new Date(),
+      end_date:new Date()
     };
   }
   handleSelect(ranges) {
@@ -40,7 +42,7 @@ export class Productreport extends Component {
   }
 
   fetch_order = (page_id, status) => {
-    fetch(global.api + "get_orders_vendor", {
+    fetch(global.api + "fetch_product_reports", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -49,7 +51,8 @@ export class Productreport extends Component {
       },
       body: JSON.stringify({
         page: page_id,
-        status: status,
+        start_date: this.state.start_date,
+        end_date:this.state.end_date
       }),
     })
       .then((response) => response.json())
@@ -144,104 +147,41 @@ export class Productreport extends Component {
                         <thead>
                           <tr>
                             <th>S.no</th>
-                            <th>Amount</th>
-                            <th>Method</th>
-                            <th>Channel</th>
-                            <th>Time</th>
-                            <th>Order List</th>
+                            <th>Product Name</th>
+                            <th>Market Price</th>
+                            <th>Our Price</th>
+                            <th>Is Veg</th>
+                            <th>Total Sales</th>
                             <th>Status</th>
-                            <th style={{ textAlign: "end" }}>Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           {this.state.data.map((item, index) => (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{item.order_code}</td>
-                              <td>{item.user.name}</td>
+                              <td>{item.product_name}</td>
+                              <td>   <BiRupee />{item.market_price}</td>
                               <td>
                                 <BiRupee />
-                                {item.total_amount}
+                                {item.our_price}
                               </td>
                               <td>
-                                {moment(item.created_at).format("llll")}
-                                {}
+                               {(item.is_veg)?
+                               <p>Veg</p>:
+                                <p>Non-Veg</p>
+
+                               }
+                           
                               </td>
                               <td>
-                                {item.order_type != "TakeAway" &&
-                                item.order_type != "Delivery" ? (
-                                  <>Dine-In</>
-                                ) : (
-                                  <>{item.order_type}</>
-                                )}
+                              
+                               {(item.salesCount != null)?
+                               <p>{item.salesCount}</p>:
+                                <p>0</p>
+
+                               }
                               </td>
-                              <td>
-                                {item.order_status == "placed" ? (
-                                  <span
-                                    style={{
-                                      // color: {item.order_status == "Pending"?"red":{item.order_status == "Pending"?}"green"},
-                                      color: "#eda332",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    {item.order_status}
-                                  </span>
-                                ) : item.order_status == "ongoing" ? (
-                                  <span
-                                    style={{
-                                      color: "#eda332",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    {item.order_status}
-                                  </span>
-                                ) : item.order_status == "processed" ? (
-                                  <span
-                                    style={{
-                                      color: "#eda332",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    {item.order_status}
-                                  </span>
-                                ) : item.order_status == "completed" ? (
-                                  <span
-                                    style={{
-                                      color: "green",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    {item.order_status}
-                                  </span>
-                                ) : (
-                                  <span
-                                    style={{
-                                      color: "red",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    {item.order_status}
-                                  </span>
-                                )}
-                              </td>
-                              <td
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                <Link to={"/orderdetails/" + item.order_code}>
-                                  <button
-                                    className="btn btn-primary"
-                                    style={{
-                                      marginRight: "10px",
-                                      padding: "2px 6px",
-                                    }}
-                                  >
-                                    <i className="fa fa-eye"></i>
-                                  </button>
-                                </Link>
-                              </td>
+                             <td>{item.status}</td>
                             </tr>
                           ))}
                         </tbody>

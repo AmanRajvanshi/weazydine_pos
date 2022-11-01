@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Bars, Circles } from "react-loader-spinner";
-import profile from "../assets/images/profile.png";
-import { AuthContext } from "../AuthContextProvider";
-import blackLogo from "../assets/images/logoBlack.png";
-import moment from "moment";
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import React, { Component } from 'react';
+import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Bars, Circles } from 'react-loader-spinner';
+import profile from '../assets/images/profile.png';
+import { AuthContext } from '../AuthContextProvider';
+import blackLogo from '../assets/images/logoBlack.png';
+import moment from 'moment';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
 export class Header extends Component {
   static contextType = AuthContext;
@@ -18,8 +18,8 @@ export class Header extends Component {
       data: [],
       dropdown: false,
       is_loading: true,
-      next_page: "",
-      total_count: "",
+      next_page: '',
+      total_count: '',
     };
   }
 
@@ -28,11 +28,11 @@ export class Header extends Component {
   }
 
   logOut = () => {
-    fetch(global.api + "logout_vendor", {
-      method: "POST",
+    fetch(global.api + 'logout_vendor', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -41,7 +41,7 @@ export class Header extends Component {
       .then((json) => {
         global.token = null;
         this.context.logout();
-        this.props.navigate("/login", { replace: true });
+        this.props.navigate('/login', { replace: true });
         // this.props.navigate("/loginpassword", { replace: true });
       })
       .catch((error) => {
@@ -66,11 +66,11 @@ export class Header extends Component {
 
   fetch_notifications = (page) => {
     this.setState({ page: page, load_more: true });
-    fetch(global.api + "fetch_vendor_notification", {
-      method: "POST",
+    fetch(global.api + 'fetch_vendor_notification', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -116,7 +116,7 @@ export class Header extends Component {
               <a>
                 <h4
                   onClick={() => {
-                    this.props.navigate("/");
+                    this.props.navigate('/');
                   }}
                 >
                   <strong>{this.context.user.name}</strong>
@@ -150,7 +150,7 @@ export class Header extends Component {
               ) : (
                 <a
                   onClick={() => {
-                    toast.error("No Notifications");
+                    toast.error('No Notifications');
                   }}
                 >
                   <img
@@ -200,7 +200,7 @@ export class Header extends Component {
                         {this.state.data.map((item, index) => {
                           return (
                             <li className="notification-message">
-                              <Link to={"/" + item.notification_url}>
+                              <Link to={'/' + item.notification_url}>
                                 <div className="media d-flex">
                                   <span className="avatar flex-shrink-0">
                                     <img alt="" src={blackLogo} />
@@ -214,7 +214,7 @@ export class Header extends Component {
                                       <span className="notification-time">
                                         {moment(item.created_at)
                                           .local()
-                                          .startOf("seconds")
+                                          .startOf('seconds')
                                           .fromNow()}
                                       </span>
                                     </p>
@@ -245,7 +245,7 @@ export class Header extends Component {
                         : this.context.user.profile_pic
                     }
                     alt=""
-                    style={{ width: "40px", height: "40px" }}
+                    style={{ width: '40px', height: '40px' }}
                   />
                   <span className="status online" />
                 </span>
@@ -342,7 +342,11 @@ export class Header extends Component {
           <div className="sidebar1" id="sidebar">
             <div className="sidebar-inner slimscroll">
               <div id="sidebar-menu" className="sidebar-menu">
-                <Sidebar width={245} collapsedWidth={245}>
+                <Sidebar
+                  width={245}
+                  collapsedWidth={245}
+                  backgroundColor="rgb(249, 249, 249, 0.7)"
+                >
                   <Menu>
                     <MenuItem routerLink={<Link to="/" />}>
                       <span>Dashboard</span>
@@ -364,7 +368,7 @@ export class Header extends Component {
                         <span>Category List</span>
                       </MenuItem>
                     </SubMenu>
-                 
+
                     <SubMenu label="Inventory">
                       <MenuItem routerLink={<Link to="/inventorycategory" />}>
                         <span>Inventory Category</span>
@@ -385,18 +389,19 @@ export class Header extends Component {
                         <span>Product Report</span>
                       </MenuItem>
                     </SubMenu>
-                    
-                    <SubMenu label="Setup">
-                    <MenuItem routerLink={<Link to="/dineinlisting" />}>
-                      <span>Dine In Management</span>
+
+                    <MenuItem routerLink={<Link to="/crm" />}>
+                      <span>CRM</span>
                     </MenuItem>
+
+                    <SubMenu label="Setup">
+                      <MenuItem routerLink={<Link to="/dineinlisting" />}>
+                        <span>Dine In Management</span>
+                      </MenuItem>
                       <MenuItem routerLink={<Link to="/pickuppoint" />}>
                         <span>Pickup Points Management</span>
                       </MenuItem>
-
-
                     </SubMenu>
-                 
                   </Menu>
                 </Sidebar>
               </div>

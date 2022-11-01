@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
-import { BiRupee } from "react-icons/bi";
-import { Modal } from "react-responsive-modal";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import "react-responsive-modal/styles.css";
-import { RadioButton, RadioGroup } from "react-radio-buttons";
-import Skeletonloader from "../othercomponent/Skeletonloader";
-import no_cart from "../assets/images/cart_empty.png";
-import no_product from "../assets/images/no_products_found.png";
-import { toStatement } from "@babel/types";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import { AuthContext } from '../AuthContextProvider';
+import { Bars } from 'react-loader-spinner';
+import { BiRupee } from 'react-icons/bi';
+import { Modal } from 'react-responsive-modal';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import 'react-responsive-modal/styles.css';
+import { RadioButton, RadioGroup } from 'react-radio-buttons';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+import no_cart from '../assets/images/cart_empty.png';
+import no_product from '../assets/images/no_products_found.png';
+import { toStatement } from '@babel/types';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 class Pos extends Component {
   static contextType = AuthContext;
@@ -30,23 +30,27 @@ class Pos extends Component {
       taxes: 0,
       isModalOpen: false,
       is_buttonloding: false,
-      contact: "",
-      user_id: "",
-      name: "",
+      contact: '',
+      user_id: '',
+      name: '',
       payment_step: 0,
-      order_method: "TakeAway",
+      order_method: 'TakeAway',
       show_table: false,
       table_no: 0,
-      type: "product",
-      split:false,
-      split_payment:[{amount:0,method:"Cash"},{amount:0,method:"Card"},{amount:0,method:"UPI"}],
-      split_total:0,
+      type: 'product',
+      split: false,
+      split_payment: [
+        { amount: 0, method: 'Cash' },
+        { amount: 0, method: 'Card' },
+        { amount: 0, method: 'UPI' },
+      ],
+      split_total: 0,
     };
   }
 
   componentDidMount() {
     if (this.props.table_id != undefined) {
-      this.setState({ table_no: this.props.table_id, order_method: "DineIn" });
+      this.setState({ table_no: this.props.table_id, order_method: 'DineIn' });
       this.orderDetails(this.props.table_id);
     }
     this.fetchCategories();
@@ -60,18 +64,18 @@ class Pos extends Component {
 
   fetchProducts = (category_id, type, page) => {
     this.setState({ load_item: true });
-    fetch(global.api + "vendor_get_vendor_product", {
-      method: "POST",
+    fetch(global.api + 'vendor_get_vendor_product', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         vendor_category_id: category_id,
         product_type: type,
         page: page,
-        status: "active",
+        status: 'active',
       }),
     })
       .then((response) => response.json())
@@ -96,11 +100,11 @@ class Pos extends Component {
   };
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_vendor_category", {
-      method: "POST",
+    fetch(global.api + 'fetch_vendor_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -250,11 +254,11 @@ class Pos extends Component {
 
   search = (e) => {
     if (e.target.value.length > 3) {
-      fetch(global.api + "search_product", {
-        method: "POST",
+      fetch(global.api + 'search_product', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -292,14 +296,14 @@ class Pos extends Component {
     let rjx = /^[0]?[6789]\d{9}$/;
     let isValid = rjx.test(phoneNumber);
     if (!isValid) {
-      toast.error("Please enter valid mobile number");
+      toast.error('Please enter valid mobile number');
       this.setState({ is_buttonloding: false });
     } else {
-      fetch(global.api + "verify_contact", {
-        method: "POST",
+      fetch(global.api + 'verify_contact', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -314,12 +318,12 @@ class Pos extends Component {
             toast.error(msg);
           } else {
             this.setState({ user_id: json.data.id });
-            if (json.data.name == null || json.data.name == "") {
+            if (json.data.name == null || json.data.name == '') {
               this.setState({ payment_step: 1 });
             } else {
               this.setState({ name: json.data.name, payment_step: 2 });
             }
-            toast.success("done");
+            toast.success('done');
           }
           this.setState({ is_buttonloding: false });
           return json;
@@ -333,11 +337,11 @@ class Pos extends Component {
 
   updateCustomer = () => {
     this.setState({ is_buttonloding: true });
-    fetch(global.api + "update_customer_name", {
-      method: "POST",
+    fetch(global.api + 'update_customer_name', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -354,7 +358,7 @@ class Pos extends Component {
         } else {
           this.setState({ payment_step: 2 });
 
-          toast.success("done");
+          toast.success('done');
         }
         this.setState({ is_buttonloding: false });
         return json;
@@ -368,7 +372,7 @@ class Pos extends Component {
   };
 
   update_order_method = (method) => {
-    if (method == "DineIn") {
+    if (method == 'DineIn') {
       this.setState({ order_method: method, show_table: true });
     } else {
       this.setState({ order_method: method, show_table: false });
@@ -378,12 +382,12 @@ class Pos extends Component {
   next_step = () => {
     if (
       this.state.contact != null &&
-      this.state.contact != "" &&
-      this.state.order_method == "DineIn"
+      this.state.contact != '' &&
+      this.state.order_method == 'DineIn'
     ) {
       this.setState({ payment_step: 2 });
     } else {
-      this.setState({ user_id: "", contact: "", name: "" });
+      this.setState({ user_id: '', contact: '', name: '' });
     }
 
     this.setState({ isModalOpen: true });
@@ -394,17 +398,17 @@ class Pos extends Component {
 
     var order_method = this.state.order_method;
     if (
-      this.state.order_method != "TakeAway" &&
-      this.state.order_method != "Delivery"
+      this.state.order_method != 'TakeAway' &&
+      this.state.order_method != 'Delivery'
     ) {
       var order_method = this.state.table_no;
     }
 
-    fetch(global.api + "place_pos_order", {
-      method: "POST",
+    fetch(global.api + 'place_pos_order', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -412,7 +416,7 @@ class Pos extends Component {
         cart: this.state.cart,
         method: order_method,
         payment_method: payment_method,
-        split_payment:this.state.split_payment
+        split_payment: this.state.split_payment,
       }),
     })
       .then((response) => response.json())
@@ -430,20 +434,21 @@ class Pos extends Component {
             taxes: 0,
             grandTotal: 0,
           });
-          toast.success("Order Placed");
+          toast.success('Order Placed');
           Swal.fire({
-            title: "Order Placed",
-            text: "Order Placed Successfully",
-            icon: "success",
+            icon: 'success',
+            title: 'Order Placed',
+            text: 'Order Placed Successfully',
+            showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: "Print KOT",
-            cancelButtonText: "View Order",
-            showCloseButton: true,
+            confirmButtonText: 'Print KOT',
+            denyButtonText: `View Order`,
+            cancelButtonText: 'Close',
           }).then((result) => {
             if (result.isConfirmed) {
-              this.print_kot(json.data.id);
-            } else {
-              this.props.navigate("/orderdetails/" + json.data.order_code);
+              window.open('/print/' + json.data.order_code, '_blank');
+            } else if (result.isDenied) {
+              this.props.navigate('/orderdetails/' + json.data.order_code);
             }
           });
         }
@@ -461,18 +466,18 @@ class Pos extends Component {
   update_order_type = (table_uu_id) => {
     this.orderDetails(table_uu_id);
     this.setState({
-      order_method: "DineIn",
+      order_method: 'DineIn',
       table_no: table_uu_id,
       show_table: false,
     });
   };
 
   orderDetails = (id) => {
-    fetch(global.api + "fetch_ongoing_order_for_table", {
-      method: "POST",
+    fetch(global.api + 'fetch_ongoing_order_for_table', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -495,47 +500,38 @@ class Pos extends Component {
       .catch((error) => console.error(error))
       .finally(() => {});
   };
-  
-  guest = ()=> {
-    this.setState({ user_id: "1", contact: "0000000000", name: "Guest" });
+
+  guest = () => {
+    this.setState({ user_id: '1', contact: '0000000000', name: 'Guest' });
     this.setState({ payment_step: 2 });
     this.setState({ isModalOpen: true });
-  }
+  };
 
-
-  add_split_amount = (amount,index) => {
-    if(amount == ""){
+  add_split_amount = (amount, index) => {
+    if (amount == '') {
       amount = 0;
     }
     var split = this.state.split_payment;
 
-    var tt=0;
+    var tt = 0;
     split.map((item, i) => {
-      if(i!=index){
-       tt=parseFloat(tt)+ parseFloat(item.amount);
-      }
-      else
-      {
-        tt=parseFloat(tt)+parseFloat(amount);
+      if (i != index) {
+        tt = parseFloat(tt) + parseFloat(item.amount);
+      } else {
+        tt = parseFloat(tt) + parseFloat(amount);
       }
     });
 
-
     split[index].amount = amount;
-    this.setState({ split_payment: split,split_total:tt });
-
-    
-
+    this.setState({ split_payment: split, split_total: tt });
   };
-
-
 
   render() {
     return (
       <div className="main-wrappers">
         <Header sidebar={false} />
         {this.state.isloading ? (
-          <div className="main_loader" style={{ marginLeft: "0px" }}>
+          <div className="main_loader" style={{ marginLeft: '0px' }}>
             <Bars
               height="80"
               width="80"
@@ -551,7 +547,7 @@ class Pos extends Component {
             className="page-wrapper"
             id="sidebar"
             style={{
-              margin: "0 0 0 20px",
+              margin: '0 0 0 20px',
             }}
           >
             <div className="content">
@@ -569,13 +565,13 @@ class Pos extends Component {
                       onChange={(e) => this.search(e)}
                       placeholder="Search Here...."
                       style={{
-                        width: "100%",
-                        height: "40px",
-                        borderRadius: "5px",
-                        border: "1px solid #ccc",
-                        padding: "0 10px",
-                        position: "relative",
-                        margin: "10px 0 30px",
+                        width: '100%',
+                        height: '40px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        padding: '0 10px',
+                        position: 'relative',
+                        margin: '10px 0 30px',
                       }}
                     />
 
@@ -588,7 +584,7 @@ class Pos extends Component {
                             data-bs-toggle="tab"
                             onClick={() => {
                               this.setState({ is_loading: true });
-                              this.fetchProducts(0, "product", 1);
+                              this.fetchProducts(0, 'product', 1);
                             }}
                           >
                             Product
@@ -601,7 +597,7 @@ class Pos extends Component {
                             data-bs-toggle="tab"
                             onClick={() => {
                               this.setState({ is_loading: true });
-                              this.fetchProducts(0, "package", 1);
+                              this.fetchProducts(0, 'package', 1);
                             }}
                           >
                             Combos
@@ -620,10 +616,10 @@ class Pos extends Component {
                     )}
                     <div
                       style={{
-                        position: "fixed",
-                        width: "60%",
-                        height: "70vh",
-                        overflowX: "scroll",
+                        position: 'fixed',
+                        width: '60%',
+                        height: '70vh',
+                        overflowX: 'scroll',
                       }}
                     >
                       <div className="tabs_container">
@@ -631,7 +627,7 @@ class Pos extends Component {
                           <div
                             className="row m-0"
                             style={{
-                              paddingTop: "20px",
+                              paddingTop: '20px',
                             }}
                           >
                             {!this.state.load_item ? (
@@ -651,8 +647,8 @@ class Pos extends Component {
                                     src={no_product}
                                     alt=""
                                     style={{
-                                      height: "300px",
-                                      paddingBottom: "20px",
+                                      height: '300px',
+                                      paddingBottom: '20px',
                                     }}
                                   />
                                   <h6>No Product Found.</h6>
@@ -670,11 +666,11 @@ class Pos extends Component {
                 <div className="col-lg-4 col-sm-12 sidebar_scroll">
                   <div
                     style={{
-                      position: "fixed",
+                      position: 'fixed',
                       zIndex: 99,
-                      width: "30%",
-                      height: "90%",
-                      overflowY: "scroll",
+                      width: '30%',
+                      height: '90%',
+                      overflowY: 'scroll',
                     }}
                   >
                     <PosAdd
@@ -700,7 +696,7 @@ class Pos extends Component {
           onClose={() => this.setState({ isModalOpen: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -727,24 +723,23 @@ class Pos extends Component {
                       </div>
                     </div>
                     <div className="col-lg-6 d-flex justify-content-start">
-
-                    <a
-                          // href="javascript:void(0);"
-                          onClick={() => {
-                            this.guest();
-                          }}
-                          className="btn  btn-outline-warning btn-sm me-2"
-                        >
-                            Skip
-                        </a>
-</div>
-                        <div className="col-lg-6 d-flex justify-content-end">
+                      <a
+                        // href="javascript:void(0);"
+                        onClick={() => {
+                          this.guest();
+                        }}
+                        className="btn  btn-outline-warning btn-sm me-2"
+                      >
+                        Skip
+                      </a>
+                    </div>
+                    <div className="col-lg-6 d-flex justify-content-end">
                       {this.state.is_buttonloding ? (
                         <button
                           className="btn btn-primary btn-sm me-2"
                           style={{
-                            pointerEvents: "none",
-                            opacity: "0.8",
+                            pointerEvents: 'none',
+                            opacity: '0.8',
                           }}
                         >
                           <span
@@ -754,7 +749,6 @@ class Pos extends Component {
                           Updating
                         </button>
                       ) : (
-                        
                         <a
                           // href="javascript:void(0);"
                           onClick={() => {
@@ -798,8 +792,8 @@ class Pos extends Component {
                         <button
                           className="btn btn-primary btn-sm me-2"
                           style={{
-                            pointerEvents: "none",
-                            opacity: "0.8",
+                            pointerEvents: 'none',
+                            opacity: '0.8',
                           }}
                         >
                           <span
@@ -826,14 +820,17 @@ class Pos extends Component {
                     <div className="col-lg-12">
                       <div className="form-group">
                         <h3>Hello, {this.state.name}</h3>
-                        <h5><b>Total Payable- </b>  <BiRupee />{this.state.grandTotal}</h5>
-                        {this.state.order_method != "DineIn" ? (
-                          <label style={{ marginTop: "20px" }}>
+                        <h5>
+                          <b>Total Payable- </b> <BiRupee />
+                          {this.state.grandTotal}
+                        </h5>
+                        {this.state.order_method != 'DineIn' ? (
+                          <label style={{ marginTop: '20px' }}>
                             Select Payment Method
                           </label>
                         ) : (
-                          <label style={{ marginTop: "20px" }}>
-                            Confirm Order{" "}
+                          <label style={{ marginTop: '20px' }}>
+                            Confirm Order{' '}
                           </label>
                         )}
 
@@ -841,8 +838,8 @@ class Pos extends Component {
                           <button
                             className="btn btn-primary btn-sm me-2"
                             style={{
-                              pointerEvents: "none",
-                              opacity: "0.8",
+                              pointerEvents: 'none',
+                              opacity: '0.8',
                             }}
                           >
                             <span
@@ -853,125 +850,128 @@ class Pos extends Component {
                           </button>
                         ) : (
                           <div className="setvaluecash">
-                            {this.state.order_method != "DineIn" ? (
-                              !this.state.split?
-                              <ul>
-                                <li>
-                                  <a
-                                    onClick={() => {
-                                      this.place_order("Cash");
-                                    }}
-                                    href="javascript:void(0);"
-                                    className="paymentmethod"
-                                  >
-                                    <img
-                                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/cash.svg"
-                                      alt="img"
-                                      className="me-2"
-                                    />
-                                    Cash
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="javascript:void(0);"
-                                    onClick={() => {
-                                      this.place_order("Card");
-                                    }}
-                                    className="paymentmethod"
-                                  >
-                                    <img
-                                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/debitcard.svg"
-                                      alt="img"
-                                      className="me-2"
-                                    />
-                                    Card
-                                  </a>
-                                </li>
-                                <li>
-                                  <a
-                                    href="javascript:void(0);"
-                                    onClick={() => {
-                                      this.place_order("UPI");
-                                    }}
-                                    className="paymentmethod"
-                                  >
-                                    <img
-                                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
-                                      alt="img"
-                                      className="me-2"
-                                    />
-                                    Scan
-                                  </a>
-                                </li>
+                            {this.state.order_method != 'DineIn' ? (
+                              !this.state.split ? (
+                                <ul>
+                                  <li>
+                                    <a
+                                      onClick={() => {
+                                        this.place_order('Cash');
+                                      }}
+                                      href="javascript:void(0);"
+                                      className="paymentmethod"
+                                    >
+                                      <img
+                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/cash.svg"
+                                        alt="img"
+                                        className="me-2"
+                                      />
+                                      Cash
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="javascript:void(0);"
+                                      onClick={() => {
+                                        this.place_order('Card');
+                                      }}
+                                      className="paymentmethod"
+                                    >
+                                      <img
+                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/debitcard.svg"
+                                        alt="img"
+                                        className="me-2"
+                                      />
+                                      Card
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a
+                                      href="javascript:void(0);"
+                                      onClick={() => {
+                                        this.place_order('UPI');
+                                      }}
+                                      className="paymentmethod"
+                                    >
+                                      <img
+                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
+                                        alt="img"
+                                        className="me-2"
+                                      />
+                                      Scan
+                                    </a>
+                                  </li>
 
-                                <li>
-                                  <a
-                                    href="javascript:void(0);"
-                                    onClick={() => {
-                                      this.setState({split:true})
-                                      // this.place_order("offline-UPI");
-                                    }}
-                                    className="paymentmethod"
-                                  >
-                                    <img
-                                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
-                                      alt="img"
-                                      className="me-2"
-                                    />
-                                 Split
-                                  </a>
-                                </li>
+                                  <li>
+                                    <a
+                                      href="javascript:void(0);"
+                                      onClick={() => {
+                                        this.setState({ split: true });
+                                        // this.place_order("offline-UPI");
+                                      }}
+                                      className="paymentmethod"
+                                    >
+                                      <img
+                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/split.svg"
+                                        alt="img"
+                                        className="me-2"
+                                      />
+                                      Split
+                                    </a>
+                                  </li>
+                                </ul>
+                              ) : (
+                                <>
+                                  {this.state.split_payment.map(
+                                    (item, index) => {
+                                      var tt = item.amount;
+                                      return (
+                                        <div className="row">
+                                          <div className="col-lg-6">
+                                            <div className="form-group">
+                                              <label>{item.method} </label>
+                                            </div>
+                                          </div>
+                                          <div className="col-lg-6">
+                                            <div className="form-group">
+                                              <input
+                                                type="number"
+                                                onChange={(e) => {
+                                                  this.add_split_amount(
+                                                    e.target.value,
+                                                    index
+                                                  );
+                                                }}
+                                                value={this.state[item.amount]}
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      );
+                                    }
+                                  )}
 
-                              </ul>:
-<>{
-                              this.state.split_payment.map((item,index)=>{
-                                var tt=item.amount;
-                                return(
-                                  <div className="row">
-                                    <div className="col-lg-6">
-                                      <div className="form-group">
-                                        <label>{item.method} </label>
-                                        </div>
-                                        </div>
-                                        <div className="col-lg-6">
-                                      <div className="form-group">
-                                        <input
-
-                                          type="number"
-                                          onChange={(e) => {
-                                            this.add_split_amount(e.target.value,index);
-                                          }}
-                                          value={this.state[item.amount]}
-                                        />  
-                                        </div>
-                                        </div>
-                                        </div>
-                                )
-                              })
-                            }
-
-                            <h5>Total - {this.state.split_total} </h5>
-                            { this.state.split_total==this.state.grandTotal&&
-                             <div
-                             className="btn btn-primary"
-                             style={{ width: "100%" }}
-                             onClick={() => {
-                              this.place_order("split");
-                             }}
-                           >
-                             <h5>Place Order</h5>
-                           </div>
-
-                            }
-                                   
-                            </>
+                                  <h5>Total - {this.state.split_total} </h5>
+                                  {this.state.split_total ==
+                                    this.state.grandTotal && (
+                                    <div
+                                      className="btn btn-primary"
+                                      style={{ width: '100%' }}
+                                      onClick={() => {
+                                        this.place_order('split');
+                                      }}
+                                    >
+                                      <h5>Place Order</h5>
+                                    </div>
+                                  )}
+                                </>
+                              )
                             ) : (
-                              <ul style={{ justifyContent: "center" }}>
+                              <ul style={{ justifyContent: 'center' }}>
                                 <li>
                                   <a
                                     onClick={() => {
-                                      this.place_order("offline-cash");
+                                      this.place_order('offline-cash');
                                     }}
                                     href="javascript:void(0);"
                                     className="paymentmethod"
@@ -1067,9 +1067,9 @@ class PosAdd extends React.Component {
                   <h4>Total items : {this.props.cart.length}</h4>
                   <a
                     style={{
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                      color: "red",
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                      color: 'red',
                     }}
                     onClick={() => {
                       this.props.clear();
@@ -1111,7 +1111,7 @@ class PosAdd extends React.Component {
                                   />
                                 </div>
                                 <div className="col-6">
-                                  <p style={{ marginTop: "10px" }}>
+                                  <p style={{ marginTop: '10px' }}>
                                     X {(item.price / item.quantity).toFixed(2)}
                                   </p>
                                 </div>
@@ -1142,7 +1142,7 @@ class PosAdd extends React.Component {
                     <li>
                       <h5>Subtotal</h5>
                       <h6>
-                        {" "}
+                        {' '}
                         <BiRupee />
                         {this.props.subTotal}
                       </h6>
@@ -1150,7 +1150,7 @@ class PosAdd extends React.Component {
                     <li>
                       <h5>Tax</h5>
                       <h6>
-                        {" "}
+                        {' '}
                         <BiRupee />
                         {this.props.taxes}
                       </h6>
@@ -1158,7 +1158,7 @@ class PosAdd extends React.Component {
                     <li className="total-value">
                       <h5>Total</h5>
                       <h6>
-                        {" "}
+                        {' '}
                         <BiRupee />
                         {this.props.grandTotal}
                       </h6>
@@ -1167,7 +1167,7 @@ class PosAdd extends React.Component {
                 </div>
                 <div
                   className="btn btn-primary"
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   onClick={() => {
                     this.props.next_step();
                   }}
@@ -1251,8 +1251,8 @@ class Category extends Component {
           >
             <div
               className={
-                "product-details" +
-                (this.props.active_cat == 0 ? " active" : "")
+                'product-details' +
+                (this.props.active_cat == 0 ? ' active' : '')
               }
             >
               <h6>All</h6>
@@ -1270,8 +1270,8 @@ class Category extends Component {
                 >
                   <div
                     className={
-                      "product-details" +
-                      (this.props.active_cat == item.id ? " active" : "")
+                      'product-details' +
+                      (this.props.active_cat == item.id ? ' active' : '')
                     }
                   >
                     <h6>
@@ -1351,7 +1351,7 @@ class Products extends Component {
               <div>
                 <h4>{this.props.data.product_name}</h4>
                 <h6>
-                  {" "}
+                  {' '}
                   <BiRupee />
                   {this.props.data.our_price}
                 </h6>
@@ -1366,15 +1366,15 @@ class Products extends Component {
           center
           showCloseIcon={true}
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <h5
             className="mb-2 fw-600 font-md"
             style={{
-              paddingLeft: "10px",
-              paddingBottom: "10px",
-              borderBottom: "1px solid #e0e0e0",
+              paddingLeft: '10px',
+              paddingBottom: '10px',
+              borderBottom: '1px solid #e0e0e0',
             }}
           >
             Customise as per your taste
@@ -1402,7 +1402,7 @@ class Products extends Component {
                         iconInnerSize={10}
                         padding={10}
                         props={{
-                          className: "radio-button",
+                          className: 'radio-button',
                         }}
                         key={key}
                       >
@@ -1502,11 +1502,11 @@ class Tables extends Component {
   }
 
   fetch_table_vendors = () => {
-    fetch(global.api + "fetch_table_vendors", {
-      method: "POST",
+    fetch(global.api + 'fetch_table_vendors', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -1551,16 +1551,16 @@ class Tables extends Component {
                       >
                         <div
                           className={
-                            item.table_status == "active"
-                              ? "dash-count1"
-                              : "dash-count"
+                            item.table_status == 'active'
+                              ? 'dash-count1'
+                              : 'dash-count'
                           }
                         >
                           <div className="dash-counts">
                             <h4>{item.table_name}</h4>
                             <h6
                               style={{
-                                textTransform: "capitalize",
+                                textTransform: 'capitalize',
                               }}
                             >
                               {item.table_status}

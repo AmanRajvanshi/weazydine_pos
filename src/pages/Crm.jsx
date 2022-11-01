@@ -1,4 +1,4 @@
- import React, { Component } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Header from "../othercomponent/Header";
 import { BiRupee } from "react-icons/bi";
@@ -8,7 +8,7 @@ import moment from "moment";
 import no_order from "../assets/images/no_orders.webp";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
-class Salesreport extends Component {
+class Crm extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -42,7 +42,7 @@ class Salesreport extends Component {
   }
 
   fetch_order = (page_id, status) => {
-    fetch(global.api + "fetch_sales_reports", {
+    fetch(global.api + "fetch_customer_vendor", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -51,8 +51,7 @@ class Salesreport extends Component {
       },
       body: JSON.stringify({
         page: page_id,
-        start_date: this.state.start_date,
-        end_date:this.state.end_date
+        status:'all'
       }),
     })
       .then((response) => response.json())
@@ -87,11 +86,11 @@ class Salesreport extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Sales Report</h4>
+                <h4>Customers</h4>
               </div>
             </div>
-            <div className="comp-sec-wrapper" style={{backgroundColor:'white',padding:10,borderRadius:10}}>
-              <section className="comp-section">
+            {/* <div className="comp-sec-wrapper" style={{backgroundColor:'white',padding:10,borderRadius:10}}> */}
+              {/* <section className="comp-section">
                 <div className="row pb-4">
                   <div className="col-md-12">
                     <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
@@ -171,8 +170,8 @@ class Salesreport extends Component {
                     </ul>
                   </div>
                 </div>
-              </section>
-            </div>
+              </section> */}
+            {/* </div> */}
             {!this.state.is_loading ? (
               <div className="card">
                 {this.state.data.length > 0 ? (
@@ -182,13 +181,12 @@ class Salesreport extends Component {
                         <thead>
                           <tr>
                             <th>S.no</th>
-                            <th>OrderID</th>
-                            <th>Txn ID</th>
-                            <th>Amount</th>
-                            <th>Payment Method</th>
-                            <th>Payment Channel</th>
-                            <th>Time</th>
-                            <th>Type</th>
+                            <th>Customer Name</th>
+                            <th>Contact </th>
+                            <th>Email</th>
+                            <th>Total Orders</th>
+                            <th>Date of Joining</th>
+                            <th>Date of Birth</th>
                             {/* <th>Status</th> */}
                             {/* <th style={{ textAlign: "end" }}>Action</th> */}
                           </tr>
@@ -197,25 +195,27 @@ class Salesreport extends Component {
                           {this.state.data.map((item, index) => (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{item.orders.order_code}</td>
-                              <td>{item.payment_txn_id}</td>
+                              <td> {item.name == null ? "N/A" : item.name}</td>
+                              <td>{item.contact}</td>
                               <td>
-                                <BiRupee />
-                                {item.txn_amount}
+                                {item.email == null ? "N/A" : item.email}
+
+                                
                               </td>
                               <td>
-                                {item.txn_method}
+                            {(item.orders == null || item.orders == 0) ? "N/A" : item.orders}
+
+                            
                               </td>
-                              <td>
-                                {item.txn_channel}
-                              </td>
+                            
                               <td>
                                 {moment(item.created_at).format("llll")}
                                 {}
                               </td>
-                              <td>
-                                {item.txn_status}
-                              </td>
+                            <td>
+                                 {item.dob == null ? "N/A" : item.dob}
+
+                            </td>
                              
                               {/* <td
                                 style={{
@@ -255,7 +255,7 @@ class Salesreport extends Component {
                       }}
                     >
                       <img src={no_order} alt="" />
-                      <h3>No Records Found</h3>
+                      <h3>No Customer Found</h3>
                     </div>
                   </div>
                 )}
@@ -285,4 +285,4 @@ class Salesreport extends Component {
   }
 }
 
-export default Salesreport;
+export default Crm;

@@ -18,6 +18,8 @@ export class Orderreport extends Component {
       load_data: false,
       page: 1,
       value: [new Date(), new Date()],
+      start_date:new Date(),
+      end_date:new Date()
     };
   }
   handleSelect(ranges) {
@@ -40,7 +42,7 @@ export class Orderreport extends Component {
   }
 
   fetch_order = (page_id, status) => {
-    fetch(global.api + "get_orders_vendor", {
+    fetch(global.api + "fetch_order_reports", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -49,7 +51,8 @@ export class Orderreport extends Component {
       },
       body: JSON.stringify({
         page: page_id,
-        status: status,
+        start_date: this.state.start_date,
+        end_date:this.state.end_date
       }),
     })
       .then((response) => response.json())
@@ -95,9 +98,8 @@ export class Orderreport extends Component {
                       <li className="nav-item">
                         <DateRangePicker
                           onChange={(value) =>
-                            this.setState({
-                              value: value,
-                            })
+                            this.setState({start_date:value[0].toLocaleDateString('zh-Hans-CN'),end_date:value[1].toLocaleDateString('zh-Hans-CN'),value:value})
+                           
                           }
                           value={this.state.value}
                           maxDate={new Date()}
@@ -144,13 +146,17 @@ export class Orderreport extends Component {
                         <thead>
                           <tr>
                             <th>S.no</th>
+                            <th>Order Id</th>
+                            <th>Customer</th>
                             <th>Amount</th>
-                            <th>Method</th>
-                            <th>Channel</th>
-                            <th>Time</th>
-                            <th>Order List</th>
-                            <th>Status</th>
-                            <th style={{ textAlign: "end" }}>Action</th>
+                            <th>Discount</th>
+                            <th>Tax</th>
+                            <th>Total Amount</th>
+                          
+                            <th>Order Channel</th>
+                            <th>Date Time</th>
+                            <th>Order Type</th>
+                            <th style={{ textAlign: "end" }}>Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -161,7 +167,22 @@ export class Orderreport extends Component {
                               <td>{item.user.name}</td>
                               <td>
                                 <BiRupee />
+                                {item.order_amount}
+                              </td>
+                              <td>
+                              <BiRupee />
+                                {item.order_discount}
+                              </td>
+                            <td>
+                            <BiRupee />
+                                {item.cgst}
+                            </td>
+                              <td>
+                              <BiRupee />
                                 {item.total_amount}
+                              </td>
+                              <td>
+                                {item.channel}
                               </td>
                               <td>
                                 {moment(item.created_at).format("llll")}
@@ -224,24 +245,7 @@ export class Orderreport extends Component {
                                   </span>
                                 )}
                               </td>
-                              <td
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                <Link to={"/orderdetails/" + item.order_code}>
-                                  <button
-                                    className="btn btn-primary"
-                                    style={{
-                                      marginRight: "10px",
-                                      padding: "2px 6px",
-                                    }}
-                                  >
-                                    <i className="fa fa-eye"></i>
-                                  </button>
-                                </Link>
-                              </td>
+                             
                             </tr>
                           ))}
                         </tbody>
