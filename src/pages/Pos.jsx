@@ -55,7 +55,7 @@ class Pos extends Component {
       this.orderDetails(this.props.table_id);
     }
     this.fetchCategories();
-   // this.fetchProducts(0, this.state.type, 1);
+    // this.fetchProducts(0, this.state.type, 1);
   }
 
   active_cat = (id) => {
@@ -68,7 +68,7 @@ class Pos extends Component {
   };
 
   fetchProducts = (category_id, type, page) => {
-    this.setState({ load_item: true,product_show:true });
+    this.setState({ load_item: true, product_show: true });
     fetch(global.api + 'vendor_get_vendor_product', {
       method: 'POST',
       headers: {
@@ -118,10 +118,10 @@ class Pos extends Component {
         if (!json.status) {
         } else {
           this.setState({ category: json.data });
-        // this.fetchProducts(0, this.state.type, 1);
+          // this.fetchProducts(0, this.state.type, 1);
         }
         // console.warn(json.data)
-        this.setState({ load_item: false, isloading: false});
+        this.setState({ load_item: false, isloading: false });
         return json;
       })
       .catch((error) => console.error(error))
@@ -563,8 +563,6 @@ class Pos extends Component {
                   </div>
                 ) : (
                   <div className="col-lg-8 col-sm-12 ">
-                    
-
                     <div className="col-md-12 mb-20">
                       {/* <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
                         <li className="nav-item">
@@ -595,18 +593,16 @@ class Pos extends Component {
                         </li>
                       </ul> */}
                     </div>
-                    <div className='row'>
-                    {this.state.category.length > 0 ? (
-                
-                      <Category
-                        active_cat={this.state.active_cat}
-                        category={this.state.category}
-                        fetch_product={this.active_cat}
-                      />
-              
-                    ) : (
-                      <></>
-                    )}
+                    <div className="row">
+                      {this.state.category.length > 0 ? (
+                        <Category
+                          active_cat={this.state.active_cat}
+                          category={this.state.category}
+                          fetch_product={this.active_cat}
+                        />
+                      ) : (
+                        <></>
+                      )}
                     </div>
                     <div
                       style={{
@@ -624,81 +620,82 @@ class Pos extends Component {
                               paddingTop: '20px',
                             }}
                           >
+                            <Modal
+                              open={this.state.product_show}
+                              onClose={() => this.onCloseModal()}
+                              center
+                              showCloseIcon={true}
+                              styles={{
+                                modal: {
+                                  width: '100%',
+                                },
+                              }}
+                              classNames={{
+                                modal: 'new_modal_styling',
+                              }}
+                            >
+                              <div>
+                                <h5
+                                  className="mb-2 fw-600 font-md"
+                                  style={{
+                                    paddingLeft: '10px',
+                                    paddingBottom: '10px',
+                                    borderBottom: '1px solid #e0e0e0',
+                                  }}
+                                >
+                                  Select The Product To Add
+                                </h5>
 
-<Modal
-          open={this.state.product_show}
-          onClose={() => this.onCloseModal()}
-          center
-styles={{width:"100vw",minWidth:'100vw'}}
-          showCloseIcon={true}
-          classNames={{
-            modal: 'customModal',
-          }}
-
-        
-        >
-          <div >
-          <h5
-            className="mb-2 fw-600 font-md"
-            style={{
-              paddingLeft: '10px',
-              paddingBottom: '10px',
-              borderBottom: '1px solid #e0e0e0',
-            }}
-          >
-           Select The Product To Add
-          </h5>
-         
-          <input
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) => this.search(e)}
-                      placeholder="Search Here...."
-                      style={{
-                        width: '100%',
-                        height: '40px',
-                        borderRadius: '5px',
-                        border: '1px solid #ccc',
-                        padding: '0 10px',
-                        position: 'relative',
-                        margin: '10px 0 30px',
-                      }}
-                    />
-                    <div className='row'>
-          {!this.state.load_item ? (
-                              this.state.products.length > 0 ? (
-                                this.state.products.map((item, index) => {
-                                  return (
-                                    <Products
-                                      key={index}
-                                      data={item}
-                                      product_show={this.state.product_show}
-                                      cart={this.add_to_cart}
-                                    />
-                                  );
-                                })
-                              ) : (
-                                <div className="d-flex align-items-center justify-content-center flex-column">
-                                  <img
-                                    src={no_product}
-                                    alt=""
-                                    style={{
-                                      height: '300px',
-                                      paddingBottom: '20px',
-                                    }}
-                                  />
-                                  <h6>No Product Found.</h6>
+                                <input
+                                  type="text"
+                                  name=""
+                                  id=""
+                                  onChange={(e) => this.search(e)}
+                                  placeholder="Search Here...."
+                                  style={{
+                                    width: '100%',
+                                    height: '40px',
+                                    borderRadius: '5px',
+                                    border: '1px solid #ccc',
+                                    padding: '0 10px',
+                                    position: 'relative',
+                                    margin: '10px 0 30px',
+                                  }}
+                                />
+                                <div className="row">
+                                  {!this.state.load_item ? (
+                                    this.state.products.length > 0 ? (
+                                      this.state.products.map((item, index) => {
+                                        return (
+                                          <Products
+                                            key={index}
+                                            data={item}
+                                            product_show={
+                                              this.state.product_show
+                                            }
+                                            cart={this.add_to_cart}
+                                          />
+                                        );
+                                      })
+                                    ) : (
+                                      <div className="d-flex align-items-center justify-content-center flex-column">
+                                        <img
+                                          src={no_product}
+                                          alt=""
+                                          style={{
+                                            height: '300px',
+                                            paddingBottom: '20px',
+                                          }}
+                                        />
+                                        <h6>No Product Found.</h6>
+                                      </div>
+                                    )
+                                  ) : (
+                                    <Skeletonloader height={210} count={2} />
+                                  )}
                                 </div>
-                              )
-                            ) : (
-                              <Skeletonloader height={210} count={2} />
-                            )}
-</div>
-</div>
-
-        </Modal>
-                           
+                              </div>
+                            </Modal>
                           </div>
                         </div>
                       </div>
@@ -1284,100 +1281,95 @@ class AddDelete extends React.Component {
 class Category extends Component {
   render() {
     return (
-<>
-
-<div
-      className="col-pos-div d-flex"
-      onClick={() => {
-        this.props.fetch_product(0);
-      }}
-style={{padding:'15px'}}
-    >
-      <div className="productset flex-fill">
-        <div className="productsetimg">
-          
-        </div>
-        <div className="productsetcontent">
-          <div>
-              <h4>All</h4>
-         </div>
-         </div>
-</div>
-
-</div>
-
-          {this.props.category.length > 0 ? (
-            this.props.category.map((item, index) => (
-      <div
-      className="col-pos-div d-flex"
-      onClick={() => {
-                    this.props.fetch_product(item.id);
-                  }}
-                  style={{padding:'15px'}}
-    >
-      <div className="productset flex-fill">
-        <div className="productsetimg">
-          
-        </div>
-        <div className="productsetcontent">
-          <div>
-            <h4>   {item.name} ({item.products_count}) </h4>
-           
+      <>
+        <div
+          className="col-pos-div d-flex"
+          onClick={() => {
+            this.props.fetch_product(0);
+          }}
+          style={{ padding: '15px' }}
+        >
+          <div className="productset flex-fill">
+            {/* <div className="productsetimg"></div> */}
+            <div className="productsetcontent">
+              <div>
+                <h4>All</h4>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-              ) )
-          ) : (
-            <></>
-          )}
-    
-</>
-        // <div className='col-4'>
-        // {/* <ul className="tabs ">
-        //   <li
-        //     onClick={() => {
-        //       this.props.fetch_product(0);
-        //     }}
-        //   > */}
-        //     <div
-        //       className={
-        //         'product-details' +
-        //         (this.props.active_cat == 0 ? ' active' : '')
-        //       }
-        //     >
-        //       <h6>All</h6>
-        //     </div>
-        //   {/* </li> */}
 
-        //   {this.props.category.length > 0 ? (
-        //     this.props.category.map((item, index) => {
-        //       return (
-        //         // <li
-        //         //   key={index}
-        //         //   onClick={() => {
-        //         //     this.props.fetch_product(item.id);
-        //         //   }}
-        //         // >
-        //           <div
-        //             className={
-        //               'product-details' +
-        //               (this.props.active_cat == item.id ? ' active' : '')
-        //             }
-        //           >
-        //             <h6>
-        //               {item.name} ({item.products_count})
-        //             </h6>
-        //           </div>
-        //         // </li>
-        //       );
-        //     })
-        //   ) : (
-        //     <></>
-        //   )}
-      
-        // {/* </ul> */}
-        // </div>
+        {this.props.category.length > 0 ? (
+          this.props.category.map((item, index) => (
+            <div
+              className="col-pos-div d-flex"
+              onClick={() => {
+                this.props.fetch_product(item.id);
+              }}
+              style={{ padding: '15px' }}
+            >
+              <div className="productset flex-fill">
+                {/* <div className="productsetimg"></div> */}
+                <div className="productsetcontent">
+                  <div>
+                    <h4>
+                      {' '}
+                      {item.name} ({item.products_count}){' '}
+                    </h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
+      </>
+      // <div className='col-4'>
+      // {/* <ul className="tabs ">
+      //   <li
+      //     onClick={() => {
+      //       this.props.fetch_product(0);
+      //     }}
+      //   > */}
+      //     <div
+      //       className={
+      //         'product-details' +
+      //         (this.props.active_cat == 0 ? ' active' : '')
+      //       }
+      //     >
+      //       <h6>All</h6>
+      //     </div>
+      //   {/* </li> */}
+
+      //   {this.props.category.length > 0 ? (
+      //     this.props.category.map((item, index) => {
+      //       return (
+      //         // <li
+      //         //   key={index}
+      //         //   onClick={() => {
+      //         //     this.props.fetch_product(item.id);
+      //         //   }}
+      //         // >
+      //           <div
+      //             className={
+      //               'product-details' +
+      //               (this.props.active_cat == item.id ? ' active' : '')
+      //             }
+      //           >
+      //             <h6>
+      //               {item.name} ({item.products_count})
+      //             </h6>
+      //           </div>
+      //         // </li>
+      //       );
+      //     })
+      //   ) : (
+      //     <></>
+      //   )}
+
+      // {/* </ul> */}
+      // </div>
     );
   }
 }
@@ -1424,8 +1416,8 @@ class Products extends Component {
 
   render() {
     return (
-      <div className='col-md-3'>
-       <div
+      <div className="col-md-3">
+        <div
           className=" d-flex"
           onClick={() => {
             this.add_cart(this.props.data);
@@ -1443,31 +1435,33 @@ class Products extends Component {
        
             </div> */}
 
-       <div className="productset flex-fill" style={{padding:'10px'}}>
-          
+          <div className="productset flex-fill" style={{ padding: '10px',marginBottom:"15px" }}>
             <div className="productsetcontent">
               <div className="row">
-            <div className='col-4'>
+                <div className="col-3">
+                  <img
+                    src={this.props.data.product_img}
+                    alt="img"
+                    style={{
+                      width: '60px',
+                      objectFit: 'contain',
+                      height: '60px',
+                    }}
+                    // className="product_image"
+                  />
+                </div>
 
-            <img
-                src={this.props.data.product_img}
-                alt="img"
-                style={{ width: '60px',objectFit:'contain',height:'60px' }}
-                // className="product_image"
-              />
-            </div>
-
-              <div className='col-8'>
-              <h4>{this.props.data.product_name}</h4>
-                <h6>
-                  {' '}
-                  <BiRupee />
-                  {this.props.data.our_price}
-                </h6>
-              </div>
+                <div className="col-9">
+                  <h4>{this.props.data.product_name}</h4>
+                  <h6>
+                    {' '}
+                    <BiRupee />
+                    {this.props.data.our_price}
+                  </h6>
+                </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
 
         <Modal
