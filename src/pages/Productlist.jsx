@@ -231,8 +231,8 @@ export class Productlist extends Component {
                               <tr>
                                 <th>S.no</th>
                                 <th>Product Name</th>
-                                <th>Market Price</th>
-                                <th>Our Price</th>
+                                <th> Price</th>
+                                <th>Offer Price</th>
                                 <th>Category</th>
                                 <th>Type</th>
                                 <th>Veg/NonVeg</th>

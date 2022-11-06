@@ -181,7 +181,7 @@ class Order extends React.Component {
       data: props.dat,
       open: false,
       openupdate: false,
-      time: 5,
+      time: 0,
       id: "",
     };
   }
@@ -251,7 +251,10 @@ class Order extends React.Component {
                   <div className="row">
                     {values.order_status === "in_process" && (
                       <h6 className=" d-flex align-items-end justify-content-end">
-                        <Countdown
+
+                        {
+                          (this.context.user.kot_time_status )?
+                          <Countdown
                           date={moment(values.estimate_prepare_time).format(
                             "YYYY-MM-DD HH:mm:ss"
                           )}
@@ -265,7 +268,10 @@ class Order extends React.Component {
                           //     {props.minutes}: {props.seconds}
                           //   </span>
                           // )}
-                        />
+                        />:
+                        <></>
+                        }
+                        
                       </h6>
                     )}
                   </div>
@@ -426,45 +432,53 @@ class Order extends React.Component {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <label>Time to prepare the order.</label>
-                      <div className="d-flex align-items-center">
-                        {this.state.time <= 5 ? (
-                          <a className="btn btn-primary mx-2 disabled">
-                            <i className="fa-solid fa-minus"></i>
-                          </a>
-                        ) : (
+
+                      {
+                        (this.context.user.kot_time_status)?
+                        <>
+                        <label>Time to prepare the order.</label>
+                        <div className="d-flex align-items-center">
+                          {this.state.time <= 0 ? (
+                            <a className="btn btn-primary mx-2 disabled">
+                              <i className="fa-solid fa-minus"></i>
+                            </a>
+                          ) : (
+                            <a
+                              className="btn btn-primary mx-2"
+                              onClick={() => {
+                                this.setState({ time: this.state.time - 1 });
+                              }}
+                            >
+                              <i className="fa-solid fa-minus"></i>
+                            </a>
+                          )}
+                          <input
+                            type="text"
+                            className="text-center mx-2"
+                            onChange={(e) => {
+                              this.setState({
+                                time: e.target.value,
+                              });
+                            }}
+                            value={this.state.time}
+                            readOnly
+                          />
+                          <h6>Minutes</h6>
                           <a
                             className="btn btn-primary mx-2"
                             onClick={() => {
-                              this.setState({ time: this.state.time - 1 });
+                              this.setState({
+                                time: this.state.time + 1,
+                              });
                             }}
                           >
-                            <i className="fa-solid fa-minus"></i>
+                            <i className="fa-solid fa-add"></i>
                           </a>
-                        )}
-                        <input
-                          type="text"
-                          className="text-center mx-2"
-                          onChange={(e) => {
-                            this.setState({
-                              time: e.target.value,
-                            });
-                          }}
-                          value={this.state.time}
-                          readOnly
-                        />
-                        <h6>Minutes</h6>
-                        <a
-                          className="btn btn-primary mx-2"
-                          onClick={() => {
-                            this.setState({
-                              time: this.state.time + 1,
-                            });
-                          }}
-                        >
-                          <i className="fa-solid fa-add"></i>
-                        </a>
-                      </div>
+                        </div>
+                        </>:
+                        <label>Start preparing the order</label>
+                      }
+                   
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
@@ -489,7 +503,7 @@ class Order extends React.Component {
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
-                        Update Status
+                        Start Preparing
                       </a>
                     )}
                   </div>

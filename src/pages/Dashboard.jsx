@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider.js";
 import Skeletonloader from "../othercomponent/Skeletonloader";
 import moment from "moment";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 export class Dashboard extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -19,13 +20,13 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.get_vendor_data();
+    this.get_vendor_data("lifetime");
   }
   loader = (value) => {
     this.setState({ isloading: value });
   };
 
-  get_vendor_data = () => {
+  get_vendor_data = (range) => {
     fetch(global.api + "get_vendor_data", {
       method: "POST",
       headers: {
@@ -33,7 +34,9 @@ export class Dashboard extends Component {
         "Content-Type": "application/json",
         Authorization: this.context.token,
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({
+        range: range,
+      }),
     })
       .then((response) => response.json())
       .then((json) => {
@@ -70,10 +73,45 @@ export class Dashboard extends Component {
                 visible={true}
               />
             </div> */}
-
+   
           <div className="page-wrapper">
             <div className="content">
               <div className="row">
+              <div className="col-sm-10 col-10">
+                <h4>Overview</h4>
+                </div>
+                <div className="col-sm-2 col-2">
+                <select
+                      className="form-control"
+                          onChange={(e) => {
+                            if(e.target.value == "customrange"){
+                        
+                            }
+                            else
+                            {
+                              this.get_vendor_data(e.target.value);
+                            }
+                       
+                          }}
+
+                          value={"Sss"}
+                        style={{width:'150px'}}
+                          // className="select-container"
+                        >
+                          <option value="lifetime">LifeTime</option>
+                          <option value="today">Today</option>
+                          <option value="yesterday">Yesterday</option>
+                          <option value="thisweek">This Week</option>
+                          <option value="lastweek">Last Week</option>
+                          <option value="thismonth">This Month</option>
+                          <option value="lastmonth">Last Month</option>
+                          <option value="customrange">Custom Range</option>
+                        </select>
+
+                          <br />
+                  </div>
+
+                  
                 <div className="col-lg-3 col-sm-3 col-12">
                   <div className="dash-widget">
                     <div className="dash-widgetimg">
@@ -120,6 +158,62 @@ export class Dashboard extends Component {
                         )}
                       </h5>
                       <h6>Total Sales</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
+                          <>
+                            <BiRupee />
+                            <span className="counters">
+                              {item.total_earnning}
+                            </span>
+                          </>
+                        )}
+                      </h5>
+                      <h6>Cash Sales</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
+                          <>
+                            <BiRupee />
+                            <span className="counters">
+                              {item.total_earnning}
+                            </span>
+                          </>
+                        )}
+                      </h5>
+                      <h6>Weazy Pay</h6>
                     </div>
                   </div>
                 </div>

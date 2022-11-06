@@ -251,7 +251,7 @@ export class Addproduct extends Component {
                       </div>
                       <div className="col-lg-3 col-sm-6 col-12">
                         <div className="form-group">
-                          <label>Market Price</label>
+                          <label> Price</label>
                           <input
                             type="text"
                             onChange={(e) => {
@@ -262,7 +262,7 @@ export class Addproduct extends Component {
                       </div>
                       <div className="col-lg-3 col-sm-6 col-12">
                         <div className="form-group">
-                          <label>Our Price</label>
+                          <label>Offer Price</label>
                           <input
                             onChange={(e) => {
                               this.setState({ our_price: e.target.value });

@@ -182,12 +182,14 @@ class Salesreport extends Component {
                         <thead>
                           <tr>
                             <th>S.no</th>
-                            <th>OrderID</th>
-                            <th>Txn ID</th>
+                            <th>Time</th>
+                            
+                           
                             <th>Amount</th>
                             <th>Payment Method</th>
                             <th>Payment Channel</th>
-                            <th>Time</th>
+                            <th>OrderID</th>
+                            <th>Txn ID</th>
                             <th>Type</th>
                             {/* <th>Status</th> */}
                             {/* <th style={{ textAlign: "end" }}>Action</th> */}
@@ -197,8 +199,10 @@ class Salesreport extends Component {
                           {this.state.data.map((item, index) => (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{item.orders.order_code}</td>
-                              <td>{item.payment_txn_id}</td>
+                              <td>
+                                {moment(item.created_at).format("llll")}
+                                {}
+                              </td>
                               <td>
                                 <BiRupee />
                                 {item.txn_amount}
@@ -209,10 +213,9 @@ class Salesreport extends Component {
                               <td>
                                 {item.txn_channel}
                               </td>
-                              <td>
-                                {moment(item.created_at).format("llll")}
-                                {}
-                              </td>
+                           
+                              <td>{item.orders.order_code}</td>
+                              <td>{item.payment_txn_id}</td>
                               <td>
                                 {item.txn_status}
                               </td>

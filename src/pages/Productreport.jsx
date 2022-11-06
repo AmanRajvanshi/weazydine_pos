@@ -148,8 +148,8 @@ export class Productreport extends Component {
                           <tr>
                             <th>S.no</th>
                             <th>Product Name</th>
-                            <th>Market Price</th>
-                            <th>Our Price</th>
+                            <th>Price</th>
+                            <th>Offer Price</th>
                             <th>Is Veg</th>
                             <th>Total Sales</th>
                             <th>Status</th>
