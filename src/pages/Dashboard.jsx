@@ -180,7 +180,7 @@ export class Dashboard extends Component {
                           <>
                             <BiRupee />
                             <span className="counters">
-                              {item.total_earnning}
+                              {item.cashsale}
                             </span>
                           </>
                         )}
@@ -208,7 +208,7 @@ export class Dashboard extends Component {
                           <>
                             <BiRupee />
                             <span className="counters">
-                              {item.total_earnning}
+                              {item.weazypay}
                             </span>
                           </>
                         )}
