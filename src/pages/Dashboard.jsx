@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import { Bars } from "react-loader-spinner";
-import { BiRupee } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../AuthContextProvider.js";
-import Skeletonloader from "../othercomponent/Skeletonloader";
-import moment from "moment";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import { Bars } from 'react-loader-spinner';
+import { BiRupee } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../AuthContextProvider.js';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+import moment from 'moment';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 export class Dashboard extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -20,18 +20,18 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.get_vendor_data("lifetime");
+    this.get_vendor_data('lifetime');
   }
   loader = (value) => {
     this.setState({ isloading: value });
   };
 
   get_vendor_data = (range) => {
-    fetch(global.api + "get_vendor_data", {
-      method: "POST",
+    fetch(global.api + 'get_vendor_data', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -73,45 +73,39 @@ export class Dashboard extends Component {
                 visible={true}
               />
             </div> */}
-   
+
           <div className="page-wrapper">
             <div className="content">
               <div className="row">
-              <div className="col-sm-10 col-10">
-                <h4>Overview</h4>
+                <div className="col-sm-10 col-10">
+                  <h4>Overview</h4>
                 </div>
                 <div className="col-sm-2 col-2">
-                <select
-                      className="form-control"
-                          onChange={(e) => {
-                            if(e.target.value == "customrange"){
-                        
-                            }
-                            else
-                            {
-                              this.get_vendor_data(e.target.value);
-                            }
-                       
-                          }}
+                  <select
+                    className="form-control"
+                    onChange={(e) => {
+                      if (e.target.value == 'customrange') {
+                      } else {
+                        this.get_vendor_data(e.target.value);
+                      }
+                    }}
+                    value={'Sss'}
+                    style={{ width: '150px' }}
+                    // className="select-container"
+                  >
+                    <option value="lifetime">LifeTime</option>
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="thisweek">This Week</option>
+                    <option value="lastweek">Last Week</option>
+                    <option value="thismonth">This Month</option>
+                    <option value="lastmonth">Last Month</option>
+                    <option value="customrange">Custom Range</option>
+                  </select>
 
-                          value={"Sss"}
-                        style={{width:'150px'}}
-                          // className="select-container"
-                        >
-                          <option value="lifetime">LifeTime</option>
-                          <option value="today">Today</option>
-                          <option value="yesterday">Yesterday</option>
-                          <option value="thisweek">This Week</option>
-                          <option value="lastweek">Last Week</option>
-                          <option value="thismonth">This Month</option>
-                          <option value="lastmonth">Last Month</option>
-                          <option value="customrange">Custom Range</option>
-                        </select>
+                  <br />
+                </div>
 
-                          <br />
-                  </div>
-
-                  
                 <div className="col-lg-3 col-sm-3 col-12">
                   <div className="dash-widget">
                     <div className="dash-widgetimg">
@@ -179,9 +173,7 @@ export class Dashboard extends Component {
                         ) : (
                           <>
                             <BiRupee />
-                            <span className="counters">
-                              {item.cashsale}
-                            </span>
+                            <span className="counters">{item.cashsale}</span>
                           </>
                         )}
                       </h5>
@@ -207,13 +199,11 @@ export class Dashboard extends Component {
                         ) : (
                           <>
                             <BiRupee />
-                            <span className="counters">
-                              {item.weazypay}
-                            </span>
+                            <span className="counters">{item.total_earnning - item.cashsale}</span>
                           </>
                         )}
                       </h5>
-                      <h6>Weazy Pay</h6>
+                      <h6>Online Sales</h6>
                     </div>
                   </div>
                 </div>
@@ -233,10 +223,36 @@ export class Dashboard extends Component {
                         {this.state.isloading ? (
                           <Skeletonloader height={23} count={1} />
                         ) : (
+                          <>
+                            <BiRupee />
+                            <span className="counters">{item.weazypay}</span>
+                          </>
+                        )}
+                      </h5>
+                      <h6>Weazy Pay</h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <div className="dash-widget">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                        {this.state.isloading ? (
+                          <Skeletonloader height={23} count={1} />
+                        ) : (
                           <span className="counters">{item.shop_visit}</span>
                         )}
                       </h5>
-                      <h6>Site Visit</h6>
+                      <h6>Total QR Scans</h6>
                     </div>
                   </div>
                 </div>
@@ -292,7 +308,7 @@ class Tables extends Component {
   componentDidMount() {
     this.fetch_table_vendors();
     window.Echo.private(`checkTableStatus.` + this.context.user.id).listen(
-      ".server.created",
+      '.server.created',
       (e) => {
         this.setState({ data: e.tables });
       }
@@ -300,11 +316,11 @@ class Tables extends Component {
   }
 
   fetch_table_vendors = () => {
-    fetch(global.api + "fetch_table_vendors", {
-      method: "POST",
+    fetch(global.api + 'fetch_table_vendors', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -341,21 +357,21 @@ class Tables extends Component {
                   return (
                     <div key={index} className="col-lg-3 col-sm-6 col-12">
                       <Link
-                        to={"/tableorderdetails/" + item.table_uu_id}
+                        to={'/tableorderdetails/' + item.table_uu_id}
                         className=" d-flex w-100"
                       >
                         <div
                           className={
-                            item.table_status == "active"
-                              ? "dash-count1"
-                              : "dash-count"
+                            item.table_status == 'active'
+                              ? 'dash-count1'
+                              : 'dash-count'
                           }
                         >
                           <div className="dash-counts">
                             <h4>{item.table_name}</h4>
                             <h6
                               style={{
-                                textTransform: "capitalize",
+                                textTransform: 'capitalize',
                               }}
                             >
                               {item.table_status}
@@ -393,16 +409,16 @@ class OngoingOrders extends Component {
   }
 
   fetch_order = (page_id) => {
-    fetch(global.api + "get_orders_vendor", {
-      method: "POST",
+    fetch(global.api + 'get_orders_vendor', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         page: page_id,
-        status: "placed",
+        status: 'placed',
       }),
     })
       .then((response) => response.json())
@@ -447,18 +463,18 @@ class OngoingOrders extends Component {
                           <tr>
                             <td>{index + 1}</td>
                             <td>
-                              <Link to={"/orderdetails/" + values.order_code}>
+                              <Link to={'/orderdetails/' + values.order_code}>
                                 {values.order_code}
                               </Link>
                             </td>
                             <td
                               style={{
-                                textTransform: "capitalize",
+                                textTransform: 'capitalize',
                               }}
                             >
                               {values.order_type}
                             </td>
-                            <td>{moment(values.updated_at).format("llll")}</td>
+                            <td>{moment(values.updated_at).format('llll')}</td>
                             <td>
                               <BiRupee />
                               {values.total_amount}

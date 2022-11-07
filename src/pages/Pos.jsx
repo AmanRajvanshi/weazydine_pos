@@ -708,8 +708,7 @@ class Pos extends Component {
                       position: "fixed",
                       zIndex: 99,
                       width: "30%",
-                      height: "90%",
-                      overflowY: "scroll",
+                      height: "80%",
                     }}
                   >
                     <PosAdd

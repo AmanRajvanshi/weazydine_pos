@@ -3954,6 +3954,9 @@ hr {
   line-height: 70px;
   height: 60px;
   padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .user-menu.nav > li > a.dropdown-toggle.nav-link.show {
   background: #eeeeee;

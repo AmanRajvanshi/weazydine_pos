@@ -133,6 +133,18 @@ export class Header extends Component {
           </a>
           <ul className="nav user-menu">
             <li className="nav-item dropdown">
+              <a
+                className="dropdown-toggle nav-link"
+                onClick={() => {
+                  document.documentElement.requestFullscreen()
+                    ? document.exitFullscreen()
+                    : document.documentElement.requestFullscreen();
+                }}
+              >
+                <i className="fa-solid fa-expand"></i>
+              </a>
+            </li>
+            <li className="nav-item dropdown">
               {this.state.data.length > 0 ? (
                 <a
                   href="return false;"
