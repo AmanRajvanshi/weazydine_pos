@@ -555,7 +555,7 @@ class Pos extends Component {
               margin: "0 0 0 20px",
             }}
           >
-            <div className="content">
+            <div className="content" style={{marginTop:-30}}>
               <div className="row">
                 {this.state.show_table ? (
                   <div className="col-lg-8 col-sm-12 ">
@@ -646,10 +646,11 @@ class Pos extends Component {
                                   Select The Product To Add
                                 </h5>
 
-                                <input
+                                {/* <input
                                   type="text"
                                   name=""
                                   id=""
+                                  autofocus={}
                                   onChange={(e) => this.search(e)}
                                   placeholder="Search Here...."
                                   style={{
@@ -661,7 +662,7 @@ class Pos extends Component {
                                     position: "relative",
                                     margin: "10px 0 30px",
                                   }}
-                                />
+                                /> */}
                                 <div className="row">
                                   {!this.state.load_item ? (
                                     this.state.products.length > 0 ? (

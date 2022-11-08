@@ -20,7 +20,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.get_vendor_data('lifetime');
+    this.get_vendor_data('today');
   }
   loader = (value) => {
     this.setState({ isloading: value });
@@ -93,13 +93,14 @@ export class Dashboard extends Component {
                     style={{ width: '150px' }}
                     // className="select-container"
                   >
-                    <option value="lifetime">LifeTime</option>
+                  
                     <option value="today">Today</option>
                     <option value="yesterday">Yesterday</option>
                     <option value="thisweek">This Week</option>
                     <option value="lastweek">Last Week</option>
                     <option value="thismonth">This Month</option>
                     <option value="lastmonth">Last Month</option>
+                    <option value="lifetime">LifeTime</option>
                     <option value="customrange">Custom Range</option>
                   </select>
 

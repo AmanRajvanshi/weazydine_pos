@@ -225,7 +225,7 @@ class Order extends React.Component {
       <>
         {this.props.dat.map((values, index) => {
           return (
-            <div className="col-md-4">
+            <div className="col-md-3">
               <div
                 className="card flex-fill bg-white cursor_pointer"
                 onClick={() =>
@@ -281,7 +281,7 @@ class Order extends React.Component {
                         fontSize: "15px",
                       }}
                     >
-                      Order ID: {values.order_code} -{" "}
+                      {values.order_code} -{" "}
                       {values.order_type != "TakeAway" &&
                       values.order_type != "Delivery" ? (
                         <span>
@@ -310,7 +310,7 @@ class Order extends React.Component {
                           fontSize: "14px",
                         }}
                       >
-                        Order Status: {values.order_status}
+                        {/* Order Status: {values.order_status} */}
                       </span>
                     </h6>
                   </div>
