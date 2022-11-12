@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Header from "../othercomponent/Header";
-import { BiRupee } from "react-icons/bi";
-import { Bars } from "react-loader-spinner";
-import { AuthContext } from "../AuthContextProvider";
-import moment from "moment";
-import no_order from "../assets/images/no_orders.webp";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { toast } from "react-toastify";
-import Countdown from "react-countdown";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../othercomponent/Header';
+import { BiRupee } from 'react-icons/bi';
+import { Bars } from 'react-loader-spinner';
+import { AuthContext } from '../AuthContextProvider';
+import moment from 'moment';
+import no_order from '../assets/images/no_orders.webp';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { toast } from 'react-toastify';
+import Countdown from 'react-countdown';
 
 export class Kot extends Component {
   static contextType = AuthContext;
@@ -24,9 +24,10 @@ export class Kot extends Component {
   }
 
   componentDidMount() {
-    this.fetch_order(this.state.page, "all");
+    console.log(this.context.token);
+    this.fetch_order(this.state.page, 'all');
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
-      ".kot.status",
+      '.kot.status',
       (e) => {
         this.setState({ data: e.orders });
       }
@@ -34,11 +35,11 @@ export class Kot extends Component {
   }
 
   fetch_order = (page_id, status) => {
-    fetch(global.api + "fetch_kot_orders", {
-      method: "POST",
+    fetch(global.api + 'fetch_kot_orders', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -70,8 +71,8 @@ export class Kot extends Component {
           <div
             className="page-wrapper"
             style={{
-              margin: "0 0 0 20px",
-              padding: "0 0 0 0",
+              margin: '0 0 0 20px',
+              padding: '0 0 0 0',
             }}
           >
             <div className="content">
@@ -93,7 +94,7 @@ export class Kot extends Component {
                           data-bs-toggle="tab"
                           onClick={() => {
                             this.setState({ is_loading: true });
-                            this.fetch_order(1, "all");
+                            this.fetch_order(1, 'all');
                           }}
                         >
                           All
@@ -106,7 +107,7 @@ export class Kot extends Component {
                           data-bs-toggle="tab"
                           onClick={() => {
                             this.setState({ is_loading: true });
-                            this.fetch_order(1, "pending");
+                            this.fetch_order(1, 'pending');
                           }}
                         >
                           Pending
@@ -119,7 +120,7 @@ export class Kot extends Component {
                           data-bs-toggle="tab"
                           onClick={() => {
                             this.setState({ is_loading: true });
-                            this.fetch_order(1, "in_process");
+                            this.fetch_order(1, 'in_process');
                           }}
                         >
                           In Process
@@ -131,7 +132,8 @@ export class Kot extends Component {
                 <div className="col-md-4 d-flex justify-content-end align-items-start">
                   <Link to="/">
                     <button className="btn btn-primary btn-block">
-                      <i className="fa-solid fa-arrow-left me-2"></i>Back to Home
+                      <i className="fa-solid fa-arrow-left me-2"></i>Back to
+                      Home
                     </button>
                   </Link>
                 </div>
@@ -151,12 +153,12 @@ export class Kot extends Component {
                     <div
                       className="content"
                       style={{
-                        height: "60vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                        margin: "40px 0",
+                        height: '60vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        margin: '40px 0',
                       }}
                     >
                       <img src={no_order} alt="" />
@@ -165,7 +167,7 @@ export class Kot extends Component {
                   )}
                 </>
               ) : (
-                <div className="main_loader" style={{ marginLeft: "0px" }}>
+                <div className="main_loader" style={{ marginLeft: '0px' }}>
                   <Bars
                     height="80"
                     width="80"
@@ -195,17 +197,17 @@ class Order extends React.Component {
       open: false,
       openupdate: false,
       time: 0,
-      id: "",
+      id: '',
     };
   }
 
   change_order_status = (id, status) => {
     this.setState({ is_buttonloding: true });
-    fetch(global.api + "update_order_status", {
-      method: "POST",
+    fetch(global.api + 'update_order_status', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -221,7 +223,7 @@ class Order extends React.Component {
           toast.error(msg);
         } else {
           this.setState({ open: false, openupdate: false });
-          toast.success("Order Status Updated Successfully");
+          toast.success('Order Status Updated Successfully');
         }
         return json;
       })
@@ -242,7 +244,7 @@ class Order extends React.Component {
               <div
                 className="card flex-fill bg-white cursor_pointer"
                 onClick={() =>
-                  values.order_status == "in_process"
+                  values.order_status == 'in_process'
                     ? this.setState({ openupdate: true, id: values.order_code })
                     : this.setState({ open: true, id: values.order_code })
                 }
@@ -250,24 +252,24 @@ class Order extends React.Component {
                 <div
                   className="card-header order_details"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    borderBottom: "1px solid #e5e5e5",
-                    padding: "10px 15px",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderBottom: '1px solid #e5e5e5',
+                    padding: '10px 15px',
                     backgroundColor:
-                      values.order_status == "in_process"
-                        ? "#009000"
-                        : "#eda332",
-                    color: "#fff",
+                      values.order_status == 'in_process'
+                        ? '#009000'
+                        : '#eda332',
+                    color: '#fff',
                   }}
                 >
                   <div className="row">
-                    {values.order_status === "in_process" && (
+                    {values.order_status === 'in_process' && (
                       <h6 className=" d-flex align-items-end justify-content-end">
                         {this.context.user.kot_time_status ? (
                           <Countdown
                             date={moment(values.estimate_prepare_time).format(
-                              "YYYY-MM-DD HH:mm:ss"
+                              'YYYY-MM-DD HH:mm:ss'
                             )}
                             zeroPadDays={0}
                             zeroPadHours={0}
@@ -289,17 +291,15 @@ class Order extends React.Component {
                   <div>
                     <h6
                       style={{
-                        fontSize: "15px",
+                        fontSize: '15px',
                       }}
                     >
-                      {values.order_code} -{" "}
-                      {values.order_type != "TakeAway" &&
-                      values.order_type != "Delivery" ? (
+                      {values.order_code} -{' '}
+                      {values.order_type != 'TakeAway' &&
+                      values.order_type != 'Delivery' ? (
                         <span>
-                          Dine-In{" "}
-                          {values.table != null ? (
-                            ""
-                          ) : (
+                          Dine-In{' '}
+                          {values.table != null && (
                             <span>{values.table.table_name}</span>
                           )}
                         </span>
@@ -311,14 +311,14 @@ class Order extends React.Component {
                     <h6
                       className="mt-2"
                       style={{
-                        fontSize: "14px",
+                        fontSize: '14px',
                       }}
                     >
-                      {moment(values.updated_at).format("lll")}{" "}
+                      {moment(values.updated_at).format('lll')}{' '}
                       <span
                         style={{
-                          textTransform: "capitalize",
-                          fontSize: "14px",
+                          textTransform: 'capitalize',
+                          fontSize: '14px',
                         }}
                       >
                         {/* Order Status: {values.order_status} */}
@@ -330,14 +330,14 @@ class Order extends React.Component {
                   <section
                     className="item-section"
                     style={{
-                      padding: "20px 0 0!important",
+                      padding: '20px 0 0!important',
                     }}
                   >
                     <div className="item_row">
                       <div
                         className="sno_column_heading"
                         style={{
-                          width: "15%",
+                          width: '15%',
                         }}
                       >
                         No.
@@ -345,7 +345,7 @@ class Order extends React.Component {
                       <div
                         className="item_name_column_heading"
                         style={{
-                          width: "70%",
+                          width: '70%',
                         }}
                       >
                         Item
@@ -353,7 +353,7 @@ class Order extends React.Component {
                       <div
                         className="qty_column_heading"
                         style={{
-                          width: "15%",
+                          width: '15%',
                         }}
                       >
                         Qty.
@@ -365,7 +365,7 @@ class Order extends React.Component {
                           <div
                             className="sno_column"
                             style={{
-                              width: "15%",
+                              width: '15%',
                             }}
                           >
                             {index + 1}
@@ -373,13 +373,13 @@ class Order extends React.Component {
                           <div
                             className="item_name_column"
                             style={{
-                              width: "70%",
+                              width: '70%',
                             }}
                           >
                             <span
                               style={{
-                                fontWeight: "600px",
-                                marginRight: "10px",
+                                fontWeight: '600px',
+                                marginRight: '10px',
                               }}
                             >
                               {values.product.product_name}
@@ -387,7 +387,7 @@ class Order extends React.Component {
 
                             {values.variant != null && (
                               <span>
-                                <strong>Variant</strong> -{" "}
+                                <strong>Variant</strong> -{' '}
                                 {values.variant.variants_name}
                               </span>
                             )}
@@ -410,7 +410,7 @@ class Order extends React.Component {
                           <div
                             className="qty_column"
                             style={{
-                              width: "15%",
+                              width: '15%',
                             }}
                           >
                             x {values.product_quantity}
@@ -429,7 +429,7 @@ class Order extends React.Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -495,8 +495,8 @@ class Order extends React.Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -508,7 +508,7 @@ class Order extends React.Component {
                     ) : (
                       <a
                         onClick={() => {
-                          this.change_order_status(this.state.id, "in_process");
+                          this.change_order_status(this.state.id, 'in_process');
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
@@ -526,7 +526,7 @@ class Order extends React.Component {
           onClose={() => this.setState({ openupdate: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -559,8 +559,8 @@ class Order extends React.Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -572,7 +572,7 @@ class Order extends React.Component {
                     ) : (
                       <a
                         onClick={() => {
-                          this.change_order_status(this.state.id, "processed");
+                          this.change_order_status(this.state.id, 'processed');
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
