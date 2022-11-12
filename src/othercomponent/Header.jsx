@@ -369,7 +369,7 @@ export class Header extends Component {
                     <MenuItem routerLink={<Link to="/orderlist" />}>
                       <span>Orders</span>
                     </MenuItem>
-                    <MenuItem routerLink={<Link to="/kot" />}>
+                    <MenuItem routerLink={<a href="/kot" target="_blank"/>}>
                       <span>KOT</span>
                     </MenuItem>
                     <SubMenu label="Catalogue">

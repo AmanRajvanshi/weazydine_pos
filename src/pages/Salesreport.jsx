@@ -1,4 +1,4 @@
- import React, { Component } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Header from "../othercomponent/Header";
 import { BiRupee } from "react-icons/bi";
@@ -17,9 +17,10 @@ class Salesreport extends Component {
       is_loading: true,
       load_data: false,
       page: 1,
-      value: [new Date(), new Date()],
-      start_date:new Date(),
-      end_date:new Date()
+      isOpen: false,
+      from: new Date(),
+      to: new Date(),
+      range: "today",
     };
   }
   handleSelect(ranges) {
@@ -32,16 +33,16 @@ class Salesreport extends Component {
     // }
   }
   componentDidMount() {
-    this.fetch_order(1, "");
-    window.Echo.private(`orderstatus.(order_id)`).listen(
-      ".order.status",
-      (e) => {
-        console.log(e);
-      }
-    );
+    this.fetch_order(1, "", "today");
+    // window.Echo.private(`orderstatus.(order_id)`).listen(
+    //   ".order.status",
+    //   (e) => {
+    //     console.log(e);
+    //   }
+    // );
   }
 
-  fetch_order = (page_id, status) => {
+  fetch_order = (page_id, status, range) => {
     fetch(global.api + "fetch_sales_reports", {
       method: "POST",
       headers: {
@@ -51,8 +52,9 @@ class Salesreport extends Component {
       },
       body: JSON.stringify({
         page: page_id,
-        start_date: this.state.start_date,
-        end_date:this.state.end_date
+        range: range,
+        start_date: this.state.from,
+        end_date: this.state.to,
       }),
     })
       .then((response) => response.json())
@@ -62,7 +64,7 @@ class Salesreport extends Component {
             this.setState({ data: [], is_loading: false });
           }
         } else {
-         console.log(json.data.data);
+          console.log(json.data.data);
           this.setState({ data: json.data.data });
         }
         this.setState({ is_loading: false });
@@ -90,30 +92,67 @@ class Salesreport extends Component {
                 <h4>Sales Report</h4>
               </div>
             </div>
-            <div className="comp-sec-wrapper" style={{backgroundColor:'white',padding:10,borderRadius:10}}>
+            <div
+              className="comp-sec-wrapper"
+              style={{
+                backgroundColor: "white",
+                padding: 10,
+                borderRadius: 10,
+              }}
+            >
               <section className="comp-section">
                 <div className="row pb-4">
                   <div className="col-md-12">
                     <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
                       <li className="nav-item">
-                        <label>
-                          From To
-                        </label>
-                        <DateRangePicker
-                          onChange={(value) =>
-                            this.setState({start_date:value[0].toLocaleDateString('zh-Hans-CN'),end_date:value[1].toLocaleDateString('zh-Hans-CN'),value:value})
-                            // console.log(value[1].toLocaleDateString())
-                          }
-                          format="dd/MM/y"
+                        <label></label>
+                        <select
+                          className="form-control"
+                          onChange={(e) => {
+                            if (e.target.value == "customrange") {
+                              this.setState({
+                                isOpen: !this.state.isOpen,
+                                range: "custom",
+                              });
+                            } else {
+                              this.setState({
+                                isOpen: false,
+                                range: e.target.value,
+                              });
+                            }
+                          }}
                           value={this.state.value}
-                          maxDate={new Date()}
-                          className="date_range_picker_styling"
-                        />
+                          style={{ width: "150px", marginRight: "10px" }}
+                        >
+                          <option value="today">Today</option>
+                          <option value="yesterday">Yesterday</option>
+                          <option value="thisweek">This Week</option>
+                          <option value="lastweek">Last Week</option>
+                          <option value="thismonth">This Month</option>
+                          <option value="lastmonth">Last Month</option>
+                          <option value="lifetime">LifeTime</option>
+                          <option value="customrange">Custom Range</option>
+                        </select>
+                        {this.state.isOpen && (
+                          <DateRangePicker
+                            isOpen={this.state.isOpen}
+                            maxDate={new Date()}
+                            onChange={(value) => {
+                              this.setState({
+                                from: moment(value[0]).format(
+                                  "YYYY-MM-DD 00:00:00"
+                                ),
+                                to: moment(value[1]).format(
+                                  "YYYY-MM-DD 23:59:59"
+                                ),
+                              });
+                            }}
+                            value={[this.state.from, this.state.to]}
+                          />
+                        )}
                       </li>
                       <li className="nav-item">
-                      <label >
-                         Select type
-                        </label>
+                        <label>Select type</label>
                         <select
                           className="form-control"
                           onChange={(e) => {
@@ -121,8 +160,7 @@ class Salesreport extends Component {
                               parent_category_id: e.target.value,
                             });
                           }}
-
-                        style={{width:'150px'}}
+                          style={{ width: "150px", marginRight: "10px" }}
                           // className="select-container"
                         >
                           <option value="all">All</option>
@@ -133,9 +171,7 @@ class Salesreport extends Component {
                       </li>
 
                       <li className="nav-item">
-                      <label>
-                         Order Status
-                        </label>
+                        <label>Order Status</label>
                         <select
                           className="form-control"
                           onChange={(e) => {
@@ -143,11 +179,10 @@ class Salesreport extends Component {
                               parent_category_id: e.target.value,
                             });
                           }}
-
-                        style={{width:'150px'}}
+                          style={{ width: "150px", marginRight: "10px" }}
                           // className="select-container"
                         >
-                         <option value="all">All</option>
+                          <option value="all">All</option>
                           <option value="confirmed">Confirmed</option>
                           <option value="in_process">In process</option>
                           <option value="processed">Processed</option>
@@ -155,14 +190,14 @@ class Salesreport extends Component {
                           <option value="cancelled">Cancelled</option>
                         </select>
                       </li>
-                      <li className="nav-item" style={{paddingTop:20}}>
+                      <li className="nav-item" style={{ paddingTop: 20 }}>
                         <a
                           className="nav-link active mx-4"
                           href="#solid-rounded-justified-tab1"
                           data-bs-toggle="tab"
                           onClick={() => {
                             this.setState({ is_loading: true });
-                            this.fetch_order(1, "");
+                            this.fetch_order(1, "", this.state.range);
                           }}
                         >
                           Search
@@ -183,8 +218,7 @@ class Salesreport extends Component {
                           <tr>
                             <th>S.no</th>
                             <th>Time</th>
-                            
-                           
+
                             <th>Amount</th>
                             <th>Payment Method</th>
                             <th>Payment Channel</th>
@@ -207,19 +241,13 @@ class Salesreport extends Component {
                                 <BiRupee />
                                 {item.txn_amount}
                               </td>
-                              <td>
-                                {item.txn_method}
-                              </td>
-                              <td>
-                                {item.txn_channel}
-                              </td>
-                           
+                              <td>{item.txn_method}</td>
+                              <td>{item.txn_channel}</td>
+
                               <td>{item.orders.order_code}</td>
                               <td>{item.payment_txn_id}</td>
-                              <td>
-                                {item.txn_status}
-                              </td>
-                             
+                              <td>{item.txn_status}</td>
+
                               {/* <td
                                 style={{
                                   display: "flex",

@@ -66,66 +66,79 @@ export class Kot extends Component {
     return (
       <>
         <div className="main-wrapper">
-          <Header sidebar={false} />
+          {/* <Header sidebar={false} /> */}
           <div
             className="page-wrapper"
             style={{
               margin: "0 0 0 20px",
+              padding: "0 0 0 0",
             }}
           >
             <div className="content">
-              <div className="page-header">
-                <div className="page-title">
-                  <h4>KOT (Kitchen Order Ticket)</h4>
+              <div className="row">
+                <div className="col-md-3">
+                  <div className="page-header">
+                    <div className="page-title">
+                      <h4>KOT (Kitchen Order Ticket)</h4>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-5">
+                  <div className="col-md-12">
+                    <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
+                      <li className="nav-item">
+                        <a
+                          className="nav-link active"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "all");
+                          }}
+                        >
+                          All
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "pending");
+                          }}
+                        >
+                          Pending
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          className="nav-link"
+                          href="#solid-rounded-justified-tab1"
+                          data-bs-toggle="tab"
+                          onClick={() => {
+                            this.setState({ is_loading: true });
+                            this.fetch_order(1, "in_process");
+                          }}
+                        >
+                          In Process
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-md-4 d-flex justify-content-end align-items-start">
+                  <Link to="/">
+                    <button className="btn btn-primary btn-block">
+                      <i className="fa-solid fa-arrow-left me-2"></i>Back to Home
+                    </button>
+                  </Link>
                 </div>
               </div>
               <div className="comp-sec-wrapper">
                 <section className="comp-section">
-                  <div className="row pb-4">
-                    <div className="col-md-12">
-                      <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
-                        <li className="nav-item">
-                          <a
-                            className="nav-link active"
-                            href="#solid-rounded-justified-tab1"
-                            data-bs-toggle="tab"
-                            onClick={() => {
-                              this.setState({ is_loading: true });
-                              this.fetch_order(1, "all");
-                            }}
-                          >
-                            All
-                          </a>
-                        </li>
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            href="#solid-rounded-justified-tab1"
-                            data-bs-toggle="tab"
-                            onClick={() => {
-                              this.setState({ is_loading: true });
-                              this.fetch_order(1, "pending");
-                            }}
-                          >
-                            Pending
-                          </a>
-                        </li>
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            href="#solid-rounded-justified-tab1"
-                            data-bs-toggle="tab"
-                            onClick={() => {
-                              this.setState({ is_loading: true });
-                              this.fetch_order(1, "in_process");
-                            }}
-                          >
-                            In Process
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                  <div className="row pb-4"></div>
                 </section>
               </div>
               {!this.state.is_loading ? (
@@ -251,27 +264,25 @@ class Order extends React.Component {
                   <div className="row">
                     {values.order_status === "in_process" && (
                       <h6 className=" d-flex align-items-end justify-content-end">
-
-                        {
-                          (this.context.user.kot_time_status )?
+                        {this.context.user.kot_time_status ? (
                           <Countdown
-                          date={moment(values.estimate_prepare_time).format(
-                            "YYYY-MM-DD HH:mm:ss"
-                          )}
-                          zeroPadDays={0}
-                          zeroPadHours={0}
-                          zeroPadMinutes={2}
-                          zeroPadSeconds={2}
-                          overtime={true}
-                          // renderer={(props) => (
-                          //   <span>
-                          //     {props.minutes}: {props.seconds}
-                          //   </span>
-                          // )}
-                        />:
-                        <></>
-                        }
-                        
+                            date={moment(values.estimate_prepare_time).format(
+                              "YYYY-MM-DD HH:mm:ss"
+                            )}
+                            zeroPadDays={0}
+                            zeroPadHours={0}
+                            zeroPadMinutes={2}
+                            zeroPadSeconds={2}
+                            overtime={true}
+                            // renderer={(props) => (
+                            //   <span>
+                            //     {props.minutes}: {props.seconds}
+                            //   </span>
+                            // )}
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </h6>
                     )}
                   </div>
@@ -432,53 +443,51 @@ class Order extends React.Component {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="form-group">
-
-                      {
-                        (this.context.user.kot_time_status)?
+                      {this.context.user.kot_time_status ? (
                         <>
-                        <label>Time to prepare the order.</label>
-                        <div className="d-flex align-items-center">
-                          {this.state.time <= 0 ? (
-                            <a className="btn btn-primary mx-2 disabled">
-                              <i className="fa-solid fa-minus"></i>
-                            </a>
-                          ) : (
+                          <label>Time to prepare the order.</label>
+                          <div className="d-flex align-items-center">
+                            {this.state.time <= 0 ? (
+                              <a className="btn btn-primary mx-2 disabled">
+                                <i className="fa-solid fa-minus"></i>
+                              </a>
+                            ) : (
+                              <a
+                                className="btn btn-primary mx-2"
+                                onClick={() => {
+                                  this.setState({ time: this.state.time - 1 });
+                                }}
+                              >
+                                <i className="fa-solid fa-minus"></i>
+                              </a>
+                            )}
+                            <input
+                              type="text"
+                              className="text-center mx-2"
+                              onChange={(e) => {
+                                this.setState({
+                                  time: e.target.value,
+                                });
+                              }}
+                              value={this.state.time}
+                              readOnly
+                            />
+                            <h6>Minutes</h6>
                             <a
                               className="btn btn-primary mx-2"
                               onClick={() => {
-                                this.setState({ time: this.state.time - 1 });
+                                this.setState({
+                                  time: this.state.time + 1,
+                                });
                               }}
                             >
-                              <i className="fa-solid fa-minus"></i>
+                              <i className="fa-solid fa-add"></i>
                             </a>
-                          )}
-                          <input
-                            type="text"
-                            className="text-center mx-2"
-                            onChange={(e) => {
-                              this.setState({
-                                time: e.target.value,
-                              });
-                            }}
-                            value={this.state.time}
-                            readOnly
-                          />
-                          <h6>Minutes</h6>
-                          <a
-                            className="btn btn-primary mx-2"
-                            onClick={() => {
-                              this.setState({
-                                time: this.state.time + 1,
-                              });
-                            }}
-                          >
-                            <i className="fa-solid fa-add"></i>
-                          </a>
-                        </div>
-                        </>:
+                          </div>
+                        </>
+                      ) : (
                         <label>Start preparing the order</label>
-                      }
-                   
+                      )}
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">

@@ -6,8 +6,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider.js";
 import Skeletonloader from "../othercomponent/Skeletonloader";
 import moment from "moment";
-import DateRangePicker from "react-daterange-picker";
-import "react-daterange-picker/dist/css/react-calendar.css";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
 export class Dashboard extends Component {
   static contextType = AuthContext;
@@ -20,7 +19,8 @@ export class Dashboard extends Component {
       item: { total_earnning: 0, orders: 0, shop_visit: 0, customer: 0 },
       orders: [],
       isOpen: false,
-      value: moment.range(today.clone().subtract(7, "days"), today.clone()),
+      from: new Date(),
+      to: new Date(),
     };
   }
 
@@ -30,12 +30,10 @@ export class Dashboard extends Component {
   loader = (value) => {
     this.setState({ isloading: value });
   };
+
   onSelect = (value, states) => {
     this.setState({ value, states });
-  };
-
-  onToggle = () => {
-    this.setState({ isOpen: !this.state.isOpen });
+    console.log(value);
   };
 
   get_vendor_data = (range) => {
@@ -48,6 +46,8 @@ export class Dashboard extends Component {
       },
       body: JSON.stringify({
         range: range,
+        from:this.state.from,
+        to:this.state.to
       }),
     })
       .then((response) => response.json())
@@ -78,38 +78,25 @@ export class Dashboard extends Component {
       <>
         <div className="main-wrappers">
           <Header />
-
-          {/* <div className="main_loader">
-              <Bars
-                height="80"
-                width="80"
-                color="#eda332"
-                ariaLabel="bars-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-              />
-            </div> */}
-
           <div className="page-wrapper">
             <div className="content">
               <div className="row">
                 <div className="col-sm-2 col-2">
                   <h4>Overview</h4>
                 </div>
-                <div className="col-sm-10 col-10 d-flex justify-content-end mb-4">
+                <div className="col-sm-10 col-10 d-flex justify-content-end mb-4 flex-column align-items-end">
                   <select
                     className="form-control"
                     onChange={(e) => {
                       if (e.target.value == "customrange") {
                         this.setState({ isOpen: !this.state.isOpen });
                       } else {
+                        this.setState({ isOpen: false });
                         this.get_vendor_data(e.target.value);
                       }
                     }}
-                    value={"Sss"}
+                    value={this.state.value}
                     style={{ width: "150px" }}
-                    // className="select-container"
                   >
                     <option value="today">Today</option>
                     <option value="yesterday">Yesterday</option>
@@ -120,12 +107,19 @@ export class Dashboard extends Component {
                     <option value="lifetime">LifeTime</option>
                     <option value="customrange">Custom Range</option>
                   </select>
-
                   {this.state.isOpen && (
                     <DateRangePicker
-                      value={this.state.value}
-                      onSelect={this.onSelect}
-                      singleDateRange={true}
+                      isOpen={this.state.isOpen}
+                      maxDate={new Date()}
+                      onChange={(value) => {
+                        this.setState({
+                          from: moment(value[0]).format("YYYY-MM-DD 00:00:00"),
+                          to: moment(value[1]).format("YYYY-MM-DD 23:59:59"),
+                        });
+
+                        this.get_vendor_data("custom");
+                      }}
+                      value={[this.state.from, this.state.to]}
                     />
                   )}
                 </div>

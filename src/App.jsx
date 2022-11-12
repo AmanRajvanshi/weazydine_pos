@@ -42,7 +42,7 @@ OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
  //global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-//  global.api = 'http://192.168.1.34:8000/api/';
+  // global.api = 'http://127.0.0.1:8000/api/';
 
 //for local
 global.api = 'https://beta-dine-api.weazy.in/api/';
