@@ -39,13 +39,13 @@ import Print from './pages/Print.jsx';
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
- //global.api = 'https://dine-api.weazy.in/api/';
+ global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
   // global.api = 'http://127.0.0.1:8000/api/';
 
 //for local
-global.api = 'https://beta-dine-api.weazy.in/api/';
+//global.api = 'https://beta-dine-api.weazy.in/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -87,9 +87,9 @@ export class App extends Component {
     // console.log(Pusher);
     window.Echo = new Echo({
       broadcaster: 'pusher',
-      key: 'b8ba8023ac2fc3612e90',
+      key: '714d1999a24b68c8bf87',
       cluster: 'ap2',
-      forceTLS: false,
+      forceTLS: true,
       disableStats: true,
       authEndpoint: global.api + 'broadcasting/auth',
       auth: {
