@@ -131,7 +131,7 @@ class Pos extends Component {
   };
 
   add_to_cart = (product, vv_id, addons) => {
-    var final_price = 0;
+    let final_price = 0;
     toast.success(product.product_name + " added to cart");
     var bb = [];
     addons.map((item, index) => {
@@ -173,16 +173,16 @@ class Pos extends Component {
     var cart = this.state.cart;
 
     this.state.cart.map((item, index) => {
-      final_price = final_price + item.price;
+      final_price = parseFloat(final_price) + parseFloat(item.price);
     });
 
     if (match) {
       var quantity = cart[key].quantity + 1;
       var price = cart[key].price / cart[key].quantity;
-      final_price = final_price - cart[key].price + price * quantity;
+      final_price = parseFloat(final_price) - parseFloat(cart[key].price) + parseFloat(price) * parseFloat(quantity);
       cart[key].quantity = quantity;
 
-      cart[key].price = price * quantity;
+      cart[key].price = (parseFloat(price)* parseFloat(quantity)).toFixed(2);
       this.setState({ cart: cart });
     } else {
       let total = parseFloat(product.our_price);
@@ -198,16 +198,20 @@ class Pos extends Component {
         }
       });
 
+
+      if (this.context.user.gstin != null && this.context.user.gst_type == "inclusive") {
+        total = parseFloat(total / 1.05);
+      }
       var cart2 = {
         product_id: product.id,
         product: product,
         variant_id: vv_id,
         cart_addon: bb,
         quantity: 1,
-        price: total,
+        price: total.toFixed(2),
       };
 
-      final_price = final_price + total;
+      final_price = parseFloat(final_price)+ parseFloat( total);
       this.setState({ cart: [...this.state.cart, cart2] });
     }
 
@@ -216,11 +220,12 @@ class Pos extends Component {
 
   calculateTotal = (finalPrice) => {
     if (this.context.user.gstin != null) {
-      var gst = (finalPrice * 5) / 100;
+      let gst = parseFloat(finalPrice * 5) / 100;
+      let total = parseFloat(finalPrice )+ parseFloat(gst);
       this.setState({
-        subTotal: finalPrice,
-        taxes: gst,
-        grandTotal: finalPrice + gst,
+        subTotal: finalPrice.toFixed(2),
+        taxes: gst.toFixed(2),
+        grandTotal: total.toFixed(2),
       });
     } else {
       this.setState({
@@ -1158,7 +1163,7 @@ class PosAdd extends React.Component {
                             </div>
                           </div>
                         </li>
-                        <li>{item.price}</li>
+                        <li>     <BiRupee />{item.price}</li>
                         <li className="d-flex align-items-start">
                           <a className="confirm-text" href="#!">
                             <img
@@ -1251,15 +1256,10 @@ class AddDelete extends React.Component {
               // this.setState({ count: this.state.count - 1 });
             }}
           />
-          <input
-            type="text"
-            name="child"
-            value={this.props.quantity}
-            onChange={(e) => {
-              this.setState({ quantity: e.target.value });
-            }}
-            className="quantity-field"
-          />
+          <div style={{marginLeft:5,marginRight:5}}>
+            {this.props.quantity}
+          </div>
+         
           <input
             type="button"
             defaultValue="+"

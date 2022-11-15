@@ -24,15 +24,15 @@ export class Kot extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token);
     this.fetch_order(this.state.page, 'all');
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
       '.kot.status',
       (e) => {
-        this.setState({ data: e.orders });
+        this.fetch_order(1, 'all');
       }
     );
   }
+
 
   fetch_order = (page_id, status) => {
     fetch(global.api + 'fetch_kot_orders', {

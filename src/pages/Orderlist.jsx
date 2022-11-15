@@ -197,7 +197,12 @@ class Orderlist extends Component {
                             <tr>
                               <td>{index + 1}</td>
                               <td>{item.order_code}</td>
-                              <td>{item.user.name}</td>
+                              <td>
+                                {
+                                  (item.user.name != null)?item.user.name:"N/A"
+
+                                }
+                             </td>
                               <td>
                                 <BiRupee />
                                 {item.total_amount}

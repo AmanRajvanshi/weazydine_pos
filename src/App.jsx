@@ -88,9 +88,7 @@ export class App extends Component {
     window.Echo = new Echo({
       broadcaster: 'pusher',
       key: 'b8ba8023ac2fc3612e90',
-      cluster: 'mt',
-      wsHost: 'websockets.webixun.com',
-      wsPort: 6001,
+      cluster: 'ap2',
       forceTLS: false,
       disableStats: true,
       authEndpoint: global.api + 'broadcasting/auth',
