@@ -372,7 +372,7 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/print/:code"
+              path="/print/:code/1.pdf"
               element={
                 <RequireAuth>
                   <Print />

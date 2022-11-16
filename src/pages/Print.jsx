@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../AuthContextProvider';
 
+
 export class Print extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -298,12 +299,24 @@ export class Print extends Component {
                 <tr className="tabletitle">
                   <td />
                   <td className="Rate">
-                    <h2>Grand Total</h2>
+                    <h2
+                      style={{
+                        fontSize: '2em !important',
+                      }}
+                    >
+                      Grand Total
+                    </h2>
                   </td>
                   <td />
                   <td />
                   <td className="payment">
-                    <h2>₹ {this.state.data.total_amount}/-</h2>
+                    <h2
+                      style={{
+                        fontSize: '2em !important',
+                      }}
+                    >
+                      ₹ {this.state.data.total_amount}/-
+                    </h2>
                   </td>
                 </tr>
               </tbody>

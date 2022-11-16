@@ -8205,7 +8205,7 @@ span.select-container.select-container--default.select-container--open {
 }
 #invoice-POS h2 {
   font-size: 2em;
-  font-weight: 600;
+  font-weight: 300;
 }
 #invoice-POS h3 {
   font-size: 1.2em;
@@ -8227,7 +8227,7 @@ span.select-container.select-container--default.select-container--open {
 #invoice-POS .new_h3 {
   text-align: center;
   font-size: 1em;
-  font-weight: 600;
+  font-weight: 300;
   line-height: 2em;
 }
 #invoice-POS p {
