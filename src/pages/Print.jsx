@@ -179,20 +179,45 @@ export class Print extends Component {
             <table>
               <tbody>
                 <tr className="tabletitle">
-                  <td className="count">
-                    <h2>#</h2>
+                  <td
+                    className="count"
+                    style={{
+                      width: '10%',
+                    }}
+                  >
+                    <h2 className="table_data">#</h2>
                   </td>
-                  <td className="item">
-                    <h2>Item</h2>
+                  <td
+                    className="item"
+                    style={{
+                      width: '50%',
+                    }}
+                  >
+                    <h2 className="table_data">Item</h2>
                   </td>
-                  <td className="Hours">
-                    <h2>Qty</h2>
+                  <td
+                    className="Hours"
+                    style={{
+                      width: '10%',
+                    }}
+                  >
+                    <h2 className="table_data">Qty</h2>
                   </td>
-                  <td className="Rate">
-                    <h2>Rate</h2>
+                  <td
+                    className="Rate"
+                    style={{
+                      width: '15%',
+                    }}
+                  >
+                    <h2 className="table_data">Rate</h2>
                   </td>
-                  <td className="Amount">
-                    <h2>Amount</h2>
+                  <td
+                    className="Amount"
+                    style={{
+                      width: '15%',
+                    }}
+                  >
+                    <h2 className="table_data">Amount</h2>
                   </td>
                 </tr>
                 {this.state.cart_details.map((values, index) => {
@@ -235,7 +260,7 @@ export class Print extends Component {
                   <tr className="tabletitle">
                     <td />
                     <td className="Rate">
-                      <h2>tax(C.G.S.T)</h2>
+                      <h2>Tax(C.G.S.T)</h2>
                     </td>
                     <td />
                     <td />
@@ -248,7 +273,7 @@ export class Print extends Component {
                   <tr className="tabletitle">
                     <td />
                     <td className="Rate">
-                      <h2>tax(S.G.S.T)</h2>
+                      <h2>Tax(S.G.S.T)</h2>
                     </td>
                     <td />
                     <td />
@@ -294,7 +319,7 @@ export class Print extends Component {
         {/*End InvoiceBot*/}
         {/*KOT start*/}
         <div id="legalcopy">
-          <p className="kot_dT">
+          <p className="kot_dT kot_heading">
             Token For: {this.state.data.order_code}
             {'    '}Date: {moment(this.state.data.created_at).format('llll')}
           </p>

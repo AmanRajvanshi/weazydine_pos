@@ -39,6 +39,8 @@ build/Release
 build/*
 build
 
+loginpassword
+
 
 */.DS_Store
 
