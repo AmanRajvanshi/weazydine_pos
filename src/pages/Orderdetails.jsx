@@ -761,6 +761,28 @@ export class Orderdetails extends Component {
 
                     <a
                       // href="javascript:void(0);"
+                      className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center mb-2"
+                      onClick={() => {
+                        // window.open('/print/' + this.props.id, '_blank');
+                        // this.print();
+                        // this.BtPrint(
+                        //   document.getElementById('print').innerText
+                        // );
+                        this.sendUrlToPrint(
+                          // 'http://192.168.1.7:3000/print/' +
+                          //   this.props.id +
+                          //   '/1.pdf'
+                          'https://beta-dine-api.weazy.in/' +
+                            this.props.id +
+                            '/bill.pdf'
+                        );
+                      }}
+                    >
+                      <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                      <p>Print Receipt</p>
+                    </a>
+                    <a
+                      // href="javascript:void(0);"
                       className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
                       onClick={() => {
                         // window.open('/print/' + this.props.id, '_blank');
@@ -769,20 +791,13 @@ export class Orderdetails extends Component {
                         //   document.getElementById('print').innerText
                         // );
                         this.sendUrlToPrint(
-                          'http://192.168.1.7:3000/print/' +
+                          // 'http://192.168.1.7:3000/print/' +
+                          //   this.props.id +
+                          //   '/1.pdf'
+                          'https://beta-dine-api.weazy.in/' +
                             this.props.id +
-                            '/1.pdf'
+                            '/kot.pdf'
                         );
-                      }}
-                    >
-                      <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                      <p>Print Receipt</p>
-                    </a>
-                    <a
-                      href="javascript:void(0);"
-                      className="btn btn-submit me-2 my-2 w-100 d-flex align-items-center justify-content-center"
-                      onClick={() => {
-                        window.open('/print/' + this.props.id, '_blank');
                       }}
                     >
                       <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
@@ -1378,7 +1393,6 @@ export class Orderdetails extends Component {
     );
   }
 }
-
 
 function Navigate(props) {
   const abcd = useNavigate();
