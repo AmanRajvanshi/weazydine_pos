@@ -24,6 +24,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
+    console.log(this.context.token)
     this.fetch_notifications(this.state.page);
   }
 

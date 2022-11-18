@@ -24,6 +24,7 @@ export class Kot extends Component {
   }
 
   componentDidMount() {
+    console.log(this.context.token);
     this.fetch_order(this.state.page, 'all');
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
       '.kot.status',
@@ -32,7 +33,6 @@ export class Kot extends Component {
       }
     );
   }
-
 
   fetch_order = (page_id, status) => {
     fetch(global.api + 'fetch_kot_orders', {
@@ -320,10 +320,18 @@ class Order extends React.Component {
                           textTransform: 'capitalize',
                           fontSize: '14px',
                         }}
-                      >
-                        {/* Order Status: {values.order_status} */}
-                      </span>
+                      ></span>
                     </h6>
+                    {values.instruction !== null && (
+                      <h6
+                        className="mt-2"
+                        style={{
+                          fontSize: '14px',
+                        }}
+                      >
+                        Instructions: {values.instruction}
+                      </h6>
+                    )}
                   </div>
                 </div>
                 <div className="card-body">

@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Header from "../othercomponent/Header";
-import { BiRupee } from "react-icons/bi";
-import { Bars } from "react-loader-spinner";
-import { AuthContext } from "../AuthContextProvider";
-import moment from "moment";
-import no_order from "../assets/images/no_orders.webp";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../othercomponent/Header';
+import { BiRupee } from 'react-icons/bi';
+import { Bars } from 'react-loader-spinner';
+import { AuthContext } from '../AuthContextProvider';
+import moment from 'moment';
+import no_order from '../assets/images/no_orders.webp';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 class Salesreport extends Component {
   static contextType = AuthContext;
@@ -20,7 +20,7 @@ class Salesreport extends Component {
       isOpen: false,
       from: new Date(),
       to: new Date(),
-      range: "today",
+      range: 'today',
     };
   }
   handleSelect(ranges) {
@@ -33,7 +33,7 @@ class Salesreport extends Component {
     // }
   }
   componentDidMount() {
-    this.fetch_order(1, "", "today");
+    this.fetch_order(1, '', 'today');
     // window.Echo.private(`orderstatus.(order_id)`).listen(
     //   ".order.status",
     //   (e) => {
@@ -43,11 +43,11 @@ class Salesreport extends Component {
   }
 
   fetch_order = (page_id, status, range) => {
-    fetch(global.api + "fetch_sales_reports", {
-      method: "POST",
+    fetch(global.api + 'fetch_sales_reports', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -80,7 +80,7 @@ class Salesreport extends Component {
     const selectionRange = {
       startDate: new Date(),
       endDate: new Date(),
-      key: "selection",
+      key: 'selection',
     };
     return (
       <div className="main-wrapper">
@@ -95,7 +95,7 @@ class Salesreport extends Component {
             <div
               className="comp-sec-wrapper"
               style={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 padding: 10,
                 borderRadius: 10,
               }}
@@ -109,10 +109,10 @@ class Salesreport extends Component {
                         <select
                           className="form-control"
                           onChange={(e) => {
-                            if (e.target.value == "customrange") {
+                            if (e.target.value == 'customrange') {
                               this.setState({
                                 isOpen: !this.state.isOpen,
-                                range: "custom",
+                                range: 'custom',
                               });
                             } else {
                               this.setState({
@@ -122,7 +122,7 @@ class Salesreport extends Component {
                             }
                           }}
                           value={this.state.value}
-                          style={{ width: "150px", marginRight: "10px" }}
+                          style={{ width: '150px', marginRight: '10px' }}
                         >
                           <option value="today">Today</option>
                           <option value="yesterday">Yesterday</option>
@@ -140,10 +140,10 @@ class Salesreport extends Component {
                             onChange={(value) => {
                               this.setState({
                                 from: moment(value[0]).format(
-                                  "YYYY-MM-DD 00:00:00"
+                                  'YYYY-MM-DD 00:00:00'
                                 ),
                                 to: moment(value[1]).format(
-                                  "YYYY-MM-DD 23:59:59"
+                                  'YYYY-MM-DD 23:59:59'
                                 ),
                               });
                             }}
@@ -160,7 +160,7 @@ class Salesreport extends Component {
                               parent_category_id: e.target.value,
                             });
                           }}
-                          style={{ width: "150px", marginRight: "10px" }}
+                          style={{ width: '150px', marginRight: '10px' }}
                           // className="select-container"
                         >
                           <option value="all">All</option>
@@ -179,7 +179,7 @@ class Salesreport extends Component {
                               parent_category_id: e.target.value,
                             });
                           }}
-                          style={{ width: "150px", marginRight: "10px" }}
+                          style={{ width: '150px', marginRight: '10px' }}
                           // className="select-container"
                         >
                           <option value="all">All</option>
@@ -197,7 +197,7 @@ class Salesreport extends Component {
                           data-bs-toggle="tab"
                           onClick={() => {
                             this.setState({ is_loading: true });
-                            this.fetch_order(1, "", this.state.range);
+                            this.fetch_order(1, '', this.state.range);
                           }}
                         >
                           Search
@@ -218,7 +218,6 @@ class Salesreport extends Component {
                           <tr>
                             <th>S.no</th>
                             <th>Time</th>
-
                             <th>Amount</th>
                             <th>Payment Method</th>
                             <th>Payment Channel</th>
@@ -233,20 +232,40 @@ class Salesreport extends Component {
                           {this.state.data.map((item, index) => (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>
-                                {moment(item.created_at).format("llll")}
-                                {}
-                              </td>
+                              <td>{moment(item.created_at).format('llll')}</td>
                               <td>
                                 <BiRupee />
                                 {item.txn_amount}
                               </td>
-                              <td>{item.txn_method}</td>
-                              <td>{item.txn_channel}</td>
-
-                              <td>{item.orders.order_code}</td>
+                              <td
+                                style={{
+                                  textTransform: 'capitalize',
+                                }}
+                              >
+                                {item.txn_method}
+                              </td>
+                              <td
+                                style={{
+                                  textTransform: 'capitalize',
+                                }}
+                              >
+                                {item.txn_channel}
+                              </td>
+                              <td
+                                style={{
+                                  textTransform: 'capitalize',
+                                }}
+                              >
+                                {item.orders.order_code}
+                              </td>
                               <td>{item.payment_txn_id}</td>
-                              <td>{item.txn_status}</td>
+                              <td
+                                style={{
+                                  textTransform: 'capitalize',
+                                }}
+                              >
+                                {item.txn_status}
+                              </td>
 
                               {/* <td
                                 style={{
@@ -277,12 +296,12 @@ class Salesreport extends Component {
                     <div
                       className="content"
                       style={{
-                        height: "60vh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                        margin: "40px 0",
+                        height: '60vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        margin: '40px 0',
                       }}
                     >
                       <img src={no_order} alt="" />
@@ -295,7 +314,7 @@ class Salesreport extends Component {
               <div
                 className="main_loader"
                 style={{
-                  height: "60vh",
+                  height: '60vh',
                 }}
               >
                 <Bars

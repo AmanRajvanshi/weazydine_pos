@@ -316,7 +316,25 @@ export class Orderdetails extends Component {
                             {moment(this.state.data.updated_at).format('llll')}{' '}
                             <span
                               style={{
-                                color: '#eda332',
+                                color:
+                                  this.state.data.order_status == 'pending'
+                                    ? 'red'
+                                    : this.state.data.order_status ==
+                                      'confirmed'
+                                    ? '#eda332'
+                                    : this.state.data.order_status ==
+                                      'cancelled'
+                                    ? 'red'
+                                    : this.state.data.order_status ==
+                                      'in_process'
+                                    ? '#eda332'
+                                    : this.state.data.order_status ==
+                                      'processed'
+                                    ? '#eda332'
+                                    : this.state.data.order_status ==
+                                      'completed'
+                                    ? 'green'
+                                    : '',
                                 textTransform: 'capitalize',
                                 fontSize: '17px',
                               }}
@@ -329,6 +347,7 @@ export class Orderdetails extends Component {
                           {this.state.data.order_type != 'TakeAway' &&
                             this.state.data.order_type != 'Delivery' &&
                             this.state.data.order_status != 'completed' &&
+                            this.state.data.order_status != 'cancelled' &&
                             (this.state.generate_order_buttonLoading ? (
                               <button
                                 className="btn btn-primary btn-sm"
@@ -759,50 +778,58 @@ export class Orderdetails extends Component {
                       content={() => this.componentRef}
                     /> */}
 
-                    <a
-                      // href="javascript:void(0);"
-                      className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center mb-2"
-                      onClick={() => {
-                        // window.open('/print/' + this.props.id, '_blank');
-                        // this.print();
-                        // this.BtPrint(
-                        //   document.getElementById('print').innerText
-                        // );
-                        this.sendUrlToPrint(
-                          // 'http://192.168.1.7:3000/print/' +
-                          //   this.props.id +
-                          //   '/1.pdf'
-                          'https://beta-dine-api.weazy.in/' +
-                            this.props.id +
-                            '/bill.pdf'
-                        );
-                      }}
-                    >
-                      <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                      <p>Print Receipt</p>
-                    </a>
-                    <a
-                      // href="javascript:void(0);"
-                      className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
-                      onClick={() => {
-                        // window.open('/print/' + this.props.id, '_blank');
-                        // this.print();
-                        // this.BtPrint(
-                        //   document.getElementById('print').innerText
-                        // );
-                        this.sendUrlToPrint(
-                          // 'http://192.168.1.7:3000/print/' +
-                          //   this.props.id +
-                          //   '/1.pdf'
-                          'https://beta-dine-api.weazy.in/' +
-                            this.props.id +
-                            '/kot.pdf'
-                        );
-                      }}
-                    >
-                      <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                      <p>Print KOT</p>
-                    </a>
+                    {this.state.data.order_status != 'cancelled' && (
+                      <>
+                        <a
+                          // href="javascript:void(0);"
+                          className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center mb-2"
+                          onClick={() => {
+                            // window.open('/print/' + this.props.id, '_blank');
+                            // this.print();
+                            // this.BtPrint(
+                            //   document.getElementById('print').innerText
+                            // );
+                            this.sendUrlToPrint(
+                              // 'http://192.168.1.7:3000/print/' +
+                              //   this.props.id +
+                              //   '/1.pdf'
+                              'https://beta-dine-api.weazy.in/' +
+                                this.props.id +
+                                '/bill.pdf'
+                            );
+                          }}
+                        >
+                          <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                          <p>Print Receipt</p>
+                        </a>
+                        <>
+                          {this.state.data.order_status != 'completed' && (
+                            <a
+                              // href="javascript:void(0);"
+                              className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
+                              onClick={() => {
+                                // window.open('/print/' + this.props.id, '_blank');
+                                // this.print();
+                                // this.BtPrint(
+                                //   document.getElementById('print').innerText
+                                // );
+                                this.sendUrlToPrint(
+                                  // 'http://192.168.1.7:3000/print/' +
+                                  //   this.props.id +
+                                  //   '/1.pdf'
+                                  'https://beta-dine-api.weazy.in/' +
+                                    this.props.id +
+                                    '/kot.pdf'
+                                );
+                              }}
+                            >
+                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                              <p>Print KOT</p>
+                            </a>
+                          )}
+                        </>
+                      </>
+                    )}
                   </div>
                 </div>
               </section>

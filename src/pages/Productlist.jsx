@@ -199,7 +199,7 @@ export class Productlist extends Component {
                                   data-bs-toggle="tab"
                                   onClick={() => {
                                     this.setState({ is_loading: true });
-                                    this.fetchProducts(0, "product", 1);
+                                    this.fetchProducts(this.state.active_cat, "product", 1);
                                   }}
                                 >
                                   Product
@@ -212,7 +212,7 @@ export class Productlist extends Component {
                                   data-bs-toggle="tab"
                                   onClick={() => {
                                     this.setState({ is_loading: true });
-                                    this.fetchProducts(0, "package", 1);
+                                    this.fetchProducts(this.state.active_cat, "package", 1);
                                   }}
                                 >
                                   Combos
