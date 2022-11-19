@@ -66,6 +66,16 @@ class Pos extends Component {
   onCloseModal = () => {
     this.setState({ product_show: false });
   };
+  sendUrlToPrint = (url) => {
+    var beforeUrl = 'intent:';
+    var afterUrl = '#Intent;';
+    // Intent call with component
+    afterUrl +=
+      'component=ru.a402d.rawbtprinter.activity.PrintDownloadActivity;';
+    afterUrl += 'package=ru.a402d.rawbtprinter;end;';
+    document.location = beforeUrl + encodeURI(url) + afterUrl;
+    return false;
+  };
 
   fetchProducts = (category_id, type, page) => {
     this.setState({ load_item: true, product_show: true });
@@ -451,12 +461,17 @@ class Pos extends Component {
             text: "Order Placed Successfully",
             showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: "Print KOT",
+            confirmButtonText: "Print Receipt",
             denyButtonText: `View Order`,
             cancelButtonText: "Close",
           }).then((result) => {
             if (result.isConfirmed) {
-              window.open("/print/" + json.data.order_code, "_blank");
+              this.sendUrlToPrint(
+                // 'http://192.168.1.7:3000/print/' +
+                //   this.props.id +
+                //   '/1.pdf'
+                global.api + json.data.order_code + '/bill.pdf'
+              );
             } else if (result.isDenied) {
               this.props.navigate("/orderdetails/" + json.data.order_code);
             }

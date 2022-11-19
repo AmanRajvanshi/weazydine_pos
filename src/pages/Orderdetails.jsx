@@ -793,9 +793,7 @@ export class Orderdetails extends Component {
                               // 'http://192.168.1.7:3000/print/' +
                               //   this.props.id +
                               //   '/1.pdf'
-                              'https://beta-dine-api.weazy.in/' +
-                                this.props.id +
-                                '/bill.pdf'
+                              global.api + this.props.id + '/bill.pdf'
                             );
                           }}
                         >
@@ -817,9 +815,7 @@ export class Orderdetails extends Component {
                                   // 'http://192.168.1.7:3000/print/' +
                                   //   this.props.id +
                                   //   '/1.pdf'
-                                  'https://beta-dine-api.weazy.in/' +
-                                    this.props.id +
-                                    '/kot.pdf'
+                                  global.api + this.props.id + '/kot.pdf'
                                 );
                               }}
                             >
