@@ -333,6 +333,8 @@ class Tables extends Component {
         this.setState({ data: e.tables });
       }
     );
+
+   
   }
 
   fetch_table_vendors = () => {

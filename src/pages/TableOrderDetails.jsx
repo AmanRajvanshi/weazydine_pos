@@ -27,7 +27,7 @@ export class TableOrderDetails extends Component {
       total_amount: '',
       order_code: '',
       bill: [],
-      payment: '',
+      payment: 'UPI',
       generate_order_buttonLoading: false,
       mark_complete_buttonLoading: false,
       total_amount: '',
@@ -119,6 +119,7 @@ export class TableOrderDetails extends Component {
 
   mark_complete = () => {
     this.setState({ mark_complete_buttonLoading: true });
+
     fetch(global.api + 'update_order_status_by_vendor', {
       method: 'POST',
       headers: {
@@ -653,7 +654,8 @@ export class TableOrderDetails extends Component {
                       <div>
                         <RadioGroup
                           onChange={(value) => {
-                            this.setState({ payment: value });
+                           this.setState({ payment: value });
+                      
                           }}
                           value={this.state.payment}
                         >

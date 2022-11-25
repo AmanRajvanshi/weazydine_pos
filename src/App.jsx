@@ -36,17 +36,19 @@ import Orderreport from './pages/Orderreport.jsx';
 import Productreport from './pages/Productreport.jsx';
 import Print from './pages/Print.jsx';
 import Example from './pages/Example.jsx';
+import { toast } from "react-toastify";
+import {Howl, Howler} from 'howler';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
- global.api = 'https://dine-api.weazy.in/api/';
+ //global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
   // global.api = 'http://127.0.0.1:8000/api/';
 
 //for local
-// global.api = 'https://beta-dine-api.weazy.in/api/';
+ global.api = 'https://beta-dine-api.weazy.in/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -56,11 +58,13 @@ export class App extends Component {
       is_login: true,
       loading: true,
       user: [],
+      play: false
     };
   }
 
+ 
   componentDidMount() {
-    const items = JSON.parse(localStorage.getItem('@auth_login'));
+  const items = JSON.parse(localStorage.getItem('@auth_login'));
     if (items != null) {
       this.get_profile(items.token);
       global.vendor = items.vendor_id;
@@ -71,6 +75,7 @@ export class App extends Component {
     }
     // toast.success(global.msg);
   }
+
 
   login = (step, user, token) => {
     this.setState({
@@ -88,7 +93,8 @@ export class App extends Component {
     // console.log(Pusher);
     window.Echo = new Echo({
       broadcaster: 'pusher',
-      key: '714d1999a24b68c8bf87',
+      // key: '714d1999a24b68c8bf87', // for production
+       key: 'b8ba8023ac2fc3612e90', //for testing
       cluster: 'ap2',
       forceTLS: true,
       disableStats: true,
@@ -100,6 +106,21 @@ export class App extends Component {
         },
       },
     });
+
+    window.Echo.private(`NotificationChannel.` + user.id).listen(
+      ".notification.created",
+      (e) => {
+
+        toast(e.orders.msg.title);
+        var sound = new Howl({
+          src: ['notification.mp3'],
+          html5: true
+        });
+        sound.play();
+        // this.setState({ data: e.tables });
+      }
+    );
+  
   };
 
   get_profile = (token) => {

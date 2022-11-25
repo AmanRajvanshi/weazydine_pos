@@ -226,8 +226,6 @@ export class Header extends Component {
                                     <p className="noti-time">
                                       <span className="notification-time">
                                         {moment(item.created_at)
-                                          .local()
-                                          .startOf('seconds')
                                           .fromNow()}
                                       </span>
                                     </p>
