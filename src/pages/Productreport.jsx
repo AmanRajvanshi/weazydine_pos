@@ -58,6 +58,7 @@ export class Productreport extends Component {
         page: page_id,
         start_date: this.state.start_date,
         end_date: this.state.end_date,
+        range: this.state.range,
       }),
     })
       .then((response) => response.json())
@@ -147,7 +148,7 @@ export class Productreport extends Component {
       },
     },
     { dataField: 'salesCount', text: 'Sales Count', sort: true },
-    { dataField: 'status', text: 'Status', sort: true },
+    // { dataField: 'status', text: 'Status', sort: true },
   ];
 
   paginationOptions = {
@@ -208,7 +209,7 @@ export class Productreport extends Component {
                               });
                             }
                           }}
-                          value={this.state.value}
+                          value={this.state.range}
                           style={{ width: '150px', marginRight: '10px' }}
                         >
                           <option value="today">Today</option>

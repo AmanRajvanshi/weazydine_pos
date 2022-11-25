@@ -58,6 +58,7 @@ export class Orderreport extends Component {
         page: page_id,
         start_date: this.state.start_date,
         end_date: this.state.end_date,
+        range: this.state.range,
       }),
     })
       .then((response) => response.json())
@@ -274,7 +275,7 @@ export class Orderreport extends Component {
                               });
                             }
                           }}
-                          value={this.state.value}
+                          value={this.state.range}
                           style={{ width: '150px', marginRight: '10px' }}
                         >
                           <option value="today">Today</option>

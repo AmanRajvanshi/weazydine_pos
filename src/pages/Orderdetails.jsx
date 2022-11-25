@@ -561,6 +561,31 @@ export class Orderdetails extends Component {
                             </div>
                           </div>
                         )}
+                        {this.state.data.convenience_fee > 0 && (
+                          <div className="row">
+                            <div
+                              className="col-md-6"
+                              style={{
+                                color: '#28c76f',
+                                margin: '10px 0px 0px',
+                              }}
+                            >
+                              Convenience Fee
+                            </div>
+                            <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
+                              <div
+                                className="d-flex align-items-center"
+                                style={{
+                                  color: '#28c76f',
+                                  margin: '10px 0px 0px',
+                                }}
+                              >
+                                <BiRupee />
+                                {this.state.data.convenience_fee}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                         <div className="row">
                           <div className="col-md-6 grand_total">
                             Grand Total
