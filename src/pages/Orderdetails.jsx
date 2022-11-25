@@ -313,7 +313,7 @@ export class Orderdetails extends Component {
                           </h5>
 
                           <h6 className="order_date mt-2">
-                            {moment(this.state.data.updated_at).format('llll')}{' '}
+                            {moment(this.state.data.created_at).format('llll')}{' '}
                             <span
                               style={{
                                 color:

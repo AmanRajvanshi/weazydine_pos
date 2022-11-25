@@ -36,19 +36,20 @@ import Orderreport from './pages/Orderreport.jsx';
 import Productreport from './pages/Productreport.jsx';
 import Print from './pages/Print.jsx';
 import Example from './pages/Example.jsx';
-import { toast } from "react-toastify";
-import {Howl, Howler} from 'howler';
+import { toast } from 'react-toastify';
+import { Howl, Howler } from 'howler';
+import Tables from './pages/Tables.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
- //global.api = 'https://dine-api.weazy.in/api/';
+//global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-  // global.api = 'http://127.0.0.1:8000/api/';
+// global.api = 'http://127.0.0.1:8000/api/';
 
 //for local
- global.api = 'https://beta-dine-api.weazy.in/api/';
+global.api = 'https://beta-dine-api.weazy.in/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -58,13 +59,12 @@ export class App extends Component {
       is_login: true,
       loading: true,
       user: [],
-      play: false
+      play: false,
     };
   }
 
- 
   componentDidMount() {
-  const items = JSON.parse(localStorage.getItem('@auth_login'));
+    const items = JSON.parse(localStorage.getItem('@auth_login'));
     if (items != null) {
       this.get_profile(items.token);
       global.vendor = items.vendor_id;
@@ -75,7 +75,6 @@ export class App extends Component {
     }
     // toast.success(global.msg);
   }
-
 
   login = (step, user, token) => {
     this.setState({
@@ -94,7 +93,7 @@ export class App extends Component {
     window.Echo = new Echo({
       broadcaster: 'pusher',
       // key: '714d1999a24b68c8bf87', // for production
-       key: 'b8ba8023ac2fc3612e90', //for testing
+      key: 'b8ba8023ac2fc3612e90', //for testing
       cluster: 'ap2',
       forceTLS: true,
       disableStats: true,
@@ -108,19 +107,20 @@ export class App extends Component {
     });
 
     window.Echo.private(`NotificationChannel.` + user.id).listen(
-      ".notification.created",
+      '.notification.created',
       (e) => {
-
-        toast(e.orders.msg.title);
+        toast.success(e.orders.msg.title, {
+          position: 'top-right',
+          toastId: 'success1',
+        });
         var sound = new Howl({
           src: ['notification.mp3'],
-          html5: true
+          html5: true,
         });
         sound.play();
         // this.setState({ data: e.tables });
       }
     );
-  
   };
 
   get_profile = (token) => {
@@ -402,6 +402,7 @@ export class App extends Component {
             />
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
+            <Route exact path="/tables" element={<Tables />} />
             <Route exact path="/example" element={<Example />} />
             {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>

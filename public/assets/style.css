@@ -4313,7 +4313,7 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .sidebar1 {
-  background-color: transparent;
+  background-color: #fff;
   border-right: 1px solid transparent;
   margin-top: 0;
   z-index: 1001;
@@ -7990,7 +7990,7 @@ span.select-container.select-container--default.select-container--open {
   color: #070710;
   font-size: 15px;
   padding-left: 20px;
-  line-height: 12px;
+  line-height: 20px;
   padding: 0px;
   padding-top: 10px;
   width: 100%;
@@ -8374,7 +8374,7 @@ span.select-container.select-container--default.select-container--open {
   line-height: 1.5em;
 }
 
-.kot_heading{
+.kot_heading {
   text-align: center;
   font-size: 1em !important;
   font-weight: 600;
@@ -8406,4 +8406,36 @@ span.select-container.select-container--default.select-container--open {
 .nav-link.active {
   color: #fff !important;
   background-color: #eda332 !important;
+}
+
+.nav-justified .nav-item,
+.nav-justified > .nav-link {
+  text-align: left;
+}
+
+.react-bootstrap-table-pagination {
+  margin-top: 20px;
+}
+
+.react-bootstrap-table-page-btns-ul{
+  display: flex;
+  justify-content: end;
+}
+
+.react-bs-table-csv-btn{
+  float: left;
+  background-color: #eda332;
+  color: #fff;
+  border: none;
+}
+
+.react-bs-table-csv-btn:hover{
+  background-color: #eda332;
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.15);
+}
+
+.react-bootstrap-table{
+  overflow-x: scroll;
 }

@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import { Bars } from "react-loader-spinner";
-import { BiRupee } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../AuthContextProvider.js";
-import Skeletonloader from "../othercomponent/Skeletonloader";
-import moment from "moment";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import { Bars } from 'react-loader-spinner';
+import { BiRupee } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../AuthContextProvider.js';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+import moment from 'moment';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 
 export class Dashboard extends Component {
   static contextType = AuthContext;
@@ -25,7 +25,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.get_vendor_data("today");
+    this.get_vendor_data('today');
   }
   loader = (value) => {
     this.setState({ isloading: value });
@@ -37,17 +37,17 @@ export class Dashboard extends Component {
   };
 
   get_vendor_data = (range) => {
-    fetch(global.api + "get_vendor_data", {
-      method: "POST",
+    fetch(global.api + 'get_vendor_data', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         range: range,
-        from:this.state.from,
-        to:this.state.to
+        from: this.state.from,
+        to: this.state.to,
       }),
     })
       .then((response) => response.json())
@@ -71,7 +71,7 @@ export class Dashboard extends Component {
     const selectionRange = {
       startDate: new Date(),
       endDate: new Date(),
-      key: "selection",
+      key: 'selection',
     };
     let { item } = this.state;
     return (
@@ -88,7 +88,7 @@ export class Dashboard extends Component {
                   <select
                     className="form-control"
                     onChange={(e) => {
-                      if (e.target.value == "customrange") {
+                      if (e.target.value == 'customrange') {
                         this.setState({ isOpen: !this.state.isOpen });
                       } else {
                         this.setState({ isOpen: false });
@@ -96,7 +96,7 @@ export class Dashboard extends Component {
                       }
                     }}
                     value={this.state.value}
-                    style={{ width: "150px" }}
+                    style={{ width: '150px' }}
                   >
                     <option value="today">Today</option>
                     <option value="yesterday">Yesterday</option>
@@ -113,11 +113,11 @@ export class Dashboard extends Component {
                       maxDate={new Date()}
                       onChange={(value) => {
                         this.setState({
-                          from: moment(value[0]).format("YYYY-MM-DD 00:00:00"),
-                          to: moment(value[1]).format("YYYY-MM-DD 23:59:59"),
+                          from: moment(value[0]).format('YYYY-MM-DD 00:00:00'),
+                          to: moment(value[1]).format('YYYY-MM-DD 23:59:59'),
                         });
 
-                        this.get_vendor_data("custom");
+                        this.get_vendor_data('custom');
                       }}
                       value={[this.state.from, this.state.to]}
                     />
@@ -191,7 +191,9 @@ export class Dashboard extends Component {
                         ) : (
                           <>
                             <BiRupee />
-                            <span className="counters">{item.cashsale.toFixed(2)}</span>
+                            <span className="counters">
+                              {item.cashsale.toFixed(2)}
+                            </span>
                           </>
                         )}
                       </h5>
@@ -218,7 +220,7 @@ export class Dashboard extends Component {
                           <>
                             <BiRupee />
                             <span className="counters">
-                              {item.online}
+                              {item.online.toFixed(2)}
                             </span>
                           </>
                         )}
@@ -245,7 +247,9 @@ export class Dashboard extends Component {
                         ) : (
                           <>
                             <BiRupee />
-                            <span className="counters">{item.weazypay.toFixed(2)}</span>
+                            <span className="counters">
+                              {item.weazypay.toFixed(2)}
+                            </span>
                           </>
                         )}
                       </h5>
@@ -282,7 +286,7 @@ export class Dashboard extends Component {
                     <div className="dash-widgetimg">
                       <span>
                         <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/user.svg"
                           alt="img"
                         />
                       </span>
@@ -328,21 +332,19 @@ class Tables extends Component {
   componentDidMount() {
     this.fetch_table_vendors();
     window.Echo.private(`checkTableStatus.` + this.context.user.id).listen(
-      ".server.created",
+      '.server.created',
       (e) => {
         this.setState({ data: e.tables });
       }
     );
-
-   
   }
 
   fetch_table_vendors = () => {
-    fetch(global.api + "fetch_table_vendors", {
-      method: "POST",
+    fetch(global.api + 'fetch_table_vendors', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -368,44 +370,52 @@ class Tables extends Component {
   render() {
     return (
       <>
-        <h4>Dine-In</h4>
         <div className="row" style={{ marginTop: 10 }}>
           {this.state.is_loading ? (
             <Skeletonloader count={1} height={100} />
           ) : (
             <>
               {this.state.data.length > 0 ? (
-                this.state.data.map((item, index) => {
-                  return (
-                    <div key={index} className="col-lg-3 col-sm-6 col-12">
-                      <Link
-                        to={"/tableorderdetails/" + item.table_uu_id}
-                        className=" d-flex w-100"
-                      >
-                        <div
-                          className={
-                            item.table_status == "active"
-                              ? "dash-count1"
-                              : "dash-count"
-                          }
+                <>
+                  <h4
+                    style={{
+                      marginBottom: '10px',
+                    }}
+                  >
+                    Dine-In
+                  </h4>
+                  {this.state.data.map((item, index) => {
+                    return (
+                      <div key={index} className="col-lg-3 col-sm-6 col-12">
+                        <Link
+                          to={'/tableorderdetails/' + item.table_uu_id}
+                          className=" d-flex w-100"
                         >
-                          <div className="dash-counts">
-                            <h4>{item.table_name}</h4>
-                            <h6
-                              style={{
-                                textTransform: "capitalize",
-                              }}
-                            >
-                              {item.table_status}
-                            </h6>
+                          <div
+                            className={
+                              item.table_status == 'active'
+                                ? 'dash-count1'
+                                : 'dash-count'
+                            }
+                          >
+                            <div className="dash-counts">
+                              <h4>{item.table_name}</h4>
+                              <h6
+                                style={{
+                                  textTransform: 'capitalize',
+                                }}
+                              >
+                                {item.table_status}
+                              </h6>
 
-                            {/* <a href={item.qr_link}>Download QR</a> */}
+                              {/* <a href={item.qr_link}>Download QR</a> */}
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    </div>
-                  );
-                })
+                        </Link>
+                      </div>
+                    );
+                  })}
+                </>
               ) : (
                 <></>
               )}
@@ -431,16 +441,16 @@ class OngoingOrders extends Component {
   }
 
   fetch_order = (page_id) => {
-    fetch(global.api + "get_orders_vendor", {
-      method: "POST",
+    fetch(global.api + 'get_orders_vendor', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         page: page_id,
-        status: "placed",
+        status: 'placed',
       }),
     })
       .then((response) => response.json())
@@ -485,18 +495,18 @@ class OngoingOrders extends Component {
                           <tr>
                             <td>{index + 1}</td>
                             <td>
-                              <Link to={"/orderdetails/" + values.order_code}>
+                              <Link to={'/orderdetails/' + values.order_code}>
                                 {values.order_code}
                               </Link>
                             </td>
                             <td
                               style={{
-                                textTransform: "capitalize",
+                                textTransform: 'capitalize',
                               }}
                             >
                               {values.order_type}
                             </td>
-                            <td>{moment(values.updated_at).format("llll")}</td>
+                            <td>{moment(values.updated_at).format('llll')}</td>
                             <td>
                               <BiRupee />
                               {values.total_amount}

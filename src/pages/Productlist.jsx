@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Header from "../othercomponent/Header";
-import { BiRupee } from "react-icons/bi";
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
-import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
-import { Toggle } from "../othercomponent/Toggle";
-import Skeletonloader from "../othercomponent/Skeletonloader";
-import no_img from "../assets/images/no_products_found.png";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../othercomponent/Header';
+import { BiRupee } from 'react-icons/bi';
+import delete_icon from '../assets/images/icons/delete.svg';
+import edit_icon from '../assets/images/icons/edit.svg';
+import { AuthContext } from '../AuthContextProvider';
+import { Bars, Circles } from 'react-loader-spinner';
+import { Toggle } from '../othercomponent/Toggle';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+import no_img from '../assets/images/no_products_found.png';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export class Productlist extends Component {
   static contextType = AuthContext;
@@ -22,7 +23,9 @@ export class Productlist extends Component {
       active_cat: 0,
       is_loding: true,
       category_loding: true,
-      type: "product",
+      type: 'product',
+      next_page: '',
+      page: 1,
     };
   }
 
@@ -38,11 +41,11 @@ export class Productlist extends Component {
   };
 
   fetchProducts = (category_id, type, page) => {
-    fetch(global.api + "vendor_get_vendor_product", {
-      method: "POST",
+    fetch(global.api + 'vendor_get_vendor_product', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -60,8 +63,22 @@ export class Productlist extends Component {
             this.setState({ products: [] });
           }
         } else {
-          if (json.data.data.length > 0) {
+          this.setState({
+            next_page: json.data.next_page_url,
+          });
+          if (page == 1) {
             this.setState({ products: json.data.data });
+          } else {
+            {
+              this.state.next_page
+                ? this.setState({
+                  products: [...this.state.products, ...json.data.data],
+                    page: this.state.page + 1,
+                  })
+                : this.setState({
+                  products: json.data.data,
+                  });
+            }
           }
         }
         return json;
@@ -75,11 +92,11 @@ export class Productlist extends Component {
   };
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_vendor_category", {
-      method: "POST",
+    fetch(global.api + 'fetch_vendor_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -100,17 +117,17 @@ export class Productlist extends Component {
   };
 
   delete_product = (id) => {
-    fetch(global.api + "update_status_product_offer", {
-      method: "POST",
+    fetch(global.api + 'update_status_product_offer', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
         action_id: id,
-        type: "product",
-        status: "delete",
+        type: 'product',
+        status: 'delete',
       }),
     })
       .then((response) => response.json())
@@ -121,7 +138,7 @@ export class Productlist extends Component {
           // Toast.show(msg);
           toast.success(msg);
         } else {
-          toast.success("Product Deleted Successfully");
+          toast.success('Product Deleted Successfully');
           this.fetchProducts(this.state.active_cat, this.state.type, 1);
         }
       })
@@ -170,7 +187,7 @@ export class Productlist extends Component {
               <div
                 className="main_loader"
                 style={{
-                  height: "50vh",
+                  height: '50vh',
                 }}
               >
                 <Bars
@@ -199,7 +216,11 @@ export class Productlist extends Component {
                                   data-bs-toggle="tab"
                                   onClick={() => {
                                     this.setState({ is_loading: true });
-                                    this.fetchProducts(this.state.active_cat, "product", 1);
+                                    this.fetchProducts(
+                                      this.state.active_cat,
+                                      'product',
+                                      1
+                                    );
                                   }}
                                 >
                                   Product
@@ -212,7 +233,11 @@ export class Productlist extends Component {
                                   data-bs-toggle="tab"
                                   onClick={() => {
                                     this.setState({ is_loading: true });
-                                    this.fetchProducts(this.state.active_cat, "package", 1);
+                                    this.fetchProducts(
+                                      this.state.active_cat,
+                                      'package',
+                                      1
+                                    );
                                   }}
                                 >
                                   Combos
@@ -226,98 +251,126 @@ export class Productlist extends Component {
                     <div className="card">
                       <div className="card-body">
                         <div className="table-responsive">
-                          <table className="table  datanew">
-                            <thead>
-                              <tr>
-                                <th>S.no</th>
-                                <th>Product Name</th>
-                                <th> Price</th>
-                                <th>Offer Price</th>
-                                <th>Category</th>
-                                <th>Type</th>
-                                <th>Veg/NonVeg</th>
-                                <th>Status</th>
-                                <th style={{ textAlign: "end" }}>Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {this.state.products.map((item, index) => {
-                                return (
-                                  <tr>
-                                    <td>{index + 1}</td>
-                                    <td className="productimgname">
-                                      <Link
-                                        to={"/productdetails/" + item.id}
-                                        className="product-img"
-                                      >
-                                        <img
-                                          src={item.product_img}
-                                          alt="product"
+                          <InfiniteScroll
+                            dataLength={this.state.products.length}
+                            next={() => {
+                              this.fetchProducts(
+                                this.state.active_cat,
+                                this.state.type,
+                                this.state.page + 1
+                              );
+                              this.setState({
+                                // page: this.state.page + 1,
+                                loadMore: true,
+                              });
+                            }}
+                            hasMore={
+                              this.state.next_page !== null &&
+                              this.state.products.length > 0
+                            }
+                            loader={
+                              <div className="d-flex align-items-center justify-content-center w-full mt-xl">
+                                <Circles
+                                  height="30"
+                                  width="30"
+                                  color="#3b3b3b"
+                                />
+                              </div>
+                            }
+                          >
+                            <table className="table  datanew">
+                              <thead>
+                                <tr>
+                                  <th>S.no</th>
+                                  <th>Product Name</th>
+                                  <th> Price</th>
+                                  <th>Offer Price</th>
+                                  <th>Category</th>
+                                  <th>Type</th>
+                                  <th>Veg/NonVeg</th>
+                                  <th>Status</th>
+                                  <th style={{ textAlign: 'end' }}>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {this.state.products.map((item, index) => {
+                                  return (
+                                    <tr>
+                                      <td>{index + 1}</td>
+                                      <td className="productimgname">
+                                        <Link
+                                          to={'/productdetails/' + item.id}
                                           className="product-img"
-                                        />
-                                      </Link>
-                                      <Link to={"/productdetails/" + item.id}>
-                                        {item.product_name}
-                                      </Link>
-                                    </td>
-                                    <td>
-                                      <BiRupee />
-                                      {item.market_price}
-                                    </td>
-                                    <td>
-                                      <BiRupee />
-                                      {item.our_price}
-                                    </td>
-                                    <td>{item.category.name}</td>
-                                    <td>{item.type}</td>
-                                    <td>
-                                      {item.is_veg ? <>Veg</> : <> Non-Veg</>}
-                                    </td>
+                                        >
+                                          <img
+                                            src={item.product_img}
+                                            alt="product"
+                                            className="product-img"
+                                          />
+                                        </Link>
+                                        <Link to={'/productdetails/' + item.id}>
+                                          {item.product_name}
+                                        </Link>
+                                      </td>
+                                      <td>
+                                        <BiRupee />
+                                        {item.market_price}
+                                      </td>
+                                      <td>
+                                        <BiRupee />
+                                        {item.our_price}
+                                      </td>
+                                      <td>{item.category.name}</td>
+                                      <td>{item.type}</td>
+                                      <td>
+                                        {item.is_veg ? <>Veg</> : <> Non-Veg</>}
+                                      </td>
 
-                                    <td>
-                                      <Toggle
-                                        status={item.status}
-                                        product_id={item.id}
-                                        action_type="product"
-                                      />
-                                    </td>
-                                    <td style={{ textAlign: "end" }}>
-                                      <Link
-                                        to={"/editproduct/" + item.id}
-                                        className="me-3"
-                                      >
-                                        <img src={edit_icon} alt="img" />
-                                      </Link>
-                                      <a
-                                        className="confirm-text"
-                                        // onClick={() => {
-                                        //   this.delete_product(item.id);
-                                        // }}
-                                        onClick={() =>
-                                          Swal.fire({
-                                            title: "Are you sure?",
-                                            text: "You won't be able to revert this!",
-                                            icon: "warning",
-                                            showCancelButton: true,
-                                            confirmButtonColor: "#3085d6",
-                                            cancelButtonColor: "#d33",
-                                            confirmButtonText:
-                                              "Yes, delete it!",
-                                          }).then((result) => {
-                                            if (result.isConfirmed) {
-                                              this.delete_product(item.id);
-                                            }
-                                          })
-                                        }
-                                      >
-                                        <img src={delete_icon} alt="img" />
-                                      </a>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                                      <td>
+                                        <Toggle
+                                          status={item.status}
+                                          product_id={item.id}
+                                          action_type="product"
+                                        />
+                                      </td>
+                                      <td style={{ textAlign: 'end' }}>
+                                        <Link
+                                          to={'/editproduct/' + item.id}
+                                          className="me-3"
+                                        >
+                                          <img src={edit_icon} alt="img" />
+                                        </Link>
+                                        <a
+                                          className="confirm-text"
+                                          // onClick={() => {
+                                          //   this.delete_product(item.id);
+                                          // }}
+                                          onClick={() =>
+                                            Swal.fire({
+                                              title: 'Are you sure?',
+                                              text: "You won't be able to revert this!",
+                                              icon: 'warning',
+                                              showCancelButton: true,
+                                              confirmButtonColor: '#3085d6',
+                                              cancelButtonColor: '#d33',
+                                              confirmButtonText:
+                                                'Yes, delete it!',
+                                            }).then((result) => {
+                                              if (result.isConfirmed) {
+                                                this.delete_product(item.id);
+                                              }
+                                            })
+                                          }
+                                        >
+                                          <img src={delete_icon} alt="img" />
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </InfiniteScroll>
                         </div>
                       </div>
                     </div>
@@ -326,14 +379,14 @@ export class Productlist extends Component {
                   <div
                     className="d-flex align-items-center justify-content-center flex-column"
                     style={{
-                      height: "70vh",
+                      height: '70vh',
                     }}
                   >
                     <img
                       src={no_img}
                       alt=""
                       style={{
-                        height: "250px",
+                        height: '250px',
                       }}
                     />
                     <h4>No Products Found</h4>
@@ -361,8 +414,8 @@ class Category extends Component {
             >
               <div
                 className={
-                  "product-details" +
-                  (this.props.active_cat == 0 ? " active" : "")
+                  'product-details' +
+                  (this.props.active_cat == 0 ? ' active' : '')
                 }
                 href="#solid-rounded-justified-tab1"
                 data-bs-toggle="tab"
@@ -379,14 +432,14 @@ class Category extends Component {
                 >
                   <div
                     className={
-                      "product-details" +
-                      (this.props.active_cat == item.id ? " active" : "")
+                      'product-details' +
+                      (this.props.active_cat == item.id ? ' active' : '')
                     }
                     href="#solid-rounded-justified-tab1"
                     data-bs-toggle="tab"
                   >
                     <h6>
-                      {item.name}({item.products_count}){" "}
+                      {item.name}({item.products_count}){' '}
                     </h6>
                   </div>
                 </li>

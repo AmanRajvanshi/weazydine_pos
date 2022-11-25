@@ -24,7 +24,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token)
+    console.log(this.context.token);
     this.fetch_notifications(this.state.page);
   }
 
@@ -213,7 +213,7 @@ export class Header extends Component {
                         {this.state.data.map((item, index) => {
                           return (
                             <li className="notification-message">
-                              <Link to={'/' + item.notification_url}>
+                              <a href={item.notification_url}>
                                 <div className="media d-flex">
                                   <span className="avatar flex-shrink-0">
                                     <img alt="" src={blackLogo} />
@@ -225,13 +225,12 @@ export class Header extends Component {
                                     <p>{item.notification_description}</p>
                                     <p className="noti-time">
                                       <span className="notification-time">
-                                        {moment(item.created_at)
-                                          .fromNow()}
+                                        {moment(item.created_at).fromNow()}
                                       </span>
                                     </p>
                                   </div>
                                 </div>
-                              </Link>
+                              </a>
                             </li>
                           );
                         })}
@@ -356,7 +355,7 @@ export class Header extends Component {
                 <Sidebar
                   width={245}
                   collapsedWidth={245}
-                  backgroundColor="rgb(249, 249, 249, 0.7)"
+                  backgroundColor="rgb(255, 255, 255, 1)"
                 >
                   <Menu>
                     <MenuItem routerLink={<Link to="/" />}>
@@ -368,7 +367,7 @@ export class Header extends Component {
                     <MenuItem routerLink={<Link to="/orderlist" />}>
                       <span>Orders</span>
                     </MenuItem>
-                    <MenuItem routerLink={<a href="/kot" target="_blank"/>}>
+                    <MenuItem routerLink={<a href="/kot" target="_blank" />}>
                       <span>KOT</span>
                     </MenuItem>
                     <SubMenu label="Catalogue">
@@ -381,11 +380,11 @@ export class Header extends Component {
                     </SubMenu>
 
                     <SubMenu label="Inventory">
-                      <MenuItem routerLink={<Link to="/inventorycategory" />}>
-                        <span>Inventory Category</span>
-                      </MenuItem>
                       <MenuItem routerLink={<Link to="/inventoryproducts" />}>
                         <span>Inventory Products</span>
+                      </MenuItem>
+                      <MenuItem routerLink={<Link to="/inventorycategory" />}>
+                        <span>Inventory Category</span>
                       </MenuItem>
                     </SubMenu>
 

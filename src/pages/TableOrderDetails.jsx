@@ -224,7 +224,7 @@ export class TableOrderDetails extends Component {
                             <div>
                               <h5>Order ID: {this.state.data[0].order_code}</h5>
                               <h6 className="order_date mt-2">
-                                {moment(this.state.data.updated_at).format(
+                                {moment(this.state.data.created_at).format(
                                   'llll'
                                 )}
                               </h6>

@@ -7,22 +7,28 @@ import { AuthContext } from '../AuthContextProvider';
 import moment from 'moment';
 import no_order from '../assets/images/no_orders.webp';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+  ColumnToggle,
+} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 
 class Salesreport extends Component {
   static contextType = AuthContext;
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      is_loading: true,
-      load_data: false,
-      page: 1,
-      isOpen: false,
-      from: new Date(),
-      to: new Date(),
-      range: 'today',
-    };
-  }
+  state = {
+    data: [],
+    is_loading: true,
+    load_data: false,
+    page: 1,
+    isOpen: false,
+    from: new Date(),
+    to: new Date(),
+    range: 'today',
+    last_page: 1,
+  };
+
   handleSelect(ranges) {
     console.log(ranges);
     // {
@@ -32,14 +38,9 @@ class Salesreport extends Component {
     //   }
     // }
   }
+
   componentDidMount() {
     this.fetch_order(1, '', 'today');
-    // window.Echo.private(`orderstatus.(order_id)`).listen(
-    //   ".order.status",
-    //   (e) => {
-    //     console.log(e);
-    //   }
-    // );
   }
 
   fetch_order = (page_id, status, range) => {
@@ -65,7 +66,7 @@ class Salesreport extends Component {
           }
         } else {
           console.log(json.data.data);
-          this.setState({ data: json.data.data });
+          this.setState({ data: json.data.data,last_page:json.data.last_page});
         }
         this.setState({ is_loading: false });
         return json;
@@ -76,12 +77,122 @@ class Salesreport extends Component {
       .finally(() => {});
   };
 
+  defaultSorted = [
+    {
+      dataField: 'name',
+      order: 'asc',
+    },
+  ];
+
+  columns = [
+    {
+      dataField: 'id',
+      text: 'No',
+    },
+    {
+      dataField: 'created_at',
+      text: 'Time',
+    },
+    {
+      dataField: 'txn_amount',
+      text: 'Amount',
+    },
+    {
+      dataField: 'txn_method',
+      text: 'Method',
+    },
+    {
+      dataField: 'txn_channel',
+      text: 'Channel',
+    },
+    {
+      dataField: 'order_code',
+      text: 'Order Code',
+    },
+    {
+      dataField: 'payment_txn_id',
+      text: 'Payment Txn Id',
+    },
+    {
+      dataField: 'txn_status',
+      text: 'Status',
+    },
+  ];
+
+  sortableColumn = [
+    {
+      text: 'No',
+      sort: true,
+      formatter: (cell, row, rowIndex, extraData) => {
+        return rowIndex + 1;
+      },
+    },
+    {
+      text: 'Time',
+      sort: true,
+      formatter: (cell, row) => {
+        return moment(row.created_at).format('llll');
+      },
+    },
+    {
+      text: 'Amount',
+      sort: true,
+      formatter: (cell, row) => {
+        return "₹ " + row.txn_amount;
+      }
+    },
+    {
+      dataField: 'txn_method',
+      text: 'Method',
+      sort: true,
+    },
+    {
+      dataField: 'txn_channel',
+      text: 'Channel',
+      sort: true,
+    },
+    {
+      dataField: 'orders.order_code',
+      text: 'Order Code',
+      sort: true,
+    },
+    {
+      dataField: 'payment_txn_id',
+      text: 'Payment Txn Id',
+      sort: true,
+    },
+    {
+      dataField: 'txn_status',
+      text: 'Status',
+      sort: true,
+    },
+  ];
+
+  paginationOptions = {
+    // custom: true,
+    paginationSize: 5,
+    pageStartIndex: 1,
+    firstPageText: 'First',
+    prePageText: 'Back',
+    nextPageText: 'Next',
+    lastPageText: 'Last',
+    nextPageTitle: 'First page',
+    prePageTitle: 'Pre page',
+    firstPageTitle: 'Next page',
+    lastPageTitle: 'Last page',
+    showTotal: true,
+    totalSize: this.state.data.length,
+  };
+
   render() {
     const selectionRange = {
       startDate: new Date(),
       endDate: new Date(),
       key: 'selection',
     };
+    const { ExportCSVButton } = CSVExport;
+    let { data } = this.state;
+    let { SearchBar } = Search;
     return (
       <div className="main-wrapper">
         <Header />
@@ -212,7 +323,7 @@ class Salesreport extends Component {
               <div className="card">
                 {this.state.data.length > 0 ? (
                   <div className="card-body">
-                    <div className="table-responsive">
+                    {/* <div className="table-responsive">
                       <table className="table  datanew">
                         <thead>
                           <tr>
@@ -224,8 +335,6 @@ class Salesreport extends Component {
                             <th>OrderID</th>
                             <th>Txn ID</th>
                             <th>Type</th>
-                            {/* <th>Status</th> */}
-                            {/* <th style={{ textAlign: "end" }}>Action</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -266,30 +375,45 @@ class Salesreport extends Component {
                               >
                                 {item.txn_status}
                               </td>
-
-                              {/* <td
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                <Link to={"/orderdetails/" + item.order_code}>
-                                  <button
-                                    className="btn btn-primary"
-                                    style={{
-                                      marginRight: "10px",
-                                      padding: "2px 6px",
-                                    }}
-                                  >
-                                    <i className="fa fa-eye"></i>
-                                  </button>
-                                </Link>
-                              </td> */}
                             </tr>
                           ))}
                         </tbody>
                       </table>
-                    </div>
+                    </div> */}
+
+                    <ToolkitProvider
+                      striped
+                      keyField="id"
+                      data={this.state.data}
+                      columns={this.sortableColumn}
+                      search
+                      exportCSV
+                    >
+                      {(props) => (
+                        <>
+                          <div className="d-flex justify-content-between align-items-center mb-4">
+                            <ExportCSVButton {...props.csvProps}>
+                              Export CSV!!
+                            </ExportCSVButton>
+                            <SearchBar {...props.searchProps} />
+                          </div>
+                          <BootstrapTable
+                            {...props.baseProps}
+                            bootstrap4
+                            pagination={paginationFactory(
+                              this.paginationOptions
+                            )}
+                            noDataIndication={() => {
+                              return (
+                                <div className="text-center">
+                                  <h5>No Records Found</h5>
+                                </div>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    </ToolkitProvider>
                   </div>
                 ) : (
                   <div className="page-wrapper">
