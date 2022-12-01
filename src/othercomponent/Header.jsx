@@ -355,6 +355,7 @@ export class Header extends Component {
                   width={245}
                   collapsedWidth={245}
                   backgroundColor="rgb(255, 255, 255, 1)"
+                  overflow="scroll"
                 >
                   <Menu>
                     <MenuItem routerLink={<Link to="/" />}>
@@ -388,8 +389,13 @@ export class Header extends Component {
                       <MenuItem routerLink={<Link to="/stock_purchase" />}>
                         <span>Stock Purchase</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/ReleaseStock" />}>
+                      <MenuItem routerLink={<Link to="/releaseStock" />}>
                         <span>Stock Release</span>
+                      </MenuItem>
+                      <MenuItem routerLink={<Link to="/semifinishedrawmaterialproducts" />}>
+                        <span>
+                          Semi-Finished <br /> Raw Material Recipe
+                        </span>
                       </MenuItem>
                     </SubMenu>
 
@@ -411,10 +417,18 @@ export class Header extends Component {
 
                     <SubMenu label="Setup">
                       <MenuItem routerLink={<Link to="/dineinlisting" />}>
-                        <span>Dine In Management</span>
+                        <span>
+                          Dine In
+                          <br />
+                          Management
+                        </span>
                       </MenuItem>
                       <MenuItem routerLink={<Link to="/pickuppoint" />}>
-                        <span>Pickup Points Management</span>
+                        <span>
+                          Pickup Points
+                          <br />
+                          Management
+                        </span>
                       </MenuItem>
                       <MenuItem routerLink={<Link to="/kitchens" />}>
                         <span>Kitchens Management</span>

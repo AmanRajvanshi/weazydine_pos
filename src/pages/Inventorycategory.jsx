@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
-import { AuthContext } from "../AuthContextProvider";
-import { toast } from "react-toastify";
-import { Bars } from "react-loader-spinner";
-import Swal from "sweetalert2";
-import no_img from "../assets/images/no_products_found.png";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import delete_icon from '../assets/images/icons/delete.svg';
+import edit_icon from '../assets/images/icons/edit.svg';
+import { AuthContext } from '../AuthContextProvider';
+import { toast } from 'react-toastify';
+import { Bars } from 'react-loader-spinner';
+import Swal from 'sweetalert2';
+import no_img from '../assets/images/no_products_found.png';
 
 class Inventorycategory extends Component {
   static contextType = AuthContext;
@@ -19,12 +19,12 @@ class Inventorycategory extends Component {
       openedit: false,
       is_loding: true,
       category: [],
-      new_category_name: "",
-      category_id: "",
+      new_category_name: '',
+      category_id: '',
       is_buttonloding: false,
-      parent_category_id: "",
-      category_status: "active",
-      parent_category_id_edit: "",
+      parent_category_id: '',
+      category_status: 'active',
+      parent_category_id_edit: '',
     };
   }
 
@@ -33,11 +33,11 @@ class Inventorycategory extends Component {
   }
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_inventory_category", {
-      method: "POST",
+    fetch(global.api + 'fetch_inventory_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -58,20 +58,20 @@ class Inventorycategory extends Component {
 
   add = () => {
     if (
-      this.state.new_category_name != "" ||
-      this.state.parent_category_id != ""
+      this.state.new_category_name != '' ||
+      this.state.parent_category_id != ''
     ) {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "create_inventory_category", {
-        method: "POST",
+      fetch(global.api + 'create_inventory_category', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
           category_name: this.state.new_category_name,
-          category_status: "active",
+          category_status: 'active',
           category_parent: this.state.parent_category_id,
         }),
       })
@@ -82,7 +82,7 @@ class Inventorycategory extends Component {
             var msg = json.msg;
             toast.error(msg);
           } else {
-            this.setState({ open: false, new_category_name: "" });
+            this.setState({ open: false, new_category_name: '' });
             toast.success(json.msg);
             this.fetchCategories();
           }
@@ -95,23 +95,23 @@ class Inventorycategory extends Component {
           this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
-      toast.error("Please fill all required fields!");
+      toast.error('Please fill all required fields!');
     }
   };
 
   edit = () => {
     if (this.state.category_id == this.state.parent_category_id_edit) {
-      toast.error("Category can not be parent of itself!");
+      toast.error('Category can not be parent of itself!');
     } else if (
-      this.state.new_category_name != "" ||
-      this.state.parent_category_id_edit != ""
+      this.state.new_category_name != '' ||
+      this.state.parent_category_id_edit != ''
     ) {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "update_inventory_category", {
-        method: "POST",
+      fetch(global.api + 'update_inventory_category', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -128,7 +128,7 @@ class Inventorycategory extends Component {
             var msg = json.msg;
             toast.success(msg);
           } else {
-            this.setState({ openedit: false, new_category_name: "" });
+            this.setState({ openedit: false, new_category_name: '' });
             toast.success(json.msg);
             this.fetchCategories();
           }
@@ -141,17 +141,17 @@ class Inventorycategory extends Component {
           this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
-      toast.error("Please fill all required fields!");
+      toast.error('Please fill all required fields!');
     }
   };
 
   delete = (id) => {
     console.warn(id);
-    fetch(global.api + "delete_inventory_category", {
-      method: "POST",
+    fetch(global.api + 'delete_inventory_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -165,7 +165,7 @@ class Inventorycategory extends Component {
           var msg = json.msg;
           // Toast.show(msg);
         } else {
-          toast.success("Category deleted");
+          toast.success('Category deleted');
           this.fetchCategories();
         }
       })
@@ -186,8 +186,8 @@ class Inventorycategory extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Inventory Category List</h4>
-                  <h6>Manage your categories in your inventory</h6>
+                  <h4>Raw Materials Category</h4>
+                  <h6>Manage raw material categories in your inventory</h6>
                 </div>
                 <div className="page-btn">
                   <a
@@ -201,7 +201,7 @@ class Inventorycategory extends Component {
                       alt="img"
                       className="me-1"
                     />
-                    Add New Inventory Category
+                    Add
                   </a>
                 </div>
               </div>
@@ -209,7 +209,7 @@ class Inventorycategory extends Component {
                 <div
                   className="main_loader"
                   style={{
-                    height: "50vh",
+                    height: '50vh',
                   }}
                 >
                   <Bars
@@ -244,15 +244,16 @@ class Inventorycategory extends Component {
                                 <td>{index + 1}</td>
                                 <td>{item.category_name}</td>
                                 <td>
-                                  {(item.parent != null)?
-                                  item.parent.category_name:"None"}
+                                  {item.parent != null
+                                    ? item.parent.category_name
+                                    : 'None'}
                                 </td>
                                 <td>{item.products_count}</td>
                                 <td
                                   className={
-                                    item.category_status == "active"
-                                      ? "text-success text-capitalize"
-                                      : "text-danger text-capitalize"
+                                    item.category_status == 'active'
+                                      ? 'text-success text-capitalize'
+                                      : 'text-danger text-capitalize'
                                   }
                                 >
                                   {item.category_status}
@@ -275,13 +276,13 @@ class Inventorycategory extends Component {
                                     onClick={() => {
                                       Swal.fire({
                                         title:
-                                          "Are you sure you want to delete this category?",
-                                        text: "All the products under this category will also be deleted",
-                                        icon: "warning",
+                                          'Are you sure you want to delete this category?',
+                                        text: 'All the products under this category will also be deleted',
+                                        icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: "#ff9900",
-                                        cancelButtonColor: "#d33",
-                                        confirmButtonText: "Yes, delete it!",
+                                        confirmButtonColor: '#ff9900',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
                                       }).then((result) => {
                                         if (result.isConfirmed) {
                                           this.delete(item.id);
@@ -302,14 +303,14 @@ class Inventorycategory extends Component {
                     <div
                       className="d-flex align-items-center justify-content-center flex-column"
                       style={{
-                        height: "70vh",
+                        height: '70vh',
                       }}
                     >
                       <img
                         src={no_img}
                         alt=""
                         style={{
-                          height: "250px",
+                          height: '250px',
                         }}
                       />
                       <h4>No Category Found</h4>
@@ -325,7 +326,7 @@ class Inventorycategory extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -353,7 +354,7 @@ class Inventorycategory extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>
-                        Choose Parent Categry{" "}
+                        Choose Parent Categry{' '}
                         <span className="text-danger">*</span>
                       </label>
                       <select
@@ -379,8 +380,8 @@ class Inventorycategory extends Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -411,7 +412,7 @@ class Inventorycategory extends Component {
           onClose={() => this.setState({ openedit: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -458,7 +459,7 @@ class Inventorycategory extends Component {
                   <div className="col-lg-6">
                     <div className="form-group">
                       <label>
-                        Choose Parent Categry{" "}
+                        Choose Parent Categry{' '}
                         <span className="text-danger">*</span>
                       </label>
                       <select
@@ -486,8 +487,8 @@ class Inventorycategory extends Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span

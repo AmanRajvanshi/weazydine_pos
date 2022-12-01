@@ -8417,25 +8417,31 @@ span.select-container.select-container--default.select-container--open {
   margin-top: 20px;
 }
 
-.react-bootstrap-table-page-btns-ul{
+.react-bootstrap-table-page-btns-ul {
   display: flex;
   justify-content: end;
 }
 
-.react-bs-table-csv-btn{
+.react-bs-table-csv-btn {
   float: left;
   background-color: #eda332;
   color: #fff;
   border: none;
 }
 
-.react-bs-table-csv-btn:hover{
+.react-bs-table-csv-btn:hover {
   background-color: #eda332;
   color: #fff;
   border: none;
   box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.15);
 }
 
-.react-bootstrap-table{
+.react-bootstrap-table {
   overflow-x: scroll;
+}
+
+.sidebar-menu {
+  height: 100vh;
+  overflow-y: scroll;
+  padding-bottom:80px
 }

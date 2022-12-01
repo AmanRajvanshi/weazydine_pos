@@ -39,8 +39,10 @@ import ReleaseStock from './pages/ReleaseStock.jsx';
 import AddStockPurchase from './pages/ReleaseStock.jsx';
 import { Howl, Howler } from 'howler';
 import { toast } from 'react-toastify';
-
 import Kitchens from './pages/Kitchens.jsx';
+import Semifinishedrawmaterialproducts from './pages/Semifinishedrawmaterialproducts.jsx';
+import Addsemifinishedrawmaterialproducts from './pages/Addsemifinishedrawmaterialproducts.jsx';
+import Editsemifinishedrawmaterialproducts from './pages/Editsemifinishedrawmaterialproducts.jsx';
 // import Tables from './pages/Tables.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
@@ -403,7 +405,6 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-
             <Route
               exact
               path="/stock_purchase"
@@ -413,8 +414,7 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-
-<Route
+            <Route
               exact
               path="/ReleaseStock"
               element={
@@ -423,30 +423,51 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-
-
-
-<Route
+            <Route
               exact
               path="/add_stock_purchase"
               element={
                 <RequireAuth>
-                  <AddStockPurchase/>
+                  <AddStockPurchase />
                 </RequireAuth>
               }
             />
-
-<Route
+            <Route
               exact
               path="/kitchens"
               element={
                 <RequireAuth>
-                  <Kitchens/>
+                  <Kitchens />
                 </RequireAuth>
               }
             />
-
-
+            <Route
+              exact
+              path="/semifinishedrawmaterialproducts"
+              element={
+                <RequireAuth>
+                  <Semifinishedrawmaterialproducts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/addsemifinishedrawmaterialproducts"
+              element={
+                <RequireAuth>
+                  <Addsemifinishedrawmaterialproducts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/editsemifinishedrawmaterialproducts/:id"
+              element={
+                <RequireAuth>
+                  <Editsemifinishedrawmaterialproducts />
+                </RequireAuth>
+              }
+            />
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
             {/* <Route exact path="/tables" element={<Tables />} /> */}

@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../AuthContextProvider';
 import Skeletonloader from '../othercomponent/Skeletonloader';
 
-export class ReleaseStock extends Component {
+export class Editsemifinishedrawmaterialproducts extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -275,8 +275,7 @@ export class ReleaseStock extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Release Stocks</h4>
-                  <h6>Release stock in inventory</h6>
+                  <h4>Edit Semi-Finished Raw Material Products</h4>
                 </div>
               </div>
               <div className="card">
@@ -284,13 +283,100 @@ export class ReleaseStock extends Component {
                   <div className="row">
                     <div className="col-lg-3 col-sm-6 col-12">
                       <div className="form-group">
-                        <label>Receiver</label>
+                        <label>Product Name</label>
                         <input
                           onChange={(e) => {
                             this.setState({ our_price: e.target.value });
                           }}
                           type="text"
                         />
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>Product Expiry(In Days)</label>
+                        
+                        <select
+                          onChange={(e) => {
+                            this.setState({
+                              inventory_add_purchase_sub_unit: e.target.value,
+                            });
+                          }}
+                          className="select-container"
+                        >
+                          <option>Choose Product Expiry Date</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                          <option value="21">21</option>
+                          <option value="22">22</option>
+                          <option value="23">23</option>
+                          <option value="24">24</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>Product Quantity</label>
+                        <input
+                          onChange={(e) => {
+                            this.setState({ our_price: e.target.value });
+                          }}
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>Quantity Unit</label>
+                        <select
+                          onChange={(e) => {
+                            this.setState({
+                              inventory_add_purchase_sub_unit: e.target.value,
+                            });
+                          }}
+                          className="select-container"
+                        >
+                          <option>Choose Quantity Unit</option>
+                          <option value="kg">KG</option>
+                          <option value="gm">GM</option>
+                          <option value="ltr">LTR</option>
+                          <option value="ml">ML</option>
+                          <option value="pcs">PCS</option>
+                          <option value="bori">Bori</option>
+                          <option value="dozen">Dozen</option>
+                          <option value="box">Box</option>
+                          <option value="pack">Pack</option>
+                          <option value="bundle">Bundle</option>
+                          <option value="bag">Bag</option>
+                          <option value="bottle">Bottle</option>
+                          <option value="carton">Carton</option>
+                          <option value="coil">Coil</option>
+                          <option value="drum">Drum</option>
+                          <option value="pair">Pair</option>
+                          <option value="ream">Ream</option>
+                          <option value="roll">Roll</option>
+                          <option value="set">Set</option>
+                          <option value="tube">Tube</option>
+                          <option value="unit">Unit</option>
+                        </select>
                       </div>
                     </div>
                     {this.state.rows.length > 0 ? (
@@ -418,7 +504,7 @@ export class ReleaseStock extends Component {
                           onClick={() => {
                             this.create();
                           }}
-                          className="btn btn-submit me-2  btn-sm"
+                          className="btn btn-submit me-2 btn-sm"
                           style={{ float: 'right' }}
                         >
                           Save Changes
@@ -500,7 +586,7 @@ function Navigate(props) {
   const abcd = useNavigate();
   const location = useLocation();
   return (
-    <ReleaseStock
+    <Editsemifinishedrawmaterialproducts
       {...props}
       {...useParams()}
       navigate={abcd}

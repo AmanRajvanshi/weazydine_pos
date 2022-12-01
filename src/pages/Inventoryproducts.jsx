@@ -258,8 +258,8 @@ class Inventoryproducts extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Inventory Product List</h4>
-                  <h6>Manage the products in your inventory</h6>
+                  <h4>Raw Materials</h4>
+                  <h6>Manage raw materials in your inventory</h6>
                 </div>
                 <div className="page-btn">
                   <a
