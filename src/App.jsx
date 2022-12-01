@@ -5,7 +5,6 @@ import Categorylist from './pages/Categorylist.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Kot from './pages/Kot.jsx';
 import Login from './pages/Login.jsx';
-import Orders from './pages/Orders.jsx';
 import Pagenotfound from './pages/Pagenotfound.jsx';
 import Pos from './pages/Pos.jsx';
 import Productlist from './pages/Productlist.jsx';
@@ -23,7 +22,6 @@ import DineinList from './pages/DineinList.jsx';
 import Inventorycategory from './pages/Inventorycategory.jsx';
 import Inventoryproducts from './pages/Inventoryproducts.jsx';
 import Releaseinventory from './pages/Releaseinventory.jsx';
-import LoginPassword from './pages/LoginPassword.jsx';
 import Crm from './pages/Crm.jsx';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
@@ -35,21 +33,26 @@ import Salesreport from './pages/Salesreport.jsx';
 import Orderreport from './pages/Orderreport.jsx';
 import Productreport from './pages/Productreport.jsx';
 import Print from './pages/Print.jsx';
+import StockPurchase from './pages/StockPurchase.jsx';
 import Example from './pages/Example.jsx';
-import { toast } from 'react-toastify';
+import ReleaseStock from './pages/ReleaseStock.jsx';
+import AddStockPurchase from './pages/ReleaseStock.jsx';
 import { Howl, Howler } from 'howler';
+import { toast } from 'react-toastify';
+
+import Kitchens from './pages/Kitchens.jsx';
 // import Tables from './pages/Tables.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
-global.api = 'https://dine-api.weazy.in/api/';
+// global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
 // global.api = 'http://127.0.0.1:8000/api/';
 
 //for local
-// global.api = 'https://beta-dine-api.weazy.in/api/';
+global.api = 'https://beta-dine-api.weazy.in/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -92,8 +95,8 @@ export class App extends Component {
     // console.log(Pusher);
     window.Echo = new Echo({
       broadcaster: 'pusher',
-      key: '714d1999a24b68c8bf87', // for production
-      // key: 'b8ba8023ac2fc3612e90', //for testing
+      // key: '714d1999a24b68c8bf87', // for production
+      key: 'b8ba8023ac2fc3612e90', //for testing
       cluster: 'ap2',
       forceTLS: true,
       disableStats: true,
@@ -400,6 +403,50 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
+
+            <Route
+              exact
+              path="/stock_purchase"
+              element={
+                <RequireAuth>
+                  <StockPurchase />
+                </RequireAuth>
+              }
+            />
+
+<Route
+              exact
+              path="/ReleaseStock"
+              element={
+                <RequireAuth>
+                  <ReleaseStock />
+                </RequireAuth>
+              }
+            />
+
+
+
+<Route
+              exact
+              path="/add_stock_purchase"
+              element={
+                <RequireAuth>
+                  <AddStockPurchase/>
+                </RequireAuth>
+              }
+            />
+
+<Route
+              exact
+              path="/kitchens"
+              element={
+                <RequireAuth>
+                  <Kitchens/>
+                </RequireAuth>
+              }
+            />
+
+
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
             {/* <Route exact path="/tables" element={<Tables />} /> */}

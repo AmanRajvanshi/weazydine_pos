@@ -80,7 +80,7 @@ export class Kot extends Component {
                 <div className="col-md-3">
                   <div className="page-header">
                     <div className="page-title">
-                      <h4>KOT (Kitchen Order Ticket)</h4>
+                      <h4>Kitchen Display </h4>
                     </div>
                   </div>
                 </div>

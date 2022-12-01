@@ -367,7 +367,7 @@ export class Header extends Component {
                       <span>Orders</span>
                     </MenuItem>
                     <MenuItem routerLink={<a href="/kot" target="_blank" />}>
-                      <span>KOT</span>
+                      <span>Kitchen Display System</span>
                     </MenuItem>
                     <SubMenu label="Catalogue">
                       <MenuItem routerLink={<Link to="/productlist" />}>
@@ -380,19 +380,25 @@ export class Header extends Component {
 
                     <SubMenu label="Inventory">
                       <MenuItem routerLink={<Link to="/inventoryproducts" />}>
-                        <span>Inventory Products</span>
+                        <span>Raw Materials</span>
                       </MenuItem>
                       <MenuItem routerLink={<Link to="/inventorycategory" />}>
-                        <span>Inventory Category</span>
+                        <span>Raw Materials Category</span>
+                      </MenuItem>
+                      <MenuItem routerLink={<Link to="/stock_purchase" />}>
+                        <span>Stock Purchase</span>
+                      </MenuItem>
+                      <MenuItem routerLink={<Link to="/ReleaseStock" />}>
+                        <span>Stock Release</span>
                       </MenuItem>
                     </SubMenu>
 
                     <SubMenu label="Reports">
                       <MenuItem routerLink={<Link to="/salesreport" />}>
-                        <span>Sales Report</span>
+                        <span>Transactions</span>
                       </MenuItem>
                       <MenuItem routerLink={<Link to="/orderreport" />}>
-                        <span>Order Report</span>
+                        <span>Sales Report</span>
                       </MenuItem>
                       <MenuItem routerLink={<Link to="/productreport" />}>
                         <span>Product Report</span>
@@ -409,6 +415,12 @@ export class Header extends Component {
                       </MenuItem>
                       <MenuItem routerLink={<Link to="/pickuppoint" />}>
                         <span>Pickup Points Management</span>
+                      </MenuItem>
+                      <MenuItem routerLink={<Link to="/kitchens" />}>
+                        <span>Kitchens Management</span>
+                      </MenuItem>
+                      <MenuItem routerLink={<Link to="/editprofile" />}>
+                        <span>Store Profile</span>
                       </MenuItem>
                     </SubMenu>
                   </Menu>
