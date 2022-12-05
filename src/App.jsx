@@ -436,8 +436,7 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-
-<Route
+            <Route
               exact
               path="/edit_stock_purchase/:id"
               element={
@@ -446,7 +445,6 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-
             <Route
               exact
               path="/kitchens"
@@ -474,7 +472,7 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-  <Route
+            <Route
               exact
               path="/supliers"
               element={
@@ -483,7 +481,6 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
-
             <Route
               exact
               path="/editsemifinishedrawmaterialproducts/:id"

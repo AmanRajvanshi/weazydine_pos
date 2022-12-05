@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
-import { AuthContext } from "../AuthContextProvider";
-import { toast } from "react-toastify";
-import { Bars } from "react-loader-spinner";
-import Swal from "sweetalert2";
-import no_img from "../assets/images/no_products_found.png";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import delete_icon from '../assets/images/icons/delete.svg';
+import edit_icon from '../assets/images/icons/edit.svg';
+import { AuthContext } from '../AuthContextProvider';
+import { toast } from 'react-toastify';
+import { Bars } from 'react-loader-spinner';
+import Swal from 'sweetalert2';
+import no_img from '../assets/images/no_products_found.png';
 
 export class supliers extends Component {
   static contextType = AuthContext;
@@ -19,14 +19,14 @@ export class supliers extends Component {
       openedit: false,
       is_loding: true,
       category: [],
-      new_category_name: "",
+      new_category_name: '',
       is_buttonloding: false,
-      name:'',
-        email:'',
-        contact:'',
-        address:'',
-        gstin:'',
-        suplier_id:'',
+      name: '',
+      email: '',
+      contact: '',
+      address: '',
+      gstin: '',
+      suplier_id: '',
     };
   }
 
@@ -35,11 +35,11 @@ export class supliers extends Component {
   }
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_supplier", {
-      method: "POST",
+    fetch(global.api + 'fetch_supplier', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -57,33 +57,28 @@ export class supliers extends Component {
   };
 
   add = () => {
-    if (this.state.name == "")
-    {
-        toast.error("Please enter name");
-        return;
-
+    if (this.state.name == '') {
+      toast.error('Please enter name');
+      return;
     }
-    if (this.state.contact == "")
-    {
-        toast.error("Please enter contact");
-        return;
-
-    }
-    else {
+    if (this.state.contact == '') {
+      toast.error('Please enter contact');
+      return;
+    } else {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "add_supplier", {
-        method: "POST",
+      fetch(global.api + 'add_supplier', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
-            supplier_name:this.state.name,
-            supplier_email:this.state.email,
-            supplier_contact:this.state.contact,
-            supplier_address:this.state.address,
-            supplier_gstin:this.state.gstin,
+          supplier_name: this.state.name,
+          supplier_email: this.state.email,
+          supplier_contact: this.state.contact,
+          supplier_address: this.state.address,
+          supplier_gstin: this.state.gstin,
         }),
       })
         .then((response) => response.json())
@@ -93,7 +88,7 @@ export class supliers extends Component {
             var msg = json.msg;
             toast.error(msg);
           } else {
-            this.setState({ open: false, new_category_name: "" });
+            this.setState({ open: false, new_category_name: '' });
             toast.success(json.msg);
             this.fetchCategories();
           }
@@ -105,30 +100,25 @@ export class supliers extends Component {
         .finally(() => {
           this.setState({ isloading: false, is_buttonloding: false });
         });
-    } 
+    }
   };
 
   edit = () => {
     //   alert("sfghsdf")
-    if (this.state.name == "")
-    {
-        toast.error("Please enter name");
-        return;
-
+    if (this.state.name == '') {
+      toast.error('Please enter name');
+      return;
     }
-    if (this.state.contact == "")
-    {
-        toast.error("Please enter contact");
-        return;
-
-    }
-    else {
+    if (this.state.contact == '') {
+      toast.error('Please enter contact');
+      return;
+    } else {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "edit_supplier", {
-        method: "POST",
+      fetch(global.api + 'edit_supplier', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -142,12 +132,12 @@ export class supliers extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-           console.warn(json)
+          console.warn(json);
           if (!json.status) {
             var msg = json.errors[0];
             toast.error(msg);
           } else {
-            this.setState({ openedit: false, name: "" });
+            this.setState({ openedit: false, name: '' });
             toast.success(json.msg);
             this.fetchCategories();
           }
@@ -159,19 +149,19 @@ export class supliers extends Component {
         .finally(() => {
           this.setState({ isloading: false, is_buttonloding: false });
         });
-    } 
+    }
   };
 
   delete = (id, name) => {
-    fetch(global.api + "delete_supplier", {
-      method: "POST",
+    fetch(global.api + 'delete_supplier', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        suplier_id : id,
+        suplier_id: id,
       }),
     })
       .then((response) => response.json())
@@ -180,7 +170,7 @@ export class supliers extends Component {
           var msg = json.msg;
           // Toast.show(msg);
         } else {
-          toast.success("Pickup Point deleted");
+          toast.success('Pickup Point deleted');
           this.fetchCategories();
         }
       })
@@ -196,7 +186,7 @@ export class supliers extends Component {
     return (
       <>
         <div className="main-wrapper">
-        <Header />
+          <Header />
           <div className="page-wrapper">
             <div className="content">
               <div className="page-header">
@@ -224,7 +214,7 @@ export class supliers extends Component {
                 <div
                   className="main_loader"
                   style={{
-                    height: "50vh",
+                    height: '50vh',
                   }}
                 >
                   <Bars
@@ -248,9 +238,9 @@ export class supliers extends Component {
                               <th>S.no</th>
                               <th>Supplier Name</th>
                               <th>Gstin</th>
-                                <th>Contact</th>
-                                <th>Email</th>
-                                <th>Orders</th>
+                              <th>Contact</th>
+                              <th>Email</th>
+                              <th>Orders</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -284,13 +274,13 @@ export class supliers extends Component {
                                     className="confirm-text"
                                     onClick={() => {
                                       Swal.fire({
-                                        title: "Are you sure?",
+                                        title: 'Are you sure?',
                                         text: "You won't be able to revert this!",
-                                        icon: "warning",
+                                        icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: "#3085d6",
-                                        cancelButtonColor: "#d33",
-                                        confirmButtonText: "Yes, delete it!",
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
                                       }).then((result) => {
                                         if (result.isConfirmed) {
                                           this.delete(item.id, item.name);
@@ -311,14 +301,14 @@ export class supliers extends Component {
                     <div
                       className="d-flex align-items-center justify-content-center flex-column"
                       style={{
-                        height: "70vh",
+                        height: '70vh',
                       }}
                     >
                       <img
                         src={no_img}
                         alt=""
                         style={{
-                          height: "250px",
+                          height: '250px',
                         }}
                       />
                       <h4>No Records Found</h4>
@@ -334,7 +324,7 @@ export class supliers extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -411,8 +401,8 @@ export class supliers extends Component {
                       <button
                         className="btn btn-submit me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -443,14 +433,14 @@ export class supliers extends Component {
           onClose={() => this.setState({ openedit: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
             <div className="page-header">
               <div className="page-title">
                 <h4>Edit suplier </h4>
-                              </div>
+              </div>
             </div>
             <div className="card">
               <div className="card-body">
@@ -525,8 +515,8 @@ export class supliers extends Component {
                       <button
                         className="btn btn-submit me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span

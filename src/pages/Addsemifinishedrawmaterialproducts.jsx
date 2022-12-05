@@ -16,10 +16,10 @@ export class Addsemifinishedrawmaterialproducts extends Component {
     super(props);
     this.state = {
       open: false,
-  
+
       products: [],
       product_show: true,
-  
+
       save_and_continue: false,
       add_category_loading: false,
       rows: [
@@ -31,10 +31,10 @@ export class Addsemifinishedrawmaterialproducts extends Component {
           material_id: '',
         },
       ],
-      dish_name:'',
-      recipe_quantity:'' ,
-      dish_expiry:0,
-      production_quantity_estimate:'',
+      dish_name: '',
+      recipe_quantity: '',
+      dish_expiry: 0,
+      production_quantity_estimate: '',
     };
   }
 
@@ -42,32 +42,32 @@ export class Addsemifinishedrawmaterialproducts extends Component {
     this.fetchProducts();
   }
 
-
   create = () => {
-    
     if (
       this.state.dish_name === '' ||
       this.state.recipe_quantity === '' ||
-      this.state.dish_expiry === '' 
+      this.state.dish_expiry === ''
     ) {
       toast.error('All fields are required !');
-    }
-    else if(this.state.rows.length === 0){
+    } else if (this.state.rows.length === 0) {
       toast.error('Please add atleast one ingredient !');
     }
     // else if (this.state.market_price<this.state.our_price) {
     //     toast.error("Your price should be less than market price !");
     // }
-   else {
+    else {
       this.setState({ save_and_continue: true, isLoading: true });
 
       var form = new FormData();
       form.append('dish_name', this.state.dish_name);
       form.append('recipe_quantity', this.state.recipe_quantity);
       form.append('dish_expiry', this.state.dish_expiry);
-      form.append('production_quantity_estimate', this.state.production_quantity_estimate);
+      form.append(
+        'production_quantity_estimate',
+        this.state.production_quantity_estimate
+      );
       form.append('production_materials[]', JSON.stringify(this.state.rows));
-      
+
       fetch(global.api + 'add_semi_dishes', {
         method: 'POST',
         body: form,
@@ -77,12 +77,13 @@ export class Addsemifinishedrawmaterialproducts extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
+          console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
           } else {
             toast.success(json.msg);
+            this.props.navigate("/semifinishedrawmaterialproducts");
             this.setState({ product_show: false, product_id: json.data.id });
           }
           return json;
@@ -110,7 +111,6 @@ export class Addsemifinishedrawmaterialproducts extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
@@ -187,7 +187,7 @@ export class Addsemifinishedrawmaterialproducts extends Component {
                         <label>Product Name</label>
                         <input
                           onChange={(e) => {
-                            this.setState({ dish_name : e.target.value });
+                            this.setState({ dish_name: e.target.value });
                           }}
                           type="text"
                         />
@@ -196,11 +196,11 @@ export class Addsemifinishedrawmaterialproducts extends Component {
                     <div className="col-lg-3 col-sm-6 col-12">
                       <div className="form-group">
                         <label>Product Expiry(In Days)</label>
-                        
+
                         <select
                           onChange={(e) => {
                             this.setState({
-                              dish_expiry : e.target.value,
+                              dish_expiry: e.target.value,
                             });
                           }}
                           className="select-container"
@@ -238,7 +238,9 @@ export class Addsemifinishedrawmaterialproducts extends Component {
                         <label>Product Quantity</label>
                         <input
                           onChange={(e) => {
-                            this.setState({ production_quantity_estimate: e.target.value });
+                            this.setState({
+                              production_quantity_estimate: e.target.value,
+                            });
                           }}
                           type="text"
                         />

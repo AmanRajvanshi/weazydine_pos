@@ -1,26 +1,26 @@
-import { Component } from "react";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import logo from "../assets/images/main_logo.png";
-import login from "../assets/images/login.jpg";
-import Swal from "sweetalert2";
-import { AuthContext } from "../AuthContextProvider";
-import { toast } from "react-toastify";
-import OtpInput from "react-otp-input";
-import Timer from "otp-timer";
+import { Component } from 'react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import logo from '../assets/images/main_logo.png';
+import login from '../assets/images/login.jpg';
+import Swal from 'sweetalert2';
+import { AuthContext } from '../AuthContextProvider';
+import { toast } from 'react-toastify';
+import OtpInput from 'react-otp-input';
+import Timer from 'otp-timer';
 
 export class Subscription extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: "",
-      otp: "",
+      phoneNumber: '',
+      otp: '',
       otpButton: false,
-      heading: "Basic Plan",
-      subheading: "Continue to WeazyDine Dashboard",
+      heading: 'Basic Plan',
+      subheading: 'Continue to WeazyDine Dashboard',
       sendotploading: false,
       verifyotploading: false,
-      password: "",
+      password: '',
     };
   }
   render() {
@@ -32,10 +32,10 @@ export class Subscription extends Component {
               <div
                 className="row"
                 style={{
-                  height: "100vh",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  height: '100vh',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <div>
@@ -44,8 +44,8 @@ export class Subscription extends Component {
                       src={logo}
                       alt="img"
                       style={{
-                        maxWidth: "20%",
-                        marginBottom: "20px",
+                        maxWidth: '20%',
+                        marginBottom: '20px',
                       }}
                     />
                   </div>
