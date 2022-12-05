@@ -39,6 +39,7 @@ export class ReleaseStock extends Component {
           name: '',
           quantity: '',
           Unit: '',
+          material_id: '',
         },
       ],
       total: 0,
@@ -46,128 +47,24 @@ export class ReleaseStock extends Component {
   }
 
   componentDidMount() {
-    this.fetchCategories();
     this.fetchProducts();
   }
 
-  fetchCategories = () => {
-    fetch(global.api + 'fetch_vendor_category', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.context.token,
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        // console.warn(json.data)
-        if (json.data.length == 0) {
-          this.setState({ open: true });
-        }
-        this.setState({ category: json.data });
-        this.setState({ is_loding: false });
-        return json;
-      })
-      .catch((error) => console.error(error))
-      .finally(() => {});
-  };
 
-  uploadImage = async (e) => {
-    let image = this.state.images;
-    image.push(e.target.files[0]);
-    this.setState({ images: image });
-  };
-
-  add = () => {
-    if (this.state.new_category_name != '') {
-      this.setState({ add_category_loading: true });
-      fetch(global.api + 'create_category_vendor', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: this.context.token,
-        },
-        body: JSON.stringify({
-          category_name: this.state.new_category_name,
-          status: 'active',
-        }),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          // console.warn(json)
-          if (!json.status) {
-            var msg = json.msg;
-            toast.error(msg);
-          } else {
-            this.setState({
-              open: false,
-              new_category_name: '',
-            });
-            toast.success(json.msg);
-            this.fetchCategories();
-          }
-          return json;
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          this.setState({ add_category_loading: false });
-        });
-    } else {
-      toast.error('Please add Category first!');
-    }
-  };
 
   create = () => {
-    let numberValidation = /^[0-9]+$/;
-    let isnumValid = numberValidation.test(
-      this.state.market_price + this.state.our_price
-    );
-    if (
-      this.state.name == '' ||
-      this.state.market_price == '' ||
-      this.state.images == '' ||
-      this.state.our_price == '' ||
-      this.state.description == ''
-    ) {
-      toast.error('All fields are required !');
-    } else if (this.state.category == '') {
-      toast.error('Add category first !');
+   
+    if (this.state.rows.length == 0) {
+      toast.error("Add atleast one product !");
     }
-    // else if (this.state.market_price<this.state.our_price) {
-    //     toast.error("Your price should be less than market price !");
-    // }
-    else if (this.state.c_id == '') {
-      toast.error('Category is required !');
-    } else if (!isnumValid) {
-      toast.error('Price contains digits only!');
-    } else if (!isnumValid) {
-      toast.error('Price contains digits only!');
-    } else if (this.state.description == '') {
-      toast.error('Description is required !');
-    } else {
+   else {
       this.setState({ save_and_continue: true, isLoading: true });
 
       var form = new FormData();
-      form.append('product_name', this.state.name);
-      // form.append("token",global.token);
-      form.append('vendor_category_id', this.state.c_id);
-      form.append('market_price', this.state.market_price);
-      form.append('price', this.state.our_price);
-      form.append('description', this.state.description);
-      form.append('type', this.state.type);
-
-      if (this.state.images.length > 0) {
-        this.state.images.map((item, index) => {
-          form.append('product_img', item);
-        });
-      }
-
-      form.append('is_veg', this.state.is_veg);
-      fetch(global.api + 'vendor_add_product', {
+   
+      form.append("purchase_order_product[]", JSON.stringify(this.state.rows));
+     
+      fetch(global.api + 'release_inventory', {
         method: 'POST',
         body: form,
         headers: {
@@ -233,7 +130,7 @@ export class ReleaseStock extends Component {
   handleChange = (idx) => (e) => {
     const newRows = [...this.state.rows];
 
-    if (e.target.name == 'name') {
+    if (e.target.name == 'material_id') {
       var index = e.target.selectedIndex;
       var optionElement = e.target.childNodes[index];
       var option = optionElement.getAttribute('unit');
@@ -251,11 +148,7 @@ export class ReleaseStock extends Component {
         name: '',
         quantity: '',
         Unit: '',
-        price: '',
-        sgst: '',
-        cgst: '',
-        igst: '',
-        total: '',
+       
       },
     ];
     this.setState({ rows: [...this.state.rows, ...vari] });
@@ -282,7 +175,7 @@ export class ReleaseStock extends Component {
               <div className="card">
                 <div className="card-body">
                   <div className="row">
-                    <div className="col-lg-3 col-sm-6 col-12">
+                    {/* <div className="col-lg-3 col-sm-6 col-12">
                       <div className="form-group">
                         <label>Receiver</label>
                         <input
@@ -292,7 +185,7 @@ export class ReleaseStock extends Component {
                           type="text"
                         />
                       </div>
-                    </div>
+                    </div> */}
                     {this.state.rows.length > 0 ? (
                       <div className="row">
                         <div className="col-mg-12">
@@ -324,9 +217,9 @@ export class ReleaseStock extends Component {
                                     <select
                                       onChange={this.handleChange(idx)}
                                       className="select-container"
-                                      name="name"
+                                      name="material_id"
                                     >
-                                      <option>Choose Suplier</option>
+                                      <option>Choose Material</option>
                                       {this.state.products.length > 0 ? (
                                         this.state.products.map(
                                           (item, index) => (

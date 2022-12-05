@@ -397,6 +397,13 @@ export class Header extends Component {
                           Semi-Finished <br /> Raw Material Recipe
                         </span>
                       </MenuItem>
+
+                      <MenuItem routerLink={<Link to="/supliers" />}>
+                        <span>
+                          Supliers
+                        </span>
+                      </MenuItem>
+
                     </SubMenu>
 
                     <SubMenu label="Reports">

@@ -4,16 +4,13 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import delete_icon from "../assets/images/icons/delete.svg";
 import edit_icon from "../assets/images/icons/edit.svg";
-import money_icon from "../assets/images/icons/money.svg";
 import { AuthContext } from "../AuthContextProvider";
 import { toast } from "react-toastify";
 import { Bars } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import no_img from "../assets/images/no_products_found.png";
-import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
-import { RadioGroup, RadioButton } from "react-radio-buttons";
-import moment from "moment";
-class StockPurchase extends Component {
+
+export class supliers extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -23,44 +20,35 @@ class StockPurchase extends Component {
       is_loding: true,
       category: [],
       new_category_name: "",
-      category_id: "",
       is_buttonloding: false,
-      parent_category_id: "",
-      category_status: "active",
-      parent_category_id_edit: "",
-      remaing_amount:0,
-      payment_mode:"cash",
-      txn_amount:'',
-      txn_note:'kjh',
-      txn_date:moment(new Date()).format("YYYY-MM-DD"),
-      purchase_id:'',
+      name:'',
+        email:'',
+        contact:'',
+        address:'',
+        gstin:'',
+        suplier_id:'',
     };
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchCategories();
   }
 
-  fetchData = () => {
-    fetch(global.api + "fetch_purchase_order", {
+  fetchCategories = () => {
+    fetch(global.api + "fetch_supplier", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: this.context.token,
       },
-      body: JSON.stringify({
-        range:'lifetime',
-      }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (json.status) {
-          this.setState({ category: json.data.data });
-          this.setState({ is_loding: false });
+          this.setState({ category: json.data, is_loding: false });
         } else {
-          this.setState({ category: [], is_loding: false });
-          toast.error(json.message);
+          this.setState({ is_loding: false, category: [] });
         }
         return json;
       })
@@ -68,8 +56,114 @@ class StockPurchase extends Component {
       .finally(() => {});
   };
 
-  addPayment = () => {
-    fetch(global.api + "add_payment_purchase_order", {
+  add = () => {
+    if (this.state.name == "")
+    {
+        toast.error("Please enter name");
+        return;
+
+    }
+    if (this.state.contact == "")
+    {
+        toast.error("Please enter contact");
+        return;
+
+    }
+    else {
+      this.setState({ is_buttonloding: true });
+      fetch(global.api + "add_supplier", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+            supplier_name:this.state.name,
+            supplier_email:this.state.email,
+            supplier_contact:this.state.contact,
+            supplier_address:this.state.address,
+            supplier_gstin:this.state.gstin,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // console.warn(json)
+          if (!json.status) {
+            var msg = json.msg;
+            toast.error(msg);
+          } else {
+            this.setState({ open: false, new_category_name: "" });
+            toast.success(json.msg);
+            this.fetchCategories();
+          }
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isloading: false, is_buttonloding: false });
+        });
+    } 
+  };
+
+  edit = () => {
+    //   alert("sfghsdf")
+    if (this.state.name == "")
+    {
+        toast.error("Please enter name");
+        return;
+
+    }
+    if (this.state.contact == "")
+    {
+        toast.error("Please enter contact");
+        return;
+
+    }
+    else {
+      this.setState({ is_buttonloding: true });
+      fetch(global.api + "edit_supplier", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          supplier_id: this.state.suplier_id,
+          supplier_name: this.state.name,
+          supplier_email: this.state.email,
+          supplier_contact: this.state.contact,
+          supplier_address: this.state.address,
+          supplier_gstin: this.state.gstin,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+           console.warn(json)
+          if (!json.status) {
+            var msg = json.errors[0];
+            toast.error(msg);
+          } else {
+            this.setState({ openedit: false, name: "" });
+            toast.success(json.msg);
+            this.fetchCategories();
+          }
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isloading: false, is_buttonloding: false });
+        });
+    } 
+  };
+
+  delete = (id, name) => {
+    fetch(global.api + "delete_supplier", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -77,51 +171,53 @@ class StockPurchase extends Component {
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        purchase_id:this.state.purchase_id,
-        txn_amount:this.state.txn_amount,
-        txn_method:this.state.payment_mode,
-        txn_notes:this.state.txn_note,
-        txn_date:this.state.txn_date
-        
+        suplier_id : id,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.status) {
-          toast.success(json.msg);
-          this.setState({ open: false });
-          this.fetchData();
-        
+        if (!json.status) {
+          var msg = json.msg;
+          // Toast.show(msg);
         } else {
-          toast.error(json.msg);
+          toast.success("Pickup Point deleted");
+          this.fetchCategories();
         }
-        return json;
       })
-      .catch((error) => console.error(error))
-      .finally(() => {});
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
   };
-
- 
 
   render() {
     return (
       <>
         <div className="main-wrapper">
-          <Header />
+        <Header />
           <div className="page-wrapper">
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Stock Purchase</h4>
-                  <h6>Manage your all stock purchasing</h6>
+                  <h4>Supliers </h4>
+                  <h6>Manage your Supliers</h6>
                 </div>
                 <div className="page-btn">
-                  <Link to="/add_stock_purchase" 
+                  <a
                     className="btn btn-added"
-                    
+                    onClick={() => {
+                      this.setState({ open: true });
+                    }}
                   >
-                    Add new stock
-                  </Link>
+                    <img
+                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
+                      alt="img"
+                      className="me-1"
+                    />
+                    Add New Supplier
+                  </a>
                 </div>
               </div>
               {this.state.is_loding ? (
@@ -150,14 +246,11 @@ class StockPurchase extends Component {
                           <thead>
                             <tr>
                               <th>S.no</th>
-                              <th>From</th>
-                              <th>PO No</th>
-                              <th>Purchase date</th>
-                              <th>Total</th>
-                          
-                              <th>Paid Amount</th>
-                              <th>Balance</th>
-                              <th>Stock Added</th>
+                              <th>Supplier Name</th>
+                              <th>Gstin</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Orders</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -165,70 +258,42 @@ class StockPurchase extends Component {
                             {this.state.category.map((item, index) => (
                               <tr>
                                 <td>{index + 1}</td>
-                                <td>{item.supplier.supplier_name}</td>
-                                <td>{item.po_no}</td>
-                                <td>{item.purchase_date}</td>
-                                <td>{item.total_price}</td>
-                                <td>{(item.payment_sum_txn_amount == '' || item.payment_sum_txn_amount == null)?0:
-                                item.payment_sum_txn_amount
-                                }</td>
-                                <td>{
-                                  (item.payment_sum_txn_amount == '' || item.payment_sum_txn_amount == null)?item.total_price:
-                                  item.total_price - item.payment_sum_txn_amount
-                                  
-                                
-  }</td>
-                                {/* <td
-                                  className={
-                                    item.category_status == "active"
-                                      ? "text-success text-capitalize"
-                                      : "text-danger text-capitalize"
-                                  }
-                                >
-                                  {item.category_status}
-                                </td> */}
+                                <td>{item.supplier_name}</td>
+                                <td>{item.supplier_gstin}</td>
+                                <td>{item.supplier_contact}</td>
+                                <td>{item.supplier_email}</td>
+                                <td>{item.orders_count}</td>
                                 <td>
-                                  {
-                                    item.stock_added == 1 ?
-                                    <span className="text-success">Yes</span>
-                                    :
-                                    <span className="text-danger">No</span>
-                                  }
-                                </td>
-                                <td>
-                                  <Link
-                                    className="me-3"
-                                    to={"/edit_stock_purchase/" + item.id}
-                                  >
-                                    <img src={edit_icon} alt="img" />
-                                  </Link>
                                   <a
                                     className="me-3"
                                     onClick={() => {
                                       this.setState({
                                         openedit: true,
-                                        purchase_id:item.id
+                                        suplier_id: item.id,
+                                        name: item.supplier_name,
+                                        email: item.supplier_email,
+                                        contact: item.supplier_contact,
+                                        address: item.supplier_address,
+                                        gstin: item.supplier_gstin,
                                       });
                                     }}
                                   >
-                                    <img src={money_icon} alt="img" />
+                                    <img src={edit_icon} alt="img" />
                                   </a>
-
                                   <a
                                     className="confirm-text"
                                     onClick={() => {
                                       Swal.fire({
-                                        title:
-                                          "Are you sure you want to delete this category?",
-                                        text: "All the products under this category will also be deleted",
+                                        title: "Are you sure?",
+                                        text: "You won't be able to revert this!",
                                         icon: "warning",
                                         showCancelButton: true,
-                                        confirmButtonColor: "#ff9900",
+                                        confirmButtonColor: "#3085d6",
                                         cancelButtonColor: "#d33",
                                         confirmButtonText: "Yes, delete it!",
                                       }).then((result) => {
                                         if (result.isConfirmed) {
-                                          this.delete(item.id);
+                                          this.delete(item.id, item.name);
                                         }
                                       });
                                     }}
@@ -256,7 +321,7 @@ class StockPurchase extends Component {
                           height: "250px",
                         }}
                       />
-                      <h4>No Recoard Found</h4>
+                      <h4>No Records Found</h4>
                     </div>
                   )}
                 </div>
@@ -275,53 +340,76 @@ class StockPurchase extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Add Category</h4>
+                <h4>Add New Supplier </h4>
               </div>
             </div>
             <div className="card">
               <div className="card-body">
                 <div className="row">
-                  <div className="col-lg-12">
+                  <div className="col-lg-6">
                     <div className="form-group">
-                      <label>
-                        Category Name <span className="text-danger">*</span>
-                      </label>
+                      <label>Supplier Name</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({ name: e.target.value });
                         }}
                       />
                     </div>
                   </div>
-                  <div className="col-lg-12">
+
+                  <div className="col-lg-6">
                     <div className="form-group">
-                      <label>
-                        Choose Parent Categry{" "}
-                        <span className="text-danger">*</span>
-                      </label>
-                      <select
+                      <label>Supplier Contact</label>
+                      <input
+                        type="text"
                         onChange={(e) => {
-                          this.setState({ parent_category_id: e.target.value });
-                          // alert(e.target.value);
+                          this.setState({ contact: e.target.value });
                         }}
-                        className="select-container"
-                      >
-                        <option>Choose Parent Category</option>
-                        <option value={0}>None</option>
-                        {this.state.category.length > 0 &&
-                          this.state.category.map((item, index) => (
-                            <option value={item.id}>
-                              {item.category_name}
-                            </option>
-                          ))}
-                      </select>
+                      />
                     </div>
                   </div>
+
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Supplier Email</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ email: e.target.value });
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Supplier GSTIN</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ gstin: e.target.value });
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Supplier Address</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ address: e.target.value });
+                        }}
+                      />
+                    </div>
+                  </div>
+
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-primary btn-sm me-2"
+                        className="btn btn-submit me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -339,9 +427,9 @@ class StockPurchase extends Component {
                         onClick={() => {
                           this.add();
                         }}
-                        className="btn btn-primary btn-sm me-2"
+                        className="btn btn-submit me-2"
                       >
-                        Add Category
+                        Add
                       </a>
                     )}
                   </div>
@@ -361,118 +449,81 @@ class StockPurchase extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Pay Amount</h4>
-              </div>
+                <h4>Edit suplier </h4>
+                              </div>
             </div>
             <div className="card">
               <div className="card-body">
                 <div className="row">
-                <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>
-                        Remaing Amount - {this.state.remaing_amount}
-                   
-                      </label>
-                      
-                    </div>
-                  </div>
-
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>
-                        Amount
-                        <span className="text-danger">*</span>
-                      </label>
+                      <label>Supplier Name</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ txn_amount: e.target.value });
+                          this.setState({ name: e.target.value });
                         }}
-                        value={this.state.txn_amount}
+                        value={this.state.name}
                       />
                     </div>
                   </div>
 
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>
-                       Payment Date
-                        <span className="text-danger">*</span>
-                      </label>
+                      <label>Supplier Contact</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ txn_date: e.target.value });
+                          this.setState({ contact: e.target.value });
                         }}
-                        value={this.state.txn_date}
+                        value={this.state.contact}
                       />
                     </div>
                   </div>
 
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Supplier Email</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ email: e.target.value });
+                        }}
+                        value={this.state.email}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Supplier GSTIN</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ gstin: e.target.value });
+                        }}
+                        value={this.state.gstin}
+                      />
+                    </div>
+                  </div>
 
                   <div className="col-lg-12">
                     <div className="form-group">
-                      
-                      <div className="form-group">
-                          <label> Payment mode</label>
-                          <RadioGroup
-                            value={this.state.payment_mode}
-                            onChange={(e) => {
-                              this.setState({ payment_mode: e });
-                            }}
-                            horizontal
-                          >
-                            <RadioButton
-                              value="Cash"
-                            //   pointColor="#f3c783"
-                              iconSize={20}
-                            //   rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Cash
-                            </RadioButton>
-                            <RadioButton
-                              value="Card"
-                            //   pointColor="#f3c783"
-                              iconSize={20}
-                            //   rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Card
-                            </RadioButton>
-                            <RadioButton
-                              value="Chaque"
-                            //   pointColor="#f3c783"
-                              iconSize={20}
-                            //   rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Chaque
-                            </RadioButton>
-                            <RadioButton
-                              value="Online"
-                            //   pointColor="#f3c783"
-                              iconSize={20}
-                            //   rootColor="#bf370d"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                             Online
-                            </RadioButton>
-                          </RadioGroup>
-                        </div>
+                      <label>Supplier Address</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ address: e.target.value });
+                        }}
+                        value={this.state.address}
+                      />
                     </div>
                   </div>
-
-
 
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-primary btn-sm me-2"
+                        className="btn btn-submit me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -488,11 +539,11 @@ class StockPurchase extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.addPayment();
+                          this.edit();
                         }}
-                        className="btn btn-primary btn-sm me-2"
+                        className="btn btn-submit me-2"
                       >
-                       Save Changes
+                        Update
                       </a>
                     )}
                   </div>
@@ -506,4 +557,4 @@ class StockPurchase extends Component {
   }
 }
 
-export default StockPurchase;
+export default supliers;

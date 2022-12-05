@@ -315,6 +315,7 @@ class Inventoryproducts extends Component {
                                 <th>S.no</th>
                                 <th>Product Name</th>
                                 <th>Model</th>
+                                <th>Stock</th>
                                 <th>Purchase Unit</th>
                                 <th>Purchase Sub Unit</th>
                                 <th>Purchase Subunit Quantity</th>
@@ -329,6 +330,7 @@ class Inventoryproducts extends Component {
                                     <td>{index + 1}</td>
                                     <td>{item.inventory_product_name}</td>
                                     <td>{item.model}</td>
+                                    <td>{item.current_stock} {item.purchase_unit}</td>
                                     <td>{item.purchase_unit}</td>
                                     <td>{item.purchase_sub_unit}</td>
                                     <td>{item.purchase_subunit_quantity}</td>

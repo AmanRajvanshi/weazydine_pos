@@ -36,13 +36,17 @@ import Print from './pages/Print.jsx';
 import StockPurchase from './pages/StockPurchase.jsx';
 import Example from './pages/Example.jsx';
 import ReleaseStock from './pages/ReleaseStock.jsx';
-import AddStockPurchase from './pages/ReleaseStock.jsx';
+import AddStockPurchase from './pages/AddStockPurchase.jsx';
+import EditStockPurchase from './pages/EditStockRelease.jsx';
+
 import { Howl, Howler } from 'howler';
 import { toast } from 'react-toastify';
 import Kitchens from './pages/Kitchens.jsx';
 import Semifinishedrawmaterialproducts from './pages/Semifinishedrawmaterialproducts.jsx';
 import Addsemifinishedrawmaterialproducts from './pages/Addsemifinishedrawmaterialproducts.jsx';
 import Editsemifinishedrawmaterialproducts from './pages/Editsemifinishedrawmaterialproducts.jsx';
+
+import Supliers from './pages/Supliers.jsx';
 // import Tables from './pages/Tables.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
@@ -51,7 +55,7 @@ OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 // global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-// global.api = 'http://127.0.0.1:8000/api/';
+//global.api = 'http://127.0.0.1:8000/api/';
 
 //for local
 global.api = 'https://beta-dine-api.weazy.in/api/';
@@ -432,6 +436,17 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
+
+<Route
+              exact
+              path="/edit_stock_purchase/:id"
+              element={
+                <RequireAuth>
+                  <EditStockPurchase />
+                </RequireAuth>
+              }
+            />
+
             <Route
               exact
               path="/kitchens"
@@ -459,6 +474,16 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
+  <Route
+              exact
+              path="/supliers"
+              element={
+                <RequireAuth>
+                  <Supliers />
+                </RequireAuth>
+              }
+            />
+
             <Route
               exact
               path="/editsemifinishedrawmaterialproducts/:id"

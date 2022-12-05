@@ -10,31 +10,18 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../AuthContextProvider";
 import Skeletonloader from "../othercomponent/Skeletonloader";
 import moment from "moment";
-export class AddStockPurchase extends Component {
+export class EditStockPurchase extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
       open: false,
- 
       new_category_name: "",
       category: [],
-      products:[],
-      
+      products:[],  
       save_and_continue: false,
    
-      rows: [{
-        id: 1,
-        name: "",
-        quantity: "",
-        Unit: "",
-        price: "",
-        sgst: "",
-        cgst: "",
-        igst: "",
-        total: "",
-        material_id: 0,
-      }],
+      rows: [],
       supplier_id: "",
       invoice_date:moment(new Date()).format("YYYY-MM-DD"),
       po:'',
@@ -51,8 +38,74 @@ export class AddStockPurchase extends Component {
   componentDidMount() {
     this.fetchCategories();
     this.fetchProducts();
+    this.fetch_order();
+
   }
 
+
+  fetch_order =()=>{
+
+    fetch(global.api + "fetch_purchase_order_details", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+            purchase_order_id: this.props.id,
+        }),
+
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // console.warn(json.data)
+            if (!json.status ) {
+                toast.error("Something went wrong");
+
+            } else {
+                let one=[];
+                json.data.material.map((item, index) => {
+                    let row={
+                        id: index+1,
+                        name: item.name,
+                        quantity: item.material_quantity, 
+                        unit: item.material_unit,
+                        price: item.material_price,
+                        sgst: item.material_sgst,
+                        cgst: item.material_cgst,
+                        igst: item.material_igst,
+                        total: item.material_total_price,
+                        material_id: item.material_id,
+
+                    }
+                    one.push(row);
+                    
+                }
+                )
+
+                this.setState({
+                    rows: one,
+                });
+
+                this.setState({
+                    supplier_id:json.data.supplier_id,
+                    invoice_date:json.data.purchase_date, 
+                    po:json.data.po_no,
+                    note:json.data.note,
+                    stock_added:json.data.stock_added,
+                    payment_type:json.data.is_paid,
+                    igst:json.data.igst,
+                    sgst:json.data.sgst,
+                    cgst:json.data.cgst,
+                    total:json.data.total_price,
+                })
+            }
+        })
+          
+        .catch((error) => console.error(error))
+        .finally(() => {});
+  }
   fetchCategories = () => {
     fetch(global.api + "fetch_supplier", {
       method: "POST",
@@ -125,7 +178,7 @@ export class AddStockPurchase extends Component {
   };
 
   create = () => {
-console.log(this.state.rows);
+    console.log(this.state.rows);
     if (
       this.state.supplier_id == "" &&
       this.state.invoice_date == "" &&
@@ -148,9 +201,10 @@ console.log(this.state.rows);
       this.setState({ save_and_continue: true, isLoading: true });
 
       var form = new FormData();
+      form.append("purchase_id", this.props.id);
       form.append("supplier_id", this.state.supplier_id);
       form.append("purchase_date", this.state.invoice_date);
-      form.append("po", this.state.po);
+      form.append("po_id", this.state.po);
       form.append("is_paid", this.state.payment_type);
       
       form.append("note", this.state.note);
@@ -169,7 +223,7 @@ console.log(this.state.rows);
       form.append("total_price", this.state.total);
       form.append("purchase_order_product[]", JSON.stringify(this.state.rows));
       
-      fetch(global.api + "create_purchase_order", {
+      fetch(global.api + "update_purchase_order", {
         method: "POST",
         body: form,
         headers: {
@@ -370,7 +424,7 @@ console.log(this.state.rows);
               <div className="content">
                 <div className="page-header">
                   <div className="page-title">
-                    <h4>Purachse  Stocks</h4>
+                    <h4>Edit Purachse  Stocks</h4>
                     <h6>Purchase & add stock in inventory</h6>
                   </div>
                 </div>
@@ -403,6 +457,7 @@ console.log(this.state.rows);
                               this.setState({ supplier_id : e.target.value });
                               // alert(e.target.value);
                             }}
+                            value={this.state.supplier_id}
                             className="select-container"
                           >
                             <option>Choose Suplier</option>
@@ -435,6 +490,7 @@ console.log(this.state.rows);
                             onChange={(e) => {
                               this.setState({ po : e.target.value });
                             }}
+                            value={this.state.po}
                             type="text"
                           />
                         </div>
@@ -512,6 +568,7 @@ console.log(this.state.rows);
                               onChange={this.handleChange(idx)}
                             className="select-container"
                             name="material_id"
+                            value={this.state.rows[idx].material_id}
                           >
                             <option>Choose Material</option>
                             {this.state.products.length > 0 ? (
@@ -536,6 +593,7 @@ console.log(this.state.rows);
                               type="text"
                               name="unit"
                               value={this.state.rows[idx].unit}
+                              
                               onChange={this.handleChange(idx)}
                               className="form-control"
                             />
@@ -547,6 +605,8 @@ console.log(this.state.rows);
                               value={this.state.rows[idx].quantity}
                               onChange={this.handleChange(idx)}
                               className="form-control"
+                              
+
                             />
                           </td>
                          
@@ -766,7 +826,7 @@ function Navigate(props) {
   const abcd = useNavigate();
   const location = useLocation();
   return (
-    <AddStockPurchase
+    <EditStockPurchase
       {...props}
       {...useParams()}
       navigate={abcd}

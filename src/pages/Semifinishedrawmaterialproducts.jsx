@@ -22,10 +22,12 @@ class Semifinishedrawmaterialproducts extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.fetchProducts();
+  }
 
   fetchProducts = (id, page) => {
-    fetch(global.api + 'fetch_inventory_products', {
+    fetch(global.api + 'fetch_semi_dishes', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
