@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
-import money_icon from "../assets/images/icons/money.svg";
-import { AuthContext } from "../AuthContextProvider";
-import { toast } from "react-toastify";
-import { Bars } from "react-loader-spinner";
-import Swal from "sweetalert2";
-import no_img from "../assets/images/no_products_found.png";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import delete_icon from '../assets/images/icons/delete.svg';
+import edit_icon from '../assets/images/icons/edit.svg';
+import money_icon from '../assets/images/icons/money.svg';
+import { AuthContext } from '../AuthContextProvider';
+import { toast } from 'react-toastify';
+import { Bars } from 'react-loader-spinner';
+import Swal from 'sweetalert2';
+import no_img from '../assets/images/no_products_found.png';
 import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
-import { RadioGroup, RadioButton } from "react-radio-buttons";
-import moment from "moment";
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import moment from 'moment';
 class StockPurchase extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -22,18 +22,18 @@ class StockPurchase extends Component {
       openedit: false,
       is_loding: true,
       category: [],
-      new_category_name: "",
-      category_id: "",
+      new_category_name: '',
+      category_id: '',
       is_buttonloding: false,
-      parent_category_id: "",
-      category_status: "active",
-      parent_category_id_edit: "",
-      remaing_amount:0,
-      payment_mode:"cash",
-      txn_amount:'',
-      txn_note:'kjh',
-      txn_date:moment(new Date()).format("YYYY-MM-DD"),
-      purchase_id:'',
+      parent_category_id: '',
+      category_status: 'active',
+      parent_category_id_edit: '',
+      remaing_amount: 0,
+      payment_mode: 'cash',
+      txn_amount: '',
+      txn_note: 'kjh',
+      txn_date: moment(new Date()).format('YYYY-MM-DD'),
+      purchase_id: '',
     };
   }
 
@@ -42,15 +42,15 @@ class StockPurchase extends Component {
   }
 
   fetchData = () => {
-    fetch(global.api + "fetch_purchase_order", {
-      method: "POST",
+    fetch(global.api + 'fetch_purchase_order', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        range:'lifetime',
+        range: 'lifetime',
       }),
     })
       .then((response) => response.json())
@@ -69,20 +69,19 @@ class StockPurchase extends Component {
   };
 
   addPayment = () => {
-    fetch(global.api + "add_payment_purchase_order", {
-      method: "POST",
+    fetch(global.api + 'add_payment_purchase_order', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        purchase_id:this.state.purchase_id,
-        txn_amount:this.state.txn_amount,
-        txn_method:this.state.payment_mode,
-        txn_notes:this.state.txn_note,
-        txn_date:this.state.txn_date
-        
+        purchase_id: this.state.purchase_id,
+        txn_amount: this.state.txn_amount,
+        txn_method: this.state.payment_mode,
+        txn_notes: this.state.txn_note,
+        txn_date: this.state.txn_date,
       }),
     })
       .then((response) => response.json())
@@ -91,7 +90,6 @@ class StockPurchase extends Component {
           toast.success(json.msg);
           this.setState({ open: false });
           this.fetchData();
-        
         } else {
           toast.error(json.msg);
         }
@@ -100,8 +98,6 @@ class StockPurchase extends Component {
       .catch((error) => console.error(error))
       .finally(() => {});
   };
-
- 
 
   render() {
     return (
@@ -116,10 +112,7 @@ class StockPurchase extends Component {
                   <h6>Manage your all stock purchasing</h6>
                 </div>
                 <div className="page-btn">
-                  <Link to="/add_stock_purchase" 
-                    className="btn btn-added"
-                    
-                  >
+                  <Link to="/add_stock_purchase" className="btn btn-added">
                     Add new stock
                   </Link>
                 </div>
@@ -128,13 +121,13 @@ class StockPurchase extends Component {
                 <div
                   className="main_loader"
                   style={{
-                    height: "50vh",
+                    height: '50vh',
                   }}
                 >
                   <Bars
                     height="80"
                     width="80"
-                    color="#eda332"
+                    color="#5BC2C1"
                     ariaLabel="bars-loading"
                     wrapperStyle={{}}
                     wrapperClass=""
@@ -154,7 +147,7 @@ class StockPurchase extends Component {
                               <th>PO No</th>
                               <th>Purchase date</th>
                               <th>Total</th>
-                          
+
                               <th>Paid Amount</th>
                               <th>Balance</th>
                               <th>Stock Added</th>
@@ -169,15 +162,19 @@ class StockPurchase extends Component {
                                 <td>{item.po_no}</td>
                                 <td>{item.purchase_date}</td>
                                 <td>{item.total_price}</td>
-                                <td>{(item.payment_sum_txn_amount == '' || item.payment_sum_txn_amount == null)?0:
-                                item.payment_sum_txn_amount
-                                }</td>
-                                <td>{
-                                  (item.payment_sum_txn_amount == '' || item.payment_sum_txn_amount == null)?item.total_price:
-                                  item.total_price - item.payment_sum_txn_amount
-                                  
-                                
-  }</td>
+                                <td>
+                                  {item.payment_sum_txn_amount == '' ||
+                                  item.payment_sum_txn_amount == null
+                                    ? 0
+                                    : item.payment_sum_txn_amount}
+                                </td>
+                                <td>
+                                  {item.payment_sum_txn_amount == '' ||
+                                  item.payment_sum_txn_amount == null
+                                    ? item.total_price
+                                    : item.total_price -
+                                      item.payment_sum_txn_amount}
+                                </td>
                                 {/* <td
                                   className={
                                     item.category_status == "active"
@@ -188,17 +185,16 @@ class StockPurchase extends Component {
                                   {item.category_status}
                                 </td> */}
                                 <td>
-                                  {
-                                    item.stock_added == 1 ?
+                                  {item.stock_added == 1 ? (
                                     <span className="text-success">Yes</span>
-                                    :
+                                  ) : (
                                     <span className="text-danger">No</span>
-                                  }
+                                  )}
                                 </td>
                                 <td>
                                   <Link
                                     className="me-3"
-                                    to={"/edit_stock_purchase/" + item.id}
+                                    to={'/edit_stock_purchase/' + item.id}
                                   >
                                     <img src={edit_icon} alt="img" />
                                   </Link>
@@ -207,7 +203,7 @@ class StockPurchase extends Component {
                                     onClick={() => {
                                       this.setState({
                                         openedit: true,
-                                        purchase_id:item.id
+                                        purchase_id: item.id,
                                       });
                                     }}
                                   >
@@ -219,13 +215,13 @@ class StockPurchase extends Component {
                                     onClick={() => {
                                       Swal.fire({
                                         title:
-                                          "Are you sure you want to delete this category?",
-                                        text: "All the products under this category will also be deleted",
-                                        icon: "warning",
+                                          'Are you sure you want to delete this category?',
+                                        text: 'All the products under this category will also be deleted',
+                                        icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: "#ff9900",
-                                        cancelButtonColor: "#d33",
-                                        confirmButtonText: "Yes, delete it!",
+                                        confirmButtonColor: '#5bc2c1',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
                                       }).then((result) => {
                                         if (result.isConfirmed) {
                                           this.delete(item.id);
@@ -246,14 +242,14 @@ class StockPurchase extends Component {
                     <div
                       className="d-flex align-items-center justify-content-center flex-column"
                       style={{
-                        height: "70vh",
+                        height: '70vh',
                       }}
                     >
                       <img
                         src={no_img}
                         alt=""
                         style={{
-                          height: "250px",
+                          height: '250px',
                         }}
                       />
                       <h4>No Recoard Found</h4>
@@ -269,7 +265,7 @@ class StockPurchase extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -297,7 +293,7 @@ class StockPurchase extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>
-                        Choose Parent Categry{" "}
+                        Choose Parent Categry{' '}
                         <span className="text-danger">*</span>
                       </label>
                       <select
@@ -323,8 +319,8 @@ class StockPurchase extends Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -355,7 +351,7 @@ class StockPurchase extends Component {
           onClose={() => this.setState({ openedit: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -367,13 +363,11 @@ class StockPurchase extends Component {
             <div className="card">
               <div className="card-body">
                 <div className="row">
-                <div className="col-lg-12">
+                  <div className="col-lg-12">
                     <div className="form-group">
                       <label>
                         Remaing Amount - {this.state.remaing_amount}
-                   
                       </label>
-                      
                     </div>
                   </div>
 
@@ -396,7 +390,7 @@ class StockPurchase extends Component {
                   <div className="col-lg-6">
                     <div className="form-group">
                       <label>
-                       Payment Date
+                        Payment Date
                         <span className="text-danger">*</span>
                       </label>
                       <input
@@ -409,73 +403,69 @@ class StockPurchase extends Component {
                     </div>
                   </div>
 
-
                   <div className="col-lg-12">
                     <div className="form-group">
-                      
                       <div className="form-group">
-                          <label> Payment mode</label>
-                          <RadioGroup
-                            value={this.state.payment_mode}
-                            onChange={(e) => {
-                              this.setState({ payment_mode: e });
-                            }}
-                            horizontal
+                        <label> Payment mode</label>
+                        <RadioGroup
+                          value={this.state.payment_mode}
+                          onChange={(e) => {
+                            this.setState({ payment_mode: e });
+                          }}
+                          horizontal
+                        >
+                          <RadioButton
+                            value="Cash"
+                            //   pointColor="#f3c783"
+                            iconSize={20}
+                            //   rootColor="#065f0a"
+                            iconInnerSize={10}
+                            padding={10}
                           >
-                            <RadioButton
-                              value="Cash"
+                            Cash
+                          </RadioButton>
+                          <RadioButton
+                            value="Card"
                             //   pointColor="#f3c783"
-                              iconSize={20}
+                            iconSize={20}
                             //   rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Cash
-                            </RadioButton>
-                            <RadioButton
-                              value="Card"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Card
+                          </RadioButton>
+                          <RadioButton
+                            value="Chaque"
                             //   pointColor="#f3c783"
-                              iconSize={20}
+                            iconSize={20}
                             //   rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Card
-                            </RadioButton>
-                            <RadioButton
-                              value="Chaque"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Chaque
+                          </RadioButton>
+                          <RadioButton
+                            value="Online"
                             //   pointColor="#f3c783"
-                              iconSize={20}
-                            //   rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Chaque
-                            </RadioButton>
-                            <RadioButton
-                              value="Online"
-                            //   pointColor="#f3c783"
-                              iconSize={20}
+                            iconSize={20}
                             //   rootColor="#bf370d"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                             Online
-                            </RadioButton>
-                          </RadioGroup>
-                        </div>
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Online
+                          </RadioButton>
+                        </RadioGroup>
+                      </div>
                     </div>
                   </div>
-
-
 
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -492,7 +482,7 @@ class StockPurchase extends Component {
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
-                       Save Changes
+                        Save Changes
                       </a>
                     )}
                   </div>

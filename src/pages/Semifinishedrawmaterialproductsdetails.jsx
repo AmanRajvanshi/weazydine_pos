@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { BiRupee } from "react-icons/bi";
-import { Bars } from "react-loader-spinner";
-import { Link, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Header } from "../othercomponent/Header";
+import React, { Component } from 'react';
+import { BiRupee } from 'react-icons/bi';
+import { Bars } from 'react-loader-spinner';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Header } from '../othercomponent/Header';
 
-export class Productdetails extends Component {
+export class Semifinishedrawmaterialproductsdetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,10 +18,10 @@ export class Productdetails extends Component {
   }
 
   productDetails = () => {
-    fetch(global.api + "get_product_details?product_id=" + this.props.id, {
-      method: "GET",
+    fetch(global.api + 'get_product_details?product_id=' + this.props.id, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((response) => response.json())
@@ -64,32 +64,9 @@ export class Productdetails extends Component {
                 <div className="page-title">
                   <h4>Product Details</h4>
                 </div>
-                {/* <Link to="/editproduct/1">
-                <button className="btn btn-added">Edit</button>
-              </Link> */}
               </div>
               <div className="row">
-                <div className="col-lg-3 col-sm-12">
-                  <div className="card d-flex justify-content-center align-items-center">
-                    <div
-                      className="card-body"
-                      style={{
-                        height: "200px",
-                        width: "200px",
-                      }}
-                    >
-                      <img
-                        src={this.state.product.product_img}
-                        alt="img"
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-9 col-sm-12">
+                <div className="col-lg-12 col-sm-12">
                   <div className="card">
                     <div className="card-body">
                       <div className="productdetails">
@@ -98,37 +75,13 @@ export class Productdetails extends Component {
                             <h4>Name</h4>
                             <h6>{this.state.product.product_name}</h6>
                           </li>
-                          {/* <li>
-                            <h4>Category</h4>
-                            <h6>Computers</h6>
-                          </li> */}
-                          {/* <li>
-                          <h4>Unit</h4>
-                          <h6>Piece</h6>
-                        </li>
-                        <li>
-                          <h4>SKU</h4>
-                          <h6>PT0001</h6>
-                        </li>
-                        <li>
-                          <h4>Minimum Qty</h4>
-                          <h6>5</h6>
-                        </li>
-                        <li>
-                          <h4>Quantity</h4>
-                          <h6>50</h6>
-                        </li> */}
-                          {/* <li>
-                          <h4>Tax</h4>
-                          <h6>0.00 %</h6>
-                        </li> */}
                           <li>
                             <h4>Discount Type</h4>
                             <h6>Percentage</h6>
                           </li>
                           <li>
                             <h4>VEG/NON-VEG</h4>
-                            {this.state.product.is_veg == "1" ? (
+                            {this.state.product.is_veg == '1' ? (
                               <h6>VEG</h6>
                             ) : (
                               <h6>NON-VEG</h6>
@@ -163,15 +116,15 @@ export class Productdetails extends Component {
                                     <li>
                                       <h6
                                         style={{
-                                          width: "100%",
+                                          width: '100%',
                                         }}
                                       >
                                         {item.variants_name}
                                         <span
                                           className="mx-2"
                                           style={{
-                                            textDecoration: "line-through",
-                                            opacity: "0.9",
+                                            textDecoration: 'line-through',
+                                            opacity: '0.9',
                                           }}
                                         >
                                           <BiRupee />
@@ -197,7 +150,7 @@ export class Productdetails extends Component {
                                     <li>
                                       <h6
                                         style={{
-                                          width: "100%",
+                                          width: '100%',
                                         }}
                                       >
                                         {item.addon_name}
@@ -226,4 +179,6 @@ export class Productdetails extends Component {
   }
 }
 
-export default (props) => <Productdetails {...useParams()} {...props} />;
+export default (props) => (
+  <Semifinishedrawmaterialproductsdetails {...useParams()} {...props} />
+);

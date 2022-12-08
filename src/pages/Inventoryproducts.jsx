@@ -61,6 +61,7 @@ class Inventoryproducts extends Component {
       },
       body: JSON.stringify({
         page: page,
+        inventory_category_id: id,
       }),
     })
       .then((response) => response.json())
@@ -74,6 +75,9 @@ class Inventoryproducts extends Component {
         } else {
           if (json.data.data.length > 0) {
             this.setState({ products: json.data.data });
+          }
+          else{
+            this.setState({ products: [] });
           }
         }
         return json;
@@ -360,7 +364,7 @@ class Inventoryproducts extends Component {
                   <Bars
                     height="80"
                     width="80"
-                    color="#eda332"
+                    color="#5BC2C1"
                     ariaLabel="bars-loading"
                     wrapperStyle={{}}
                     wrapperClass=""

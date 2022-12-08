@@ -5,7 +5,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Bars, Circles } from 'react-loader-spinner';
 import profile from '../assets/images/profile.png';
 import { AuthContext } from '../AuthContextProvider';
-import blackLogo from '../assets/images/logoBlack.png';
+import blackLogo from '../assets/images/logos/favicon.png';
+import logo from '../assets/images/logos/main_logo_black.png';
 import moment from 'moment';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
@@ -24,7 +25,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token)
+    console.log(this.context.token);
     this.fetch_notifications(this.state.page);
   }
 
@@ -115,12 +116,19 @@ export class Header extends Component {
           <div className="header-left border-0">
             <div className="logo">
               <a>
+                <img src={logo} alt="" />
+              </a>
+            </div>
+          </div>
+          <div className="header-left border-0">
+            <div className="logo">
+              <a>
                 <h4
                   onClick={() => {
                     this.props.navigate('/');
                   }}
                 >
-                  <strong>{this.context.user.name}</strong>
+                  {this.context.user.name}
                 </h4>
               </a>
             </div>
@@ -133,6 +141,20 @@ export class Header extends Component {
             </span>
           </a>
           <ul className="nav user-menu">
+            <li className="nav-item dropdown has-arrow main-drop">
+              <a
+                href="return false;"
+                className="dropdown-toggle nav-link userset"
+                data-bs-toggle="dropdown"
+              >
+                <i className="fa-solid fa-headset"></i>
+              </a>
+              <div className="dropdown-menu menu-drop-user">
+                <div className="profilename">
+                  <p className="p-2">+91 7060-222-517</p>
+                </div>
+              </div>
+            </li>
             <li className="nav-item dropdown">
               <a
                 className="dropdown-toggle nav-link"
@@ -196,11 +218,11 @@ export class Header extends Component {
                         this.state.data.length > 0
                       }
                       loader={
-                        <div className="d-flex align-items-center justify-content-center w-full mt-xl">
+                        <div className="d-flex align-items-center justify-content-center w-full my-2">
                           <Bars
                             height="20"
                             width="20"
-                            color="#ff9900"
+                            color="#5bc2c1"
                             ariaLabel="bars-loading"
                             wrapperStyle={{}}
                             wrapperClass=""
@@ -215,15 +237,14 @@ export class Header extends Component {
                             <li className="notification-message">
                               <a href={item.notification_url}>
                                 <div className="media d-flex">
-                                  <span className="avatar flex-shrink-0">
-                                    <img alt="" src={blackLogo} />
-                                  </span>
                                   <div className="media-body flex-grow-1">
                                     <p className="noti-details">
                                       {item.notification_title}
                                     </p>
-                                    <p>{item.notification_description}</p>
-                                    <p className="noti-time">
+                                    {item.notification_description == null && (
+                                      <p>{item.notification_description}</p>
+                                    )}
+                                    <p className="noti-time d-flex justify-content-end">
                                       <span className="notification-time">
                                         {moment(item.created_at).fromNow()}
                                       </span>
@@ -393,18 +414,19 @@ export class Header extends Component {
                       <MenuItem routerLink={<Link to="/releaseStock" />}>
                         <span>Stock Release</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/semifinishedrawmaterialproducts" />}>
+                      <MenuItem
+                        routerLink={
+                          <Link to="/semifinishedrawmaterialproducts" />
+                        }
+                      >
                         <span>
                           Semi-Finished <br /> Raw Material Recipe
                         </span>
                       </MenuItem>
 
                       <MenuItem routerLink={<Link to="/supliers" />}>
-                        <span>
-                          Supliers
-                        </span>
+                        <span>Supliers</span>
                       </MenuItem>
-
                     </SubMenu>
 
                     <SubMenu label="Reports">

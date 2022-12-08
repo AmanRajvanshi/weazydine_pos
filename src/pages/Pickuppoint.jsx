@@ -198,7 +198,7 @@ export class Pickuppoint extends Component {
                   <Bars
                     height="80"
                     width="80"
-                    color="#eda332"
+                    color="#5BC2C1"
                     ariaLabel="bars-loading"
                     wrapperStyle={{}}
                     wrapperClass=""

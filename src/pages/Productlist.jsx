@@ -72,11 +72,11 @@ export class Productlist extends Component {
             {
               this.state.next_page
                 ? this.setState({
-                  products: [...this.state.products, ...json.data.data],
+                    products: [...this.state.products, ...json.data.data],
                     page: this.state.page + 1,
                   })
                 : this.setState({
-                  products: json.data.data,
+                    products: json.data.data,
                   });
             }
           }
@@ -193,7 +193,7 @@ export class Productlist extends Component {
                 <Bars
                   height="80"
                   width="80"
-                  color="#eda332"
+                  color="#5BC2C1"
                   ariaLabel="bars-loading"
                   wrapperStyle={{}}
                   wrapperClass=""
@@ -271,9 +271,9 @@ export class Productlist extends Component {
                             loader={
                               <div className="d-flex align-items-center justify-content-center w-full mt-xl">
                                 <Circles
-                                  height="30"
-                                  width="30"
-                                  color="#3b3b3b"
+                                  height="40"
+                                  width="40"
+                                  color="#5bc2c1"
                                 />
                               </div>
                             }

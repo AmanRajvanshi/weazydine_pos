@@ -50,20 +50,18 @@ export class ReleaseStock extends Component {
     this.fetchProducts();
   }
 
-
-
   create = () => {
-   
     if (this.state.rows.length == 0) {
-      toast.error("Add atleast one product !");
-    }
-   else {
+      toast.error('Add atleast one product !');
+    } else if (this.state.rows[0].material_id == '') {
+      toast.error('Select product !');
+    } else {
       this.setState({ save_and_continue: true, isLoading: true });
 
       var form = new FormData();
-   
-      form.append("purchase_order_product[]", JSON.stringify(this.state.rows));
-     
+
+      form.append('purchase_order_product[]', JSON.stringify(this.state.rows));
+
       fetch(global.api + 'release_inventory', {
         method: 'POST',
         body: form,
@@ -102,6 +100,7 @@ export class ReleaseStock extends Component {
       },
       body: JSON.stringify({
         page: page,
+        inventory_category_id: 0,
       }),
     })
       .then((response) => response.json())
@@ -148,7 +147,6 @@ export class ReleaseStock extends Component {
         name: '',
         quantity: '',
         Unit: '',
-       
       },
     ];
     this.setState({ rows: [...this.state.rows, ...vari] });
@@ -175,21 +173,9 @@ export class ReleaseStock extends Component {
               <div className="card">
                 <div className="card-body">
                   <div className="row">
-                    {/* <div className="col-lg-3 col-sm-6 col-12">
-                      <div className="form-group">
-                        <label>Receiver</label>
-                        <input
-                          onChange={(e) => {
-                            this.setState({ our_price: e.target.value });
-                          }}
-                          type="text"
-                        />
-                      </div>
-                    </div> */}
                     {this.state.rows.length > 0 ? (
                       <div className="row">
                         <div className="col-mg-12">
-                          <label>Row Material Details</label>
                           <br />
                           <table
                             className="table table-bordered table-hover"
@@ -289,12 +275,28 @@ export class ReleaseStock extends Component {
                         </div>
                       </div>
                     ) : (
-                      <></>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'end',
+                        }}
+                      >
+                        <button
+                          onClick={this.handleAddRow}
+                          className="btn btn-sm btn-outline-secondary"
+                          style={{
+                            marginBottom: '20px',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Add A Row
+                        </button>
+                      </div>
                     )}
-                    <div className="col-lg-12">
+                    <div className="col-lg-12 d-flex justify-content-end">
                       {this.state.save_and_continue ? (
                         <button
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{
                             pointerEvents: 'none',
                             opacity: '0.8',
@@ -311,8 +313,7 @@ export class ReleaseStock extends Component {
                           onClick={() => {
                             this.create();
                           }}
-                          className="btn btn-submit me-2  btn-sm"
-                          style={{ float: 'right' }}
+                          className="btn btn-primary btn-sm me-2"
                         >
                           Save Changes
                         </a>

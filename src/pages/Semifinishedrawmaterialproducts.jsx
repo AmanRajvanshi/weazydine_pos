@@ -130,7 +130,7 @@ class Semifinishedrawmaterialproducts extends Component {
                   <Bars
                     height="80"
                     width="80"
-                    color="#eda332"
+                    color="#5BC2C1"
                     ariaLabel="bars-loading"
                     wrapperStyle={{}}
                     wrapperClass=""
@@ -162,29 +162,23 @@ class Semifinishedrawmaterialproducts extends Component {
                                   {item.recipe_quantity}
                                 </td>
                                 <td>
-                                  {item.dish_expiry > 1 ? (
-                                    'in ' + item.dish_expiry + ' Days'
-                                  ) : (
-                                    <span
-                                      style={{
-                                        color: 'red',
-                                      }}
-                                    >
-                                      Tomorrow
-                                    </span>
-                                  )}
+                                  {item.dish_expiry > 1
+                                    ? item.dish_expiry + ' Days'
+                                    : item.dish_expiry + ' Day'}
                                 </td>
                                 <td style={{ textAlign: 'end' }}>
-                                  <img
-                                    src={eye_icon}
-                                    alt="img"
-                                    className="mx-2 cursor_pointer"
-                                    onClick={() => {
-                                      this.setState({
-                                        openedit: true,
-                                      });
-                                    }}
-                                  />
+                                  <Link to="/semifinishedrawmaterialproductsdetails">
+                                    <img
+                                      src={eye_icon}
+                                      alt="img"
+                                      className="mx-2 cursor_pointer"
+                                      onClick={() => {
+                                        this.setState({
+                                          openedit: true,
+                                        });
+                                      }}
+                                    />
+                                  </Link>
                                   <Link to="/editsemifinishedrawmaterialproducts/1">
                                     <img
                                       src={edit_icon}

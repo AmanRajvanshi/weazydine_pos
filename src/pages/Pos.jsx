@@ -565,7 +565,7 @@ class Pos extends Component {
             <Bars
               height="80"
               width="80"
-              color="#eda332"
+              color="#5BC2C1"
               ariaLabel="bars-loading"
               wrapperStyle={{}}
               wrapperClass=""
@@ -580,7 +580,7 @@ class Pos extends Component {
               margin: '0 0 0 20px',
             }}
           >
-            <div className="content" style={{ marginTop: -30 }}>
+            <div className="content">
               <div className="row">
                 {this.state.show_table ? (
                   <div className="col-lg-8 col-sm-12 ">
@@ -653,13 +653,14 @@ class Pos extends Component {
                               styles={{
                                 modal: {
                                   width: '100%',
+                                  maxWidth:"60vw"
                                 },
                               }}
                               classNames={{
-                                modal: 'new_modal_styling',
+                                modal: 'new_modal_styling new_modal_styling2',
                               }}
                             >
-                              <div>
+                              <div className='w-100'>
                                 <h5
                                   className="mb-2 fw-600 font-md"
                                   style={{
@@ -671,23 +672,22 @@ class Pos extends Component {
                                   Select The Product To Add
                                 </h5>
 
-                                {/* <input
+                                <input
                                   type="text"
                                   name=""
                                   id=""
-                                  autofocus={}
                                   onChange={(e) => this.search(e)}
                                   placeholder="Search Here...."
                                   style={{
-                                    width: "100%",
-                                    height: "40px",
-                                    borderRadius: "5px",
-                                    border: "1px solid #ccc",
-                                    padding: "0 10px",
-                                    position: "relative",
-                                    margin: "10px 0 30px",
+                                    width: '100%',
+                                    height: '40px',
+                                    borderRadius: '5px',
+                                    border: '1px solid #ccc',
+                                    padding: '0 10px',
+                                    position: 'relative',
+                                    margin: '10px 0 30px',
                                   }}
-                                /> */}
+                                />
                                 <div className="row">
                                   {!this.state.load_item ? (
                                     this.state.products.length > 0 ? (
@@ -792,7 +792,7 @@ class Pos extends Component {
                         onClick={() => {
                           this.guest();
                         }}
-                        className="btn  btn-outline-warning btn-sm me-2"
+                        className="btn  btn-outline btn-sm me-2"
                       >
                         Skip
                       </a>
@@ -1000,6 +1000,7 @@ class Pos extends Component {
                                             <div className="form-group">
                                               <input
                                                 type="number"
+                                                className="form-control w-100"
                                                 onChange={(e) => {
                                                   this.add_split_amount(
                                                     e.target.value,
@@ -1317,6 +1318,22 @@ class Category extends Component {
             {/* <div className="productsetimg"></div> */}
             <div className="productsetcontent">
               <div>
+                <h4>Search</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="col-pos-div d-flex"
+          onClick={() => {
+            this.props.fetch_product(0);
+          }}
+          style={{ padding: '15px' }}
+        >
+          <div className="productset flex-fill">
+            {/* <div className="productsetimg"></div> */}
+            <div className="productsetcontent">
+              <div>
                 <h4>All</h4>
               </div>
             </div>
@@ -1461,11 +1478,11 @@ class Products extends Component {
 
           <div
             className="productset flex-fill"
-            style={{ padding: '10px', marginBottom: '15px' }}
+            style={{ paddingBottom: '10px', marginBottom: '15px' }}
           >
             <div className="productsetcontent">
               <div className="row">
-                <div className="col-3">
+                {/* <div className="col-3">
                   <img
                     src={this.props.data.product_img}
                     alt="img"
@@ -1476,9 +1493,9 @@ class Products extends Component {
                     }}
                     // className="product_image"
                   />
-                </div>
+                </div> */}
 
-                <div className="col-9">
+                <div className="col-12">
                   <h4>{this.props.data.product_name}</h4>
                   <h6>
                     {' '}

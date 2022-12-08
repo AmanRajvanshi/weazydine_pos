@@ -254,7 +254,7 @@ export class Orderdetails extends Component {
             <Bars
               height="80"
               width="80"
-              color="#eda332"
+              color="#5BC2C1"
               ariaLabel="bars-loading"
               wrapperStyle={{}}
               wrapperClass=""
@@ -289,7 +289,7 @@ export class Orderdetails extends Component {
                             this.state.data.order_type != 'Delivery' ? (
                               <span
                                 style={{
-                                  color: '#eda332',
+                                  color: '#5BC2C1',
                                 }}
                               >
                                 Dine-In{' '}
@@ -304,7 +304,7 @@ export class Orderdetails extends Component {
                             ) : (
                               <span
                                 style={{
-                                  color: '#eda332',
+                                  color: '#5BC2C1',
                                 }}
                               >
                                 {this.state.data.order_type}
@@ -321,16 +321,16 @@ export class Orderdetails extends Component {
                                     ? 'red'
                                     : this.state.data.order_status ==
                                       'confirmed'
-                                    ? '#eda332'
+                                    ? '#5BC2C1'
                                     : this.state.data.order_status ==
                                       'cancelled'
                                     ? 'red'
                                     : this.state.data.order_status ==
                                       'in_process'
-                                    ? '#eda332'
+                                    ? '#5BC2C1'
                                     : this.state.data.order_status ==
                                       'processed'
-                                    ? '#eda332'
+                                    ? '#5BC2C1'
                                     : this.state.data.order_status ==
                                       'completed'
                                     ? 'green'
@@ -780,7 +780,7 @@ export class Orderdetails extends Component {
                             <a
                               className="btn btn-added"
                               style={{
-                                color: "#eda332",
+                                color: "#5BC2C1",
                               }}
                               onClick={() => this.setState({ open: true })}
                             >
@@ -982,7 +982,7 @@ export class Orderdetails extends Component {
                         >
                           <RadioButton
                             value="upi"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}
@@ -992,7 +992,7 @@ export class Orderdetails extends Component {
                           </RadioButton>
                           <RadioButton
                             value="card"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}
@@ -1002,7 +1002,7 @@ export class Orderdetails extends Component {
                           </RadioButton>
                           <RadioButton
                             value="cash"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}
@@ -1012,7 +1012,7 @@ export class Orderdetails extends Component {
                           </RadioButton>
                           <RadioButton
                             value="split"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}

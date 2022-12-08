@@ -47,6 +47,7 @@ import Addsemifinishedrawmaterialproducts from './pages/Addsemifinishedrawmateri
 import Editsemifinishedrawmaterialproducts from './pages/Editsemifinishedrawmaterialproducts.jsx';
 
 import Supliers from './pages/Supliers.jsx';
+import Semifinishedrawmaterialproductsdetails from './pages/Semifinishedrawmaterialproductsdetails.jsx';
 // import Tables from './pages/Tables.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
@@ -174,7 +175,7 @@ export class App extends Component {
         <Bars
           height="80"
           width="80"
-          color="#eda332"
+          color="#5BC2C1"
           ariaLabel="bars-loading"
           wrapperStyle={{}}
           wrapperClass=""
@@ -478,6 +479,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Supliers />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/semifinishedrawmaterialproductsdetails"
+              element={
+                <RequireAuth>
+                  <Semifinishedrawmaterialproductsdetails />
                 </RequireAuth>
               }
             />

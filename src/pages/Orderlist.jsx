@@ -233,7 +233,7 @@ class Orderlist extends Component {
                         }
                         loader={
                           <div className="d-flex align-items-center justify-content-center w-full mt-xl">
-                            <Circles height="30" width="30" color="#3b3b3b" />
+                            <Circles height="40" width="40" color="#5bc2c1" />
                           </div>
                         }
                       >
@@ -281,7 +281,7 @@ class Orderlist extends Component {
                                     <span
                                       style={{
                                         // color: {item.order_status == "Pending"?"red":{item.order_status == "Pending"?}"green"},
-                                        color: '#eda332',
+                                        color: '#5BC2C1',
                                         textTransform: 'capitalize',
                                       }}
                                     >
@@ -290,7 +290,7 @@ class Orderlist extends Component {
                                   ) : item.order_status == 'ongoing' ? (
                                     <span
                                       style={{
-                                        color: '#eda332',
+                                        color: '#5BC2C1',
                                         textTransform: 'capitalize',
                                       }}
                                     >
@@ -299,7 +299,7 @@ class Orderlist extends Component {
                                   ) : item.order_status == 'processed' ? (
                                     <span
                                       style={{
-                                        color: '#eda332',
+                                        color: '#5BC2C1',
                                         textTransform: 'capitalize',
                                       }}
                                     >
@@ -379,7 +379,7 @@ class Orderlist extends Component {
                 <Bars
                   height="80"
                   width="80"
-                  color="#eda332"
+                  color="#5BC2C1"
                   ariaLabel="bars-loading"
                   wrapperStyle={{}}
                   wrapperClass=""

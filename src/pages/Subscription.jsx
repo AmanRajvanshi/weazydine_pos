@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
-import logo from '../assets/images/main_logo.png';
+import logo from "../assets/images/logos/main_logo_black.png";
 import login from '../assets/images/login.jpg';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../AuthContextProvider';

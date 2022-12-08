@@ -47,6 +47,11 @@ export class AddStockPurchase extends Component {
       sgst: 0,
       cgst: 0,
       total: 0,
+      name: '',
+      email: '',
+      contact: '',
+      address: '',
+      gstin: '',
     };
   }
 
@@ -66,12 +71,14 @@ export class AddStockPurchase extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
-        if (json.data.length == 0) {
-          this.setState({ open: true });
+        if (json.status) {
+          if (json.data.length == 0) {
+            this.setState({ open: true });
+          }
+          this.setState({ category: json.data, is_loding: false });
+        } else {
+          this.setState({ is_loding: false, category: [] });
         }
-        this.setState({ category: json.data });
-        this.setState({ is_loding: false });
         return json;
       })
       .catch((error) => console.error(error))
@@ -80,6 +87,52 @@ export class AddStockPurchase extends Component {
 
   handleCheck = (e) => {
     this.setState({ stock_added: e.target.checked });
+  };
+
+  addsupplier = () => {
+    if (this.state.name == '') {
+      toast.error('Please enter name');
+      return;
+    }
+    if (this.state.contact == '') {
+      toast.error('Please enter contact');
+      return;
+    } else {
+      this.setState({ is_buttonloding: true });
+      fetch(global.api + 'add_supplier', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          supplier_name: this.state.name,
+          supplier_email: this.state.email,
+          supplier_contact: this.state.contact,
+          supplier_address: this.state.address,
+          supplier_gstin: this.state.gstin,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.status) {
+            var msg = json.msg;
+            toast.error(msg);
+          } else {
+            this.setState({ open: false, new_category_name: '' });
+            toast.success(json.msg);
+            this.fetchCategories();
+          }
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isloading: false, is_buttonloding: false });
+        });
+    }
   };
 
   add = () => {
@@ -99,7 +152,6 @@ export class AddStockPurchase extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -125,7 +177,6 @@ export class AddStockPurchase extends Component {
   };
 
   create = () => {
-    console.log(this.state.rows);
     if (
       this.state.supplier_id == '' &&
       this.state.invoice_date == '' &&
@@ -173,12 +224,12 @@ export class AddStockPurchase extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
           } else {
             toast.success(json.msg);
+            this.props.navigate('/stock_purchase');
             this.setState({ product_show: false, product_id: json.data.id });
           }
           return json;
@@ -202,11 +253,11 @@ export class AddStockPurchase extends Component {
       },
       body: JSON.stringify({
         page: page,
+        inventory_category_id: 0,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
@@ -606,7 +657,7 @@ export class AddStockPurchase extends Component {
                         >
                           <button
                             onClick={this.handleAddRow}
-                            className="btn btn-outline-secondary"
+                            className="btn btn-sm btn-outline-secondary"
                             style={{
                               marginBottom: '20px',
                               marginTop: '10px',
@@ -619,15 +670,23 @@ export class AddStockPurchase extends Component {
                     ) : (
                       <></>
                     )}
-
-                    <label>
+                    <div className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3">
                       <input
                         type="checkbox"
+                        className="checkbox"
                         checked={this.state.stock_added}
                         onChange={this.handleCheck}
+                        id="stock_added"
                       />
-                      you want to add stock in your inventory
-                    </label>
+                      <label
+                        htmlFor="stock_added"
+                        className="checkbox_text d-flex justify-content-between align-items-center"
+                      >
+                        <p className="m-0 mx-3">
+                          Do you want to add stock in your inventory?
+                        </p>
+                      </label>
+                    </div>
 
                     <div className="col-lg-3 col-sm-12 col-12">
                       <div className="form-group">
@@ -648,10 +707,10 @@ export class AddStockPurchase extends Component {
                       </div>
                     </div>
 
-                    <div className="col-lg-12">
+                    <div className="col-lg-12 d-flex justify-content-end">
                       {this.state.save_and_continue ? (
                         <button
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{
                             pointerEvents: 'none',
                             opacity: '0.8',
@@ -668,7 +727,7 @@ export class AddStockPurchase extends Component {
                           onClick={() => {
                             this.create();
                           }}
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{ float: 'right' }}
                         >
                           Save Changes
@@ -692,27 +751,40 @@ export class AddStockPurchase extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Add Supplier </h4>
+                <h4>Add New Supplier </h4>
               </div>
             </div>
             <div className="card">
               <div className="card-body">
                 <div className="row">
-                  <div className="col-lg-12">
+                  <div className="col-lg-6">
                     <div className="form-group">
-                      <label> Supplier Name</label>
+                      <label>Supplier Name</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({ name: e.target.value });
                         }}
                       />
                     </div>
                   </div>
+
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Supplier Contact</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ contact: e.target.value });
+                        }}
+                      />
+                    </div>
+                  </div>
+
                   <div className="col-lg-12 d-flex justify-content-end">
-                    {this.state.add_category_loading ? (
+                    {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: 'none',
                           opacity: '0.8',
@@ -728,11 +800,11 @@ export class AddStockPurchase extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.add();
+                          this.addsupplier();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
-                        Add Supplier
+                        Add
                       </a>
                     )}
                   </div>

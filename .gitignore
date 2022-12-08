@@ -42,7 +42,7 @@ build
 loginpassword
 
 
-*/.DS_Store
+.DS_Store
 
 
 # Dependency directories

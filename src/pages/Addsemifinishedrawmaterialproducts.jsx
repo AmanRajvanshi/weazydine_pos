@@ -77,13 +77,13 @@ export class Addsemifinishedrawmaterialproducts extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.warn(json)
+          console.warn(json);
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
           } else {
             toast.success(json.msg);
-            this.props.navigate("/semifinishedrawmaterialproducts");
+            this.props.navigate('/semifinishedrawmaterialproducts');
             this.setState({ product_show: false, product_id: json.data.id });
           }
           return json;
@@ -107,6 +107,7 @@ export class Addsemifinishedrawmaterialproducts extends Component {
       },
       body: JSON.stringify({
         page: page,
+        inventory_category_id: 0,
       }),
     })
       .then((response) => response.json())
@@ -373,7 +374,7 @@ export class Addsemifinishedrawmaterialproducts extends Component {
                           >
                             <button
                               onClick={this.handleAddRow}
-                              className="btn btn-outline-secondary"
+                              className="btn btn-sm btn-outline-secondary"
                               style={{
                                 marginBottom: '20px',
                                 marginTop: '10px',
@@ -385,12 +386,28 @@ export class Addsemifinishedrawmaterialproducts extends Component {
                         </div>
                       </div>
                     ) : (
-                      <></>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'end',
+                        }}
+                      >
+                        <button
+                          onClick={this.handleAddRow}
+                          className="btn btn-sm btn-outline-secondary"
+                          style={{
+                            marginBottom: '20px',
+                            marginTop: '10px',
+                          }}
+                        >
+                          Add A Row
+                        </button>
+                      </div>
                     )}
-                    <div className="col-lg-12">
+                    <div className="col-lg-12 d-flex justify-content-end">
                       {this.state.save_and_continue ? (
                         <button
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{
                             pointerEvents: 'none',
                             opacity: '0.8',
@@ -407,8 +424,7 @@ export class Addsemifinishedrawmaterialproducts extends Component {
                           onClick={() => {
                             this.create();
                           }}
-                          className="btn btn-submit me-2 btn-sm"
-                          style={{ float: 'right' }}
+                          className="btn btn-primary btn-sm me-2"
                         >
                           Save Changes
                         </a>

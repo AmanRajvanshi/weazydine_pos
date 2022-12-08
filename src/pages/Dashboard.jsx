@@ -386,7 +386,7 @@ class Tables extends Component {
                   </h4>
                   {this.state.data.map((item, index) => {
                     return (
-                      <div key={index} className="col-lg-3 col-sm-6 col-12">
+                      <div key={index} className="col-lg-2 col-sm-6 col-12">
                         <Link
                           to={'/tableorderdetails/' + item.table_uu_id}
                           className=" d-flex w-100"
@@ -398,18 +398,7 @@ class Tables extends Component {
                                 : 'dash-count'
                             }
                           >
-                            <div className="dash-counts">
-                              <h4>{item.table_name}</h4>
-                              <h6
-                                style={{
-                                  textTransform: 'capitalize',
-                                }}
-                              >
-                                {item.table_status}
-                              </h6>
-
-                              {/* <a href={item.qr_link}>Download QR</a> */}
-                            </div>
+                            <h4>{item.table_name}</h4>
                           </div>
                         </Link>
                       </div>

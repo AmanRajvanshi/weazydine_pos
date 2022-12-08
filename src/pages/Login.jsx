@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import logo from "../assets/images/main_logo.png";
-import login from "../assets/images/login.jpg";
+import logo from "../assets/images/logos/main_logo_black.png";
+import login from "../assets/images/logos/main_logo_black.png";
 import Swal from "sweetalert2";
 import { AuthContext } from "../AuthContextProvider";
 import { toast } from "react-toastify";
@@ -189,7 +189,7 @@ class Login extends Component {
                 <div className="col-md-3"></div>
                 <div className="col-md-6">
                   <div className="card">
-                    <div className="card-body">
+                    <div className="card-body main_login_card">
                       <div className="login-content">
                         <div className="login-userset">
                           <div className="login-logo">
@@ -197,7 +197,7 @@ class Login extends Component {
                               src={logo}
                               alt="img"
                               style={{
-                                maxWidth: "50%",
+                                maxWidth: "60%",
                                 margin: "20px auto 40px",
                               }}
                             />
@@ -270,7 +270,7 @@ class Login extends Component {
                                 minutes={0}
                                 resend={() => this.resendOtp()}
                                 text={"Resend OTP in"}
-                                buttonColor={"#eda332"}
+                                buttonColor={"#5BC2C1"}
                                 background={"#fff"}
                                 ButtonText={"Didn't get the code? Resend OTP"}
                               />

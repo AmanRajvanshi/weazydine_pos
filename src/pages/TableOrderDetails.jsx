@@ -183,7 +183,7 @@ export class TableOrderDetails extends Component {
             <Bars
               height="80"
               width="80"
-              color="#eda332"
+              color="#5BC2C1"
               ariaLabel="bars-loading"
               wrapperStyle={{}}
               wrapperClass=""
@@ -515,7 +515,7 @@ export class TableOrderDetails extends Component {
                               <a
                                 className="btn btn-added"
                                 style={{
-                                  color: '#eda332',
+                                  color: '#5BC2C1',
                                 }}
                                 onClick={() => this.setState({ open: true })}
                               >
@@ -661,7 +661,7 @@ export class TableOrderDetails extends Component {
                         >
                           <RadioButton
                             value="UPI"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}
@@ -671,7 +671,7 @@ export class TableOrderDetails extends Component {
                           </RadioButton>
                           <RadioButton
                             value="Card"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}
@@ -681,7 +681,7 @@ export class TableOrderDetails extends Component {
                           </RadioButton>
                           <RadioButton
                             value="Cash"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}
@@ -691,7 +691,7 @@ export class TableOrderDetails extends Component {
                           </RadioButton>
                           <RadioButton
                             value="split"
-                            pointColor="#eda332"
+                            pointColor="#5BC2C1"
                             iconSize={20}
                             rootColor="#f3c783"
                             iconInnerSize={10}

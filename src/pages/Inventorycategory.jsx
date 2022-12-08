@@ -215,7 +215,7 @@ class Inventorycategory extends Component {
                   <Bars
                     height="80"
                     width="80"
-                    color="#eda332"
+                    color="#5BC2C1"
                     ariaLabel="bars-loading"
                     wrapperStyle={{}}
                     wrapperClass=""
@@ -280,7 +280,7 @@ class Inventorycategory extends Component {
                                         text: 'All the products under this category will also be deleted',
                                         icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: '#ff9900',
+                                        confirmButtonColor: '#5bc2c1',
                                         cancelButtonColor: '#d33',
                                         confirmButtonText: 'Yes, delete it!',
                                       }).then((result) => {

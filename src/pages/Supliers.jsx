@@ -170,7 +170,7 @@ export class supliers extends Component {
           var msg = json.msg;
           // Toast.show(msg);
         } else {
-          toast.success('Pickup Point deleted');
+          toast.success("Supplier Deleted Successfully");
           this.fetchCategories();
         }
       })
@@ -220,7 +220,7 @@ export class supliers extends Component {
                   <Bars
                     height="80"
                     width="80"
-                    color="#eda332"
+                    color="#5BC2C1"
                     ariaLabel="bars-loading"
                     wrapperStyle={{}}
                     wrapperClass=""

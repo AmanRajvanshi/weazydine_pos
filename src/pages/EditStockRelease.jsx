@@ -1,37 +1,42 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { Link } from "react-router-dom";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
-import { BiRupee } from "react-icons/bi";
-import { toast } from "react-toastify";
-import { AuthContext } from "../AuthContextProvider";
-import Skeletonloader from "../othercomponent/Skeletonloader";
-import moment from "moment";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { BiRupee } from 'react-icons/bi';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../AuthContextProvider';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+import moment from 'moment';
 export class EditStockPurchase extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      new_category_name: "",
+      new_category_name: '',
       category: [],
-      products:[],  
+      products: [],
       save_and_continue: false,
-   
+
       rows: [],
-      supplier_id: "",
-      invoice_date:moment(new Date()).format("YYYY-MM-DD"),
-      po:'',
-      note:'',
-      stock_added:0,
-      payment_type:1,
-      igst:0,
-      sgst:0,
-      cgst:0,
-    total:0,
+      supplier_id: '',
+      invoice_date: moment(new Date()).format('YYYY-MM-DD'),
+      po: '',
+      note: '',
+      stock_added: 0,
+      payment_type: 1,
+      igst: 0,
+      sgst: 0,
+      cgst: 0,
+      total: 0,
+      name: '',
+      email: '',
+      contact: '',
+      address: '',
+      gstin: '',
     };
   }
 
@@ -39,90 +44,85 @@ export class EditStockPurchase extends Component {
     this.fetchCategories();
     this.fetchProducts();
     this.fetch_order();
-
   }
 
-
-  fetch_order =()=>{
-
-    fetch(global.api + "fetch_purchase_order_details", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: this.context.token,
-        },
-        body: JSON.stringify({
-            purchase_order_id: this.props.id,
-        }),
-
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          // console.warn(json.data)
-            if (!json.status ) {
-                toast.error("Something went wrong");
-
-            } else {
-                let one=[];
-                json.data.material.map((item, index) => {
-                    let row={
-                        id: index+1,
-                        name: item.name,
-                        quantity: item.material_quantity, 
-                        unit: item.material_unit,
-                        price: item.material_price,
-                        sgst: item.material_sgst,
-                        cgst: item.material_cgst,
-                        igst: item.material_igst,
-                        total: item.material_total_price,
-                        material_id: item.material_id,
-
-                    }
-                    one.push(row);
-                    
-                }
-                )
-
-                this.setState({
-                    rows: one,
-                });
-
-                this.setState({
-                    supplier_id:json.data.supplier_id,
-                    invoice_date:json.data.purchase_date, 
-                    po:json.data.po_no,
-                    note:json.data.note,
-                    stock_added:json.data.stock_added,
-                    payment_type:json.data.is_paid,
-                    igst:json.data.igst,
-                    sgst:json.data.sgst,
-                    cgst:json.data.cgst,
-                    total:json.data.total_price,
-                })
-            }
-        })
-          
-        .catch((error) => console.error(error))
-        .finally(() => {});
-  }
-  fetchCategories = () => {
-    fetch(global.api + "fetch_supplier", {
-      method: "POST",
+  fetch_order = () => {
+    fetch(global.api + 'fetch_purchase_order_details', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        purchase_order_id: this.props.id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        // console.warn(json.data)
+        if (!json.status) {
+          toast.error('Something went wrong');
+        } else {
+          let one = [];
+          json.data.material.map((item, index) => {
+            let row = {
+              id: index + 1,
+              name: item.name,
+              quantity: item.material_quantity,
+              unit: item.material_unit,
+              price: item.material_price,
+              sgst: item.material_sgst,
+              cgst: item.material_cgst,
+              igst: item.material_igst,
+              total: item.material_total_price,
+              material_id: item.material_id,
+            };
+            one.push(row);
+          });
+
+          this.setState({
+            rows: one,
+          });
+
+          this.setState({
+            supplier_id: json.data.supplier_id,
+            invoice_date: json.data.purchase_date,
+            po: json.data.po_no,
+            note: json.data.note,
+            stock_added: json.data.stock_added,
+            payment_type: json.data.is_paid,
+            igst: json.data.igst,
+            sgst: json.data.sgst,
+            cgst: json.data.cgst,
+            total: json.data.total_price,
+          });
+        }
+      })
+
+      .catch((error) => console.error(error))
+      .finally(() => {});
+  };
+
+  fetchCategories = () => {
+    fetch(global.api + 'fetch_supplier', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
-        if (json.data.length == 0) {
-          this.setState({ open: true });
+        if (json.status) {
+          if (json.data.length == 0) {
+            this.setState({ open: true });
+          }
+          this.setState({ category: json.data, is_loding: false });
+        } else {
+          this.setState({ is_loding: false, category: [] });
         }
-        this.setState({ category: json.data });
-        this.setState({ is_loding: false });
         return json;
       })
       .catch((error) => console.error(error))
@@ -130,24 +130,22 @@ export class EditStockPurchase extends Component {
   };
 
   handleCheck = (e) => {
-    
-    this.setState({stock_added:e.target.checked});
-  }
-
+    this.setState({ stock_added: e.target.checked });
+  };
 
   add = () => {
-    if (this.state.new_category_name != "") {
+    if (this.state.new_category_name != '') {
       this.setState({ add_category_loading: true });
-      fetch(global.api + "create_category_vendor", {
-        method: "POST",
+      fetch(global.api + 'create_category_vendor', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
           category_name: this.state.new_category_name,
-          status: "active",
+          status: 'active',
         }),
       })
         .then((response) => response.json())
@@ -159,7 +157,7 @@ export class EditStockPurchase extends Component {
           } else {
             this.setState({
               open: false,
-              new_category_name: "",
+              new_category_name: '',
             });
             toast.success(json.msg);
             this.fetchCategories();
@@ -173,58 +171,53 @@ export class EditStockPurchase extends Component {
           this.setState({ add_category_loading: false });
         });
     } else {
-      toast.error("Please add Category first!");
+      toast.error('Please add Category first!');
     }
   };
 
   create = () => {
     console.log(this.state.rows);
     if (
-      this.state.supplier_id == "" &&
-      this.state.invoice_date == "" &&
-      this.state.po == "" 
+      this.state.supplier_id == '' &&
+      this.state.invoice_date == '' &&
+      this.state.po == ''
     ) {
-      toast.error("All fields are required !");
-    } else if (this.state.category == "") {
-      toast.error("Add category first !");
-    }
-    else if (this.state.rows.length == 0) {
-      toast.error("Add atleast one product !");
+      toast.error('All fields are required !');
+    } else if (this.state.category == '') {
+      toast.error('Add category first !');
+    } else if (this.state.rows.length == 0) {
+      toast.error('Add atleast one product !');
     }
     // else if (this.state.market_price<this.state.our_price) {
     //     toast.error("Your price should be less than market price !");
     // }
-    else if (this.state.supplier_id == "") {
-      toast.error("supplier is required !");
-    } 
-     else {
+    else if (this.state.supplier_id == '') {
+      toast.error('supplier is required !');
+    } else {
       this.setState({ save_and_continue: true, isLoading: true });
 
       var form = new FormData();
-      form.append("purchase_id", this.props.id);
-      form.append("supplier_id", this.state.supplier_id);
-      form.append("purchase_date", this.state.invoice_date);
-      form.append("po_id", this.state.po);
-      form.append("is_paid", this.state.payment_type);
-      
-      form.append("note", this.state.note);
+      form.append('purchase_id', this.props.id);
+      form.append('supplier_id', this.state.supplier_id);
+      form.append('purchase_date', this.state.invoice_date);
+      form.append('po_id', this.state.po);
+      form.append('is_paid', this.state.payment_type);
 
-      if(this.state.stock_added)
-      {
-        form.append("stock_added", 1);
+      form.append('note', this.state.note);
+
+      if (this.state.stock_added) {
+        form.append('stock_added', 1);
+      } else {
+        form.append('stock_added', 0);
       }
-      else
-      {
-        form.append("stock_added", 0);
-      }
-      form.append("igst", this.state.igst);
-      form.append("sgst", this.state.sgst);
-      form.append("cgst", this.state.cgst);
-      form.append("total_price", this.state.total);
-      form.append("purchase_order_product[]", JSON.stringify(this.state.rows));
-      
-      fetch(global.api + "update_purchase_order", {
-        method: "POST",
+      form.append('igst', this.state.igst);
+      form.append('sgst', this.state.sgst);
+      form.append('cgst', this.state.cgst);
+      form.append('total_price', this.state.total);
+      form.append('purchase_order_product[]', JSON.stringify(this.state.rows));
+
+      fetch(global.api + 'update_purchase_order', {
+        method: 'POST',
         body: form,
         headers: {
           Authorization: this.context.token,
@@ -252,11 +245,11 @@ export class EditStockPurchase extends Component {
   };
 
   fetchProducts = (id, page) => {
-    fetch(global.api + "fetch_inventory_products", {
-      method: "POST",
+    fetch(global.api + 'fetch_inventory_products', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -289,122 +282,116 @@ export class EditStockPurchase extends Component {
   handleChange = (idx) => (e) => {
     const newRows = [...this.state.rows];
 
-    if(e.target.name == 'material_id')
-    {
+    if (e.target.name == 'material_id') {
       var index = e.target.selectedIndex;
-      var optionElement = e.target.childNodes[index]
-      var option =  optionElement.getAttribute('unit');
+      var optionElement = e.target.childNodes[index];
+      var option = optionElement.getAttribute('unit');
       newRows[idx]['unit'] = option;
       newRows[idx][e.target.name] = parseInt(e.target.value);
-    }
-    else
-    {
+    } else {
       newRows[idx][e.target.name] = e.target.value;
     }
 
- 
+    var total = 0;
 
-    var total=0;
-    
-    if(newRows[idx]['sgst']=="")
-    {
-      var sgst=0;
-    }
-    else
-    {
-      var sgst=newRows[idx]['sgst'];
+    if (newRows[idx]['sgst'] == '') {
+      var sgst = 0;
+    } else {
+      var sgst = newRows[idx]['sgst'];
     }
 
-    if(newRows[idx]['igst']=="")
-    {
-      var igst=0;
-    }
-    else
-    {
-      var igst=newRows[idx]['igst'];
+    if (newRows[idx]['igst'] == '') {
+      var igst = 0;
+    } else {
+      var igst = newRows[idx]['igst'];
     }
 
-    if(newRows[idx]['cgst']=="")
-    {
-      var cgst=0;
-    }
-    else
-    {
-      var cgst=newRows[idx]['cgst'];
-    }
-    
-
-    if(newRows[idx]['price']=="")
-    {
-      var price=0;
-    }
-    else
-    {
-      var price=newRows[idx]['price'];
+    if (newRows[idx]['cgst'] == '') {
+      var cgst = 0;
+    } else {
+      var cgst = newRows[idx]['cgst'];
     }
 
-    if(newRows[idx]['quantity']=="")
-    {
-      var quantity=0;
-    }
-    else
-    {
-      var quantity=newRows[idx]['quantity'];
+    if (newRows[idx]['price'] == '') {
+      var price = 0;
+    } else {
+      var price = newRows[idx]['price'];
     }
 
+    if (newRows[idx]['quantity'] == '') {
+      var quantity = 0;
+    } else {
+      var quantity = newRows[idx]['quantity'];
+    }
 
-    newRows[idx]['total']=total+parseFloat(price)*parseInt(quantity)+parseFloat(price)*parseInt(quantity)*parseFloat(sgst)/100+parseFloat(price)*parseInt(quantity)*parseFloat(cgst)/100+parseFloat(price)*parseInt(quantity)*parseFloat(igst)/100;
+    newRows[idx]['total'] =
+      total +
+      parseFloat(price) * parseInt(quantity) +
+      (parseFloat(price) * parseInt(quantity) * parseFloat(sgst)) / 100 +
+      (parseFloat(price) * parseInt(quantity) * parseFloat(cgst)) / 100 +
+      (parseFloat(price) * parseInt(quantity) * parseFloat(igst)) / 100;
 
-    var final=0;
-    var igst=0;
-    var cgst=0;
-    var sgst=0;
+    var final = 0;
+    var igst = 0;
+    var cgst = 0;
+    var sgst = 0;
     newRows.map((item, index) => {
-      final=final+parseInt(item.total);
-      
-      if(item.igst == '')
-      {
-        igst=igst+0;
-      }
-      else
-      {
-        igst=igst+parseInt(item.quantity)*parseFloat(item.price)*parseFloat(item.igst)/100;
+      final = final + parseInt(item.total);
+
+      if (item.igst == '') {
+        igst = igst + 0;
+      } else {
+        igst =
+          igst +
+          (parseInt(item.quantity) *
+            parseFloat(item.price) *
+            parseFloat(item.igst)) /
+            100;
       }
 
-      if(item.cgst == '')
-      {
-        cgst=cgst+0;
-      }
-      else
-      {
-        cgst=cgst+parseInt(item.quantity)*parseFloat(item.price)*parseFloat(item.cgst)/100;
-      }
-
-      if(item.sgst == '')
-      {
-        sgst=sgst+0;
-      }
-      else
-      {
-        sgst=sgst+parseInt(item.quantity)*parseFloat(item.price)*parseFloat(item.sgst)/100;
+      if (item.cgst == '') {
+        cgst = cgst + 0;
+      } else {
+        cgst =
+          cgst +
+          (parseInt(item.quantity) *
+            parseFloat(item.price) *
+            parseFloat(item.cgst)) /
+            100;
       }
 
+      if (item.sgst == '') {
+        sgst = sgst + 0;
+      } else {
+        sgst =
+          sgst +
+          (parseInt(item.quantity) *
+            parseFloat(item.price) *
+            parseFloat(item.sgst)) /
+            100;
+      }
     });
 
-    this.setState({ rows: newRows, total: final, igst: igst, cgst: cgst, sgst: sgst });
+    this.setState({
+      rows: newRows,
+      total: final,
+      igst: igst,
+      cgst: cgst,
+      sgst: sgst,
+    });
   };
   handleAddRow = () => {
     const vari = [
       {
         id: 1,
-        name: "",
-        quantity: "",
-        Unit: "",
-        price: "",
-        sgst: "",
-        cgst: "",
-        igst: "",
-        total: "",
+        name: '',
+        quantity: '',
+        Unit: '',
+        price: '',
+        sgst: '',
+        cgst: '',
+        igst: '',
+        total: '',
       },
     ];
     this.setState({ rows: [...this.state.rows, ...vari] });
@@ -421,338 +408,338 @@ export class EditStockPurchase extends Component {
           <Header />
           <div className="page-wrapper">
             {/* {this.state.product_show ? ( */}
-              <div className="content">
-                <div className="page-header">
-                  <div className="page-title">
-                    <h4>Edit Purachse  Stocks</h4>
-                    <h6>Purchase & add stock in inventory</h6>
-                  </div>
+            <div className="content">
+              <div className="page-header">
+                <div className="page-title">
+                  <h4>Edit Purachse Stocks</h4>
+                  <h6>Purchase & add stock in inventory</h6>
                 </div>
-                <div className="card">
-                  <div className="card-body">
-                    <div className="row">
-                     
-                      <div className="col-lg-3 col-sm-6 col-12">
-                        <div className="form-group">
-                          <div className="d-flex align-items-center justify-content-between">
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <div className="d-flex align-items-center justify-content-between">
                           <label>Supplier </label>
-                            <div className="page-btn">
-                              <a
-                                className="btn btn-added  d-flex align-items-center pt-0"
-                                onClick={() => {
-                                  this.setState({ open: true });
-                                }}
-                              >
-                                <img
-                                  src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                                  alt="img"
-                                  className="me-1"
-                                />
-                                Add
-                              </a>
-                            </div>
+                          <div className="page-btn">
+                            <a
+                              className="btn btn-added  d-flex align-items-center pt-0"
+                              onClick={() => {
+                                this.setState({ open: true });
+                              }}
+                            >
+                              <img
+                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
+                                alt="img"
+                                className="me-1"
+                              />
+                              Add
+                            </a>
                           </div>
-                          <select
-                            onChange={(e) => {
-                              this.setState({ supplier_id : e.target.value });
-                              // alert(e.target.value);
-                            }}
-                            value={this.state.supplier_id}
-                            className="select-container"
+                        </div>
+                        <select
+                          onChange={(e) => {
+                            this.setState({ supplier_id: e.target.value });
+                            // alert(e.target.value);
+                          }}
+                          value={this.state.supplier_id}
+                          className="select-container"
+                        >
+                          <option>Choose Suplier</option>
+                          {this.state.category.length > 0 ? (
+                            this.state.category.map((item, index) => (
+                              <option value={item.id}>
+                                {item.supplier_name}
+                              </option>
+                            ))
+                          ) : (
+                            <></>
+                          )}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label> Invoice Date</label>
+                        <input
+                          type="text"
+                          value={this.state.invoice_date}
+                          onChange={(e) => {
+                            this.setState({ invoice_date: e.target.value });
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>PO No</label>
+                        <input
+                          onChange={(e) => {
+                            this.setState({ po: e.target.value });
+                          }}
+                          value={this.state.po}
+                          type="text"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-3">
+                      <div className="form-group">
+                        <label>Payment type</label>
+                        <RadioGroup
+                          value={this.state.payment_type}
+                          onChange={(e) => {
+                            this.setState({ payment_type: e });
+                          }}
+                          horizontal
+                        >
+                          <RadioButton
+                            value="1"
+                            pointColor="#f3c783"
+                            iconSize={20}
+                            rootColor="#065f0a"
+                            iconInnerSize={10}
+                            padding={10}
                           >
-                            <option>Choose Suplier</option>
-                            {this.state.category.length > 0 ? (
-                              this.state.category.map((item, index) => (
-                                <option value={item.id}>{item.supplier_name}</option>
-                              ))
-                            ) : (
-                              <></>
-                            )}
-                          </select>
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-sm-6 col-12">
-                        <div className="form-group">
-                          <label> Invoice Date</label>
-                          <input
-                            type="text"
-                            value={this.state.invoice_date}
-                            onChange={(e) => {
-                              this.setState({ invoice_date : e.target.value });
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-sm-6 col-12">
-                        <div className="form-group">
-                          <label>PO No</label>
-                          <input
-                            onChange={(e) => {
-                              this.setState({ po : e.target.value });
-                            }}
-                            value={this.state.po}
-                            type="text"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label>Payment type</label>
-                          <RadioGroup
-                            value={this.state.payment_type}
-                            onChange={(e) => {
-                              this.setState({ payment_type: e });
-                            }}
-                            horizontal
+                            Paid
+                          </RadioButton>
+                          <RadioButton
+                            value="0"
+                            pointColor="#f3c783"
+                            iconSize={20}
+                            rootColor="#bf370d"
+                            iconInnerSize={10}
+                            padding={10}
                           >
-                            <RadioButton
-                              value="1"
-                              pointColor="#f3c783"
-                              iconSize={20}
-                              rootColor="#065f0a"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                              Paid
-                            </RadioButton>
-                            <RadioButton
-                              value="0"
-                              pointColor="#f3c783"
-                              iconSize={20}
-                              rootColor="#bf370d"
-                              iconInnerSize={10}
-                              padding={10}
-                            >
-                             Unpaid
-                            </RadioButton>
-                          </RadioGroup>
-                        </div>
+                            Unpaid
+                          </RadioButton>
+                        </RadioGroup>
                       </div>
-                 
-                   
+                    </div>
 
-                      {this.state.rows.length > 0 ? (
-              <div className="row">
-                <div className="col-mg-12">
-                <label>Row Material Details</label>
-                <br/>
-                  <table
-                    className="table table-bordered table-hover"
-                    id="tab_logic"
-                    style={{
-                      border: "1px solid #d9d9d9",
-                    }}
-                  >
-                    <thead>
-                      <tr>
-                        <th className="text-center">#</th>
-                        <th className="text-center">Name</th>
-                       <th className="text-center">Unit</th>
-                        <th className="text-center">Quantity</th>
-                        <th className="text-center">Price</th>
-                        <th className="text-center">CGST(%)</th>
-                        <th className="text-center">SGST(%)</th>
-                        <th className="text-center">IGST(%)</th>
-                        <th className="text-center">Total</th>
-                        <th className="text-end">Action</th>
-                        <th />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.rows.map((item, idx) => (
-                        <tr id="addr0" key={idx}>
-                          <td>{idx+1}</td>
-                          <td>
-
-                          <select
-                              onChange={this.handleChange(idx)}
-                            className="select-container"
-                            name="material_id"
-                            value={this.state.rows[idx].material_id}
+                    {this.state.rows.length > 0 ? (
+                      <div className="row">
+                        <div className="col-mg-12">
+                          <label>Row Material Details</label>
+                          <br />
+                          <table
+                            className="table table-bordered table-hover"
+                            id="tab_logic"
+                            style={{
+                              border: '1px solid #d9d9d9',
+                            }}
                           >
-                            <option>Choose Material</option>
-                            {this.state.products.length > 0 ? (
-                              this.state.products.map((item, index) => (
-                                <option value={item.id} unit={item.purchase_unit}>{item.inventory_product_name}</option>
-                              ))
-                            ) : (
-                              <></>
-                            )}
-                          </select>
+                            <thead>
+                              <tr>
+                                <th className="text-center">#</th>
+                                <th className="text-center">Name</th>
+                                <th className="text-center">Unit</th>
+                                <th className="text-center">Quantity</th>
+                                <th className="text-center">Price</th>
+                                <th className="text-center">CGST(%)</th>
+                                <th className="text-center">SGST(%)</th>
+                                <th className="text-center">IGST(%)</th>
+                                <th className="text-center">Total</th>
+                                <th className="text-end">Action</th>
+                                <th />
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.rows.map((item, idx) => (
+                                <tr id="addr0" key={idx}>
+                                  <td>{idx + 1}</td>
+                                  <td>
+                                    <select
+                                      onChange={this.handleChange(idx)}
+                                      className="select-container"
+                                      name="material_id"
+                                      value={this.state.rows[idx].material_id}
+                                    >
+                                      <option>Choose Material</option>
+                                      {this.state.products.length > 0 ? (
+                                        this.state.products.map(
+                                          (item, index) => (
+                                            <option
+                                              value={item.id}
+                                              unit={item.purchase_unit}
+                                            >
+                                              {item.inventory_product_name}
+                                            </option>
+                                          )
+                                        )
+                                      ) : (
+                                        <></>
+                                      )}
+                                    </select>
 
-                            {/* <input
+                                    {/* <input
                               type="text"
                               name="variants_name"
                               value={this.state.rows[idx].name}
                               onChange={this.handleChange(idx)}
                               className="form-control"
                             /> */}
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              name="unit"
-                              value={this.state.rows[idx].unit}
-                              
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              name="quantity"
-                              value={this.state.rows[idx].quantity}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                              
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="unit"
+                                      value={this.state.rows[idx].unit}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="quantity"
+                                      value={this.state.rows[idx].quantity}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
 
-                            />
-                          </td>
-                         
-                          <td>
-                            <input
-                              type="text"
-                              name="price"
-                              value={this.state.rows[idx].price}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                            <td>
-                            <input
-                              type="text"
-                              name="cgst"
-                              value={this.state.rows[idx].cgst}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              name="sgst"
-                              value={this.state.rows[idx].sgst}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              name="igst"
-                              value={this.state.rows[idx].igst}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              name="total"
-                              value={this.state.rows[idx].total}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td className="text-end">
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="price"
+                                      value={this.state.rows[idx].price}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="cgst"
+                                      value={this.state.rows[idx].cgst}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="sgst"
+                                      value={this.state.rows[idx].sgst}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="igst"
+                                      value={this.state.rows[idx].igst}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="total"
+                                      value={this.state.rows[idx].total}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td className="text-end">
+                                    <button
+                                      className="btn btn-outline-danger btn-sm"
+                                      onClick={this.handleRemoveSpecificRow(
+                                        idx
+                                      )}
+                                    >
+                                      X
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'end',
+                            }}
+                          >
                             <button
-                              className="btn btn-outline-danger btn-sm"
-                              onClick={this.handleRemoveSpecificRow(idx)}
-                            >
-                          X
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "end",
-                    }}
-                  >
-                    <button
-                      onClick={this.handleAddRow}
-                      className="btn btn-outline-secondary"
-                      style={{
-                        marginBottom: "20px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      Add New
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
-
-<label>
-        <input type="checkbox" 
-        checked={this.state.stock_added}
-        onChange={this.handleCheck} 
-         />
-         you want to add stock in your inventory
-      </label>
-
-                      <div className="col-lg-3 col-sm-6 col-12">
-                        <div className="form-group">
-                          <label>Grand Total</label>
-                          <input
-                           value={this.state.total}
-                            type="text"
-                          />
-                        </div>
-                      </div>
-
-
-                      <div className="col-lg-8 col-sm-6 col-12">
-                        <div className="form-group">
-                          <label>Comment</label>
-                          <input
-                          onChange={(e) => {
-                            this.setState({ note : e.target.value });
-                          }}
-                            type="text"
-                          />
-                        </div>
-                      </div>
-
-<div className="col-lg-12">
-                          {this.state.save_and_continue ? (
-                            <button
-                              className="btn btn-submit me-2"
+                              onClick={this.handleAddRow}
+                              className="btn btn-outline-secondary"
                               style={{
-                                pointerEvents: "none",
-                                opacity: "0.8",
+                                marginBottom: '20px',
+                                marginTop: '10px',
                               }}
                             >
-                              <span
-                                class="spinner-border spinner-border-sm me-2"
-                                role="status"
-                              ></span>
-                              Saving
+                              Add New
                             </button>
-                          ) : (
-                            <a
-                              onClick={() => {
-                                this.create();
-                              }}
-                              className="btn btn-submit me-2"
-                              style={{float:'right'}}
-                            >
-                              Save Changes
-                            </a>
-                          )}
+                          </div>
                         </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={this.state.stock_added}
+                        onChange={this.handleCheck}
+                      />
+                      you want to add stock in your inventory
+                    </label>
+
+                    <div className="col-lg-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>Grand Total</label>
+                        <input value={this.state.total} type="text" />
+                      </div>
+                    </div>
+
+                    <div className="col-lg-8 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>Comment</label>
+                        <input
+                          onChange={(e) => {
+                            this.setState({ note: e.target.value });
+                          }}
+                          type="text"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                      {this.state.save_and_continue ? (
+                        <button
+                          className="btn btn-submit me-2"
+                          style={{
+                            pointerEvents: 'none',
+                            opacity: '0.8',
+                          }}
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Saving
+                        </button>
+                      ) : (
+                        <a
+                          onClick={() => {
+                            this.create();
+                          }}
+                          className="btn btn-submit me-2"
+                          style={{ float: 'right' }}
+                        >
+                          Save Changes
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-           
+            </div>
           </div>
         </div>
         <Modal
@@ -760,36 +747,49 @@ export class EditStockPurchase extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Add  Supplier </h4>
+                <h4>Add New Supplier </h4>
               </div>
             </div>
             <div className="card">
               <div className="card-body">
                 <div className="row">
-                  <div className="col-lg-12">
+                  <div className="col-lg-6">
                     <div className="form-group">
-                      <label> Supplier Name</label>
+                      <label>Supplier Name</label>
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({ name: e.target.value });
                         }}
                       />
                     </div>
                   </div>
+
+                  <div className="col-lg-6">
+                    <div className="form-group">
+                      <label>Supplier Contact</label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ contact: e.target.value });
+                        }}
+                      />
+                    </div>
+                  </div>
+
                   <div className="col-lg-12 d-flex justify-content-end">
-                    {this.state.add_category_loading ? (
+                    {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -802,11 +802,11 @@ export class EditStockPurchase extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.add();
+                          this.addsupplier();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
-                       Add  Supplier
+                        Add
                       </a>
                     )}
                   </div>
@@ -819,8 +819,6 @@ export class EditStockPurchase extends Component {
     );
   }
 }
-
-
 
 function Navigate(props) {
   const abcd = useNavigate();
