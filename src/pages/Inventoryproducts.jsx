@@ -179,7 +179,7 @@ class Inventoryproducts extends Component {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ isloading: false, is_buttonloding: false });
+          this.setState({ isloading: false, is_button_loading_add: false });
         });
     } else {
       toast.error("Please fill all required fields!");
@@ -212,15 +212,15 @@ class Inventoryproducts extends Component {
           purchase_subunit_quantity:
             this.state.inventory_add_purchase_subunit_quantity,
           purchase_sub_unit: this.state.inventory_add_purchase_sub_unit,
-          status: this.state.inventory_add_status,
+          status: 'active',
         }),
       })
         .then((response) => response.json())
         .then((json) => {
           // console.warn(json)
           if (!json.status) {
-            var msg = json.msg;
-            toast.error(msg);
+            var msg = json.errors;
+            toast.error(msg[0]);
           } else {
             this.setState({
               open: false,
@@ -246,6 +246,70 @@ class Inventoryproducts extends Component {
     } else {
       toast.error("Please fill all required fields!");
       this.setState({ is_button_loading_add: false });
+    }
+  };
+
+  edit_product = () => {
+   
+    if (
+      this.state.inventory_product_add_name != "" ||
+      this.state.invenroty_product_add_category_id != "" ||
+      this.state.inventory_prodduct_add_model != "" ||
+      this.state.inventory_add_purchase_unit != "" ||
+      this.state.inventory_add_purchase_subunit_quantity != "" ||
+      this.state.inventory_add_purchase_sub_unit != ""
+    ) {
+      this.setState({ is_buttonloding: true });
+      fetch(global.api + "update_inventory_product", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          inventory_product_name: this.state.inventory_product_add_name,
+          inventory_category_id: this.state.invenroty_product_add_category_id,
+          model: this.state.inventory_prodduct_add_model,
+          purchase_unit: this.state.inventory_add_purchase_unit,
+          purchase_subunit_quantity:
+            this.state.inventory_add_purchase_subunit_quantity,
+          purchase_sub_unit: this.state.inventory_add_purchase_sub_unit,
+          status: 'active',
+          product_id: this.state.inventory_product_id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // console.warn(json)
+          if (!json.status) {
+            var msg = json.msg;
+            toast.error(msg);
+          } else {
+            this.setState({
+              openedit: false,
+              inventory_product_add_name: "",
+              invenroty_product_add_category_id: "",
+              inventory_prodduct_add_model: "",
+              inventory_add_purchase_unit: "",
+              inventory_add_purchase_subunit_quantity: "",
+              inventory_add_purchase_sub_unit: "",
+              inventory_add_status: "",
+            });
+            toast.success(json.msg);
+            this.fetchProducts(this.state.active_cat, 1);
+          }
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ is_buttonloding: false });
+        });
+    } else {
+      toast.error("Please fill all required fields!");
+      this.setState({ is_buttonloding: false });
     }
   };
 
@@ -341,8 +405,26 @@ class Inventoryproducts extends Component {
                                         alt="img"
                                         className="mx-2 cursor_pointer"
                                         onClick={() => {
+                                          
                                           this.setState({
+                                            
                                             openedit: true,
+                                            inventory_add_purchase_sub_unit:
+                                              item.purchase_sub_unit,
+                                            inventory_add_purchase_subunit_quantity:
+                                              item.purchase_subunit_quantity,
+                                            inventory_add_purchase_unit:
+                                              item.purchase_unit,
+                                            inventory_add_status: item.status,
+                                            inventory_prodduct_add_model:
+                                              item.model,
+                                            invenroty_product_add_category_id:
+                                              item.inventory_category_id,
+                                            inventory_product_add_name:
+                                              item.inventory_product_name,
+                                            inventory_product_id: item.id,
+
+
                                           });
                                         }}
                                       />
@@ -565,6 +647,7 @@ class Inventoryproducts extends Component {
                               e.target.value,
                           });
                         }}
+                        
                       />
                     </div>
                   </div>
@@ -657,6 +740,9 @@ class Inventoryproducts extends Component {
                             invenroty_product_add_category_id: e.target.value,
                           });
                         }}
+
+                        value={this.state.invenroty_product_add_category_id}
+
                         className="select-container"
                       >
                         <option>Please Choose Category</option>
@@ -693,6 +779,7 @@ class Inventoryproducts extends Component {
                           });
                         }}
                         className="select-container"
+                        value={this.state.inventory_add_purchase_unit}
                       >
                         <option>Please Choose Unit</option>
                         <option value="kg">KG</option>
@@ -729,6 +816,7 @@ class Inventoryproducts extends Component {
                           });
                         }}
                         className="select-container"
+                        value={this.state.inventory_add_purchase_sub_unit}
                       >
                         <option>Please Choose Sub-Unit</option>
                         <option value="kg">KG</option>
@@ -760,26 +848,18 @@ class Inventoryproducts extends Component {
                       <label>Purchase SubUnit Quantity</label>
                       <input
                         type="text"
+                
                         onChange={(e) => {
                           this.setState({
                             inventory_add_purchase_subunit_quantity:
                               e.target.value,
                           });
                         }}
+                        value={this.state.inventory_add_purchase_subunit_quantity}
                       />
                     </div>
                   </div>
-                  <div className="col-lg-6">
-                    <div className="form-group">
-                      <label>Price</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
-                        }}
-                      />
-                    </div>
-                  </div>
+                
                   <div className="col-lg-6 d-flex justify-content-end align-items-center">
                     {this.state.is_buttonloding ? (
                       <button
@@ -799,7 +879,7 @@ class Inventoryproducts extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.add();
+                          this.edit_product();
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
