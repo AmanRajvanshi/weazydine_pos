@@ -77,7 +77,6 @@ class Inventorycategory extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -123,7 +122,6 @@ class Inventorycategory extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.success(msg);
@@ -160,7 +158,6 @@ class Inventorycategory extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           // Toast.show(msg);

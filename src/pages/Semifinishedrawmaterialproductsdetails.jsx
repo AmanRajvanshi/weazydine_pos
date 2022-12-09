@@ -3,9 +3,11 @@ import { BiRupee } from 'react-icons/bi';
 import { Bars } from 'react-loader-spinner';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../AuthContextProvider';
 import { Header } from '../othercomponent/Header';
 
 export class Semifinishedrawmaterialproductsdetails extends Component {
+  static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -18,11 +20,16 @@ export class Semifinishedrawmaterialproductsdetails extends Component {
   }
 
   productDetails = () => {
-    fetch(global.api + 'get_product_details?product_id=' + this.props.id, {
-      method: 'GET',
+    fetch(global.api + 'fetch_semi_dishes_single', {
+      method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
+        Authorization: this.context.token,
       },
+      body: JSON.stringify({
+        semi_dish_id: this.props.id,
+      }),
     })
       .then((response) => response.json())
       .then((json) => {
@@ -30,7 +37,7 @@ export class Semifinishedrawmaterialproductsdetails extends Component {
           var msg = json.msg;
           toast.error(msg);
         } else {
-          this.setState({ product: json.data[0] });
+          this.setState({ product: json.data });
         }
         return json;
       })
@@ -62,7 +69,7 @@ export class Semifinishedrawmaterialproductsdetails extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Product Details</h4>
+                  <h4>Details for Semi Finished Raw Material Product</h4>
                 </div>
               </div>
               <div className="row">
@@ -73,95 +80,50 @@ export class Semifinishedrawmaterialproductsdetails extends Component {
                         <ul className="product-bar">
                           <li>
                             <h4>Name</h4>
-                            <h6>{this.state.product.product_name}</h6>
+                            <h6>{this.state.product.dish_name}</h6>
                           </li>
                           <li>
-                            <h4>Discount Type</h4>
-                            <h6>Percentage</h6>
-                          </li>
-                          <li>
-                            <h4>VEG/NON-VEG</h4>
-                            {this.state.product.is_veg == '1' ? (
-                              <h6>VEG</h6>
-                            ) : (
-                              <h6>NON-VEG</h6>
-                            )}
-                          </li>
-                          <li>
-                            <h4>Market Price</h4>
+                            <h4>Expires In</h4>
                             <h6>
-                              <BiRupee /> {this.state.product.market_price}
+                              {this.state.product.dish_expiry}{' '}
+                              {this.state.product.dish_expiry == 1
+                                ? 'Day'
+                                : 'Days'}
                             </h6>
                           </li>
                           <li>
-                            <h4>Our Price</h4>
+                            <h4>Quantity</h4>
                             <h6>
-                              <BiRupee /> {this.state.product.our_price}
+                              {this.state.product.production_quantity_estimate}{' '}
+                              {this.state.product.recipe_quantity}
                             </h6>
                           </li>
-                          <li>
-                            <h4>Status</h4>
-                            <h6>{this.state.product.status}</h6>
-                          </li>
-                          <li>
-                            <h4>Description</h4>
-                            <h6>{this.state.product.description}</h6>
-                          </li>
-                          {this.state.product.variants.length > 0 && (
+
+                          {this.state.product.semi_dish_materials.length >
+                            0 && (
                             <li>
-                              <h4>Variants</h4>
+                              <h4>Materials</h4>
                               <ul>
-                                {this.state.product.variants.map((item, i) => {
-                                  return (
-                                    <li>
-                                      <h6
-                                        style={{
-                                          width: '100%',
-                                        }}
-                                      >
-                                        {item.variants_name}
-                                        <span
-                                          className="mx-2"
+                                {this.state.product.semi_dish_materials.map(
+                                  (item, index) => {
+                                    return (
+                                      <li>
+                                        <h6
                                           style={{
-                                            textDecoration: 'line-through',
-                                            opacity: '0.9',
+                                            width: '100%',
                                           }}
                                         >
-                                          <BiRupee />
-                                          {item.variants_price}
-                                        </span>
-                                        <span className="mx-2">
-                                          <BiRupee />
-                                          {item.variants_discounted_price}
-                                        </span>
-                                      </h6>
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            </li>
-                          )}
-                          {this.state.product.addon_map.length > 0 && (
-                            <li>
-                              <h4>Addons</h4>
-                              <ul>
-                                {this.state.product.addon_map.map((item, i) => {
-                                  return (
-                                    <li>
-                                      <h6
-                                        style={{
-                                          width: '100%',
-                                        }}
-                                      >
-                                        {item.addon_name}
-                                        <span className="mx-2">
-                                          <BiRupee />
-                                          {item.addon_price}
-                                        </span>
-                                      </h6>
-                                    </li>
-                                  );
-                                })}
+                                          {
+                                            item.materials
+                                              .inventory_product_name
+                                          }{' '}
+                                          - {item.material_quantity}{' '}
+                                          {item.material_unit}
+                                        </h6>
+                                      </li>
+                                    );
+                                  }
+                                )}
                               </ul>
                             </li>
                           )}

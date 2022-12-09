@@ -150,7 +150,6 @@ export class EditStockPurchase extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -225,7 +224,6 @@ export class EditStockPurchase extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -254,11 +252,11 @@ export class EditStockPurchase extends Component {
       },
       body: JSON.stringify({
         page: page,
+        inventory_category_id: 0,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {

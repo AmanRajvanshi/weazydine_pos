@@ -43,7 +43,6 @@ class Semifinishedrawmaterialproducts extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
@@ -167,7 +166,12 @@ class Semifinishedrawmaterialproducts extends Component {
                                     : item.dish_expiry + ' Day'}
                                 </td>
                                 <td style={{ textAlign: 'end' }}>
-                                  <Link to="/semifinishedrawmaterialproductsdetails">
+                                  <Link
+                                    to={
+                                      '/semifinishedrawmaterialproductsdetails/' +
+                                      item.id
+                                    }
+                                  >
                                     <img
                                       src={eye_icon}
                                       alt="img"
@@ -179,7 +183,12 @@ class Semifinishedrawmaterialproducts extends Component {
                                       }}
                                     />
                                   </Link>
-                                  <Link to="/editsemifinishedrawmaterialproducts/1">
+                                  <Link
+                                    to={
+                                      '/editsemifinishedrawmaterialproducts/' +
+                                      item.id
+                                    }
+                                  >
                                     <img
                                       src={edit_icon}
                                       alt="img"

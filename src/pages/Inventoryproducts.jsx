@@ -66,7 +66,6 @@ class Inventoryproducts extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
@@ -168,7 +167,6 @@ class Inventoryproducts extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -221,7 +219,6 @@ class Inventoryproducts extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.errors;
             toast.error(msg[0]);
@@ -285,7 +282,6 @@ class Inventoryproducts extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);

@@ -70,7 +70,6 @@ export class Orderdetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json)
         if (!json.status) {
         } else {
           this.setState({
@@ -138,7 +137,6 @@ export class Orderdetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
         } else {
@@ -178,7 +176,6 @@ export class Orderdetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           toast.error(msg);
@@ -742,7 +739,6 @@ export class Orderdetails extends Component {
                                   border: 'none',
                                   borderBottom: '1px solid black',
                                   borderRadius: 0,
-                                  // paddingLeft: "0px",
                                 }}
                               />
                             </div>
@@ -758,7 +754,6 @@ export class Orderdetails extends Component {
                                   border: 'none',
                                   borderBottom: '1px solid black',
                                   borderRadius: 0,
-                                  // paddingLeft: "0px",
                                 }}
                               />
                             </div>
@@ -776,50 +771,29 @@ export class Orderdetails extends Component {
                       <div className="card-body">
                         <div className=" d-flex align-items-start justify-content-between pb-4">
                           <h5>Notes</h5>
-                          {/* {this.state.data.order_status != "completed" && (
-                            <a
-                              className="btn btn-added"
-                              style={{
-                                color: "#5BC2C1",
-                              }}
-                              onClick={() => this.setState({ open: true })}
-                            >
-                              Add
-                            </a>
-                          )} */}
                         </div>
                         <p>{this.state.data.instruction}</p>
                       </div>
                     </div>
-                    {/* <ReactToPrint
-                      trigger={() => (
-                        <a
-                          href="javascript:void(0);"
-                          className="btn btn-primary mx-2"
-                        >
-                          <p>Print</p>
-                        </a>
-                      )}
-                      content={() => this.componentRef}
-                    /> */}
-
                     {this.state.data.order_status != 'cancelled' && (
-                      <>
+                      <div className='d-flex align-items-center justify-content-center'>
                         <a
-                          // href="javascript:void(0);"
-                          className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center mb-2"
+                          className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
                           onClick={() => {
-                            // window.open('/print/' + this.props.id, '_blank');
-                            // this.print();
-                            // this.BtPrint(
-                            //   document.getElementById('print').innerText
-                            // );
-                            this.sendUrlToPrint(
-                              // 'http://192.168.1.7:3000/print/' +
-                              //   this.props.id +
-                              //   '/1.pdf'
-                              global.api + this.props.id + '/bill.pdf'
-                            );
+                            if (
+                              global.os == 'Windows' ||
+                              global.os == 'Mac OS'
+                            ) {
+                              window.open(
+                                global.api + this.props.id + '/bill.pdf',
+                                'PRINT',
+                                'height=400,width=600'
+                              );
+                            } else {
+                              this.sendUrlToPrint(
+                                global.api + this.props.id + '/bill.pdf'
+                              );
+                            }
                           }}
                         >
                           <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
@@ -828,20 +802,22 @@ export class Orderdetails extends Component {
                         <>
                           {this.state.data.order_status != 'completed' && (
                             <a
-                              // href="javascript:void(0);"
-                              className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
+                              className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
                               onClick={() => {
-                                // window.open('/print/' + this.props.id, '_blank');
-                                // this.print();
-                                // this.BtPrint(
-                                //   document.getElementById('print').innerText
-                                // );
-                                this.sendUrlToPrint(
-                                  // 'http://192.168.1.7:3000/print/' +
-                                  //   this.props.id +
-                                  //   '/1.pdf'
-                                  global.api + this.props.id + '/kot.pdf'
-                                );
+                                if (
+                                  global.os == 'Windows' ||
+                                  global.os == 'Mac OS'
+                                ) {
+                                  window.open(
+                                    global.api + this.props.id + '/kot.pdf',
+                                    'PRINT',
+                                    'height=400,width=600'
+                                  );
+                                } else {
+                                  this.sendUrlToPrint(
+                                    global.api + this.props.id + '/kot.pdf'
+                                  );
+                                }
                               }}
                             >
                               <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
@@ -849,7 +825,7 @@ export class Orderdetails extends Component {
                             </a>
                           )}
                         </>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>

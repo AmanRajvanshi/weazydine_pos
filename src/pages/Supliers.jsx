@@ -10,7 +10,7 @@ import { Bars } from 'react-loader-spinner';
 import Swal from 'sweetalert2';
 import no_img from '../assets/images/no_products_found.png';
 
-export class supliers extends Component {
+export class Supliers extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -83,7 +83,6 @@ export class supliers extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -132,7 +131,6 @@ export class supliers extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.warn(json);
           if (!json.status) {
             var msg = json.errors[0];
             toast.error(msg);
@@ -170,7 +168,7 @@ export class supliers extends Component {
           var msg = json.msg;
           // Toast.show(msg);
         } else {
-          toast.success("Supplier Deleted Successfully");
+          toast.success('Supplier Deleted Successfully');
           this.fetchCategories();
         }
       })
@@ -191,8 +189,8 @@ export class supliers extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Supliers </h4>
-                  <h6>Manage your Supliers</h6>
+                  <h4>Suppliers </h4>
+                  <h6>Manage your Suppliers</h6>
                 </div>
                 <div className="page-btn">
                   <a
@@ -338,7 +336,9 @@ export class supliers extends Component {
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Supplier Name</label>
+                      <label>
+                        Supplier Name<span className="text-danger"> *</span>
+                      </label>
                       <input
                         type="text"
                         onChange={(e) => {
@@ -350,12 +350,15 @@ export class supliers extends Component {
 
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Supplier Contact</label>
+                      <label>
+                        Supplier Contact<span className="text-danger"> *</span>
+                      </label>
                       <input
                         type="text"
                         onChange={(e) => {
                           this.setState({ contact: e.target.value });
                         }}
+                        maxLength="10"
                       />
                     </div>
                   </div>
@@ -399,7 +402,7 @@ export class supliers extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: 'none',
                           opacity: '0.8',
@@ -417,7 +420,7 @@ export class supliers extends Component {
                         onClick={() => {
                           this.add();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Add
                       </a>
@@ -439,7 +442,7 @@ export class supliers extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Edit suplier </h4>
+                <h4>Edit Supplier </h4>
               </div>
             </div>
             <div className="card">
@@ -447,7 +450,7 @@ export class supliers extends Component {
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Supplier Name</label>
+                      <label>Supplier Name<span className="text-danger"> *</span></label>
                       <input
                         type="text"
                         onChange={(e) => {
@@ -460,12 +463,13 @@ export class supliers extends Component {
 
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Supplier Contact</label>
+                      <label>Supplier Contact<span className="text-danger"> *</span></label>
                       <input
                         type="text"
                         onChange={(e) => {
                           this.setState({ contact: e.target.value });
                         }}
+                        maxLength="10"
                         value={this.state.contact}
                       />
                     </div>
@@ -513,7 +517,7 @@ export class supliers extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: 'none',
                           opacity: '0.8',
@@ -531,7 +535,7 @@ export class supliers extends Component {
                         onClick={() => {
                           this.edit();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Update
                       </a>
@@ -547,4 +551,4 @@ export class supliers extends Component {
   }
 }
 
-export default supliers;
+export default Supliers;

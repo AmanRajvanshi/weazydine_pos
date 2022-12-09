@@ -16,7 +16,7 @@ import { RequireAuth } from './RequireAuth';
 import Productdetails from './pages/Productdetails.jsx';
 import Editproduct from './pages/Editproduct.jsx';
 import Editprofile from './pages/Editprofile.jsx';
-import { ToastContainer, Flip } from 'react-toastify';
+import { ToastContainer, Flip, Zoom, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DineinList from './pages/DineinList.jsx';
 import Inventorycategory from './pages/Inventorycategory.jsx';
@@ -56,7 +56,7 @@ OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 // global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-//global.api = 'http://127.0.0.1:8000/api/';
+// global.api = 'http://192.168.1.39:8001/api/';
 
 //for local
 global.api = 'https://beta-dine-api.weazy.in/api/';
@@ -83,8 +83,31 @@ export class App extends Component {
     } else {
       this.logout();
     }
-    // toast.success(global.msg);
+    this.getOS();
   }
+
+  getOS = () => {
+    var userAgent = window.navigator.userAgent,
+      platform =
+        window.navigator?.userAgentData?.platform || window.navigator.platform,
+      macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K', 'macOS'],
+      windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+      iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+      os = null;
+    if (macosPlatforms.indexOf(platform) !== -1) {
+      os = 'Mac OS';
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+      os = 'iOS';
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+      os = 'Windows';
+    } else if (/Android/.test(userAgent)) {
+      os = 'Android';
+    } else if (/Linux/.test(platform)) {
+      os = 'Linux';
+    }
+
+    global.os = os;
+  };
 
   login = (step, user, token) => {
     this.setState({
@@ -484,7 +507,7 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/semifinishedrawmaterialproductsdetails"
+              path="/semifinishedrawmaterialproductsdetails/:id"
               element={
                 <RequireAuth>
                   <Semifinishedrawmaterialproductsdetails />
@@ -508,7 +531,7 @@ export class App extends Component {
           </Routes>
         </AuthContext.Provider>
         <ToastContainer
-          position="bottom-center"
+          position="bottom-left"
           autoClose={2000}
           hideProgressBar={false}
           newestOnTop
@@ -517,7 +540,7 @@ export class App extends Component {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          transition={Flip}
+          transition={Slide}
         />
       </>
     );

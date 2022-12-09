@@ -10,6 +10,7 @@ import { Bars } from 'react-loader-spinner';
 import no_order from '../assets/images/no_orders.webp';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 export class TableOrderDetails extends Component {
   static contextType = AuthContext;
@@ -18,6 +19,7 @@ export class TableOrderDetails extends Component {
     this.state = {
       open: false,
       edit_user_modal: false,
+      tableData: [],
       data: [],
       cart: [],
       user: [],
@@ -35,6 +37,9 @@ export class TableOrderDetails extends Component {
       split_bill_amount_cash: '',
       is_buttonloding: false,
       splitModal: false,
+      modalVisible: false,
+      swap_table_buttonLoading: false,
+      clear_table_buttonLoading: false,
       split_payment: [
         { amount: 0, method: 'Cash' },
         { amount: 0, method: 'Card' },
@@ -46,6 +51,7 @@ export class TableOrderDetails extends Component {
 
   componentDidMount() {
     this.orderDetails(this.props.id);
+    this.fetch_table_vendors();
   }
 
   orderDetails = (id) => {
@@ -62,7 +68,6 @@ export class TableOrderDetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json)
         if (!json.status) {
           this.setState({ isLoading: false, data: [] });
           this.props.navigate('/pos/' + this.props.id, { replace: true });
@@ -97,7 +102,6 @@ export class TableOrderDetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
         } else {
@@ -136,7 +140,6 @@ export class TableOrderDetails extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           toast.error(msg);
@@ -174,6 +177,103 @@ export class TableOrderDetails extends Component {
     this.setState({ split_payment: split, split_total: tt });
   };
 
+  fetch_table_vendors = () => {
+    fetch(global.api + 'fetch_table_vendors', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+        } else {
+          if (json.data.length > 0) {
+            this.setState({ tableData: json.data });
+          }
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {});
+  };
+
+  swap_table = (id) => {
+    this.setState({ swap_table_buttonLoading: true });
+
+    fetch(global.api + 'swapp_table_order', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        order_code: this.state.data[0].order_code,
+        current_table_id: this.props.id,
+        new_table_id: id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          this.setState({ swap_table_modalVisible: false });
+          this.props.navigate(-1);
+          toast.success('Table Swapped');
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ swap_table_buttonLoading: false });
+      });
+  };
+
+  clear_table_order = () => {
+    this.setState({ clear_table_buttonLoading: true });
+
+    fetch(global.api + 'clear_table', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        order_code: this.state.data[0].order_code,
+        table_id: this.props.id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          this.props.navigate(-1);
+          toast.success('Table Cleared');
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ clear_table_buttonLoading: false });
+      });
+  };
+
   render() {
     return (
       <div className="main-wrapper">
@@ -199,13 +299,77 @@ export class TableOrderDetails extends Component {
                     <div className="page-title">
                       <h4>Order Details</h4>
                     </div>
+                    <div className="d-flex align-items-center">
+                      {this.state.swap_table_buttonLoading ? (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          style={{
+                            pointerEvents: 'none',
+                            opacity: '0.8',
+                          }}
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Order Swap
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary btn-sm me-2"
+                          onClick={() => {
+                            this.setState({ modalVisible: true });
+                          }}
+                        >
+                          <i className="fa-solid fa-arrow-right-arrow-left mr-2"></i>
+                          Order Swap
+                        </button>
+                      )}
 
-                    <Link
-                      className="btn btn-primary btn-sm me-2"
-                      to={'/pos/' + this.props.id}
-                    >
-                      Add More Item
-                    </Link>
+                      <Link
+                        className="btn btn-primary btn-sm me-2"
+                        to={'/pos/' + this.props.id}
+                      >
+                        <i className="fa-solid fa-plus mr-2"></i>Add More Item
+                      </Link>
+                      {this.state.clear_table_buttonLoading ? (
+                        <button
+                          className="btn btn-danger btn-sm me-2"
+                          style={{
+                            pointerEvents: 'none',
+                            opacity: '0.8',
+                          }}
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Clearing Table
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-danger btn-sm me-2"
+                          onClick={() => {
+                            Swal.fire({
+                              title: 'Are you sure',
+                              text: 'You want to clear this table order',
+                              icon: 'warning',
+                              showCancelButton: true,
+                              confirmButtonColor: '#3085d6',
+                              cancelButtonColor: '#d33',
+                              confirmButtonText: 'Yes, clear it!',
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                this.clear_table_order();
+                              }
+                            });
+                          }}
+                        >
+                          <i class="fa-solid fa-circle-xmark mr-2"></i>
+                          Clear Table Order
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <section className="comp-section comp-cards">
@@ -525,32 +689,58 @@ export class TableOrderDetails extends Component {
                             <p>{this.state.data[0].instruction}</p>
                           </div>
                         </div>
-                        <a
-                          href="javascript:void(0);"
-                          className="btn btn-submit me-2 w-100 d-flex align-items-center justify-content-center"
-                          onClick={() => {
-                            window.open(
-                              '/print/' + this.state.data[0].order_code,
-                              '_blank'
-                            );
-                          }}
-                        >
-                          <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                          <p>Print Receipt</p>
-                        </a>
-                        <a
-                          href="javascript:void(0);"
-                          className="btn btn-submit me-2 my-2 w-100 d-flex align-items-center justify-content-center"
-                          onClick={() => {
-                            window.open(
-                              '/print/' + this.state.data[0].order_code,
-                              '_blank'
-                            );
-                          }}
-                        >
-                          <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                          <p>Print KOT</p>
-                        </a>
+                        {this.state.data.order_status != 'cancelled' && (
+                          <div className="d-flex align-items-center justify-content-center">
+                            <a
+                              className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
+                              onClick={() => {
+                                if (
+                                  global.os == 'Windows' ||
+                                  global.os == 'Mac OS'
+                                ) {
+                                  window.open(
+                                    global.api + this.props.id + '/bill.pdf',
+                                    'PRINT',
+                                    'height=400,width=600'
+                                  );
+                                } else {
+                                  this.sendUrlToPrint(
+                                    global.api + this.props.id + '/bill.pdf'
+                                  );
+                                }
+                              }}
+                            >
+                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                              <p>Print Receipt</p>
+                            </a>
+                            <>
+                              {this.state.data.order_status != 'completed' && (
+                                <a
+                                  className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                                  onClick={() => {
+                                    if (
+                                      global.os == 'Windows' ||
+                                      global.os == 'Mac OS'
+                                    ) {
+                                      window.open(
+                                        global.api + this.props.id + '/kot.pdf',
+                                        'PRINT',
+                                        'height=400,width=600'
+                                      );
+                                    } else {
+                                      this.sendUrlToPrint(
+                                        global.api + this.props.id + '/kot.pdf'
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                  <p>Print KOT</p>
+                                </a>
+                              )}
+                            </>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </section>
@@ -582,6 +772,86 @@ export class TableOrderDetails extends Component {
             )}
           </>
         )}
+        <Modal
+          open={this.state.modalVisible}
+          onClose={() => this.setState({ modalVisible: false })}
+          center
+          styles={{
+            modal: {
+              width: '100%',
+              maxWidth: '70vw',
+            },
+          }}
+          classNames={{
+            modal: 'customModal',
+          }}
+        >
+          <div className="content">
+            <div className="page-header m-0">
+              <div className="page-title">
+                <h4>Tables - Order Swap</h4>
+              </div>
+            </div>
+            <div className="card border-none">
+              <div className="card-body p-0 pt-4">
+                <div className="row" style={{ marginTop: 10 }}>
+                  <>
+                    {this.state.tableData.length > 0 ? (
+                      <>
+                        <h4
+                          style={{
+                            marginBottom: '10px',
+                          }}
+                        >
+                          Dine-In
+                        </h4>
+                        {this.state.tableData.map((item, index) => {
+                          return (
+                            <>
+                              {item.table_status == 'active' ? (
+                                <div
+                                  key={index}
+                                  className="col-lg-2 col-sm-6 col-12"
+                                >
+                                  <div
+                                    className=" d-flex w-100"
+                                    onClick={() => {
+                                      Swal.fire({
+                                        title: 'Are you sure',
+                                        text: 'You want to swap the order',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, swap it!',
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          this.swap_table(item.table_uu_id);
+                                        }
+                                      });
+                                    }}
+                                  >
+                                    <div className="dash-count1 cursor_pointer">
+                                      <h4>{item.table_name}</h4>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <> </>
+                              )}
+                            </>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
         <Modal
           open={this.state.open}
           onClose={() => this.setState({ open: false })}
@@ -618,9 +888,9 @@ export class TableOrderDetails extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     <a
                       href="javascript:void(0);"
-                      className="btn btn-submit me-2"
+                      className="btn btn-sm btn-submit me-2"
                     >
-                      Submit
+                      Add
                     </a>
                   </div>
                 </div>
@@ -654,8 +924,7 @@ export class TableOrderDetails extends Component {
                       <div>
                         <RadioGroup
                           onChange={(value) => {
-                           this.setState({ payment: value });
-                      
+                            this.setState({ payment: value });
                           }}
                           value={this.state.payment}
                         >

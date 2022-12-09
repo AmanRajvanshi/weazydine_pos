@@ -262,11 +262,11 @@ class Pos extends Component {
       this.setState({ cart: cart });
     } else {
       var cart = this.state.cart;
-      var price = cart[key_id].price / cart[key_id].quantity;
+      var price = (cart[key_id].price / cart[key_id].quantity).toFixed(2);
       final_price = final_price - cart[key_id].price + price * quantity;
 
       cart[key_id].quantity = quantity;
-      cart[key_id].price = price * quantity;
+      cart[key_id].price = (price * quantity).toFixed(2);
       this.setState({ cart: cart });
     }
 
@@ -292,7 +292,6 @@ class Pos extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          //  console.warn(json);
           // if (!json.status) {
           //   var msg = json.msg;
 
@@ -337,7 +336,6 @@ class Pos extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json);
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -376,7 +374,6 @@ class Pos extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           toast.error(msg);
@@ -446,7 +443,6 @@ class Pos extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           toast.error(msg);
@@ -471,12 +467,15 @@ class Pos extends Component {
             cancelButtonText: 'Close',
           }).then((result) => {
             if (result.isConfirmed) {
-              this.sendUrlToPrint(
-                // 'http://192.168.1.7:3000/print/' +
-                //   this.props.id +
-                //   '/1.pdf'
-                global.api + json.data.order_code + '/bill.pdf'
-              );
+              if (global.os == 'Windows' || global.os == 'Mac OS') {
+                window.open(
+                  global.api + this.props.id + '/bill.pdf',
+                  'PRINT',
+                  'height=400,width=600'
+                );
+              } else {
+                this.sendUrlToPrint(global.api + this.props.id + '/bill.pdf');
+              }
             } else if (result.isDenied) {
               this.props.navigate('/orderdetails/' + json.data.order_code);
             }
@@ -516,7 +515,6 @@ class Pos extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json)
         if (!json.status) {
           this.setState({ isLoading: false, data: [] });
         } else {
@@ -653,14 +651,14 @@ class Pos extends Component {
                               styles={{
                                 modal: {
                                   width: '100%',
-                                  maxWidth:"60vw"
+                                  maxWidth: '60vw',
                                 },
                               }}
                               classNames={{
                                 modal: 'new_modal_styling new_modal_styling2',
                               }}
                             >
-                              <div className='w-100'>
+                              <div className="w-100">
                                 <h5
                                   className="mb-2 fw-600 font-md"
                                   style={{
@@ -1093,7 +1091,7 @@ class PosAdd extends React.Component {
             >
               <RadioButton
                 value="TakeAway"
-                pointColor="#f3c783"
+                pointColor="#5bc2c1"
                 iconSize={20}
                 rootColor="#bf370d"
                 iconInnerSize={10}
@@ -1103,7 +1101,7 @@ class PosAdd extends React.Component {
               </RadioButton>
               <RadioButton
                 value="Delivery"
-                pointColor="#f3c783"
+                pointColor="#5bc2c1"
                 iconSize={20}
                 rootColor="#065f0a"
                 iconInnerSize={10}
@@ -1114,7 +1112,7 @@ class PosAdd extends React.Component {
 
               <RadioButton
                 value="DineIn"
-                pointColor="#f3c783"
+                pointColor="#5bc2c1"
                 iconSize={20}
                 rootColor="#bf370d"
                 iconInnerSize={10}
@@ -1155,7 +1153,7 @@ class PosAdd extends React.Component {
                                 {item.product.variants.map((i, index) => {
                                   if (i.id == item.variant_id) {
                                     return (
-                                      <p key={index}>- {i.variants_name}</p>
+                                      <p key={index}> - {i.variants_name}</p>
                                     );
                                   }
                                 })}
@@ -1544,7 +1542,7 @@ class Products extends Component {
                     return (
                       <RadioButton
                         value={values.id.toString()}
-                        pointColor="#f3c783"
+                        pointColor="#5bc2c1"
                         iconSize={20}
                         rootColor="#37474f"
                         iconInnerSize={10}

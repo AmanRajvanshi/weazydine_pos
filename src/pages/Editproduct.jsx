@@ -124,7 +124,6 @@ export class Editproduct extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -201,7 +200,6 @@ export class Editproduct extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -648,7 +646,6 @@ class Variants extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.warn(json);
           if (!json.status) {
             toast.error(json.msg);
           } else {

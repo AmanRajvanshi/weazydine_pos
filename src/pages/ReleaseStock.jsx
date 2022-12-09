@@ -9,12 +9,14 @@ import { BiRupee } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../AuthContextProvider';
 import Skeletonloader from '../othercomponent/Skeletonloader';
+import { Bars } from 'react-loader-spinner';
 
 export class ReleaseStock extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
+      is_loding: true,
       open: false,
       images: [],
       variants_addons_div: false,
@@ -71,7 +73,6 @@ export class ReleaseStock extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -105,7 +106,6 @@ export class ReleaseStock extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.warn(json);
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
@@ -170,158 +170,181 @@ export class ReleaseStock extends Component {
                   <h6>Release stock in inventory</h6>
                 </div>
               </div>
-              <div className="card">
-                <div className="card-body">
-                  <div className="row">
-                    {this.state.rows.length > 0 ? (
-                      <div className="row">
-                        <div className="col-mg-12">
-                          <br />
-                          <table
-                            className="table table-bordered table-hover"
-                            id="tab_logic"
-                            style={{
-                              border: '1px solid #d9d9d9',
-                            }}
-                          >
-                            <thead>
-                              <tr>
-                                <th className="text-center">#</th>
-                                <th className="text-center">Name</th>
-                                <th className="text-center">Unit</th>
-                                <th className="text-center">Quantity</th>
-
-                                <th className="text-end">Action</th>
-                                <th />
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {this.state.rows.map((item, idx) => (
-                                <tr id="addr0" key={idx}>
-                                  <td>{idx + 1}</td>
-                                  <td>
-                                    <select
-                                      onChange={this.handleChange(idx)}
-                                      className="select-container"
-                                      name="material_id"
-                                    >
-                                      <option>Choose Material</option>
-                                      {this.state.products.length > 0 ? (
-                                        this.state.products.map(
-                                          (item, index) => (
-                                            <option
-                                              value={item.id}
-                                              unit={item.purchase_unit}
-                                            >
-                                              {item.inventory_product_name}
-                                            </option>
-                                          )
-                                        )
-                                      ) : (
-                                        <></>
-                                      )}
-                                    </select>
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      name="unit"
-                                      value={this.state.rows[idx].unit}
-                                      onChange={this.handleChange(idx)}
-                                      className="form-control"
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      name="quantity"
-                                      value={this.state.rows[idx].quantity}
-                                      onChange={this.handleChange(idx)}
-                                      className="form-control"
-                                    />
-                                  </td>
-
-                                  <td className="text-end">
-                                    <button
-                                      className="btn btn-outline-danger btn-sm"
-                                      onClick={this.handleRemoveSpecificRow(
-                                        idx
-                                      )}
-                                    >
-                                      X
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'end',
-                            }}
-                          >
-                            <button
-                              onClick={this.handleAddRow}
-                              className="btn btn-outline-secondary"
+              {this.state.is_loding ? (
+                <div
+                  className="main_loader"
+                  style={{
+                    height: '50vh',
+                  }}
+                >
+                  <Bars
+                    height="80"
+                    width="80"
+                    color="#5BC2C1"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
+                </div>
+              ) : (
+                <div className="card">
+                  <div className="card-body">
+                    <div className="row">
+                      {this.state.rows.length > 0 ? (
+                        <div className="row">
+                          <div className="col-mg-12">
+                            <br />
+                            <table
+                              className="table table-bordered table-hover"
+                              id="tab_logic"
                               style={{
-                                marginBottom: '20px',
-                                marginTop: '10px',
+                                border: '1px solid #d9d9d9',
                               }}
                             >
-                              Add New
-                            </button>
+                              <thead>
+                                <tr>
+                                  <th className="text-center">#</th>
+                                  <th className="text-center">Name</th>
+                                  <th className="text-center">Unit</th>
+                                  <th className="text-center">Quantity</th>
+                                  <th className="text-end">Action</th>
+                                  <th />
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {this.state.rows.map((item, idx) => (
+                                  <tr id="addr0" key={idx}>
+                                    <td>{idx + 1}</td>
+                                    <td>
+                                      <select
+                                        onChange={this.handleChange(idx)}
+                                        className="select-container"
+                                        name="material_id"
+                                      >
+                                        <option>Choose Material</option>
+                                        {this.state.products.length > 0 ? (
+                                          this.state.products.map(
+                                            (item, index) => (
+                                              <option
+                                                value={item.id}
+                                                unit={item.purchase_unit}
+                                                current_quantity={
+                                                  item.current_stock
+                                                }
+                                              >
+                                                {item.inventory_product_name}
+                                              </option>
+                                            )
+                                          )
+                                        ) : (
+                                          <></>
+                                        )}
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        name="unit"
+                                        value={this.state.rows[idx].unit}
+                                        onChange={this.handleChange(idx)}
+                                        className="form-control"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        name="quantity"
+                                        value={
+                                          this.state.rows[idx].current_quantity
+                                        }
+                                        onChange={this.handleChange(idx)}
+                                        className="form-control"
+                                      />
+                                    </td>
+
+                                    <td className="text-end">
+                                      <button
+                                        className="btn btn-outline-danger btn-sm"
+                                        onClick={this.handleRemoveSpecificRow(
+                                          idx
+                                        )}
+                                      >
+                                        X
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'end',
+                              }}
+                            >
+                              <button
+                                onClick={this.handleAddRow}
+                                className="btn btn-outline-secondary"
+                                style={{
+                                  marginBottom: '20px',
+                                  marginTop: '10px',
+                                }}
+                              >
+                                Add New
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'end',
-                        }}
-                      >
-                        <button
-                          onClick={this.handleAddRow}
-                          className="btn btn-sm btn-outline-secondary"
-                          style={{
-                            marginBottom: '20px',
-                            marginTop: '10px',
-                          }}
-                        >
-                          Add A Row
-                        </button>
-                      </div>
-                    )}
-                    <div className="col-lg-12 d-flex justify-content-end">
-                      {this.state.save_and_continue ? (
-                        <button
-                          className="btn btn-primary btn-sm me-2"
-                          style={{
-                            pointerEvents: 'none',
-                            opacity: '0.8',
-                          }}
-                        >
-                          <span
-                            class="spinner-border spinner-border-sm me-2"
-                            role="status"
-                          ></span>
-                          Saving
-                        </button>
                       ) : (
-                        <a
-                          onClick={() => {
-                            this.create();
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'end',
                           }}
-                          className="btn btn-primary btn-sm me-2"
                         >
-                          Save Changes
-                        </a>
+                          <button
+                            onClick={this.handleAddRow}
+                            className="btn btn-sm btn-outline-secondary"
+                            style={{
+                              marginBottom: '20px',
+                              marginTop: '10px',
+                            }}
+                          >
+                            Add A Row
+                          </button>
+                        </div>
                       )}
+                      <div className="col-lg-12 d-flex justify-content-end">
+                        {this.state.save_and_continue ? (
+                          <button
+                            className="btn btn-primary btn-sm me-2"
+                            style={{
+                              pointerEvents: 'none',
+                              opacity: '0.8',
+                            }}
+                          >
+                            <span
+                              class="spinner-border spinner-border-sm me-2"
+                              role="status"
+                            ></span>
+                            Saving
+                          </button>
+                        ) : (
+                          <a
+                            onClick={() => {
+                              this.create();
+                            }}
+                            className="btn btn-primary btn-sm me-2"
+                          >
+                            Save Changes
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

@@ -177,6 +177,9 @@ export class AddStockPurchase extends Component {
   };
 
   create = () => {
+    var po_no = this.state.po;
+    let rjx = /^[0-9]*$/;
+    let isValid = rjx.test(po_no);
     if (
       this.state.supplier_id == '' &&
       this.state.invoice_date == '' &&
@@ -187,6 +190,9 @@ export class AddStockPurchase extends Component {
       toast.error('Add category first !');
     } else if (this.state.rows.length == 0) {
       toast.error('Add atleast one product !');
+    }
+    else if(!isValid){
+      toast.error("PO number should be numeric !");
     }
     // else if (this.state.market_price<this.state.our_price) {
     //     toast.error("Your price should be less than market price !");
@@ -199,7 +205,7 @@ export class AddStockPurchase extends Component {
       var form = new FormData();
       form.append('supplier_id', this.state.supplier_id);
       form.append('purchase_date', this.state.invoice_date);
-      form.append('po', this.state.po);
+      form.append('po', po_no);
       form.append('is_paid', this.state.payment_type);
 
       form.append('note', this.state.note);

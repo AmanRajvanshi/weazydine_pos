@@ -115,9 +115,9 @@ export class Header extends Component {
         <div className="header">
           <div className="header-left border-0">
             <div className="logo">
-              <a>
+              <Link to="/">
                 <img src={logo} alt="" />
-              </a>
+              </Link>
             </div>
           </div>
           <div className="header-left border-0">
@@ -174,13 +174,10 @@ export class Header extends Component {
                   className="dropdown-toggle nav-link"
                   data-bs-toggle="dropdown"
                 >
-                  <img
-                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/notification-bing.svg"
-                    alt="img"
-                  />
-                  <span className="badge rounded-pill">
-                    {this.state.total_count}
-                  </span>
+                  <i
+                    className="fa-solid fa-bell"
+                    style={{ color: '#5bc2c1' }}
+                  ></i>
                 </a>
               ) : (
                 <a
@@ -188,20 +185,16 @@ export class Header extends Component {
                     toast.error('No Notifications');
                   }}
                 >
-                  <img
-                    src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/notification-bing.svg"
-                    alt="img"
-                  />
+                  <i
+                    className="fa-solid fa-bell"
+                    style={{ color: '#5bc2c1' }}
+                  ></i>
                 </a>
               )}
 
               <div className="dropdown-menu notifications">
                 <div className="topnav-dropdown-header">
                   <span className="notification-title">Notifications</span>
-                  {/* <a href="return false" className="clear-noti">
-                    {" "}
-                    Clear All{" "}
-                  </a> */}
                 </div>
                 <div className="noti-content">
                   <ul className="notification-list">
@@ -269,38 +262,12 @@ export class Header extends Component {
                 data-bs-toggle="dropdown"
               >
                 <span className="user-img">
-                  <img
-                    src={
-                      this.context.user.profile_pic == null
-                        ? profile
-                        : this.context.user.profile_pic
-                    }
-                    alt=""
-                    style={{ width: '40px', height: '40px' }}
-                  />
+                  <i className="fa-solid fa-shop"></i>
                   <span className="status online" />
                 </span>
               </a>
               <div className="dropdown-menu menu-drop-user">
                 <div className="profilename">
-                  <div className="profileset">
-                    <span className="user-img">
-                      <img
-                        src={
-                          this.context.user.profile_pic == null
-                            ? profile
-                            : this.context.user.profile_pic
-                        }
-                        alt=""
-                      />
-                      <span className="status online" />
-                    </span>
-                    <div className="profilesets">
-                      <h6>{this.context.user.name}</h6>
-                      <h5>Admin</h5>
-                    </div>
-                  </div>
-                  <hr className="m-0" />
                   <Link to="/editprofile" className="dropdown-item">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

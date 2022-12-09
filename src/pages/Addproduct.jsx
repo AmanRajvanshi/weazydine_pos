@@ -49,7 +49,6 @@ export class Addproduct extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
         if (json.data.length == 0) {
           this.setState({ open: true });
         }
@@ -84,7 +83,6 @@ export class Addproduct extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -164,7 +162,6 @@ export class Addproduct extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // console.warn(json)
           if (!json.status) {
             var msg = json.msg;
             toast.error(msg);
@@ -679,7 +676,6 @@ class Variants extends Component {
 
   update_product_variant = () => {
     this.setState({ add_on_loading: true });
-    console.log(this.state.rows);
     const add = [];
     this.state.object.map((item, index) => {
       if (item) {
@@ -760,7 +756,6 @@ class Variants extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.warn(json);
           if (!json.status) {
             toast.error(json.msg);
           } else {

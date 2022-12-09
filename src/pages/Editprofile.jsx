@@ -90,7 +90,6 @@ export class Editprofile extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.warn(json);
           if (!json.status) {
             toast.error(json.errors[0]);
           } else {
