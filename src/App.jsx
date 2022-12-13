@@ -34,7 +34,6 @@ import Orderreport from './pages/Orderreport.jsx';
 import Productreport from './pages/Productreport.jsx';
 import Print from './pages/Print.jsx';
 import StockPurchase from './pages/StockPurchase.jsx';
-import Example from './pages/Example.jsx';
 import ReleaseStock from './pages/ReleaseStock.jsx';
 import AddStockPurchase from './pages/AddStockPurchase.jsx';
 import EditStockPurchase from './pages/EditStockRelease.jsx';
@@ -48,7 +47,6 @@ import Editsemifinishedrawmaterialproducts from './pages/Editsemifinishedrawmate
 
 import Supliers from './pages/Supliers.jsx';
 import Semifinishedrawmaterialproductsdetails from './pages/Semifinishedrawmaterialproductsdetails.jsx';
-// import Tables from './pages/Tables.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -56,10 +54,10 @@ OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 // global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-// global.api = 'http://192.168.1.39:8001/api/';
+global.api = ' https://beta-dine-api.weazy.in/api/';
 
 //for local
-global.api = 'http://127.0.0.1:8000/api/';
+// global.api = 'http://127.0.0.1:8000/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -105,7 +103,6 @@ export class App extends Component {
     } else if (/Linux/.test(platform)) {
       os = 'Linux';
     }
-
     global.os = os;
   };
 
@@ -524,10 +521,8 @@ export class App extends Component {
               }
             />
             <Route path="*" element={<Pagenotfound />} />
-            {/* <Route exact path="/login" element={<Login />} /> */}
-            {/* <Route exact path="/tables" element={<Tables />} /> */}
-            <Route exact path="/example" element={<Example />} />
-            <Route exact path="/loginpassword" element={<LoginPassword />} />
+            <Route exact path="/login" element={<Login />} />
+            {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
         </AuthContext.Provider>
         <ToastContainer

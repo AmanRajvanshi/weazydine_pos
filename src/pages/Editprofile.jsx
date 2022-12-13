@@ -281,7 +281,7 @@ export class Editprofile extends Component {
                     <div className="col-12 d-flex align-items-center justify-content-end">
                       {this.state.submit_buttonLoading ? (
                         <button
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                           style={{
                             pointerEvents: "none",
                             opacity: "0.8",
@@ -298,7 +298,7 @@ export class Editprofile extends Component {
                           onClick={() => {
                             this.save();
                           }}
-                          className="btn btn-submit me-2"
+                          className="btn btn-primary btn-sm me-2"
                         >
                           Submit
                         </a>

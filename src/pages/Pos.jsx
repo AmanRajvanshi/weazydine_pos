@@ -1018,7 +1018,7 @@ class Pos extends Component {
                                   {this.state.split_total ==
                                     this.state.grandTotal && (
                                     <div
-                                      className="btn btn-primary"
+                                      className="btn btn-primary btn-sm"
                                       style={{ width: '100%' }}
                                       onClick={() => {
                                         this.place_order('split');
@@ -1233,7 +1233,7 @@ class PosAdd extends React.Component {
                   </ul>
                 </div>
                 <div
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-sm"
                   style={{ width: '100%' }}
                   onClick={() => {
                     this.props.next_step();
@@ -1241,6 +1241,15 @@ class PosAdd extends React.Component {
                 >
                   <h5>Place Order</h5>
                 </div>
+                {/* <div
+                  className="btn btn-primary btn-sm"
+                  style={{ width: '100%' }}
+                  onClick={() => {
+                    this.props.put_on_hold();
+                  }}
+                >
+                  <h5>Put on Hold</h5>
+                </div> */}
               </div>
             </>
           ) : (
