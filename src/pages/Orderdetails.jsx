@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import ReactToPrint from 'react-to-print';
 import PrintKot from '../component/PrintKot';
+import  PrintReceipt from '../component/PrintReceipt';
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 let EscPosEncoder = require('esc-pos-encoder');
@@ -777,19 +778,22 @@ export class Orderdetails extends Component {
                     </div>
                     {this.state.data.order_status != 'cancelled' && (
                       <div className="d-flex align-items-center justify-content-center">
-                        <a
-                          className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
-                          onClick={() => {
-                            if (
-                              global.os == 'Windows' ||
-                              global.os == 'Mac OS'
-                            ) {
-                              window.open(
-                                global.api + this.props.id + '/bill.pdf',
-                                'PRINT',
-                                'height=400,width=600'
-                              );
-                            } else {
+                        {( global.os != 'Windows' &&
+                              global.os != 'Mac OS')?
+                          <>
+                            <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
+                              onClick={() => {
+                              if(
+                                global.os == 'Windows' ||
+                                global.os == 'Mac OS'
+                              ) 
+                              {
+                                window.open(
+                                  global.api + this.props.id + '/bill.pdf',
+                                  'PRINT',
+                                  'height=400,width=600'
+                                );
+                              } else {
                               this.sendUrlToPrint(
                                 global.api + this.props.id + '/bill.pdf'
                               );
@@ -799,7 +803,7 @@ export class Orderdetails extends Component {
                           <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                           <p>Print Receipt</p>
                         </a>
-                        <>
+                        
                           {this.state.data.order_status != 'completed' && (
                             <a
                               className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
@@ -824,17 +828,72 @@ export class Orderdetails extends Component {
                               <p>Print KOT</p>
                             </a>
                           )}
-                        </>
+                      
+                    </>
+:
+<>
+
+<ReactToPrint
+                      trigger={() => <a
+                        className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
+                       
+                      >
+                        <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                        <p>Print Receipt</p>
+                      </a>}
+                      content={() => this.componentRef2}
+                 
+                  />
+                    
+                          {this.state.data.order_status != 'completed' && (
+
+<ReactToPrint
+trigger={() =><a
+                              className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                              onClick={() => {
+                                if (
+                                  global.os == 'Windows' ||
+                                  global.os == 'Mac OS'
+                                ) {
+                                  window.open(
+                                    global.api + this.props.id + '/kot.pdf',
+                                    'PRINT',
+                                    'height=400,width=600'
+                                  );
+                                } else {
+                                  this.sendUrlToPrint(
+                                    global.api + this.props.id + '/kot.pdf'
+                                  );
+                                }
+                              }}
+                            >
+                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                              <p>Print KOT</p>
+                            </a>
+}
+                           content={() => this.componentRef}
+                           
+                           />
+                          )}
+                          
+                  
+
+</>
+
+                        }
+
+               
                       </div>
                     )}
                   </div>
                   <>
-                    <ReactToPrint
-                      trigger={() => <a href="#">Print this out!</a>}
-                      content={() => this.componentRef}
-                    />
+                    
                     <PrintKot
                       ref={(el) => (this.componentRef = el)}
+                      id={this.props.id}
+                    />
+                    <PrintReceipt
+                      ref={(el2) => (this.componentRef2 = el2)}
                       id={this.props.id}
                     />
                   </>

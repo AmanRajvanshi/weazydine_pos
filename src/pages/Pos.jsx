@@ -13,7 +13,9 @@ import no_product from '../assets/images/no_products_found.png';
 import { toStatement } from '@babel/types';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-
+import PrintKot from '../component/PrintKot';
+import  PrintReceipt from '../component/PrintReceipt';
+import ReactToPrint from 'react-to-print';
 class Pos extends Component {
   static contextType = AuthContext;
   constructor(props) {

@@ -11,7 +11,9 @@ import no_order from '../assets/images/no_orders.webp';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-
+import PrintKot from '../component/PrintKot';
+import  PrintReceipt from '../component/PrintReceipt';
+import ReactToPrint from 'react-to-print';
 export class TableOrderDetails extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -691,56 +693,122 @@ export class TableOrderDetails extends Component {
                         </div>
                         {this.state.data.order_status != 'cancelled' && (
                           <div className="d-flex align-items-center justify-content-center">
-                            <a
-                              className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
-                              onClick={() => {
-                                if (
+                          {( global.os != 'Windows' &&
+                                global.os != 'Mac OS')?
+                            <>
+                              <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
+                                onClick={() => {
+                                if(
                                   global.os == 'Windows' ||
                                   global.os == 'Mac OS'
-                                ) {
+                                ) 
+                                {
                                   window.open(
                                     global.api + this.state.data[0].order_code + '/bill.pdf',
                                     'PRINT',
                                     'height=400,width=600'
                                   );
                                 } else {
-                                  this.sendUrlToPrint(
-                                    global.api + this.state.data[0].order_code + '/bill.pdf'
-                                  );
-                                }
-                              }}
-                            >
-                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                              <p>Print Receipt</p>
-                            </a>
-                            <>
-                              {this.state.data.order_status != 'completed' && (
-                                <a
-                                  className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
-                                  onClick={() => {
-                                    if (
-                                      global.os == 'Windows' ||
-                                      global.os == 'Mac OS'
-                                    ) {
-                                      window.open(
-                                        global.api + this.state.data[0].order_code + '/kot.pdf',
-                                        'PRINT',
-                                        'height=400,width=600'
-                                      );
-                                    } else {
-                                      this.sendUrlToPrint(
-                                        global.api + this.state.data[0].order_code + '/kot.pdf'
-                                      );
-                                    }
-                                  }}
-                                >
-                                  <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                                  <p>Print KOT</p>
-                                </a>
-                              )}
-                            </>
-                          </div>
+                                this.sendUrlToPrint(
+                                  global.api + this.state.data[0].order_code + '/bill.pdf'
+                                );
+                              }
+                            }}
+                          >
+                            <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                            <p>Print Receipt</p>
+                          </a>
+                          
+                            {this.state.data.order_status != 'completed' && (
+                              <a
+                                className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                                onClick={() => {
+                                  if (
+                                    global.os == 'Windows' ||
+                                    global.os == 'Mac OS'
+                                  ) {
+                                    window.open(
+                                      global.api + this.state.data[0].order_code + '/kot.pdf',
+                                      'PRINT',
+                                      'height=400,width=600'
+                                    );
+                                  } else {
+                                    this.sendUrlToPrint(
+                                      global.api + this.state.data[0].order_code + '/kot.pdf'
+                                    );
+                                  }
+                                }}
+                              >
+                                <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                <p>Print KOT</p>
+                              </a>
+                            )}
+                        
+                      </>
+  :
+  <>
+  
+  <ReactToPrint
+                        trigger={() => <a
+                          className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
+                         
+                        >
+                          <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                          <p>Print Receipt</p>
+                        </a>}
+                        content={() => this.componentRef2}
+                   
+                    />
+                      
+                            {this.state.data.order_status != 'completed' && (
+  
+  <ReactToPrint
+  trigger={() =><a
+                                className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                                onClick={() => {
+                                  if (
+                                    global.os == 'Windows' ||
+                                    global.os == 'Mac OS'
+                                  ) {
+                                    window.open(
+                                      global.api + this.state.data[0].order_code + '/kot.pdf',
+                                      'PRINT',
+                                      'height=400,width=600'
+                                    );
+                                  } else {
+                                    this.sendUrlToPrint(
+                                      global.api + this.state.data[0].order_code + '/kot.pdf'
+                                    );
+                                  }
+                                }}
+                              >
+                                <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                <p>Print KOT</p>
+                              </a>
+  }
+                             content={() => this.componentRef}
+                             
+                             />
+                            )}
+                            
+                    
+  
+  </>
+  
+                          }
+  
+                 
+                        </div>
                         )}
+
+<PrintKot
+                      ref={(el) => (this.componentRef = el)}
+                      id={this.state.data[0].order_code}
+                    />
+                    <PrintReceipt
+                      ref={(el2) => (this.componentRef2 = el2)}
+                      id={this.state.data[0].order_code}
+                    />
                       </div>
                     </div>
                   </section>
