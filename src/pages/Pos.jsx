@@ -469,12 +469,12 @@ class Pos extends Component {
             if (result.isConfirmed) {
               if (global.os == 'Windows' || global.os == 'Mac OS') {
                 window.open(
-                  global.api + this.props.id + '/bill.pdf',
+                  global.api + json.data.order_code + '/bill.pdf',
                   'PRINT',
                   'height=400,width=600'
                 );
               } else {
-                this.sendUrlToPrint(global.api + this.props.id + '/bill.pdf');
+                this.sendUrlToPrint(global.api + json.data.order_code + '/bill.pdf');
               }
             } else if (result.isDenied) {
               this.props.navigate('/orderdetails/' + json.data.order_code);

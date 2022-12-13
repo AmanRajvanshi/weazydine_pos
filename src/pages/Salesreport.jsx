@@ -27,6 +27,10 @@ class Salesreport extends Component {
     to: new Date(),
     range: 'today',
     last_page: 1,
+    total:0,
+    online:0,
+    cash:0,
+    weazypay:0
   };
 
   handleSelect(ranges) {
@@ -66,6 +70,7 @@ class Salesreport extends Component {
           }
         } else {
           console.log(json.data.data);
+          this.setState({total:json.total_earnning,online:json.online,cash:json.cashsale,weazypay:json.weazypay})
           this.setState({ data: json.data.data,last_page:json.data.last_page});
         }
         this.setState({ is_loading: false });
@@ -320,6 +325,111 @@ class Salesreport extends Component {
               </section>
             </div>
             {!this.state.is_loading ? (
+              <>
+                <div className="row">
+              <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                       
+                            <BiRupee />
+                            <span className="counters">
+                              {this.state.total.toFixed(2)}
+                            </span>
+                         
+                      </h5>
+                      <h6>Total Sales</h6>
+                    </div>
+                  </div>
+                  </Link>
+                </div>
+
+              <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                       
+                            <BiRupee />
+                            <span className="counters">
+                              {this.state.online.toFixed(2)}
+                            </span>
+                         
+                      </h5>
+                      <h6>Online Sales</h6>
+                    </div>
+                  </div>
+                  </Link>
+                </div>
+                <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                       
+                            <BiRupee />
+                            <span className="counters">
+                              {this.state.cash.toFixed(2)}
+                            </span>
+                         
+                      </h5>
+                      <h6>Cash Sales</h6>
+                    </div>
+                  </div>
+                  </Link>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
+                  <div className="dash-widget dash1">
+                    <div className="dash-widgetimg">
+                      <span>
+                        <img
+                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                          alt="img"
+                        />
+                      </span>
+                    </div>
+                    <div className="dash-widgetcontent">
+                      <h5>
+                       
+                            <BiRupee />
+                            <span className="counters">
+                              {this.state.weazypay.toFixed(2)}
+                            </span>
+                         
+                      </h5>
+                      <h6>Weazy Pay</h6>
+                    </div>
+                  </div>
+                  </Link>
+                </div>
+           </div>
               <div className="card">
                 {this.state.data.length > 0 ? (
                   <div className="card-body">
@@ -434,6 +544,8 @@ class Salesreport extends Component {
                   </div>
                 )}
               </div>
+
+              </>
             ) : (
               <div
                 className="main_loader"

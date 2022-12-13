@@ -699,13 +699,13 @@ export class TableOrderDetails extends Component {
                                   global.os == 'Mac OS'
                                 ) {
                                   window.open(
-                                    global.api + this.props.id + '/bill.pdf',
+                                    global.api + this.state.data[0].order_code + '/bill.pdf',
                                     'PRINT',
                                     'height=400,width=600'
                                   );
                                 } else {
                                   this.sendUrlToPrint(
-                                    global.api + this.props.id + '/bill.pdf'
+                                    global.api + this.state.data[0].order_code + '/bill.pdf'
                                   );
                                 }
                               }}
@@ -723,13 +723,13 @@ export class TableOrderDetails extends Component {
                                       global.os == 'Mac OS'
                                     ) {
                                       window.open(
-                                        global.api + this.props.id + '/kot.pdf',
+                                        global.api + this.state.data[0].order_code + '/kot.pdf',
                                         'PRINT',
                                         'height=400,width=600'
                                       );
                                     } else {
                                       this.sendUrlToPrint(
-                                        global.api + this.props.id + '/kot.pdf'
+                                        global.api + this.state.data[0].order_code + '/kot.pdf'
                                       );
                                     }
                                   }}

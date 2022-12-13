@@ -125,6 +125,7 @@ export class Dashboard extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/orderreport">
                   <div className="dash-widget">
                     <div className="dash-widgetimg">
                       <span>
@@ -145,8 +146,10 @@ export class Dashboard extends Component {
                       <h6>Total Orders</h6>
                     </div>
                   </div>
+                  </Link>
                 </div>
                 <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
                   <div className="dash-widget dash1">
                     <div className="dash-widgetimg">
                       <span>
@@ -172,9 +175,11 @@ export class Dashboard extends Component {
                       <h6>Total Sales</h6>
                     </div>
                   </div>
+                  </Link>
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
                   <div className="dash-widget dash1">
                     <div className="dash-widgetimg">
                       <span>
@@ -200,9 +205,11 @@ export class Dashboard extends Component {
                       <h6>Cash Sales</h6>
                     </div>
                   </div>
+                  </Link>
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
+                <Link to="/salesreport">
                   <div className="dash-widget dash1">
                     <div className="dash-widgetimg">
                       <span>
@@ -228,6 +235,7 @@ export class Dashboard extends Component {
                       <h6>Online Sales</h6>
                     </div>
                   </div>
+                  </Link>
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
@@ -282,6 +290,7 @@ export class Dashboard extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
+                  <Link to={"/crm"} >
                   <div className="dash-widget dash1">
                     <div className="dash-widgetimg">
                       <span>
@@ -302,6 +311,7 @@ export class Dashboard extends Component {
                       <h6>Total Customers</h6>
                     </div>
                   </div>
+                  </Link>
                 </div>
                 <div className="row">
                   <div className="col-md-12">
