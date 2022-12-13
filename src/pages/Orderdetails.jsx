@@ -10,11 +10,11 @@ import { Bars } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import ReactToPrint from 'react-to-print';
+import PrintKot from '../component/PrintKot';
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 let EscPosEncoder = require('esc-pos-encoder');
 
-let encoder = new EscPosEncoder();
 export class Orderdetails extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -776,7 +776,7 @@ export class Orderdetails extends Component {
                       </div>
                     </div>
                     {this.state.data.order_status != 'cancelled' && (
-                      <div className='d-flex align-items-center justify-content-center'>
+                      <div className="d-flex align-items-center justify-content-center">
                         <a
                           className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
                           onClick={() => {
@@ -828,6 +828,16 @@ export class Orderdetails extends Component {
                       </div>
                     )}
                   </div>
+                  <>
+                    <ReactToPrint
+                      trigger={() => <a href="#">Print this out!</a>}
+                      content={() => this.componentRef}
+                    />
+                    <PrintKot
+                      ref={(el) => (this.componentRef = el)}
+                      id={this.props.id}
+                    />
+                  </>
                 </div>
               </section>
             </div>
