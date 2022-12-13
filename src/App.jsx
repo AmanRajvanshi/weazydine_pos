@@ -38,7 +38,7 @@ import Example from './pages/Example.jsx';
 import ReleaseStock from './pages/ReleaseStock.jsx';
 import AddStockPurchase from './pages/AddStockPurchase.jsx';
 import EditStockPurchase from './pages/EditStockRelease.jsx';
-
+import LoginPassword from './pages/LoginPassword.jsx';
 import { Howl, Howler } from 'howler';
 import { toast } from 'react-toastify';
 import Kitchens from './pages/Kitchens.jsx';
@@ -524,10 +524,10 @@ export class App extends Component {
               }
             />
             <Route path="*" element={<Pagenotfound />} />
-            <Route exact path="/login" element={<Login />} />
+            {/* <Route exact path="/login" element={<Login />} /> */}
             {/* <Route exact path="/tables" element={<Tables />} /> */}
             <Route exact path="/example" element={<Example />} />
-            {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
+            <Route exact path="/loginpassword" element={<LoginPassword />} />
           </Routes>
         </AuthContext.Provider>
         <ToastContainer
