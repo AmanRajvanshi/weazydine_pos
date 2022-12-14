@@ -350,90 +350,163 @@ export class Header extends Component {
                   overflow="scroll"
                 >
                   <Menu>
-                    <MenuItem routerLink={<Link to="/" />}>
+                    <MenuItem
+                      routerLink={<Link to="/" />}
+                      icon={<i className="fa-solid fa-shop"></i>}
+                    >
                       <span>Dashboard</span>
                     </MenuItem>
-                    <MenuItem routerLink={<Link to="/pos" />}>
+                    <MenuItem
+                      routerLink={<Link to="/pos" />}
+                      icon={<i className="fa-solid fa-cash-register"></i>}
+                    >
                       <span>POS</span>
                     </MenuItem>
-                    <MenuItem routerLink={<Link to="/orderlist" />}>
+                    <MenuItem
+                      routerLink={<Link to="/orderlist" />}
+                      icon={<i className="fa-solid fa-shopping-bag"></i>}
+                    >
                       <span>Orders</span>
                     </MenuItem>
-                    <MenuItem routerLink={<a href="/kot" target="_blank" />}>
-                      <span>Kitchen Display System</span>
+                    <MenuItem
+                      routerLink={<a href="/kot" target="_blank" />}
+                      icon={<i className="fa-solid fa-print"></i>}
+                    >
+                      <span>
+                        Kitchen Display
+                        <br /> System
+                      </span>
                     </MenuItem>
-                    <SubMenu label="Catalogue">
-                      <MenuItem routerLink={<Link to="/productlist" />}>
+                    <SubMenu
+                      label="Catalogue"
+                      icon={<i className="fa-solid fa-boxes"></i>}
+                    >
+                      <MenuItem
+                        routerLink={<Link to="/productlist" />}
+                        icon={<i className="fa-solid fa-box"></i>}
+                      >
                         <span>Product List</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/categorylist" />}>
+                      <MenuItem
+                        routerLink={<Link to="/categorylist" />}
+                        icon={<i className="fa-solid fa-box"></i>}
+                      >
                         <span>Category List</span>
                       </MenuItem>
                     </SubMenu>
 
-                    <SubMenu label="Inventory">
-                      <MenuItem routerLink={<Link to="/inventoryproducts" />}>
+                    <SubMenu
+                      label="Inventory"
+                      icon={<i className="fa-solid fa-boxes"></i>}
+                    >
+                      <MenuItem
+                        routerLink={<Link to="/inventoryproducts" />}
+                        icon={<i className="fa-solid fa-box"></i>}
+                      >
                         <span>Raw Materials</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/inventorycategory" />}>
+                      <MenuItem
+                        routerLink={<Link to="/inventorycategory" />}
+                        icon={<i className="fa-solid fa-box"></i>}
+                      >
                         <span>Raw Materials Category</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/stock_purchase" />}>
+                      <MenuItem
+                        routerLink={<Link to="/stock_purchase" />}
+                        icon={<i className="fa-solid fa-box"></i>}
+                      >
                         <span>Stock Purchase</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/releaseStock" />}>
+                      <MenuItem
+                        routerLink={<Link to="/releaseStock" />}
+                        icon={<i className="fa-solid fa-box"></i>}
+                      >
                         <span>Stock Release</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={
                           <Link to="/semifinishedrawmaterialproducts" />
                         }
+                        icon={<i className="fa-solid fa-box"></i>}
                       >
                         <span>
                           Semi-Finished <br /> Raw Material Recipe
                         </span>
                       </MenuItem>
 
-                      <MenuItem routerLink={<Link to="/supliers" />}>
+                      <MenuItem
+                        routerLink={<Link to="/supliers" />}
+                        icon={<i className="fa-solid fa-user"></i>}
+                      >
                         <span>Supliers</span>
                       </MenuItem>
                     </SubMenu>
 
-                    <SubMenu label="Reports">
-                      <MenuItem routerLink={<Link to="/salesreport" />}>
+                    <SubMenu
+                      label="Reports"
+                      icon={<i className="fa-solid fa-chart-bar"></i>}
+                    >
+                      <MenuItem
+                        routerLink={<Link to="/salesreport" />}
+                        icon={<i className="fa-solid fa-chart-bar"></i>}
+                      >
                         <span>Transactions</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/orderreport" />}>
+                      <MenuItem
+                        routerLink={<Link to="/orderreport" />}
+                        icon={<i className="fa-solid fa-chart-bar"></i>}
+                      >
                         <span>Sales Report</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/productreport" />}>
+                      <MenuItem
+                        routerLink={<Link to="/productreport" />}
+                        icon={<i className="fa-solid fa-chart-bar"></i>}
+                      >
                         <span>Product Report</span>
                       </MenuItem>
                     </SubMenu>
 
-                    <MenuItem routerLink={<Link to="/crm" />}>
+                    <MenuItem
+                      routerLink={<Link to="/crm" />}
+                      icon={<i className="fa-solid fa-bars-progress"></i>}
+                    >
                       <span>CRM</span>
                     </MenuItem>
 
-                    <SubMenu label="Setup">
-                      <MenuItem routerLink={<Link to="/dineinlisting" />}>
+                    <SubMenu
+                      label="Setup"
+                      icon={<i className="fa-solid fa-cog"></i>}
+                    >
+                      <MenuItem
+                        routerLink={<Link to="/dineinlisting" />}
+                        icon={<i className="fa-solid fa-cog"></i>}
+                      >
                         <span>
                           Dine In
                           <br />
                           Management
                         </span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/pickuppoint" />}>
+                      <MenuItem
+                        routerLink={<Link to="/pickuppoint" />}
+                        icon={<i className="fa-solid fa-cog"></i>}
+                      >
                         <span>
                           Pickup Points
                           <br />
                           Management
                         </span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/kitchens" />}>
+                      <MenuItem
+                        routerLink={<Link to="/kitchens" />}
+                        icon={<i className="fa-solid fa-cog"></i>}
+                      >
                         <span>Kitchens Management</span>
                       </MenuItem>
-                      <MenuItem routerLink={<Link to="/editprofile" />}>
+                      <MenuItem
+                        routerLink={<Link to="/editprofile" />}
+                        icon={<i className="fa-solid fa-cog"></i>}
+                      >
                         <span>Store Profile</span>
                       </MenuItem>
                     </SubMenu>
