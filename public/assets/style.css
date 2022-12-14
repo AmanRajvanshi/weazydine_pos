@@ -9178,69 +9178,83 @@ span.select-container.select-container--default.select-container--open {
   font-size: 2em !important;
   font-weight: bold !important;
 }
+
 #invoice-POS {
   font-family: 'PrintFont', sans-serif;
   /* box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); */
   padding: 2mm;
   width: 80mm;
   background: #fff;
-  display: inline-block;    
+  display: inline-block;
   padding-bottom: 10px;
 }
+
 #invoice-POS ::selection {
   color: #fff;
 }
+
 #invoice-POS ::moz-selection {
   background: #f31544;
   color: #fff;
 }
+
 #invoice-POS h1 {
   font-size: 1.5em;
   color: #222;
 }
+
 #invoice-POS h2 {
   /* font-size: 2em; */
   font-weight: 300;
 }
+
 #invoice-POS h3 {
   font-size: 1.2em;
   font-weight: 300;
   line-height: 1em;
   text-align: center;
 }
+
 #invoice-POS p {
   width: 100%;
   text-align: center;
 }
+
 #invoice-POS .info p {
   text-align: center;
   font-size: 1em;
   line-height: 10px;
   margin: 5px;
 }
+
 #invoice-POS .info p span {
   line-height: 12px;
 }
+
 #invoice-POS .new_h3 {
   text-align: center;
   font-size: 1em;
   font-weight: 300;
   line-height: 2em;
 }
+
 #invoice-POS p {
   font-size: 1em;
   /* color: #666; */
   line-height: 1.2em;
 }
+
 #invoice-POS #top,
 #invoice-POS #mid,
 #invoice-POS #bot {
   /* / Targets all id with 'col-' / */
   border-bottom: 2px solid #b0b0b0;
 }
+
 #invoice-POS #top {
   min-height: 20px;
 }
+
 /* #invoice-POS #mid {
             margin-top: 10px;
             } */
@@ -9248,6 +9262,7 @@ span.select-container.select-container--default.select-container--open {
   min-height: 50px;
   /* / padding-bottom: 10px; / */
 }
+
 .invoice_heading {
   text-align: center;
   font-size: 1em;
@@ -9256,6 +9271,7 @@ span.select-container.select-container--default.select-container--open {
   padding-bottom: 10px;
   border-bottom: 1px solid #3d3d3d;
 }
+
 #invoice-POS .clientlogo {
   float: left;
   height: 60px;
@@ -9264,66 +9280,82 @@ span.select-container.select-container--default.select-container--open {
   background-size: 60px 60px;
   border-radius: 50px;
 }
+
 #invoice-POS .info {
   display: block;
   margin-left: 0;
 }
+
 #invoice-POS .title {
   float: right;
 }
+
 #invoice-POS .title p {
   text-align: right;
 }
+
 #invoice-POS table {
   width: 100%;
   border-collapse: collapse;
 }
+
 #invoice-POS .tabletitle {
   font-size: 0.5em;
   border-top: 1px dotted #3d3d3d !important;
   border-bottom: 1px dotted #3d3d3d !important;
 }
+
 #invoice-POS .service {
   border-bottom: 1px solid #3d3d3d;
 }
+
 #invoice-POS .item {
   width: 24mm;
 }
+
 #invoice-POS .itemtext {
   font-size: 1.2em;
   line-height: 1.5em;
   padding-left: 5px;
 }
+
 .Rate h2 {
   /* font-size: 1.5em !important; */
   color: #222 !important;
 }
+
 .payment h2 {
   font-size: 1.5em !important;
   color: #222 !important;
 }
+
 #legalcopy .legal {
   text-align: center;
   font-size: 1em;
 }
+
 #customer_details .customer_details_h3 {
   text-align: center;
   font-size: 1em;
   font-weight: 300;
   line-height: 2em;
 }
+
 .name_phone_main {
   border-bottom: 1px solid #3d3d3d;
 }
+
 .customer_order_details_main {
   border-bottom: 1px solid #3d3d3d;
 }
+
 #name_phone {
   display: flex !important;
   align-items: center !important;
   max-width: 100% !important;
   width: 100% !important;
 }
+
 #name_phone .phone_email_head {
   width: 30%;
   text-align: start;
@@ -9331,6 +9363,7 @@ span.select-container.select-container--default.select-container--open {
   line-height: 1.5em;
   float: left;
 }
+
 #name_phone .phone_email_content {
   width: 70%;
   text-align: start;
@@ -9338,11 +9371,13 @@ span.select-container.select-container--default.select-container--open {
   line-height: 1.5em;
   float: right;
 }
+
 #customer_order_details {
   display: flex;
   align-items: center;
   width: 100%;
 }
+
 #customer_order_details .customer_order_details_head {
   width: 40%;
   text-align: start;
@@ -9350,6 +9385,7 @@ span.select-container.select-container--default.select-container--open {
   line-height: 1.5em;
   float: left;
 }
+
 #customer_order_details .customer_order_details_content {
   width: 60%;
   text-align: start;
@@ -9357,6 +9393,7 @@ span.select-container.select-container--default.select-container--open {
   line-height: 1.5em;
   float: right;
 }
+
 .kot_heading {
   text-align: center;
   font-size: 1.5em !important;
@@ -9364,12 +9401,14 @@ span.select-container.select-container--default.select-container--open {
   border-bottom: 1px solid #eee;
   padding-top: 30px;
 }
+
 .table_data {
   font-size: 2.15em !important;
   /* padding-bottom: 20px !important; */
   /* font-weight: lighter !important; */
   text-align: center;
 }
+
 .kot_dT {
   /* / display: flex; / */
   /* / align-items: center; / */
@@ -9377,9 +9416,11 @@ span.select-container.select-container--default.select-container--open {
   font-size: 0.5em;
   text-align: center;
 }
+
 .mt-10 {
   margin-top: 10px;
 }
+
 .text-center {
   text-align: center;
 }

@@ -32,7 +32,7 @@ export class Orderdetails extends Component {
       generate_order_buttonLoading: false,
       bill: [],
       cart_new: [],
-      payment: '',
+      payment: 'UPI',
       time: 5,
       total_amount: '',
       split_bill_amount_other: '',
@@ -43,6 +43,11 @@ export class Orderdetails extends Component {
       user_details: [],
       cart_details: [],
       transaction_details: [],
+      split_payment: [
+        { amount: 0, method: 'Cash' },
+        { amount: 0, method: 'Card' },
+        { amount: 0, method: 'UPI' },
+      ],
     };
   }
 
@@ -143,7 +148,7 @@ export class Orderdetails extends Component {
         } else {
           if (json.data.length > 0) {
             this.setState({
-              total_amount: json.data[0].total_amount,
+              total_amount: Math.round(json.data[0].total_amount),
               bill: json.data[0],
             });
             this.setState({ cart_new: json.data[0].cart });
@@ -173,6 +178,7 @@ export class Orderdetails extends Component {
         order_id: this.state.bill.id,
         payment_method: this.state.payment,
         order_status: 'completed',
+        split_payment: this.state.split_payment,
       }),
     })
       .then((response) => response.json())
@@ -181,8 +187,8 @@ export class Orderdetails extends Component {
           var msg = json.msg;
           toast.error(msg);
         } else {
-          this.setState({ generateBillModal: false });
-          this.props.navigate(-1);
+          this.orderDetails(this.props.id);
+          this.setState({ modalVisible: false, splitModal: false });
           toast.success('Order Completed');
         }
         return json;
@@ -193,6 +199,25 @@ export class Orderdetails extends Component {
       .finally(() => {
         this.setState({ mark_complete_buttonLoading: false });
       });
+  };
+
+  add_split_amount = (amount, index) => {
+    if (amount == '') {
+      amount = 0;
+    }
+    var split = this.state.split_payment;
+
+    var tt = 0;
+    split.map((item, i) => {
+      if (i != index) {
+        tt = parseFloat(tt) + parseFloat(item.amount);
+      } else {
+        tt = parseFloat(tt) + parseFloat(amount);
+      }
+    });
+
+    split[index].amount = amount;
+    this.setState({ split_payment: split, split_total: tt });
   };
 
   getOrderDetails = (id) => {
@@ -1128,37 +1153,33 @@ export class Orderdetails extends Component {
             <div className="card border-none">
               <div className="card-body p-0 pt-4">
                 <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label>Amount Paid by Cash</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({
-                            split_bill_amount_cash: e.target.value,
-                          });
-                        }}
-                        value={this.state.split_bill_amount_cash}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label>
-                        Amount Paid by Google Pay/Paytm/UPI/Debit Card/Credit
-                        Card
-                      </label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({
-                            split_bill_amount_other: e.target.value,
-                          });
-                        }}
-                        value={this.state.split_bill_amount_other}
-                      />
-                    </div>
-                  </div>
+                  {this.state.split_payment.map((item, index) => {
+                    var tt = item.amount;
+                    return (
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <div className="form-group">
+                            <label>{item.method} </label>
+                          </div>
+                        </div>
+                        <div className="col-lg-6">
+                          <div className="form-group">
+                            <input
+                              className="form-control"
+                              type="number"
+                              onChange={(e) => {
+                                this.add_split_amount(e.target.value, index);
+                              }}
+                              value={this.state[item.amount]}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <h5>Split Total - {this.state.split_total} </h5>
+
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.mark_complete_buttonLoading ? (
                       <button
@@ -1175,14 +1196,16 @@ export class Orderdetails extends Component {
                         Please wait
                       </button>
                     ) : (
-                      <a
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          this.mark_complete();
-                        }}
-                      >
-                        Complete Order
-                      </a>
+                      this.state.split_total == this.state.total_amount && (
+                        <a
+                          className="btn btn-primary btn-sm"
+                          onClick={() => {
+                            this.mark_complete();
+                          }}
+                        >
+                          Complete Order
+                        </a>
+                      )
                     )}
                   </div>
                 </div>

@@ -1,23 +1,23 @@
-import { Component } from "react";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import logo from "../assets/images/logos/main_logo_black.png";
-import login from "../assets/images/logos/main_logo_black.png";
-import Swal from "sweetalert2";
-import { AuthContext } from "../AuthContextProvider";
-import { toast } from "react-toastify";
-import OtpInput from "react-otp-input";
-import Timer from "otp-timer";
+import { Component } from 'react';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+import logo from '../assets/images/logos/main_logo_black.png';
+import login from '../assets/images/logos/main_logo_black.png';
+import Swal from 'sweetalert2';
+import { AuthContext } from '../AuthContextProvider';
+import { toast } from 'react-toastify';
+import OtpInput from 'react-otp-input';
+import Timer from 'otp-timer';
 
 class Login extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: "",
-      otp: "",
+      phoneNumber: '',
+      otp: '',
       otpButton: false,
-      heading: "Log in",
-      subheading: "Continue to WeazyDine Dashboard",
+      heading: 'Log in',
+      subheading: 'Continue to WeazyDine Dashboard',
       sendotploading: false,
       verifyotploading: false,
     };
@@ -33,31 +33,31 @@ class Login extends Component {
     let rjx = /^[0]?[6789]\d{9}$/;
     let isValid = rjx.test(phoneNumber);
     if (!isValid) {
-      toast.error("Please enter valid mobile number");
+      toast.error('Please enter valid mobile number');
       this.setState({ sendotploading: false, isLoading: false });
     } else {
-      fetch(global.api + "mobile-verification", {
-        method: "POST",
+      fetch(global.api + 'mobile-verification', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           contact: phoneNumber,
-          verification_type: "vendor",
-          request_type: "send",
+          verification_type: 'vendor',
+          request_type: 'send',
         }),
       })
         .then((response) => response.json())
         .then((json) => {
-          if (json.msg === "ok") {
+          if (json.msg === 'ok') {
             // this.resend();
             this.setState({
               otpButton: true,
-              heading: "Verify OTP",
-              subheading: "Please enter the OTP sent to your mobile number",
+              heading: 'Verify OTP',
+              subheading: 'Please enter the OTP sent to your mobile number',
             });
-            toast.success("OTP sent successfully");
+            toast.success('OTP sent successfully');
           } else {
             toast.error(json.msg);
           }
@@ -73,57 +73,57 @@ class Login extends Component {
 
   otpVerification = () => {
     this.setState({ verifyotploading: true });
-    if (this.state.otp === "") {
-      toast.error("OTP is required");
+    if (this.state.otp === '') {
+      toast.error('OTP is required');
       this.setState({ verifyotploading: false });
     } else {
-      fetch(global.api + "otp-verification", {
-        method: "POST",
+      fetch(global.api + 'otp-verification', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           contact: this.state.phoneNumber,
           otp: this.state.otp,
-          verification_type: "vendor",
+          verification_type: 'vendor',
         }),
       })
         .then((response) => response.json())
         .then((json) => {
-          if (json.msg === "ok") {
-            toast.success("OTP verified successfully");
+          if (json.msg === 'ok') {
+            toast.success('OTP verified successfully');
             global.vendor = json.usr;
             // global.token = json.token;
-            global.msg = "Welcome";
+            global.msg = 'Welcome';
 
-            if (json.user_type == "login") {
+            if (json.user_type == 'login') {
               const data = {
                 token: json.token,
                 vendor_id: json.usr,
-                use_type: "done",
+                use_type: 'done',
               };
-              localStorage.setItem("@auth_login", JSON.stringify(data));
-              global.msg = "Welcome Back";
+              localStorage.setItem('@auth_login', JSON.stringify(data));
+              global.msg = 'Welcome Back';
             } else {
               const data = {
                 token: json.token,
                 vendor_id: json.usr,
-                use_type: "steps",
+                use_type: 'steps',
               };
-              localStorage.setItem("@auth_login", JSON.stringify(data));
+              localStorage.setItem('@auth_login', JSON.stringify(data));
 
-              global.msg = "Welcome";
+              global.msg = 'Welcome';
             }
 
-            this.context.login("done", json.data, json.token);
-            const path = this.props.location.state?.path || "/";
+            this.context.login('done', json.data, json.token);
+            const path = this.props.location.state?.path || '/';
 
             this.props.navigate(path, { replace: true });
           } else {
             toast.error(json.error);
             this.setState({
-              otp: "",
+              otp: '',
             });
           }
         })
@@ -137,22 +137,22 @@ class Login extends Component {
   };
 
   resendOtp = () => {
-    toast.success("OTP Resend successfully");
-    fetch(global.api + "mobile-verification", {
-      method: "POST",
+    toast.success('OTP Resend successfully');
+    fetch(global.api + 'mobile-verification', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         contact: this.state.phoneNumber,
-        verification_type: "vendor",
-        request_type: "resend",
+        verification_type: 'vendor',
+        request_type: 'resend',
       }),
     })
       .then((response) => response.json())
       .then((json) => {
-        if (json.msg === "ok") {
+        if (json.msg === 'ok') {
         } else {
           toast.error(json.msg);
         }
@@ -164,11 +164,11 @@ class Login extends Component {
   };
 
   revealOtp = () => {
-    var x = document.getElementById("pass");
-    if (x.type === "password") {
-      x.type = "text";
+    var x = document.getElementById('pass');
+    if (x.type === 'password') {
+      x.type = 'text';
     } else {
-      x.type = "password";
+      x.type = 'password';
     }
   };
   render() {
@@ -180,10 +180,10 @@ class Login extends Component {
               <div
                 className="row"
                 style={{
-                  height: "100vh",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  height: '100vh',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 <div className="col-md-3"></div>
@@ -197,8 +197,8 @@ class Login extends Component {
                               src={logo}
                               alt="img"
                               style={{
-                                maxWidth: "60%",
-                                margin: "20px auto 40px",
+                                maxWidth: '60%',
+                                margin: '20px auto 40px',
                               }}
                             />
                           </div>
@@ -212,20 +212,20 @@ class Login extends Component {
                               <p
                                 onClick={() => {
                                   this.setState({
-                                    heading: "Log in",
+                                    heading: 'Log in',
                                     subheading:
-                                      "Continue to WeazyDine Dashboard",
+                                      'Continue to WeazyDine Dashboard',
                                     otpButton: false,
-                                    otp: "",
+                                    otp: '',
                                   });
                                 }}
                                 style={{
-                                  cursor: "pointer",
-                                  textDecoration: "underline",
+                                  cursor: 'pointer',
+                                  textDecoration: 'underline',
                                   marginTop: -20,
                                 }}
                               >
-                                <i className="fa fa-edit" />{" "}
+                                <i className="fa fa-edit" />{' '}
                                 <span>{this.state.phoneNumber}</span>
                               </p>
                               <div className="form-login">
@@ -237,10 +237,15 @@ class Login extends Component {
                                     separator={<span>-</span>}
                                     isInputNum={true}
                                     shouldAutoFocus={true}
-                                    placeholder={"####"}
+                                    placeholder={'####'}
                                     inputStyle={{
-                                      width: "3rem",
-                                      height: "3rem",
+                                      width: '3rem',
+                                      height: '3rem',
+                                    }}
+                                    onKeyPress={(e) => {
+                                      if (e.key === 'Enter') {
+                                      this.otpVerification();
+                                      }
                                     }}
                                   />
                                 </div>
@@ -269,9 +274,9 @@ class Login extends Component {
                                 seconds={30}
                                 minutes={0}
                                 resend={() => this.resendOtp()}
-                                text={"Resend OTP in"}
-                                buttonColor={"#5BC2C1"}
-                                background={"#fff"}
+                                text={'Resend OTP in'}
+                                buttonColor={'#5BC2C1'}
+                                background={'#fff'}
                                 ButtonText={"Didn't get the code? Resend OTP"}
                               />
                             </>
@@ -290,6 +295,11 @@ class Login extends Component {
                                         phoneNumber: e.target.value,
                                       })
                                     }
+                                    onKeyPress={(e) => {
+                                      if (e.key === 'Enter') {
+                                        this.mobileVerify();
+                                      }
+                                    }}
                                   />
                                   <img
                                     src="https://img.icons8.com/ios/50/000000/phone.png"
@@ -313,7 +323,7 @@ class Login extends Component {
                                   </button>
                                 ) : (
                                   <div
-                                    className="btn btn-login"
+                                    className="btn btn-sm btn-login"
                                     onClick={() => {
                                       this.mobileVerify();
                                     }}
