@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import ReactToPrint from 'react-to-print';
 import PrintKot from '../component/PrintKot';
-import  PrintReceipt from '../component/PrintReceipt';
+import PrintReceipt from '../component/PrintReceipt';
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 let EscPosEncoder = require('esc-pos-encoder');
@@ -778,125 +778,120 @@ export class Orderdetails extends Component {
                     </div>
                     {this.state.data.order_status != 'cancelled' && (
                       <div className="d-flex align-items-center justify-content-center">
-                        {( global.os != 'Windows' &&
-                              global.os != 'Mac OS')?
+                        {global.os != 'Windows' && global.os != 'Mac OS' ? (
                           <>
-                            <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
-                              onClick={() => {
-                              if(
-                                global.os == 'Windows' ||
-                                global.os == 'Mac OS'
-                              ) 
-                              {
-                                window.open(
-                                  global.api + this.props.id + '/bill.pdf',
-                                  'PRINT',
-                                  'height=400,width=600'
-                                );
-                              } else {
-                              this.sendUrlToPrint(
-                                global.api + this.props.id + '/bill.pdf'
-                              );
-                            }
-                          }}
-                        >
-                          <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                          <p>Print Receipt</p>
-                        </a>
-                        
-                          {this.state.data.order_status != 'completed' && (
                             <a
-                              className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                              className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
                               onClick={() => {
                                 if (
                                   global.os == 'Windows' ||
                                   global.os == 'Mac OS'
                                 ) {
                                   window.open(
-                                    global.api + this.props.id + '/kot.pdf',
+                                    global.api + this.props.id + '/bill.pdf',
                                     'PRINT',
                                     'height=400,width=600'
                                   );
                                 } else {
                                   this.sendUrlToPrint(
-                                    global.api + this.props.id + '/kot.pdf'
+                                    global.api + this.props.id + '/bill.pdf'
                                   );
                                 }
                               }}
                             >
                               <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                              <p>Print KOT</p>
+                              <p>Print Receipt</p>
                             </a>
-                          )}
-                      
-                    </>
-:
-<>
 
-<ReactToPrint
-                      trigger={() => <a
-                        className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
-                       
-                      >
-                        <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                        <p>Print Receipt</p>
-                      </a>}
-                      content={() => this.componentRef2}
-                 
-                  />
-                    
-                          {this.state.data.order_status != 'completed' && (
+                            {this.state.data.order_status != 'completed' && (
+                              <a
+                                className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                                onClick={() => {
+                                  if (
+                                    global.os == 'Windows' ||
+                                    global.os == 'Mac OS'
+                                  ) {
+                                    window.open(
+                                      global.api + this.props.id + '/kot.pdf',
+                                      'PRINT',
+                                      'height=400,width=600'
+                                    );
+                                  } else {
+                                    this.sendUrlToPrint(
+                                      global.api + this.props.id + '/kot.pdf'
+                                    );
+                                  }
+                                }}
+                              >
+                                <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                <p>Print KOT</p>
+                              </a>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <ReactToPrint
+                              trigger={() => (
+                                <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center">
+                                  <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                  <p>Print Receipt</p>
+                                </a>
+                              )}
+                              content={() => this.componentRef2}
+                            />
 
-<ReactToPrint
-trigger={() =><a
-                              className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
-                              onClick={() => {
-                                if (
-                                  global.os == 'Windows' ||
-                                  global.os == 'Mac OS'
-                                ) {
-                                  window.open(
-                                    global.api + this.props.id + '/kot.pdf',
-                                    'PRINT',
-                                    'height=400,width=600'
-                                  );
-                                } else {
-                                  this.sendUrlToPrint(
-                                    global.api + this.props.id + '/kot.pdf'
-                                  );
-                                }
-                              }}
-                            >
-                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                              <p>Print KOT</p>
-                            </a>
-}
-                           content={() => this.componentRef}
-                           
-                           />
-                          )}
-                          
-                  
-
-</>
-
-                        }
-
-               
+                            {this.state.data.order_status != 'completed' && (
+                              <ReactToPrint
+                                trigger={() => (
+                                  <a
+                                    className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                                    onClick={() => {
+                                      if (
+                                        global.os == 'Windows' ||
+                                        global.os == 'Mac OS'
+                                      ) {
+                                        window.open(
+                                          global.api +
+                                            this.props.id +
+                                            '/kot.pdf',
+                                          'PRINT',
+                                          'height=400,width=600'
+                                        );
+                                      } else {
+                                        this.sendUrlToPrint(
+                                          global.api +
+                                            this.props.id +
+                                            '/kot.pdf'
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                    <p>Print KOT</p>
+                                  </a>
+                                )}
+                                content={() => this.componentRef}
+                              />
+                            )}
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
-                  <>
-                    
+                  <div
+                    style={{
+                      display: 'none',
+                    }}
+                  >
                     <PrintKot
                       ref={(el) => (this.componentRef = el)}
-                      id={this.props.id}
+                      order={this.state.data}
                     />
                     <PrintReceipt
                       ref={(el2) => (this.componentRef2 = el2)}
-                      id={this.props.id}
+                      order={this.state.data}
                     />
-                  </>
+                  </div>
                 </div>
               </section>
             </div>
@@ -1195,293 +1190,6 @@ trigger={() =><a
             </div>
           </div>
         </Modal>
-
-        <div style={{ display: 'none' }}>
-          <div id="print">
-            <center id="top">
-              <div className="info">
-                <h2>{this.state.vendor_details.name}</h2>
-              </div>
-              {/*End Info*/}
-            </center>
-            {/*End InvoiceTop*/}
-            <div id="mid">
-              <div className="info">
-                <p>
-                  {this.state.vendor_details.address != null && (
-                    <>
-                      <>{this.state.vendor_details.address}</>
-                      <br />
-                    </>
-                  )}
-                  {this.state.vendor_details.gstin != null && (
-                    <>
-                      <br />
-                      <span>GST No. {this.state.vendor_details.gstin}</span>
-                    </>
-                  )}
-                  {/* {this.state.vendor_details.gstin != null && (
-                <>
-                  <br />
-                  <span>GST No. {this.state.vendor_details.gstin}</span>
-                </>
-              )} */}
-                </p>
-                <h3 className="new_h3">{this.state.data.order_type}</h3>
-              </div>
-            </div>
-            {/* customer-details */}
-            <div id="customer_details">
-              <h3 className="customer_details_h3">---Customer Details---</h3>
-              <div className="name_phone_main">
-                <div id="name_phone">
-                  <div className="phone_email_head">Name</div>
-                  <div className="phone_email_content">
-                    {this.state.user_details.id != 1
-                      ? this.state.user_details.name
-                      : 'N/A'}
-                  </div>
-                </div>
-
-                <div id="name_phone">
-                  <div className="phone_email_head">Phone</div>
-                  <div className="phone_email_content">
-                    {this.state.user_details.id != 1
-                      ? this.state.user_details.contact
-                      : 'N/A'}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* end-customer-details */}
-            {/* customer_order_details */}
-            <div id="customer_details">
-              <div className="customer_order_details_main">
-                <div id="customer_order_details">
-                  <div className="customer_order_details_head">Order Time</div>
-                  <div className="customer_order_details_content">
-                    {moment(this.state.data.created_at).format('llll')}
-                  </div>
-                </div>
-                <div id="customer_order_details">
-                  <div className="customer_order_details_head">Order Code</div>
-                  <div className="customer_order_details_content">
-                    {this.state.data.order_code}
-                  </div>
-                </div>
-                {this.state.data.order_type == 'Dinein' && (
-                  <div id="customer_order_details">
-                    <div className="customer_order_details_head">
-                      Table Number
-                    </div>
-                    <div className="customer_order_details_content">221</div>
-                  </div>
-                )}
-
-                {this.state.transaction_details.length > 0 && (
-                  <div>
-                    <div id="customer_order_details">
-                      <div className="customer_order_details_head">
-                        Payment Method
-                      </div>
-                      <div className="customer_order_details_content">
-                        {this.state.transaction_details.length == 1 ? (
-                          <span>
-                            {' '}
-                            {this.state.transaction_details[0].txn_method}
-                          </span>
-                        ) : (
-                          this.state.transaction_details.map((item, i) => {
-                            return (
-                              <span key={i}>
-                                {' '}
-                                {item.txn_method} - ₹ {item.txn_amount},
-                              </span>
-                            );
-                          })
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* end_customer_order_details */}
-            {/*End Invoice Mid*/}
-            <div id="bot">
-              {this.state.vendor_details.gstin != null ? (
-                <h3>---GST Invoice---</h3>
-              ) : (
-                <h3>---Invoice---</h3>
-              )}
-              <div id="table">
-                <table>
-                  <tbody>
-                    <tr className="tabletitle">
-                      <td className="count">
-                        <h2 className="table_data">#</h2>
-                      </td>
-                      <td className="item">
-                        <h2 className="table_data">Item</h2>
-                      </td>
-                      <td className="Hours">
-                        <h2 className="table_data">Qty</h2>
-                      </td>
-                      <td className="Rate">
-                        <h2 className="table_data">Rate</h2>
-                      </td>
-                      <td className="Amount">
-                        <h2 className="table_data">Amount</h2>
-                      </td>
-                    </tr>
-                    {this.state.cart_details.map((values, index) => {
-                      return (
-                        <tr className="service">
-                          <td className="tableitem">
-                            <p className="itemtext">{index + 1}</p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">
-                              {values.product.product_name}
-                            </p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">
-                              {values.product_quantity}
-                            </p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">
-                              ₹ {values.product_price / values.product_quantity}
-                            </p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext">₹ {values.product_price}</p>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    <tr className="tabletitle">
-                      <td />
-                      <td className="Rate">
-                        <h2>Sub Total</h2>
-                      </td>
-                      <td />
-                      <td />
-                      <td className="payment">
-                        <h2>₹ {this.state.data.order_amount}/-</h2>
-                      </td>
-                    </tr>
-                    {this.state.data.cgst != '0' && (
-                      <tr className="tabletitle">
-                        <td />
-                        <td className="Rate">
-                          <h2>Tax(C.G.S.T)</h2>
-                        </td>
-                        <td />
-                        <td />
-                        <td className="payment">
-                          <h2>₹ {this.state.data.cgst}/-</h2>
-                        </td>
-                      </tr>
-                    )}
-                    {this.state.data.sgst != '0' && (
-                      <tr className="tabletitle">
-                        <td />
-                        <td className="Rate">
-                          <h2>Tax(S.G.S.T)</h2>
-                        </td>
-                        <td />
-                        <td />
-                        <td className="payment">
-                          <h2>₹ {this.state.data.sgst}/-</h2>
-                        </td>
-                      </tr>
-                    )}
-                    {this.state.data.order_discount != '0' && (
-                      <tr className="tabletitle">
-                        <td />
-                        <td className="Rate">
-                          <h2>Discount</h2>
-                        </td>
-                        <td />
-                        <td />
-                        <td className="payment">
-                          <h2>₹ {this.state.data.order_discount}/-</h2>
-                        </td>
-                      </tr>
-                    )}
-                    <tr className="tabletitle">
-                      <td />
-                      <td className="Rate">
-                        <h2>Grand Total</h2>
-                      </td>
-                      <td />
-                      <td />
-                      <td className="payment">
-                        <h2>₹ {this.state.data.total_amount}/-</h2>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              {/*End Table*/}
-              <div id="legalcopy">
-                <p className="legal">
-                  <strong>Thank you for your business!</strong>
-                </p>
-              </div>
-            </div>
-            {/*End InvoiceBot*/}
-            {/*KOT start*/}
-            <div id="legalcopy">
-              <p className="kot_dT kot_heading">
-                Token For: {this.state.data.order_code}
-                {'    '}Date:{' '}
-                {moment(this.state.data.created_at).format('llll')}
-              </p>
-            </div>
-            <div id="bot" className="mt-10">
-              <div id="table">
-                <table>
-                  <tbody>
-                    <tr className="tabletitle">
-                      <td className="count text-center">
-                        <h2>#</h2>
-                      </td>
-                      <td className="item text-center">
-                        <h2>Item</h2>
-                      </td>
-                      <td className="Hours text-center">
-                        <h2>Qty</h2>
-                      </td>
-                    </tr>
-                    {this.state.cart_details.map((values, index) => {
-                      return (
-                        <tr className="service">
-                          <td className="tableitem">
-                            <p className="itemtext text-center">{index + 1}</p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext text-center">
-                              {values.product.product_name}
-                            </p>
-                          </td>
-                          <td className="tableitem">
-                            <p className="itemtext text-center">
-                              {values.product_quantity}
-                            </p>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {/*KOT End*/}
-          </div>
-        </div>
       </div>
     );
   }

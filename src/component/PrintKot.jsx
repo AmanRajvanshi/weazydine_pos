@@ -15,7 +15,7 @@ export class PrintKot extends Component {
   }
 
   componentDidMount() {
-    this.orderDetails();
+    // this.orderDetails();'
   }
 
   orderDetails = () => {
@@ -49,12 +49,35 @@ export class PrintKot extends Component {
   render() {
     return (
       <div id="invoice-POS">
-       
         <div id="legalcopy">
-          <p class="kot_dT" style={{fontSize:'16px'}}>
-            Token For: {this.state.data.order_code}
-            <br />
-            Date:{moment(this.state.data.created_at).format('llll')}
+          <p class="kot_dT" style={{ fontSize: '16px' }}>
+            Token For: {this.props.order.order_code}
+            <br
+              style={{
+                marginTop: '10px',
+                marginBottom: '10px',
+              }}
+            />
+            {this.props.order.order_type != 'TakeAway' &&
+            this.props.order.order_type != 'Delivery' ? (
+              <span>
+                Dine-In -{' '}
+                {this.props.order.table == null ? (
+                  <span>Table Not Assigned</span>
+                ) : (
+                  <span>{this.props.order.table.table_name}</span>
+                )}
+              </span>
+            ) : (
+              <span>{this.props.order.order_type}</span>
+            )}
+            <br
+              style={{
+                marginTop: '10px',
+                marginBottom: '10px',
+              }}
+            />
+            Date:{moment(this.props.order.created_at).format('llll')}
           </p>
         </div>
         <div id="bot" class="mt-10">
@@ -72,7 +95,7 @@ export class PrintKot extends Component {
                     <h4 class="table_data">Qty</h4>
                   </td>
                 </tr>
-                {this.state.cart.map((values, index) => {
+                {this.props.order.cart.map((values, index) => {
                   return (
                     <tr class="service">
                       <td
@@ -96,20 +119,22 @@ export class PrintKot extends Component {
                         <p class="itemtext" style={{ fontSize: '1em' }}>
                           {values.product.product_name}
                           {values.variant != null ? (
-                            <span>- {values.variant.variants_name}</span>
+                            <span> | Variant:  {values.variant.variants_name}</span>
                           ) : (
                             <></>
                           )}
                           {values.addons.length > 0 ? (
-                            <span>
-                              <strong>AddOns:</strong>
-                              {values.addons.map((value) => {
-                                return <span>{value.addons_name}</span>;
-                              })}
-                            </span>
-                          ) : (
-                            <></>
-                          )}
+                          <span>
+                            <strong> | AddOns: </strong>
+                            {values.addons.map((pp) => (
+                              <span>
+                                {" "}{pp.addon_name}
+                              </span>
+                            ))}
+                          </span>
+                        ) : (
+                          <></>
+                        )}
                         </p>
                       </td>
                       <td

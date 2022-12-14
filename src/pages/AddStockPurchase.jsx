@@ -416,8 +416,8 @@ export class AddStockPurchase extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Purachse Stocks</h4>
-                  <h6>Purchase & add stock in inventory</h6>
+                  <h4>Purchase Stock</h4>
+                  <h6>Purchase & Add Stock in Inventory</h6>
                 </div>
               </div>
               <div className="card">
@@ -674,7 +674,23 @@ export class AddStockPurchase extends Component {
                         </div>
                       </div>
                     ) : (
-                      <></>
+                      <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'end',
+                          }}
+                        >
+                          <button
+                            onClick={this.handleAddRow}
+                            className="btn btn-sm btn-outline-secondary"
+                            style={{
+                              marginBottom: '20px',
+                              marginTop: '10px',
+                            }}
+                          >
+                            Add A Row
+                          </button>
+                        </div>
                     )}
                     <div className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3">
                       <input

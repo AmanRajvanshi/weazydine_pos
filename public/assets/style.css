@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+@font-face {
+  font-family: 'PrintFont';
+  src: url('../assets/FakeReceipt.ttf');
+}
+
 .css-equal-content,
 .css-equal-heights {
   display: flex;
@@ -8510,9 +8515,9 @@ span.select-container.select-container--default.select-container--open {
 
 .productset {
   border: 1px solid #f8f8f8;
-  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.25);
   background: #fff;
   /* margin: 0 0 25px; */
   border-radius: 5px;
@@ -9109,237 +9114,6 @@ span.select-container.select-container--default.select-container--open {
   padding: 0 10px;
 }
 
-/* print */
-
-#invoice-POS {
-  box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
-  padding: 2mm;
-  width: 80mm;
-  background: #fff;
-}
-
-#invoice-POS ::selection {
-  background: #f31544;
-  color: #fff;
-}
-
-#invoice-POS ::moz-selection {
-  background: #f31544;
-  color: #fff;
-}
-
-#invoice-POS h1 {
-  font-size: 1.5em;
-  color: #222;
-}
-
-#invoice-POS h2 {
-  /* font-size: 2em; */
-  font-weight: 300;
-}
-
-#invoice-POS h3 {
-  font-size: 1.2em;
-  font-weight: 300;
-  line-height: 2em;
-}
-
-#invoice-POS .info p {
-  text-align: center;
-  font-size: 1em;
-  line-height: 10px;
-  margin-bottom: 0px;
-}
-
-#invoice-POS .info p span {
-  line-height: 12px;
-}
-
-#invoice-POS .new_h3 {
-  text-align: center;
-  font-size: 1em;
-  font-weight: 300;
-  line-height: 2em;
-}
-
-#invoice-POS p {
-  font-size: 1em;
-  color: #666;
-  line-height: 1.2em;
-}
-
-#invoice-POS #top,
-#invoice-POS #mid,
-#invoice-POS #bot {
-  /* Targets all id with 'col-' */
-  border-bottom: 2px solid #b0b0b0;
-}
-
-#invoice-POS #top {
-  min-height: 20px;
-}
-
-/* #invoice-POS #mid {
-  margin-top: 10px;
-} */
-#invoice-POS #bot {
-  min-height: 50px;
-  padding-bottom: 10px;
-}
-
-#bot h3 {
-  text-align: center;
-  font-size: 1em;
-  font-weight: 600;
-  line-height: 2em;
-  border-bottom: 1px solid #eee;
-}
-
-#invoice-POS .clientlogo {
-  float: left;
-  height: 60px;
-  width: 60px;
-  background: url(http://michaeltruong.ca/images/client.jpg) no-repeat;
-  background-size: 60px 60px;
-  border-radius: 50px;
-}
-
-#invoice-POS .info {
-  display: block;
-  margin-left: 0;
-}
-
-#invoice-POS .title {
-  float: right;
-}
-
-#invoice-POS .title p {
-  text-align: right;
-}
-
-#invoice-POS table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-#invoice-POS .tabletitle {
-  font-size: 3.5em;
-  /* background: #eee; */
-}
-
-#invoice-POS .service {
-  border-bottom: 1px solid #eee;
-}
-
-#invoice-POS .item {
-  width: 24mm;
-}
-
-#invoice-POS .itemtext {
-  font-size: 0.9em;
-  line-height: 2em;
-  padding-left: 5px;
-  /* font-weight: 500; */
-}
-
-#invoice-POS #legalcopy {
-  margin-top: 5mm;
-}
-
-.Rate h2 {
-  /* font-size: 1.5em !important; */
-  color: #222 !important;
-}
-
-.payment h2 {
-  font-size: 1.5em !important;
-  color: #222 !important;
-}
-
-#legalcopy .legal {
-  text-align: center;
-  font-size: 1em;
-}
-
-#customer_details .customer_details_h3 {
-  text-align: center;
-  font-size: 1em;
-  font-weight: 600;
-  line-height: 2em;
-}
-
-.name_phone_main {
-  border-bottom: 1px solid #eee;
-}
-
-.customer_order_details_main {
-  border-bottom: 1px solid #eee;
-}
-
-#name_phone {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-#name_phone .phone_email_head {
-  width: 30%;
-  text-align: start;
-  font-size: 0.8em;
-  font-weight: 600;
-  line-height: 1.5em;
-}
-
-#name_phone .phone_email_content {
-  width: 70%;
-  text-align: start;
-  font-size: 0.8em;
-  font-weight: 300;
-  line-height: 1.5em;
-}
-
-#customer_order_details {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-#customer_order_details .customer_order_details_head {
-  width: 40%;
-  text-align: start;
-  font-size: 0.75em;
-  font-weight: 600;
-  line-height: 1.5em;
-}
-
-#customer_order_details .customer_order_details_content {
-  width: 60%;
-  text-align: start;
-  font-size: 0.75em;
-  font-weight: 300;
-  line-height: 1.5em;
-}
-
-.kot_heading {
-  text-align: center;
-  font-size: 1em !important;
-  font-weight: 600;
-  line-height: 2em;
-  border-bottom: 1px solid #eee;
-}
-
-.table_data {
-  font-size: 1.5em !important;
-}
-
-.kot_dT {
-  /* display: flex; */
-  /* align-items: center; */
-  width: 100%;
-  font-size: 0.5em;
-  text-align: center;
-}
-
 .mt-10 {
   margin-top: 10px;
 }
@@ -9405,10 +9179,13 @@ span.select-container.select-container--default.select-container--open {
   font-weight: bold !important;
 }
 #invoice-POS {
+  font-family: 'PrintFont', sans-serif;
   /* box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); */
   padding: 2mm;
-  width: 100%;
+  width: 80mm;
   background: #fff;
+  display: inline-block;    
+  padding-bottom: 10px;
 }
 #invoice-POS ::selection {
   color: #fff;
@@ -9452,7 +9229,7 @@ span.select-container.select-container--default.select-container--open {
 }
 #invoice-POS p {
   font-size: 1em;
-  color: #666;
+  /* color: #666; */
   line-height: 1.2em;
 }
 #invoice-POS #top,
@@ -9475,8 +9252,9 @@ span.select-container.select-container--default.select-container--open {
   text-align: center;
   font-size: 1em;
   font-weight: 300;
+  padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #3d3d3d;
 }
 #invoice-POS .clientlogo {
   float: left;
@@ -9502,11 +9280,11 @@ span.select-container.select-container--default.select-container--open {
 }
 #invoice-POS .tabletitle {
   font-size: 0.5em;
-  border-top: 1px dotted #eee !important;
-  border-bottom: 1px dotted #eee !important;
+  border-top: 1px dotted #3d3d3d !important;
+  border-bottom: 1px dotted #3d3d3d !important;
 }
 #invoice-POS .service {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #3d3d3d;
 }
 #invoice-POS .item {
   width: 24mm;
@@ -9535,10 +9313,10 @@ span.select-container.select-container--default.select-container--open {
   line-height: 2em;
 }
 .name_phone_main {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #3d3d3d;
 }
 .customer_order_details_main {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #3d3d3d;
 }
 #name_phone {
   display: flex !important;
@@ -9588,7 +9366,7 @@ span.select-container.select-container--default.select-container--open {
 }
 .table_data {
   font-size: 2.15em !important;
-  padding-bottom: 20px !important;
+  /* padding-bottom: 20px !important; */
   /* font-weight: lighter !important; */
   text-align: center;
 }
@@ -9604,4 +9382,12 @@ span.select-container.select-container--default.select-container--open {
 }
 .text-center {
   text-align: center;
+}
+
+.pr-0 {
+  padding-right: 0px;
+}
+
+.pl-0 {
+  padding-left: 0px;
 }

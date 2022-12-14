@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Header from "../othercomponent/Header";
-import { BiRupee } from "react-icons/bi";
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
-import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
-import { Toggle } from "../othercomponent/Toggle";
-import Skeletonloader from "../othercomponent/Skeletonloader";
-import no_img from "../assets/images/no_products_found.png";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../othercomponent/Header';
+import { BiRupee } from 'react-icons/bi';
+import delete_icon from '../assets/images/icons/delete.svg';
+import edit_icon from '../assets/images/icons/edit.svg';
+import { AuthContext } from '../AuthContextProvider';
+import { Bars } from 'react-loader-spinner';
+import { Toggle } from '../othercomponent/Toggle';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+import no_img from '../assets/images/no_products_found.png';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
 
 class Inventoryproducts extends Component {
   static contextType = AuthContext;
@@ -29,15 +29,15 @@ class Inventoryproducts extends Component {
       open: false,
       is_buttonloding: false,
       openedit: false,
-      new_category_name: "",
-      category_id: "",
-      inventory_product_add_name: "",
-      invenroty_product_add_category_id: "",
-      inventory_prodduct_add_model: "",
-      inventory_add_purchase_unit: "",
-      inventory_add_purchase_subunit_quantity: "",
-      inventory_add_purchase_sub_unit: "",
-      inventory_add_status: "active",
+      new_category_name: '',
+      category_id: '',
+      inventory_product_add_name: '',
+      invenroty_product_add_category_id: '',
+      inventory_prodduct_add_model: '',
+      inventory_add_purchase_unit: '',
+      inventory_add_purchase_subunit_quantity: '',
+      inventory_add_purchase_sub_unit: '',
+      inventory_add_status: 'active',
     };
   }
 
@@ -52,11 +52,11 @@ class Inventoryproducts extends Component {
   };
 
   fetchProducts = (id, page) => {
-    fetch(global.api + "fetch_inventory_products", {
-      method: "POST",
+    fetch(global.api + 'fetch_inventory_products', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -74,8 +74,7 @@ class Inventoryproducts extends Component {
         } else {
           if (json.data.data.length > 0) {
             this.setState({ products: json.data.data });
-          }
-          else{
+          } else {
             this.setState({ products: [] });
           }
         }
@@ -90,11 +89,11 @@ class Inventoryproducts extends Component {
   };
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_inventory_category", {
-      method: "POST",
+    fetch(global.api + 'fetch_inventory_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -115,11 +114,11 @@ class Inventoryproducts extends Component {
   };
 
   delete_product = (id) => {
-    fetch(global.api + "delete_inventory_product", {
-      method: "POST",
+    fetch(global.api + 'delete_inventory_product', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -134,7 +133,7 @@ class Inventoryproducts extends Component {
           // Toast.show(msg);
           toast.success(msg);
         } else {
-          toast.success("Product Deleted Successfully");
+          toast.success('Product Deleted Successfully');
           this.fetchProducts(this.state.active_cat, 1);
         }
       })
@@ -148,20 +147,20 @@ class Inventoryproducts extends Component {
 
   addCategory = () => {
     if (
-      this.state.new_category_name != "" ||
-      this.state.parent_category_id != ""
+      this.state.new_category_name != '' ||
+      this.state.parent_category_id != ''
     ) {
       this.setState({ is_button_loading_add: true });
-      fetch(global.api + "create_inventory_category", {
-        method: "POST",
+      fetch(global.api + 'create_inventory_category', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
           category_name: this.state.new_category_name,
-          category_status: "active",
+          category_status: 'active',
           category_parent: this.state.parent_category_id,
         }),
       })
@@ -171,7 +170,7 @@ class Inventoryproducts extends Component {
             var msg = json.msg;
             toast.error(msg);
           } else {
-            this.setState({ opencategory: false, new_category_name: "" });
+            this.setState({ opencategory: false, new_category_name: '' });
             toast.success(json.msg);
             this.fetchCategories();
           }
@@ -184,26 +183,26 @@ class Inventoryproducts extends Component {
           this.setState({ isloading: false, is_button_loading_add: false });
         });
     } else {
-      toast.error("Please fill all required fields!");
+      toast.error('Please fill all required fields!');
     }
   };
 
   add_product = () => {
     this.setState({ is_button_loading_add: true });
     if (
-      this.state.inventory_product_add_name != "" ||
-      this.state.invenroty_product_add_category_id != "" ||
-      this.state.inventory_prodduct_add_model != "" ||
-      this.state.inventory_add_purchase_unit != "" ||
-      this.state.inventory_add_purchase_subunit_quantity != "" ||
-      this.state.inventory_add_purchase_sub_unit != ""
+      this.state.inventory_product_add_name != '' ||
+      this.state.invenroty_product_add_category_id != '' ||
+      this.state.inventory_prodduct_add_model != '' ||
+      this.state.inventory_add_purchase_unit != '' ||
+      this.state.inventory_add_purchase_subunit_quantity != '' ||
+      this.state.inventory_add_purchase_sub_unit != ''
     ) {
       this.setState({ is_button_loading_add: true });
-      fetch(global.api + "add_inventory_product", {
-        method: "POST",
+      fetch(global.api + 'add_inventory_product', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -225,16 +224,17 @@ class Inventoryproducts extends Component {
           } else {
             this.setState({
               open: false,
-              inventory_product_add_name: "",
-              invenroty_product_add_category_id: "",
-              inventory_prodduct_add_model: "",
-              inventory_add_purchase_unit: "",
-              inventory_add_purchase_subunit_quantity: "",
-              inventory_add_purchase_sub_unit: "",
-              inventory_add_status: "",
+              inventory_product_add_name: '',
+              invenroty_product_add_category_id: '',
+              inventory_prodduct_add_model: '',
+              inventory_add_purchase_unit: '',
+              inventory_add_purchase_subunit_quantity: '',
+              inventory_add_purchase_sub_unit: '',
+              inventory_add_status: '',
             });
             toast.success(json.msg);
             this.fetchProducts(this.state.active_cat, 1);
+            this.fetchCategories();
           }
           return json;
         })
@@ -245,27 +245,26 @@ class Inventoryproducts extends Component {
           this.setState({ is_button_loading_add: false });
         });
     } else {
-      toast.error("Please fill all required fields!");
+      toast.error('Please fill all required fields!');
       this.setState({ is_button_loading_add: false });
     }
   };
 
   edit_product = () => {
-   
     if (
-      this.state.inventory_product_add_name != "" ||
-      this.state.invenroty_product_add_category_id != "" ||
-      this.state.inventory_prodduct_add_model != "" ||
-      this.state.inventory_add_purchase_unit != "" ||
-      this.state.inventory_add_purchase_subunit_quantity != "" ||
-      this.state.inventory_add_purchase_sub_unit != ""
+      this.state.inventory_product_add_name != '' ||
+      this.state.invenroty_product_add_category_id != '' ||
+      this.state.inventory_prodduct_add_model != '' ||
+      this.state.inventory_add_purchase_unit != '' ||
+      this.state.inventory_add_purchase_subunit_quantity != '' ||
+      this.state.inventory_add_purchase_sub_unit != ''
     ) {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "update_inventory_product", {
-        method: "POST",
+      fetch(global.api + 'update_inventory_product', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -288,13 +287,13 @@ class Inventoryproducts extends Component {
           } else {
             this.setState({
               openedit: false,
-              inventory_product_add_name: "",
-              invenroty_product_add_category_id: "",
-              inventory_prodduct_add_model: "",
-              inventory_add_purchase_unit: "",
-              inventory_add_purchase_subunit_quantity: "",
-              inventory_add_purchase_sub_unit: "",
-              inventory_add_status: "",
+              inventory_product_add_name: '',
+              invenroty_product_add_category_id: '',
+              inventory_prodduct_add_model: '',
+              inventory_add_purchase_unit: '',
+              inventory_add_purchase_subunit_quantity: '',
+              inventory_add_purchase_sub_unit: '',
+              inventory_add_status: '',
             });
             toast.success(json.msg);
             this.fetchProducts(this.state.active_cat, 1);
@@ -308,7 +307,7 @@ class Inventoryproducts extends Component {
           this.setState({ is_buttonloding: false });
         });
     } else {
-      toast.error("Please fill all required fields!");
+      toast.error('Please fill all required fields!');
       this.setState({ is_buttonloding: false });
     }
   };
@@ -354,7 +353,7 @@ class Inventoryproducts extends Component {
                 <div
                   className="main_loader"
                   style={{
-                    height: "50vh",
+                    height: '50vh',
                   }}
                 >
                   <Bars
@@ -384,7 +383,7 @@ class Inventoryproducts extends Component {
                                 <th>Purchase Sub Unit</th>
                                 <th>Purchase Subunit Quantity</th>
                                 <th>Category</th>
-                                <th style={{ textAlign: "end" }}>Action</th>
+                                <th style={{ textAlign: 'end' }}>Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -394,20 +393,20 @@ class Inventoryproducts extends Component {
                                     <td>{index + 1}</td>
                                     <td>{item.inventory_product_name}</td>
                                     <td>{item.model}</td>
-                                    <td>{item.current_stock} {item.purchase_unit}</td>
+                                    <td>
+                                      {item.current_stock} {item.purchase_unit}
+                                    </td>
                                     <td>{item.purchase_unit}</td>
                                     <td>{item.purchase_sub_unit}</td>
                                     <td>{item.purchase_subunit_quantity}</td>
                                     <td>{item.category.category_name}</td>
-                                    <td style={{ textAlign: "end" }}>
+                                    <td style={{ textAlign: 'end' }}>
                                       <img
                                         src={edit_icon}
                                         alt="img"
                                         className="mx-2 cursor_pointer"
                                         onClick={() => {
-                                          
                                           this.setState({
-                                            
                                             openedit: true,
                                             inventory_add_purchase_sub_unit:
                                               item.purchase_sub_unit,
@@ -423,8 +422,6 @@ class Inventoryproducts extends Component {
                                             inventory_product_add_name:
                                               item.inventory_product_name,
                                             inventory_product_id: item.id,
-
-
                                           });
                                         }}
                                       />
@@ -432,14 +429,14 @@ class Inventoryproducts extends Component {
                                         className="confirm-text"
                                         onClick={() =>
                                           Swal.fire({
-                                            title: "Are you sure?",
+                                            title: 'Are you sure?',
                                             text: "You won't be able to revert this!",
-                                            icon: "warning",
+                                            icon: 'warning',
                                             showCancelButton: true,
-                                            confirmButtonColor: "#3085d6",
-                                            cancelButtonColor: "#d33",
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
                                             confirmButtonText:
-                                              "Yes, delete it!",
+                                              'Yes, delete it!',
                                           }).then((result) => {
                                             if (result.isConfirmed) {
                                               this.delete_product(item.id);
@@ -462,14 +459,14 @@ class Inventoryproducts extends Component {
                     <div
                       className="d-flex align-items-center justify-content-center flex-column"
                       style={{
-                        height: "70vh",
+                        height: '70vh',
                       }}
                     >
                       <img
                         src={no_img}
                         alt=""
                         style={{
-                          height: "250px",
+                          height: '250px',
                         }}
                       />
                       <h4>No Products Found</h4>
@@ -486,7 +483,7 @@ class Inventoryproducts extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -647,7 +644,6 @@ class Inventoryproducts extends Component {
                               e.target.value,
                           });
                         }}
-                        
                       />
                     </div>
                   </div>
@@ -656,8 +652,8 @@ class Inventoryproducts extends Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -688,7 +684,7 @@ class Inventoryproducts extends Component {
           onClose={() => this.setState({ openedit: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -740,9 +736,7 @@ class Inventoryproducts extends Component {
                             invenroty_product_add_category_id: e.target.value,
                           });
                         }}
-
                         value={this.state.invenroty_product_add_category_id}
-
                         className="select-container"
                       >
                         <option>Please Choose Category</option>
@@ -848,25 +842,26 @@ class Inventoryproducts extends Component {
                       <label>Purchase SubUnit Quantity</label>
                       <input
                         type="text"
-                
                         onChange={(e) => {
                           this.setState({
                             inventory_add_purchase_subunit_quantity:
                               e.target.value,
                           });
                         }}
-                        value={this.state.inventory_add_purchase_subunit_quantity}
+                        value={
+                          this.state.inventory_add_purchase_subunit_quantity
+                        }
                       />
                     </div>
                   </div>
-                
+
                   <div className="col-lg-6 d-flex justify-content-end align-items-center">
                     {this.state.is_buttonloding ? (
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -898,7 +893,7 @@ class Inventoryproducts extends Component {
           onClose={() => this.setState({ opencategory: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -926,7 +921,7 @@ class Inventoryproducts extends Component {
                   <div className="col-lg-12">
                     <div className="form-group">
                       <label>
-                        Choose Parent Categry{" "}
+                        Choose Parent Categry{' '}
                         <span className="text-danger">*</span>
                       </label>
                       <select
@@ -952,8 +947,8 @@ class Inventoryproducts extends Component {
                       <button
                         className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -997,8 +992,8 @@ class Category extends Component {
             >
               <div
                 className={
-                  "product-details" +
-                  (this.props.active_cat == 0 ? " active" : "")
+                  'product-details' +
+                  (this.props.active_cat == 0 ? ' active' : '')
                 }
                 href="#solid-rounded-justified-tab1"
                 data-bs-toggle="tab"
@@ -1015,14 +1010,14 @@ class Category extends Component {
                 >
                   <div
                     className={
-                      "product-details" +
-                      (this.props.active_cat == item.id ? " active" : "")
+                      'product-details' +
+                      (this.props.active_cat == item.id ? ' active' : '')
                     }
                     href="#solid-rounded-justified-tab1"
                     data-bs-toggle="tab"
                   >
                     <h6>
-                      {item.category_name}({item.products_count}){" "}
+                      {item.category_name}({item.products_count}){' '}
                     </h6>
                   </div>
                 </li>

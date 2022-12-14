@@ -25,7 +25,7 @@ export class Header extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token);
+    // console.log(this.context.token);
     this.fetch_notifications(this.state.page);
   }
 
@@ -151,7 +151,10 @@ export class Header extends Component {
               </a>
               <div className="dropdown-menu menu-drop-user">
                 <div className="profilename">
-                  <p className="p-2">+91 7060-222-517</p>
+                  <p className="p-2">
+                    +91 7060-222-517 (Mon - Sat)
+                    <br /> (9am to 8pm)
+                  </p>
                 </div>
               </div>
             </li>

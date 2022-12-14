@@ -14,8 +14,9 @@ import { toStatement } from '@babel/types';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import PrintKot from '../component/PrintKot';
-import  PrintReceipt from '../component/PrintReceipt';
+import PrintReceipt from '../component/PrintReceipt';
 import ReactToPrint from 'react-to-print';
+import success_gif from '../assets/images/order_success.gif';
 class Pos extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -48,6 +49,10 @@ class Pos extends Component {
       ],
       split_total: 0,
       product_show: false,
+      posOrderComplete: false,
+      order_code: '',
+      order: [],
+      bill_show: false,
     };
   }
 
@@ -456,32 +461,11 @@ class Pos extends Component {
             subTotal: 0,
             taxes: 0,
             grandTotal: 0,
+            posOrderComplete: true,
+            order_code: json.data[0].order_code,
+            order: json.data,
           });
           toast.success('Order Placed');
-          Swal.fire({
-            icon: 'success',
-            title: 'Order Placed',
-            text: 'Order Placed Successfully',
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: 'Print Receipt',
-            denyButtonText: `View Order`,
-            cancelButtonText: 'Close',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              if (global.os == 'Windows' || global.os == 'Mac OS') {
-                window.open(
-                  global.api + json.data.order_code + '/bill.pdf',
-                  'PRINT',
-                  'height=400,width=600'
-                );
-              } else {
-                this.sendUrlToPrint(global.api + json.data.order_code + '/bill.pdf');
-              }
-            } else if (result.isDenied) {
-              this.props.navigate('/orderdetails/' + json.data.order_code);
-            }
-          });
         }
         this.setState({ is_buttonloding: false });
         return json;
@@ -717,7 +701,7 @@ class Pos extends Component {
                                       </div>
                                     )
                                   ) : (
-                                    <Skeletonloader height={210} count={2} />
+                                    <Skeletonloader height={85} count={2} />
                                   )}
                                 </div>
                               </div>
@@ -792,7 +776,7 @@ class Pos extends Component {
                         onClick={() => {
                           this.guest();
                         }}
-                        className="btn  btn-outline btn-sm me-2"
+                        className="btn  btn-danger btn-sm me-2"
                       >
                         Skip
                       </a>
@@ -1061,6 +1045,120 @@ class Pos extends Component {
             </div>
           </div>
         </Modal>
+
+        <Modal
+          open={this.state.posOrderComplete}
+          onClose={() =>
+            this.setState({ posOrderComplete: false, order_code: '' })
+          }
+          center
+          classNames={{
+            modal: 'customModal',
+          }}
+        >
+          <div className="content">
+            <div className="page-header">
+              <div className="page-title w-100">
+                <h4 className="text-center">Order Complete</h4>
+                <p className="text-center">
+                  Order No. <strong>{this.state.order_code}</strong> has been
+                  placed successfully.
+                </p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="d-flex justify-content-center align-items-center">
+                <img src={success_gif} alt="" />
+              </div>
+            </div>
+            <div className="row my-4 pt-4">
+              <div className="col-lg-8 d-flex align-items-center justify-content-center pr-0">
+                {global.os != 'Windows' && global.os != 'Mac OS' ? (
+                  <>
+                    <a
+                      className="btn btn-primary me-2 d-flex align-items-center justify-content-center"
+                      onClick={() => {
+                        if (global.os == 'Windows' || global.os == 'Mac OS') {
+                          window.open(
+                            global.api + this.state.order_code + '/bill.pdf',
+                            'PRINT',
+                            'height=400,width=600'
+                          );
+                        } else {
+                          this.sendUrlToPrint(
+                            global.api + this.state.order_code + '/bill.pdf'
+                          );
+                        }
+                      }}
+                    >
+                      <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                      <p>Print Receipt</p>
+                    </a>
+                  </>
+                ) : (
+                  <div className="row  w-100">
+                    <div className="col-md-6  d-flex align-items-center justify-content-center">
+                      <ReactToPrint
+                        onBeforeGetContent={() => {
+                          this.setState({ bill_show: true });
+                        }}
+                        trigger={() => (
+                          <a className="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center">
+                            {/* <i className="fa-solid fa-file-invoice  print-receipt-icon"></i> */}
+                            <p>Print Receipt</p>
+                          </a>
+                        )}
+                        content={() => this.componentRef2}
+                      />
+                    </div>
+                    <div className="col-md-6  d-flex align-items-center justify-content-center">
+                      <ReactToPrint
+                        onBeforeGetContent={() => {
+                          this.setState({ bill_show: true });
+                        }}
+                        trigger={() => (
+                          <a className="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                            {/* <i className="fa-solid fa-file-invoice  print-receipt-icon"></i> */}
+                            <p>Print KOT</p>
+                          </a>
+                        )}
+                        content={() => this.componentRef}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="col-lg-4 d-flex align-items-center justify-content-center pl-0">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    this.props.navigate(
+                      '/orderdetails/' + this.state.order_code
+                    );
+                  }}
+                >
+                  View Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+        {this.state.order.length > 0 && (
+          <div
+            style={{
+              display: 'none',
+            }}
+          >
+            <PrintKot
+              ref={(el) => (this.componentRef = el)}
+              order={this.state.order[0]}
+            />
+            <PrintReceipt
+              ref={(el2) => (this.componentRef2 = el2)}
+              order={this.state.order[0]}
+            />
+          </div>
+        )}
       </div>
     );
   }

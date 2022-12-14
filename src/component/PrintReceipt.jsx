@@ -15,7 +15,7 @@ export class PrintReceipt extends Component {
   }
 
   componentDidMount() {
-    this.orderDetails();
+    // this.orderDetails();
   }
 
   orderDetails = () => {
@@ -51,27 +51,29 @@ export class PrintReceipt extends Component {
       <div id="invoice-POS">
         <center id="top">
           <div class="info">
-            <h2 style={{ textAlign: 'center' }}>{this.state.vendor.name}</h2>
+            <h2 style={{ textAlign: 'center' }}>
+              {this.props.order.vendor.name}
+            </h2>
           </div>
           {/* <!-- End Info --> */}
         </center>
         {/* <!-- End InvoiceTop --> */}
         <div id="mid">
           <div class="info">
-            {this.state.vendor.address != null ? (
+            {this.props.order.vendor.address != null ? (
               <p>
-                <span>{this.state.vendor.address}</span>
+                <span>{this.props.order.vendor.address}</span>
                 <br />
               </p>
             ) : (
               <></>
             )}
 
-            {this.state.vendor.gstin != null ? (
+            {this.props.order.vendor.gstin != null ? (
               <p>
                 <span>
                   <center style={{ textAlign: 'center' }}>
-                    GSTIN- {this.state.vendor.gstin}{' '}
+                    GSTIN- {this.props.order.vendor.gstin}{' '}
                   </center>
                 </span>
               </p>
@@ -80,12 +82,18 @@ export class PrintReceipt extends Component {
             )}
 
             <h3 class="new_h3">
-              {this.state.data.order_type != 'TakeAway' &&
-              this.state.data.order_type != 'Delivery' ? (
-                <span> Dine In</span>
+              {this.props.order.order_type != 'TakeAway' &&
+              this.props.order.order_type != 'Delivery' ? (
+                <span>
+                  Dine-In -{' '}
+                  {this.props.order.table == null ? (
+                    <span>Table Not Assigned</span>
+                  ) : (
+                    <span>{this.props.order.table.table_name}</span>
+                  )}
+                </span>
               ) : (
-                <span>{this.state.data.order_type}</span>
-                
+                <span>{this.props.order.order_type}</span>
               )}
             </h3>
           </div>
@@ -98,20 +106,22 @@ export class PrintReceipt extends Component {
             <div id="name_phone">
               <div class="phone_email_head">Name</div>
               <div class="phone_email_content">
-                {this.state.user.id == 1 || this.state.user.name == '' ? (
+                {this.props.order.user.id == 1 ||
+                this.props.order.user.name == '' ? (
                   <span>N/A</span>
                 ) : (
-                  this.state.user.name
+                  this.props.order.user.name
                 )}
               </div>
             </div>
             <div id="name_phone">
               <div class="phone_email_head">Phone</div>
               <div class="phone_email_content">
-                {this.state.user.id == 1 || this.state.user.name == '' ? (
+                {this.props.order.user.id == 1 ||
+                this.props.order.user.name == '' ? (
                   <span>N/A</span>
                 ) : (
-                  this.state.user.contact
+                  this.props.order.user.contact
                 )}
               </div>
             </div>
@@ -123,14 +133,24 @@ export class PrintReceipt extends Component {
           <div class="customer_order_details_main">
             <div id="customer_order_details">
               <div class="customer_order_details_head">Order Time</div>
-              <div class="customer_order_details_content">
-                {moment(this.state.data.created_at).format('llll')}
+              <div
+                class="customer_order_details_content"
+                style={{
+                  fontSize: '0.9em',
+                }}
+              >
+                {moment(this.props.order.created_at).format('llll')}
               </div>
             </div>
             <div id="customer_order_details">
               <div class="customer_order_details_head">Order Code</div>
-              <div class="customer_order_details_content">
-                {this.state.data.order_code}
+              <div
+                class="customer_order_details_content"
+                style={{
+                  fontSize: '0.9em',
+                }}
+              >
+                {this.props.order.order_code}
               </div>
             </div>
             {/* <!-- <div id="customer_order_details">
@@ -138,20 +158,29 @@ export class PrintReceipt extends Component {
                   <div class="customer_order_details_content">221</div>
                   </div> --> */}
             <div>
-              <div id="customer_order_details">
-                <div class="customer_order_details_head">Method</div>
-                <div class="customer_order_details_content">
-                  {this.state.transactions.length == 1 ? (
-                    <span>{this.state.transactions[0].txn_method}</span>
-                  ) : (
-                    this.state.transactions.map((tt) => (
-                      <span>
-                        {tt.txn_method} - {tt.txn_amount}
-                      </span>
-                    ))
-                  )}
+              {this.props.order.transactions == undefined ? (
+                <></>
+              ) : (
+                <div id="customer_order_details">
+                  <div class="customer_order_details_head">Method</div>
+                  <div
+                    class="customer_order_details_content"
+                    style={{
+                      fontSize: '0.9em',
+                    }}
+                  >
+                    {this.props.order.transactions.length == 1 ? (
+                      <span>{this.props.order.transactions[0].txn_method}</span>
+                    ) : (
+                      this.props.order.transactions.map((tt) => (
+                        <span>
+                          {tt.txn_method} - {tt.txn_amount}
+                        </span>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -181,7 +210,7 @@ export class PrintReceipt extends Component {
                     <h4 class="table_data">Amt.</h4>
                   </td>
                 </tr>
-                {this.state.cart.map((product, index) => (
+                {this.props.order.cart.map((product, index) => (
                   <tr class="service" style={{ width: '100% !important' }}>
                     <td class="tableitem">
                       <p
@@ -204,10 +233,10 @@ export class PrintReceipt extends Component {
                         )}
                         {product.addons.length > 0 ? (
                           <span>
-                            <strong>AddOns: </strong>
+                            <strong> | AddOns: </strong>
                             {product.addons.map((pp) => (
                               <span>
-                                {pp.addon_name} - {pp.addon_price}
+                                {" "}{pp.addon_name} - ₹{pp.addon_price}
                               </span>
                             ))}
                           </span>
@@ -229,7 +258,7 @@ export class PrintReceipt extends Component {
                         class="itemtext"
                         style={{ fontSize: '1em', marginBottom: '2mm' }}
                       >
-                        {product.product_price/product.product_quantity}
+                        {product.product_price / product.product_quantity}
                       </p>
                     </td>
                     <td class="tableitem">
@@ -237,7 +266,7 @@ export class PrintReceipt extends Component {
                         class="itemtext"
                         style={{ fontSize: '1em', marginBottom: '2mm' }}
                       >
-                        {product.product_price }
+                        {product.product_price}
                       </p>
                     </td>
                   </tr>
@@ -256,12 +285,19 @@ export class PrintReceipt extends Component {
                   </td>
                   <td style={{ width: '20%' }}></td>
                   <td class="" style={{ width: '20%' }}>
-                    <h2 style={{ fontSize: '14px', fontWeight: '300' }}>
-                      {this.state.data.order_amount}
+                    <h2
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: '300',
+                        display: 'flex',
+                        justifyContent: 'end',
+                      }}
+                    >
+                      {this.props.order.order_amount}
                     </h2>
                   </td>
                 </tr>
-                {this.state.data.cgst != 0 ? (
+                {this.props.order.cgst != 0 ? (
                   <tr class="tabletitle">
                     <td class="Rate" style={{ width: '60%' }}>
                       <h2 style={{ fontSize: '2.15em', fontWeight: '300' }}>
@@ -269,16 +305,23 @@ export class PrintReceipt extends Component {
                       </h2>
                     </td>
                     <td style={{ width: '20%' }}></td>
-                    <td  style={{ width: '20%' }}>
-                      <h2 style={{ fontSize: '14px', fontWeight: '300' }}>
-                        {this.state.data.cgst}
+                    <td style={{ width: '20%' }}>
+                      <h2
+                        style={{
+                          fontSize: '14px',
+                          fontWeight: '300',
+                          display: 'flex',
+                          justifyContent: 'end',
+                        }}
+                      >
+                        {this.props.order.cgst}
                       </h2>
                     </td>
                   </tr>
                 ) : (
                   <></>
                 )}
-                {this.state.data.sgst != 0 ? (
+                {this.props.order.sgst != 0 ? (
                   <tr class="tabletitle">
                     <td class="Rate" style={{ width: '60%' }}>
                       <h2 style={{ fontSize: '2.15em', fontWeight: '300' }}>
@@ -286,16 +329,23 @@ export class PrintReceipt extends Component {
                       </h2>
                     </td>
                     <td style={{ width: '20%' }}></td>
-                    <td  style={{ width: '20%' }}>
-                      <h2 style={{ fontSize: '14px', fontWeight: '300' }}>
-                        {this.state.data.sgst}
+                    <td style={{ width: '20%' }}>
+                      <h2
+                        style={{
+                          fontSize: '14px',
+                          fontWeight: '300',
+                          display: 'flex',
+                          justifyContent: 'end',
+                        }}
+                      >
+                        {this.props.order.sgst}
                       </h2>
                     </td>
                   </tr>
                 ) : (
                   <></>
                 )}
-                {this.state.data.order_discount != 0 ? (
+                {this.props.order.order_discount != 0 ? (
                   <tr class="tabletitle">
                     <td class="Rate" style={{ width: '60%' }}>
                       <h2 style={{ fontSize: '2.15em', fontWeight: '300' }}>
@@ -303,9 +353,16 @@ export class PrintReceipt extends Component {
                       </h2>
                     </td>
                     <td style={{ width: '20%' }}></td>
-                    <td  style={{ width: '20%' }}>
-                      <h2 style={{ fontSize: '14px', fontWeight: '300' }}>
-                        {this.state.data.order_discount}
+                    <td style={{ width: '20%' }}>
+                      <h2
+                        style={{
+                          fontSize: '14px',
+                          fontWeight: '300',
+                          display: 'flex',
+                          justifyContent: 'end',
+                        }}
+                      >
+                        {this.props.order.order_discount}
                       </h2>
                     </td>
                   </tr>
@@ -314,17 +371,22 @@ export class PrintReceipt extends Component {
                 )}
                 <tr class="tabletitle">
                   <td class="Rate" style={{ width: '60%' }}>
-                    <h2 id="grandtotal" style={{ fontSize: '1.2em' }}>
+                    <h2 id="grandtotal" style={{ fontSize: '1.1em' }}>
                       Grand Total
                     </h2>
                   </td>
                   <td style={{ width: '15%' }}></td>
-                  <td  style={{ width: '25%' }}>
+                  <td style={{ width: '25%' }}>
                     <h2
                       id="grandtotal"
-                      style={{ fontSize: '14px', fontWeight: 'bold' }}
+                      style={{
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        display: 'flex',
+                        justifyContent: 'end',
+                      }}
                     >
-                      ₹ {this.state.data.total_amount}
+                      ₹ {this.props.order.total_amount}
                     </h2>
                   </td>
                 </tr>
