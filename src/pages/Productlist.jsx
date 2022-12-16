@@ -7,6 +7,7 @@ import edit_icon from '../assets/images/icons/edit.svg';
 import { AuthContext } from '../AuthContextProvider';
 import { Bars, Circles } from 'react-loader-spinner';
 import { Toggle } from '../othercomponent/Toggle';
+import { QRToggle } from '../othercomponent/QRToggle';
 import Skeletonloader from '../othercomponent/Skeletonloader';
 import no_img from '../assets/images/no_products_found.png';
 import { toast } from 'react-toastify';
@@ -149,6 +150,44 @@ export class Productlist extends Component {
       });
   };
 
+  search = (e) => {
+    if (e.target.value.length > 1) {
+      fetch(global.api + 'search_product', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          search_query: e.target.value,
+          status:'all'
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // if (!json.status) {
+          //   var msg = json.msg;
+
+          // } else {
+
+          this.setState({ products: json.data });
+
+          // }
+          // this.setState({ isloading: false, load_data: false });
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          this.setState({ isloading: false });
+        });
+    } else {
+      this.fetchProducts(this.state.active_cat, this.state.type, 1);
+    }
+  };
+  
   render() {
     return (
       <div className="main-wrapper">
@@ -201,12 +240,10 @@ export class Productlist extends Component {
               </div>
             ) : (
               <>
-                {this.state.products.length > 0 ? (
-                  <>
-                    <div className="comp-sec-wrapper mt-20">
+              <div className="comp-sec-wrapper mt-20" style={{marginTop:-10}}>
                       <section className="comp-section">
                         <div className="row pb-4">
-                          <div className="col-md-12">
+                          <div className="col-md-9">
                             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
                               <li className="nav-item">
                                 <a
@@ -244,9 +281,17 @@ export class Productlist extends Component {
                               </li>
                             </ul>
                           </div>
+                          <div className="col-md-3">
+                      
+                            <input type={'text'} className={'form-control'} onChange={(e)=>{this.search(e)}} placeholder={"Search Product"} />
+                            </div>
                         </div>
                       </section>
                     </div>
+
+                {this.state.products.length > 0 ? (
+                  <>
+                    
                     <div className="card">
                       <div className="card-body">
                         <div className="table-responsive">
@@ -287,6 +332,7 @@ export class Productlist extends Component {
                                   <th>Category</th>
                                   <th>Type</th>
                                   <th>Veg/NonVeg</th>
+                                  <th>QR Enable</th>
                                   <th>Status</th>
                                   <th style={{ textAlign: 'end' }}>Action</th>
                                 </tr>
@@ -326,7 +372,17 @@ export class Productlist extends Component {
                                       </td>
 
                                       <td>
-                                        <Toggle
+                                      <Toggle
+                                        id={index+"one"}
+                                          status={item.qr_enable}
+                                          product_id={item.id}
+                                          action_type="qr"
+                                        />
+                                      </td>
+
+                                      <td>
+                                      <Toggle
+                                        id={index+"two"}
                                           status={item.status}
                                           product_id={item.id}
                                           action_type="product"
@@ -334,6 +390,7 @@ export class Productlist extends Component {
                                       </td>
                                       <td style={{ textAlign: 'end' }}>
                                         <Link
+                                        target={"_blank"}
                                           to={'/editproduct/' + item.id}
                                           className="me-3"
                                         >

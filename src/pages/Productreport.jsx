@@ -26,6 +26,7 @@ export class Productreport extends Component {
     start_date: new Date(),
     end_date: new Date(),
     range: 'today',
+    is_veg: 'all',
   };
   handleSelect(ranges) {
     console.log(ranges);
@@ -59,6 +60,7 @@ export class Productreport extends Component {
         start_date: this.state.start_date,
         end_date: this.state.end_date,
         range: this.state.range,
+        is_veg: this.state.is_veg,
       }),
     })
       .then((response) => response.json())
@@ -245,14 +247,15 @@ export class Productreport extends Component {
                           className="form-control"
                           onChange={(e) => {
                             this.setState({
-                              parent_category_id: e.target.value,
+                              is_veg: e.target.value,
                             });
                           }}
                           style={{ width: '150px', marginRight: '10px' }}
                           // className="select-container"
                         >
-                          <option>All</option>
-                          <option value={0}>None</option>
+                          <option value={'all'}>All</option>
+                          <option value={1}>Veg</option>
+                          <option value={0}>Non-Veg</option>
                         </select>
                       </li>
                       <li className="nav-item" style={{ paddingTop: 20 }}>

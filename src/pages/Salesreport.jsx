@@ -35,12 +35,7 @@ class Salesreport extends Component {
 
   handleSelect(ranges) {
     console.log(ranges);
-    // {
-    //   selection: {
-    //     startDate: [native Date Object],
-    //     endDate: [native Date Object],
-    //   }
-    // }
+   
   }
 
   componentDidMount() {

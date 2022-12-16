@@ -190,15 +190,7 @@ export class Orderreport extends Component {
       text: 'Order Channel',
       sort: true,
     },
-    {
-      text: 'Order Type',
-      sort: true,
-      formatter: (cell, row) => {
-        return row.order_type != 'Takeaway' && row.order_type != 'Delivery'
-          ? 'Dine In'
-          : row.order_type;
-      },
-    },
+    
     {
       text: 'Order Type',
       sort: true,
@@ -317,10 +309,31 @@ export class Orderreport extends Component {
                           style={{ width: '150px', marginRight: '10px' }}
                           // className="select-container"
                         >
-                          <option>All</option>
-                          <option value={0}>None</option>
+                          <option value={'all'}>All</option>
+                          <option value={'TakeAway'}>TakeAway</option>
+                          <option value={'Delivery'}>Delivery</option>
+                          <option value={'DineIn'}>DineIn</option>
                         </select>
                       </li>
+
+                      <li className="nav-item">
+                        <label>Channel</label>
+                        <select
+                          className="form-control"
+                          onChange={(e) => {
+                            this.setState({
+                              parent_category_id: e.target.value,
+                            });
+                          }}
+                          style={{ width: '150px', marginRight: '10px' }}
+                          // className="select-container"
+                        >
+                          <option value={'all'} >All</option>
+                          <option value={'pos'}>POS</option>
+                          <option value={'website'}>QR Scan</option>
+                        </select>
+                      </li>
+
                       <li
                         className="nav-item"
                         style={{

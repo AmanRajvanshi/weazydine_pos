@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContextProvider";
 
-export class Toggle extends Component {
+export class QRToggle extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -31,7 +31,7 @@ export class Toggle extends Component {
     }
 
     var product_id = this.state.product_id;
-    fetch(global.api + "update_status_product_offer", {
+    fetch(global.api + "update_qr_status_product", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -66,13 +66,13 @@ export class Toggle extends Component {
       <div className="status-toggle">
         <input
           type="checkbox"
-          id={this.state.product_id+this.props.id}
+          id={this.state.product_id}
           className="check"
           value={this.state.product_id}
           onChange={this.handleStatus}
           checked={this.state.status}
         />
-        <label htmlFor={this.state.product_id+this.props.id} className="checktoggle"></label>
+        <label htmlFor={this.state.product_id} className="checktoggle"></label>
       </div>
     );
   }
