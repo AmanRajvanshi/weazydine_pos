@@ -27,15 +27,14 @@ class Salesreport extends Component {
     to: new Date(),
     range: 'today',
     last_page: 1,
-    total:0,
-    online:0,
-    cash:0,
-    weazypay:0
+    total: 0,
+    online: 0,
+    cash: 0,
+    weazypay: 0,
   };
 
   handleSelect(ranges) {
     console.log(ranges);
-   
   }
 
   componentDidMount() {
@@ -64,9 +63,16 @@ class Salesreport extends Component {
             this.setState({ data: [], is_loading: false });
           }
         } else {
-          console.log(json.data.data);
-          this.setState({total:json.total_earnning,online:json.online,cash:json.cashsale,weazypay:json.weazypay})
-          this.setState({ data: json.data.data,last_page:json.data.last_page});
+          this.setState({
+            total: json.total_earnning,
+            online: json.online,
+            cash: json.cashsale,
+            weazypay: json.weazypay,
+          });
+          this.setState({
+            data: json.data.data,
+            last_page: json.data.last_page,
+          });
         }
         this.setState({ is_loading: false });
         return json;
@@ -126,6 +132,7 @@ class Salesreport extends Component {
       formatter: (cell, row, rowIndex, extraData) => {
         return rowIndex + 1;
       },
+      dataField: 'id',
     },
     {
       text: 'Time',
@@ -133,13 +140,15 @@ class Salesreport extends Component {
       formatter: (cell, row) => {
         return moment(row.created_at).format('llll');
       },
+      dataField: 'created_at',
     },
     {
       text: 'Amount',
       sort: true,
       formatter: (cell, row) => {
-        return "₹ " + row.txn_amount;
-      }
+        return '₹ ' + row.txn_amount;
+      },
+      dataField: 'txn_amount',
     },
     {
       dataField: 'txn_method',
@@ -321,225 +330,150 @@ class Salesreport extends Component {
             </div>
             {!this.state.is_loading ? (
               <>
-                <div className="row">
-              <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
-                    </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                       
-                            <BiRupee />
-                            <span className="counters">
-                              {this.state.total.toFixed(2)}
-                            </span>
-                         
-                      </h5>
-                      <h6>Total Sales</h6>
-                    </div>
-                  </div>
-                  </Link>
-                </div>
-
-              <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
-                    </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                       
-                            <BiRupee />
-                            <span className="counters">
-                              {this.state.online.toFixed(2)}
-                            </span>
-                         
-                      </h5>
-                      <h6>Online Sales</h6>
-                    </div>
-                  </div>
-                  </Link>
-                </div>
-                <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
-                    </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                       
-                            <BiRupee />
-                            <span className="counters">
-                              {this.state.cash.toFixed(2)}
-                            </span>
-                         
-                      </h5>
-                      <h6>Cash Sales</h6>
-                    </div>
-                  </div>
-                  </Link>
-                </div>
-
-                <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
-                    </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                       
-                            <BiRupee />
-                            <span className="counters">
-                              {this.state.weazypay.toFixed(2)}
-                            </span>
-                         
-                      </h5>
-                      <h6>Weazy Pay</h6>
-                    </div>
-                  </div>
-                  </Link>
-                </div>
-           </div>
-              <div className="card">
-                {this.state.data.length > 0 ? (
-                  <div className="card-body">
-                    {/* <div className="table-responsive">
-                      <table className="table  datanew">
-                        <thead>
-                          <tr>
-                            <th>S.no</th>
-                            <th>Time</th>
-                            <th>Amount</th>
-                            <th>Payment Method</th>
-                            <th>Payment Channel</th>
-                            <th>OrderID</th>
-                            <th>Txn ID</th>
-                            <th>Type</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.data.map((item, index) => (
-                            <tr>
-                              <td>{index + 1}</td>
-                              <td>{moment(item.created_at).format('llll')}</td>
-                              <td>
-                                <BiRupee />
-                                {item.txn_amount}
-                              </td>
-                              <td
-                                style={{
-                                  textTransform: 'capitalize',
-                                }}
-                              >
-                                {item.txn_method}
-                              </td>
-                              <td
-                                style={{
-                                  textTransform: 'capitalize',
-                                }}
-                              >
-                                {item.txn_channel}
-                              </td>
-                              <td
-                                style={{
-                                  textTransform: 'capitalize',
-                                }}
-                              >
-                                {item.orders.order_code}
-                              </td>
-                              <td>{item.payment_txn_id}</td>
-                              <td
-                                style={{
-                                  textTransform: 'capitalize',
-                                }}
-                              >
-                                {item.txn_status}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div> */}
-
-                    <ToolkitProvider
-                      striped
-                      keyField="id"
-                      data={this.state.data}
-                      columns={this.sortableColumn}
-                      search
-                      exportCSV
-                    >
-                      {(props) => (
-                        <>
-                          <div className="d-flex justify-content-between align-items-center mb-4">
-                            <ExportCSVButton {...props.csvProps}>
-                              Export CSV!!
-                            </ExportCSVButton>
-                            <SearchBar {...props.searchProps} />
-                          </div>
-                          <BootstrapTable
-                            {...props.baseProps}
-                            bootstrap4
-                            pagination={paginationFactory(
-                              this.paginationOptions
-                            )}
-                            noDataIndication={() => {
-                              return (
-                                <div className="text-center">
-                                  <h5>No Records Found</h5>
-                                </div>
-                              );
-                            }}
+                <div className="row mt-4">
+                  <div className="col-lg-3 col-sm-3 col-12">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
                           />
-                        </>
-                      )}
-                    </ToolkitProvider>
-                  </div>
-                ) : (
-                  <div className="page-wrapper">
-                    <div
-                      className="content"
-                      style={{
-                        height: '60vh',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-                        margin: '40px 0',
-                      }}
-                    >
-                      <img src={no_order} alt="" />
-                      <h3>No Records Found</h3>
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h5>
+                          <BiRupee />
+                          <span className="counters">
+                            {this.state.total.toFixed(2)}
+                          </span>
+                        </h5>
+                        <h6>Total Sales</h6>
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
 
+                  <div className="col-lg-3 col-sm-3 col-12">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h5>
+                          <BiRupee />
+                          <span className="counters">
+                            {this.state.online.toFixed(2)}
+                          </span>
+                        </h5>
+                        <h6>Online Sales</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-3 col-sm-3 col-12">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h5>
+                          <BiRupee />
+                          <span className="counters">
+                            {this.state.cash.toFixed(2)}
+                          </span>
+                        </h5>
+                        <h6>Cash Sales</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-3 col-sm-3 col-12">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h5>
+                          <BiRupee />
+                          <span className="counters">
+                            {this.state.weazypay.toFixed(2)}
+                          </span>
+                        </h5>
+                        <h6>Weazy Pay</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card">
+                  {this.state.data.length > 0 ? (
+                    <div className="card-body">
+                      <ToolkitProvider
+                        striped
+                        keyField="id"
+                        data={this.state.data}
+                        columns={this.sortableColumn}
+                        search
+                        exportCSV
+                      >
+                        {(props) => (
+                          <>
+                            <div className="d-flex justify-content-between align-items-center mb-4">
+                              <ExportCSVButton {...props.csvProps}>
+                                Export CSV!!
+                              </ExportCSVButton>
+                              <SearchBar {...props.searchProps} />
+                            </div>
+                            <BootstrapTable
+                              {...props.baseProps}
+                              bootstrap4
+                              pagination={paginationFactory(
+                                this.paginationOptions
+                              )}
+                              noDataIndication={() => {
+                                return (
+                                  <div className="text-center">
+                                    <h5>No Records Found</h5>
+                                  </div>
+                                );
+                              }}
+                            />
+                          </>
+                        )}
+                      </ToolkitProvider>
+                    </div>
+                  ) : (
+                    <div className="page-wrapper">
+                      <div
+                        className="content"
+                        style={{
+                          height: '60vh',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flexDirection: 'column',
+                          margin: '40px 0',
+                        }}
+                      >
+                        <img src={no_order} alt="" />
+                        <h3>No Records Found</h3>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </>
             ) : (
               <div

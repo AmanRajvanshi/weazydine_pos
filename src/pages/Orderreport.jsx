@@ -137,6 +137,7 @@ export class Orderreport extends Component {
       formatter: (cell, row, rowIndex, extraData) => {
         return rowIndex + 1;
       },
+      dataField: 'id',
     },
     {
       text: 'Customer',
@@ -144,6 +145,7 @@ export class Orderreport extends Component {
       formatter: (cell, row, rowIndex, extraData) => {
         return row.user.name;
       },
+      dataField: 'user.name',
     },
     {
       dataField: 'order_code',
@@ -156,6 +158,7 @@ export class Orderreport extends Component {
       formatter: (cell, row) => {
         return moment(row.created_at).format('llll');
       },
+      dataField: 'created_at',
     },
     {
       text: 'Amount',
@@ -163,13 +166,23 @@ export class Orderreport extends Component {
       formatter: (cell, row) => {
         return '₹ ' + row.order_amount;
       },
+      dataField: 'order_amount',
     },
     {
-      text: 'Tax',
+      text: 'SGST',
       sort: true,
       formatter: (cell, row) => {
-        return '₹ ' + (row.cgst + row.sgst);
+        return '₹ ' + row.sgst;
       },
+      dataField: 'sgst',
+    },
+    {
+      text: 'CGST',
+      sort: true,
+      formatter: (cell, row) => {
+        return '₹ ' + row.cgst;
+      },
+      dataField: 'cgst',
     },
     {
       text: 'Discount',
@@ -177,6 +190,7 @@ export class Orderreport extends Component {
       formatter: (cell, row) => {
         return '₹ ' + row.order_discount;
       },
+      dataField: 'order_discount',
     },
     {
       text: 'Total Amount',
@@ -184,13 +198,14 @@ export class Orderreport extends Component {
       formatter: (cell, row) => {
         return '₹ ' + row.total_amount;
       },
+      dataField: 'total_amount',
     },
     {
       dataField: 'channel',
       text: 'Order Channel',
       sort: true,
     },
-    
+
     {
       text: 'Order Type',
       sort: true,
@@ -199,6 +214,7 @@ export class Orderreport extends Component {
           ? 'Dine In'
           : row.order_type;
       },
+      dataField: 'order_type',
     },
     {
       text: 'Order Status',
@@ -206,6 +222,7 @@ export class Orderreport extends Component {
       formatter: (cell, row) => {
         return row.order_status;
       },
+      dataField: 'order_status',
     },
   ];
 
@@ -328,7 +345,7 @@ export class Orderreport extends Component {
                           style={{ width: '150px', marginRight: '10px' }}
                           // className="select-container"
                         >
-                          <option value={'all'} >All</option>
+                          <option value={'all'}>All</option>
                           <option value={'pos'}>POS</option>
                           <option value={'website'}>QR Scan</option>
                         </select>

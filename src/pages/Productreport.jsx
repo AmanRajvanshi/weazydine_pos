@@ -122,6 +122,7 @@ export class Productreport extends Component {
       formatter: (cell, row, rowIndex, extraData) => {
         return rowIndex + 1;
       },
+      dataField: 'id',
     },
     { dataField: 'product_name', text: 'Product Name', sort: true },
     {
@@ -130,6 +131,7 @@ export class Productreport extends Component {
       formatter: (cell, row, rowIndex, extraData) => {
         return '₹ ' + row.market_price;
       },
+      dataField: 'market_price',
     },
     {
       text: 'Offer Price',
@@ -137,6 +139,7 @@ export class Productreport extends Component {
       formatter: (cell, row, rowIndex, extraData) => {
         return '₹ ' + row.our_price;
       },
+      dataField: 'our_price',
     },
     {
       text: 'Veg/Non-Veg',
@@ -148,6 +151,7 @@ export class Productreport extends Component {
           return 'Non-Veg';
         }
       },
+      dataField: 'is_veg',
     },
     { dataField: 'salesCount', text: 'Sales Count', sort: true },
     // { dataField: 'status', text: 'Status', sort: true },
