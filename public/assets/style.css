@@ -9432,3 +9432,7 @@ span.select-container.select-container--default.select-container--open {
 .pl-0 {
   padding-left: 0px;
 }
+
+.sidebar_icons {
+  font-size: 25px;
+}

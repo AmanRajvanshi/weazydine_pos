@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 import PrintKot from '../component/PrintKot';
 import PrintReceipt from '../component/PrintReceipt';
 import ReactToPrint from 'react-to-print';
-export class TableOrderDetails extends Component {
+export class ViewTableOrder extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -1205,7 +1205,7 @@ function Navigate(props) {
   const abcd = useNavigate();
   const location = useLocation();
   return (
-    <TableOrderDetails
+    <ViewTableOrder
       {...props}
       {...useParams()}
       navigate={abcd}

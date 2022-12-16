@@ -1801,7 +1801,7 @@ class Tables extends Component {
                         onClick={() => {
                           this.props.update_order_type(item.table_uu_id);
                         }}
-                        // to={"/tableorderdetails/" + item.table_uu_id}
+                        // to={"/viewtableorder/" + item.table_uu_id}
                         className=" d-flex w-100"
                       >
                         <div

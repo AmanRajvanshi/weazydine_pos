@@ -398,7 +398,7 @@ class Tables extends Component {
                     return (
                       <div key={index} className="col-lg-2 col-sm-6 col-12">
                         <Link
-                          to={'/tableorderdetails/' + item.table_uu_id}
+                          to={'/viewtableorder/' + item.table_uu_id}
                           className=" d-flex w-100"
                         >
                           <div

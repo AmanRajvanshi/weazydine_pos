@@ -133,7 +133,13 @@ export class Header extends Component {
               </a>
             </div>
           </div>
-          <a id="mobile_btn" className="mobile_btn">
+          <a
+            id="mobile_btn"
+            className="mobile_btn"
+            onClick={() => {
+              document.getElementById('sidebar12').style.width = '250px';
+            }}
+          >
             <span className="bar-icon">
               <span></span>
               <span></span>
@@ -344,6 +350,7 @@ export class Header extends Component {
             <div className="sidebar-inner slimscroll">
               <div id="sidebar-menu" className="sidebar-menu">
                 <Sidebar
+                  id="sidebar12"
                   width={245}
                   collapsedWidth={245}
                   backgroundColor="rgb(255, 255, 255, 1)"
@@ -352,13 +359,13 @@ export class Header extends Component {
                   <Menu>
                     <MenuItem
                       routerLink={<Link to="/" />}
-                      icon={<i className="fa-solid fa-shop"></i>}
+                      icon={<i className="iconly-Home icli sidebar_icons"></i>}
                     >
                       <span>Dashboard</span>
                     </MenuItem>
                     <MenuItem
                       routerLink={<Link to="/pos" />}
-                      icon={<i className="fa-solid fa-cash-register"></i>}
+                      icon={<i className="fa-solid fa-cash-register sidebar_icons"></i>}
                     >
                       <span>POS</span>
                     </MenuItem>

@@ -10,7 +10,7 @@ import Pos from './pages/Pos.jsx';
 import Productlist from './pages/Productlist.jsx';
 import Orderlist from './pages/Orderlist.jsx';
 import Orderdetails from './pages/Orderdetails.jsx';
-import TableOrderDetails from './pages/TableOrderDetails.jsx';
+import ViewTableOrder from './pages/ViewTableOrder.jsx';
 import { AuthContext } from './AuthContextProvider';
 import { RequireAuth } from './RequireAuth';
 import Productdetails from './pages/Productdetails.jsx';
@@ -297,10 +297,10 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/tableorderdetails/:id"
+              path="/viewtableorder/:id"
               element={
                 <RequireAuth>
-                  <TableOrderDetails />
+                  <ViewTableOrder />
                 </RequireAuth>
               }
             />{' '}

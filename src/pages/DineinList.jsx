@@ -281,7 +281,7 @@ export class DineinList extends Component {
                                     >
                                       <Link
                                         to={
-                                          '/tableorderdetails/' +
+                                          '/viewtableorder/' +
                                           item.table_uu_id
                                         }
                                       >

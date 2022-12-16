@@ -161,7 +161,7 @@ export class Productlist extends Component {
         },
         body: JSON.stringify({
           search_query: e.target.value,
-          status:'all'
+          status: 'all',
         }),
       })
         .then((response) => response.json())
@@ -187,7 +187,7 @@ export class Productlist extends Component {
       this.fetchProducts(this.state.active_cat, this.state.type, 1);
     }
   };
-  
+
   render() {
     return (
       <div className="main-wrapper">
@@ -240,58 +240,66 @@ export class Productlist extends Component {
               </div>
             ) : (
               <>
-              <div className="comp-sec-wrapper mt-20" style={{marginTop:-10}}>
-                      <section className="comp-section">
-                        <div className="row pb-4">
-                          <div className="col-md-9">
-                            <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
-                              <li className="nav-item">
-                                <a
-                                  className="nav-link active"
-                                  href="#solid-rounded-justified-tab1"
-                                  data-bs-toggle="tab"
-                                  onClick={() => {
-                                    this.setState({ is_loading: true });
-                                    this.fetchProducts(
-                                      this.state.active_cat,
-                                      'product',
-                                      1
-                                    );
-                                  }}
-                                >
-                                  Product
-                                </a>
-                              </li>
-                              <li className="nav-item">
-                                <a
-                                  className="nav-link"
-                                  href="#solid-rounded-justified-tab1"
-                                  data-bs-toggle="tab"
-                                  onClick={() => {
-                                    this.setState({ is_loading: true });
-                                    this.fetchProducts(
-                                      this.state.active_cat,
-                                      'package',
-                                      1
-                                    );
-                                  }}
-                                >
-                                  Combos
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="col-md-3">
-                      
-                            <input type={'text'} className={'form-control'} onChange={(e)=>{this.search(e)}} placeholder={"Search Product"} />
-                            </div>
-                        </div>
-                      </section>
+                <div
+                  className="comp-sec-wrapper mt-20"
+                  style={{ marginTop: -10 }}
+                >
+                  <section className="comp-section">
+                    <div className="row pb-4">
+                      <div className="col-md-9">
+                        <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
+                          <li className="nav-item">
+                            <a
+                              className="nav-link active"
+                              href="#solid-rounded-justified-tab1"
+                              data-bs-toggle="tab"
+                              onClick={() => {
+                                this.setState({ is_loading: true });
+                                this.fetchProducts(
+                                  this.state.active_cat,
+                                  'product',
+                                  1
+                                );
+                              }}
+                            >
+                              Product
+                            </a>
+                          </li>
+                          <li className="nav-item">
+                            <a
+                              className="nav-link"
+                              href="#solid-rounded-justified-tab1"
+                              data-bs-toggle="tab"
+                              onClick={() => {
+                                this.setState({ is_loading: true });
+                                this.fetchProducts(
+                                  this.state.active_cat,
+                                  'package',
+                                  1
+                                );
+                              }}
+                            >
+                              Combos
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="col-md-3">
+                        <input
+                          type={'text'}
+                          className={'form-control'}
+                          onChange={(e) => {
+                            this.search(e);
+                          }}
+                          placeholder={'Search Product'}
+                        />
+                      </div>
                     </div>
+                  </section>
+                </div>
 
                 {this.state.products.length > 0 ? (
                   <>
-                    
                     <div className="card">
                       <div className="card-body">
                         <div className="table-responsive">
@@ -372,8 +380,8 @@ export class Productlist extends Component {
                                       </td>
 
                                       <td>
-                                      <Toggle
-                                        id={index+"one"}
+                                        <Toggle
+                                          id={index + 'one'}
                                           status={item.qr_enable}
                                           product_id={item.id}
                                           action_type="qr"
@@ -381,8 +389,8 @@ export class Productlist extends Component {
                                       </td>
 
                                       <td>
-                                      <Toggle
-                                        id={index+"two"}
+                                        <Toggle
+                                          id={index + 'two'}
                                           status={item.status}
                                           product_id={item.id}
                                           action_type="product"
@@ -390,7 +398,7 @@ export class Productlist extends Component {
                                       </td>
                                       <td style={{ textAlign: 'end' }}>
                                         <Link
-                                        target={"_blank"}
+                                          target={'_blank'}
                                           to={'/editproduct/' + item.id}
                                           className="me-3"
                                         >
