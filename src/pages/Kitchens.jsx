@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import delete_icon from "../assets/images/icons/delete.svg";
-import edit_icon from "../assets/images/icons/edit.svg";
-import { AuthContext } from "../AuthContextProvider";
-import { toast } from "react-toastify";
-import { Bars } from "react-loader-spinner";
-import Swal from "sweetalert2";
-import no_img from "../assets/images/no_products_found.png";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import delete_icon from '../assets/images/icons/delete.svg';
+import edit_icon from '../assets/images/icons/edit.svg';
+import { AuthContext } from '../AuthContextProvider';
+import { toast } from 'react-toastify';
+import { Bars } from 'react-loader-spinner';
+import Swal from 'sweetalert2';
+import no_img from '../assets/images/no_products_found.png';
+import { Link } from 'react-router-dom';
 
 export class Kitchens extends Component {
   static contextType = AuthContext;
@@ -19,21 +20,23 @@ export class Kitchens extends Component {
       openedit: false,
       is_loding: true,
       category: [],
-      new_category_name: "",
+      kitchen_name: '',
+      new_category_name: '',
+      category_id: '',
       is_buttonloding: false,
     };
   }
 
   componentDidMount() {
-    this.fetchCategories();
+    this.fetchKitchens();
   }
 
-  fetchCategories = () => {
-    fetch(global.api + "fetch_kitchens", {
-      method: "POST",
+  fetchKitchens = () => {
+    fetch(global.api + 'fetch_kitchens', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -51,17 +54,17 @@ export class Kitchens extends Component {
   };
 
   add = () => {
-    if (this.state.new_category_name != "") {
+    if (this.state.kitchen_name != '') {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "add_kitchen", {
-        method: "POST",
+      fetch(global.api + 'add_kitchen', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
-          kitchen_name: this.state.new_category_name
+          kitchen_name: this.state.kitchen_name,
         }),
       })
         .then((response) => response.json())
@@ -70,9 +73,9 @@ export class Kitchens extends Component {
             var msg = json.msg;
             toast.error(msg);
           } else {
-            this.setState({ open: false, new_category_name: "" });
+            this.setState({ open: false, kitchen_name: '' });
             toast.success(json.msg);
-            this.fetchCategories();
+            this.fetchKitchens();
           }
           return json;
         })
@@ -83,19 +86,18 @@ export class Kitchens extends Component {
           this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
-      toast.error("Name is required!");
+      toast.error('Name is required!');
     }
   };
 
   edit = () => {
-    //   alert("sfghsdf")
-    if (this.state.new_category_name != "") {
+    if (this.state.new_category_name != '') {
       this.setState({ is_buttonloding: true });
-      fetch(global.api + "update_kitchen", {
-        method: "POST",
+      fetch(global.api + 'update_kitchen', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -109,9 +111,9 @@ export class Kitchens extends Component {
             var msg = json.msg;
             toast.success(msg);
           } else {
-            this.setState({ openedit: false, new_category_name: "" });
+            this.setState({ openedit: false, new_category_name: '' });
             toast.success(json.msg);
-            this.fetchCategories();
+            this.fetchKitchens();
           }
           return json;
         })
@@ -122,31 +124,29 @@ export class Kitchens extends Component {
           this.setState({ isloading: false, is_buttonloding: false });
         });
     } else {
-      toast.error("Please add Pickup Point first!");
+      toast.error('Please add Kitchen first!');
     }
   };
 
-  delete = (id, name) => {
-    console.warn(id);
-    fetch(global.api + "delete_pickup_point", {
-      method: "POST",
+  delete = (id) => {
+    fetch(global.api + 'delete_kitchen', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        pickup_point_id: id,
+        kitchen_id: id,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
-          var msg = json.msg;
-          // Toast.show(msg);
+          console.log(json.msg);
         } else {
-          toast.success("Pickup Point deleted");
-          this.fetchCategories();
+          toast.success('Kitchen deleted');
+          this.fetchKitchens();
         }
       })
       .catch((error) => {
@@ -189,7 +189,7 @@ export class Kitchens extends Component {
                 <div
                   className="main_loader"
                   style={{
-                    height: "50vh",
+                    height: '50vh',
                   }}
                 >
                   <Bars
@@ -212,6 +212,7 @@ export class Kitchens extends Component {
                             <tr>
                               <th>S.no</th>
                               <th>Kitchens</th>
+                              <th>Products</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -221,13 +222,24 @@ export class Kitchens extends Component {
                                 <td>{index + 1}</td>
                                 <td>{item.kitchen_name}</td>
                                 <td>
+                                  <Link
+                                    to={'/kitchenproducts/' + item.id}
+                                    className="btn btn-sm btn-primary"
+                                    style={{
+                                      color: 'white',
+                                    }}
+                                  >
+                                    Products
+                                  </Link>
+                                </td>
+                                <td>
                                   <a
                                     className="me-3"
                                     onClick={() => {
                                       this.setState({
                                         openedit: true,
                                         category_id: item.id,
-                                        new_category_name: item.name,
+                                        new_category_name: item.kitchen_name,
                                       });
                                     }}
                                   >
@@ -237,16 +249,16 @@ export class Kitchens extends Component {
                                     className="confirm-text"
                                     onClick={() => {
                                       Swal.fire({
-                                        title: "Are you sure?",
+                                        title: 'Are you sure?',
                                         text: "You won't be able to revert this!",
-                                        icon: "warning",
+                                        icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: "#3085d6",
-                                        cancelButtonColor: "#d33",
-                                        confirmButtonText: "Yes, delete it!",
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
                                       }).then((result) => {
                                         if (result.isConfirmed) {
-                                          this.delete(item.id, item.name);
+                                          this.delete(item.id);
                                         }
                                       });
                                     }}
@@ -264,14 +276,14 @@ export class Kitchens extends Component {
                     <div
                       className="d-flex align-items-center justify-content-center flex-column"
                       style={{
-                        height: "70vh",
+                        height: '70vh',
                       }}
                     >
                       <img
                         src={no_img}
                         alt=""
                         style={{
-                          height: "250px",
+                          height: '250px',
                         }}
                       />
                       <h4>No Pickup point Found</h4>
@@ -287,7 +299,7 @@ export class Kitchens extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -305,7 +317,7 @@ export class Kitchens extends Component {
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
+                          this.setState({ kitchen_name: e.target.value });
                         }}
                       />
                     </div>
@@ -313,10 +325,10 @@ export class Kitchens extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -331,7 +343,7 @@ export class Kitchens extends Component {
                         onClick={() => {
                           this.add();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Add
                       </a>
@@ -347,14 +359,14 @@ export class Kitchens extends Component {
           onClose={() => this.setState({ openedit: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
             <div className="page-header">
               <div className="page-title">
                 <h4>Edit Kitchen </h4>
-                              </div>
+              </div>
             </div>
             <div className="card">
               <div className="card-body">
@@ -374,10 +386,10 @@ export class Kitchens extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -392,7 +404,7 @@ export class Kitchens extends Component {
                         onClick={() => {
                           this.edit();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Update
                       </a>

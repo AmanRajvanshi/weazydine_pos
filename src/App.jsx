@@ -47,6 +47,7 @@ import Editsemifinishedrawmaterialproducts from './pages/Editsemifinishedrawmate
 
 import Supliers from './pages/Supliers.jsx';
 import Semifinishedrawmaterialproductsdetails from './pages/Semifinishedrawmaterialproductsdetails.jsx';
+import KitchenProducts from './pages/KitchenProducts.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -517,6 +518,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Editsemifinishedrawmaterialproducts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/kitchenproducts/:id"
+              element={
+                <RequireAuth>
+                  <KitchenProducts />
                 </RequireAuth>
               }
             />
