@@ -3578,6 +3578,12 @@ div.dataTables_wrapper div.dataTables_info {
   border-right: 1px solid #e8ebed;
 }
 
+@media only screen and (max-width: 600px) {
+  .header .header-left {
+    display: none;
+  }
+}
+
 .header .header-left .logo {
   display: inline-block;
   line-height: 0;
@@ -3602,12 +3608,12 @@ div.dataTables_wrapper div.dataTables_info {
   display: none;
 }
 
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
   .header .header-left {
     position: absolute;
     width: 100%;
   }
-}
+} */
 
 @media (max-width: 991px) {
   .header #toggle_btn {
@@ -4716,12 +4722,20 @@ span.select-container.select-container--default.select-container--open {
 
 @media (max-width: 991px) {
   .sidebar {
-    margin-left: -575px;
+    margin-left: 0px;
     -webkit-transition: all 0.4s ease;
     -ms-transition: all 0.4s ease;
     transition: all 0.4s ease;
     z-index: 1041;
     background: #fff;
+  }
+
+  .sidebar1 {
+    width: 0px;
+  }
+
+  .mobile_sidebar_opened {
+    width: 250px;
   }
 }
 
@@ -9059,6 +9073,12 @@ span.select-container.select-container--default.select-container--open {
 
 .react-responsive-modal-modal {
   width: 600px;
+}
+
+@media only screen and (max-width: 600px) {
+  .react-responsive-modal-modal {
+    width: auto;
+  }
 }
 
 .pos_add_div {

@@ -34,6 +34,7 @@ $(document).ready(function () {
     $wrapper.removeClass("slide-nav");
     $(".sidebar-overlay").removeClass("opened");
     $("#task_window").removeClass("opened");
+    $("#sidebar1").removeClass("mobile_sidebar_opened");
   });
 
   // Logo Hide Btn

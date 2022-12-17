@@ -380,7 +380,7 @@ class Tables extends Component {
   render() {
     return (
       <>
-        <div className="row" style={{ marginTop: 10 }}>
+        <div className='row' style={{ marginTop: 10 }} id="dashboard_row_tabs">
           {this.state.is_loading ? (
             <Skeletonloader count={1} height={100} />
           ) : (

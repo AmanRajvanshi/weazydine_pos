@@ -17,6 +17,10 @@ import PrintKot from '../component/PrintKot';
 import PrintReceipt from '../component/PrintReceipt';
 import ReactToPrint from 'react-to-print';
 import success_gif from '../assets/images/order_success.gif';
+import cash from '../assets/images/icons/cash.svg';
+import debitcard from '../assets/images/icons/debitcard.svg';
+import scan from '../assets/images/icons/scan.svg';
+
 class Pos extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -910,7 +914,7 @@ class Pos extends Component {
                                       className="paymentmethod"
                                     >
                                       <img
-                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/cash.svg"
+                                        src={cash}
                                         alt="img"
                                         className="me-2"
                                       />
@@ -926,7 +930,7 @@ class Pos extends Component {
                                       className="paymentmethod"
                                     >
                                       <img
-                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/debitcard.svg"
+                                        src={debitcard}
                                         alt="img"
                                         className="me-2"
                                       />
@@ -942,7 +946,7 @@ class Pos extends Component {
                                       className="paymentmethod"
                                     >
                                       <img
-                                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/scan.svg"
+                                        src={scan}
                                         alt="img"
                                         className="me-2"
                                       />

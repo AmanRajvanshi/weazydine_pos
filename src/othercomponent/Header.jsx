@@ -137,7 +137,9 @@ export class Header extends Component {
             id="mobile_btn"
             className="mobile_btn"
             onClick={() => {
-              document.getElementById('sidebar12').style.width = '250px';
+              document
+                .getElementById('sidebar1')
+                .classList.toggle('mobile_sidebar_opened');
             }}
           >
             <span className="bar-icon">
@@ -346,7 +348,7 @@ export class Header extends Component {
         </div>
         {/* /sidebar */}
         {this.props.sidebar != false && (
-          <div className="sidebar1" id="sidebar">
+          <div className="sidebar1" id="sidebar1">
             <div className="sidebar-inner slimscroll">
               <div id="sidebar-menu" className="sidebar-menu">
                 <Sidebar
@@ -365,7 +367,9 @@ export class Header extends Component {
                     </MenuItem>
                     <MenuItem
                       routerLink={<Link to="/pos" />}
-                      icon={<i className="fa-solid fa-cash-register sidebar_icons"></i>}
+                      icon={
+                        <i className="fa-solid fa-cash-register sidebar_icons"></i>
+                      }
                     >
                       <span>POS</span>
                     </MenuItem>
