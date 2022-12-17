@@ -77,7 +77,6 @@ class Semifinishedrawmaterialproducts extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn("delete_product",json)
         if (!json.status) {
           var msg = json.msg;
           // Toast.show(msg);

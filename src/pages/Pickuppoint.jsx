@@ -127,7 +127,6 @@ export class Pickuppoint extends Component {
   };
 
   delete = (id, name) => {
-    console.warn(id);
     fetch(global.api + "delete_pickup_point", {
       method: "POST",
       headers: {

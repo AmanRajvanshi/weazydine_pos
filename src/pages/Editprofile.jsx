@@ -37,7 +37,6 @@ export class Editprofile extends Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.status) {
-          console.log(json);
           this.setState({
             name: json.data[0].name,
             shop_name: json.data[0].shop_name,

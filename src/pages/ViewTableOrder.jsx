@@ -86,7 +86,6 @@ export class ViewTableOrder extends Component {
             total_amount: json.data[0].total_amount,
             order_code: json.data[0].order_code,
           });
-          console.log(json.data[0].cart);
         }
       })
       .catch((error) => console.error(error))
@@ -702,8 +701,14 @@ export class ViewTableOrder extends Component {
                         >
                           <div className="card-body">
                             <div className=" d-flex align-items-start justify-content-between pb-4">
-                              <h5>Notes</h5>
-                              <a
+                              <h5
+                                style={{
+                                  textDecoration: 'underline',
+                                }}
+                              >
+                                Notes
+                              </h5>
+                              {/* <a
                                 className="btn btn-added"
                                 style={{
                                   color: '#5BC2C1',
@@ -711,7 +716,7 @@ export class ViewTableOrder extends Component {
                                 onClick={() => this.setState({ open: true })}
                               >
                                 Add
-                              </a>
+                              </a> */}
                             </div>
                             <p>{this.state.data.instruction}</p>
                           </div>

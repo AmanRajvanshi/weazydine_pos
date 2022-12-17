@@ -120,7 +120,6 @@ export class App extends Component {
     OneSignal.sendTag('account_type', 'vendor-bmguj1sfd77232927ns');
 
     window.Pusher = Pusher;
-    // console.log(Pusher);
     window.Echo = new Echo({
       broadcaster: 'pusher',
       // key: '714d1999a24b68c8bf87', // for production

@@ -5559,7 +5559,7 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .table thead th {
-  font-weight: 600;
+  font-weight: 500;
   color: #1a181e;
   padding: 10px;
   white-space: nowrap;
@@ -5574,10 +5574,10 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .table tbody tr td {
-  padding: 5px 10px;
-  color: #525252;
-  font-weight: 500;
-  border-bottom: 1px solid #e9ecef;
+  padding: 8px 10px;
+  color: #333;
+  font-weight: 400;
+  border-bottom: 1px solid #dbdbdb;
   vertical-align: middle;
   white-space: nowrap;
 }
@@ -6707,8 +6707,8 @@ span.select-container.select-container--default.select-container--open {
 
 .dash-widget .dash-widgetcontent h5 {
   color: #1a181e;
-  font-weight: 700;
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 19px;
   margin-bottom: 5px;
 }
 

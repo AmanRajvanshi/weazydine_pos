@@ -144,7 +144,6 @@ class Inventorycategory extends Component {
   };
 
   delete = (id) => {
-    console.warn(id);
     fetch(global.api + 'delete_inventory_category', {
       method: 'POST',
       headers: {

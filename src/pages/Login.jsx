@@ -232,7 +232,9 @@ class Login extends Component {
                                 <div className="pass-group d-flex justify-content-center my-3">
                                   <OtpInput
                                     value={this.state.otp}
-                                    onChange={(e) => this.setState({ otp: e })}
+                                    onChange={(otp) => {
+                                      this.setState({ otp: otp });
+                                    }}
                                     numInputs={4}
                                     separator={<span>-</span>}
                                     isInputNum={true}
@@ -241,11 +243,6 @@ class Login extends Component {
                                     inputStyle={{
                                       width: '3rem',
                                       height: '3rem',
-                                    }}
-                                    onKeyPress={(e) => {
-                                      if (e.key === 'Enter') {
-                                      this.otpVerification();
-                                      }
                                     }}
                                   />
                                 </div>

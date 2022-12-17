@@ -492,7 +492,7 @@ export class Orderdetails extends Component {
                                       <div className="media-body-cart">
                                         {item.addons.length > 0 && (
                                           <>
-                                            <strong>AddOns: </strong>
+                                            <strong>Addons: </strong>
                                             {item.addons.map((items) => {
                                               return (
                                                 <span className="addon_text_order">
@@ -754,7 +754,7 @@ export class Orderdetails extends Component {
                       </div>
                       <div className="card-body">
                         <div className="row">
-                          <div className="col-lg-12 col-12">
+                          <div className="col-lg-6 col-12">
                             <div className="form-group">
                               <label>Customer Name</label>
                               <input
@@ -769,7 +769,7 @@ export class Orderdetails extends Component {
                               />
                             </div>
                           </div>
-                          <div className="col-lg-12 col-12">
+                          <div className="col-lg-6 col-12">
                             <div className="form-group">
                               <label>Mobile</label>
                               <input

@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { Link } from "react-router-dom";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
-import { BiRupee } from "react-icons/bi";
-import { toast } from "react-toastify";
-import { AuthContext } from "../AuthContextProvider";
-import { Bars } from "react-loader-spinner";
-import Skeletonloader from "../othercomponent/Skeletonloader";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { BiRupee } from 'react-icons/bi';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../AuthContextProvider';
+import { Bars } from 'react-loader-spinner';
+import Skeletonloader from '../othercomponent/Skeletonloader';
 export class Editproduct extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -18,20 +18,20 @@ export class Editproduct extends Component {
       open: false,
       images: [],
       newaddon: false,
-      new_category_name: "",
+      new_category_name: '',
       category: [],
       product_show: true,
       product_id: 0,
-      name: "",
-      c_id: "",
-      market_price: "",
-      our_price: "",
-      description: "",
-      type: "",
+      name: '',
+      c_id: '',
+      market_price: '',
+      our_price: '',
+      description: '',
+      type: '',
       is_veg: 1,
       is_loading: true,
       v_data: [],
-      product_image: "",
+      product_image: '',
       addon_object: [],
     };
   }
@@ -46,17 +46,16 @@ export class Editproduct extends Component {
   }
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_vendor_category", {
-      method: "POST",
+    fetch(global.api + 'fetch_vendor_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
         if (json.data.length == 0) {
           this.setState({ open: true });
         }
@@ -71,14 +70,14 @@ export class Editproduct extends Component {
   fetchProduct = () => {
     var product_id = this.props.id;
 
-    fetch(global.api + "get_product_details?product_id=" + product_id, {
-      method: "GET",
+    fetch(global.api + 'get_product_details?product_id=' + product_id, {
+      method: 'GET',
     })
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
           toast.error(json.msg);
-          this.props.navigate("/productlist");
+          this.props.navigate('/productlist');
         } else {
           var obj = json.data[0];
           this.setState({ product_id: obj.id });
@@ -105,21 +104,21 @@ export class Editproduct extends Component {
   uploadImage = async (e) => {
     let image = this.state.images;
     image.push(e.target.files[0]);
-    this.setState({ images: image, product_image: "" });
+    this.setState({ images: image, product_image: '' });
   };
 
   add = () => {
-    if (this.state.new_category_name != "") {
-      fetch(global.api + "create_category_vendor", {
-        method: "POST",
+    if (this.state.new_category_name != '') {
+      fetch(global.api + 'create_category_vendor', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
           category_name: this.state.new_category_name,
-          status: "active",
+          status: 'active',
         }),
       })
         .then((response) => response.json())
@@ -128,7 +127,7 @@ export class Editproduct extends Component {
             var msg = json.msg;
             toast.error(msg);
           } else {
-            this.setState({ open: false, new_category_name: "" });
+            this.setState({ open: false, new_category_name: '' });
             toast.success(json.msg);
             this.fetchCategories();
           }
@@ -141,7 +140,7 @@ export class Editproduct extends Component {
           this.setState({ isloading: false });
         });
     } else {
-      toast.error("Please add Category first!");
+      toast.error('Please add Category first!');
     }
   };
 
@@ -153,46 +152,46 @@ export class Editproduct extends Component {
     );
 
     if (
-      this.state.name == "" ||
-      this.state.market_price == "" ||
-      this.state.product_img == "" ||
-      this.state.our_price == "" ||
-      this.state.description == ""
+      this.state.name == '' ||
+      this.state.market_price == '' ||
+      this.state.product_img == '' ||
+      this.state.our_price == '' ||
+      this.state.description == ''
     ) {
-      toast.error("All fields are required !");
-    } else if (this.state.category == "") {
-      toast.error("Add category first !");
+      toast.error('All fields are required !');
+    } else if (this.state.category == '') {
+      toast.error('Add category first !');
     }
     // else if (this.state.market_price<this.state.our_price) {
     //     toast.error("Your price should be less than market price !");
     // }
-    else if (this.state.c_id == "") {
-      toast.error("Category is required !");
+    else if (this.state.c_id == '') {
+      toast.error('Category is required !');
     } else if (!isnumValid) {
-      toast.error("Price contains digits only!");
+      toast.error('Price contains digits only!');
     } else if (!isnumValid) {
-      toast.error("Price contains digits only!");
-    } else if (this.state.description == "") {
-      toast.error("Description is required !");
+      toast.error('Price contains digits only!');
+    } else if (this.state.description == '') {
+      toast.error('Description is required !');
     } else {
       this.setState({ isLoading: true });
 
       var form = new FormData();
-      form.append("product_name", this.state.name);
-      form.append("vendor_category_id", this.state.c_id);
-      form.append("market_price", this.state.market_price);
-      form.append("price", this.state.our_price);
-      form.append("description", this.state.description);
-      form.append("type", this.state.type);
-      form.append("product_id", this.state.product_id);
+      form.append('product_name', this.state.name);
+      form.append('vendor_category_id', this.state.c_id);
+      form.append('market_price', this.state.market_price);
+      form.append('price', this.state.our_price);
+      form.append('description', this.state.description);
+      form.append('type', this.state.type);
+      form.append('product_id', this.state.product_id);
       if (this.state.images.length > 0) {
         this.state.images.map((item, index) => {
-          form.append("product_img", item);
+          form.append('product_img', item);
         });
       }
-      form.append("is_veg", this.state.is_veg);
-      fetch(global.api + "vendor_update_product", {
-        method: "POST",
+      form.append('is_veg', this.state.is_veg);
+      fetch(global.api + 'vendor_update_product', {
+        method: 'POST',
         body: form,
         headers: {
           Authorization: this.context.token,
@@ -225,11 +224,11 @@ export class Editproduct extends Component {
         add.push(index);
       }
     });
-    fetch(global.api + "vendor_update_product_options", {
-      method: "POST",
+    fetch(global.api + 'vendor_update_product_options', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -244,7 +243,7 @@ export class Editproduct extends Component {
           toast.error(json.msg);
         } else {
           toast.success(json.msg);
-          this.props.navigate("/productlist");
+          this.props.navigate('/productlist');
         }
 
         this.setState({ isLoading2: false });
@@ -269,7 +268,7 @@ export class Editproduct extends Component {
                     <h6>Edit your product</h6>
                   </div>
                   <a
-                    className="btn btn-submit me-2"
+                    className="btn btn-primary btn-sm me-2"
                     onClick={() => this.create()}
                   >
                     Save
@@ -420,14 +419,14 @@ export class Editproduct extends Component {
                           <div
                             className="image-upload"
                             style={{
-                              width: "max-content",
+                              width: 'max-content',
                             }}
                           >
                             {this.state.images.length > 0 ? (
                               <></>
                             ) : (
                               <input
-                                type={"file"}
+                                type={'file'}
                                 accept=".png, .jpg, .jpeg,.svg"
                                 className="upload"
                                 onChange={(e) => {
@@ -436,13 +435,13 @@ export class Editproduct extends Component {
                               />
                             )}
 
-                            {this.state.product_image != "" ? (
+                            {this.state.product_image != '' ? (
                               <img
                                 id="target"
                                 src={this.state.product_image}
                                 style={{
-                                  width: "200px",
-                                  height: "200px",
+                                  width: '200px',
+                                  height: '200px',
                                 }}
                               />
                             ) : (
@@ -455,8 +454,8 @@ export class Editproduct extends Component {
                                     id="target"
                                     src={URL.createObjectURL(item)}
                                     style={{
-                                      width: "200px",
-                                      height: "200px",
+                                      width: '200px',
+                                      height: '200px',
                                     }}
                                   />
                                 );
@@ -499,7 +498,7 @@ export class Editproduct extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -550,8 +549,8 @@ class Variants extends Component {
     this.state = {
       rows: this.props.variants,
       add_data: [],
-      addon_name: "",
-      addon_price: "",
+      addon_name: '',
+      addon_price: '',
       object: [],
       add_on_loading: false,
       add_on_dataLoading: true,
@@ -576,11 +575,11 @@ class Variants extends Component {
   };
 
   fetch_addon = () => {
-    fetch(global.api + "fetch_product_addon", {
-      method: "POST",
+    fetch(global.api + 'fetch_product_addon', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -614,9 +613,9 @@ class Variants extends Component {
     const vari = [
       {
         id: 1,
-        variants_name: "",
-        variants_price: "",
-        variants_discounted_price: "",
+        variants_name: '',
+        variants_price: '',
+        variants_discounted_price: '',
       },
     ];
     this.setState({ rows: [...this.state.rows, ...vari] });
@@ -628,15 +627,15 @@ class Variants extends Component {
   };
 
   create_addon = () => {
-    if (this.state.addon_name == "" || this.state.addon_price == "") {
-      toast.error("All field is required!");
+    if (this.state.addon_name == '' || this.state.addon_price == '') {
+      toast.error('All field is required!');
     } else {
       this.setState({ newaddonLoading: true });
-      fetch(global.api + "add_product_addon", {
-        method: "POST",
+      fetch(global.api + 'add_product_addon', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -651,8 +650,8 @@ class Variants extends Component {
           } else {
             this.fetch_addon();
             this.setState({
-              addon_name: "",
-              addon_price: "",
+              addon_name: '',
+              addon_price: '',
               newaddonLoading: false,
               newaddon: false,
             });
@@ -692,7 +691,7 @@ class Variants extends Component {
       <>
         <div className="content">
           <div className="page-header">
-            <div className="page-title" style={{ marginTop: "-50px" }}>
+            <div className="page-title" style={{ marginTop: '-50px' }}>
               <h4>Product Varients & Addons</h4>
               <h6>Create Product Varients & Addons</h6>
             </div>
@@ -706,7 +705,7 @@ class Variants extends Component {
                     className="table table-bordered table-hover"
                     id="tab_logic"
                     style={{
-                      border: "1px solid #d9d9d9",
+                      border: '1px solid #d9d9d9',
                     }}
                   >
                     <thead>
@@ -766,16 +765,16 @@ class Variants extends Component {
                   </table>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "end",
+                      display: 'flex',
+                      justifyContent: 'end',
                     }}
                   >
                     <button
                       onClick={this.handleAddRow}
                       className="btn btn-outline-secondary"
                       style={{
-                        marginBottom: "20px",
-                        marginTop: "10px",
+                        marginBottom: '20px',
+                        marginTop: '10px',
                       }}
                     >
                       Add New Varient
@@ -786,16 +785,16 @@ class Variants extends Component {
             ) : (
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
                 }}
               >
                 <button
                   onClick={this.handleAddRow}
                   className="btn btn-outline-secondary"
                   style={{
-                    marginBottom: "20px",
-                    marginTop: "10px",
+                    marginBottom: '20px',
+                    marginTop: '10px',
                   }}
                 >
                   Add New Varient
@@ -805,8 +804,8 @@ class Variants extends Component {
 
             <div
               style={{
-                display: "flex",
-                justifyContent: "start",
+                display: 'flex',
+                justifyContent: 'start',
               }}
             >
               <h3 className="mb-3 py-2 underline">Addons</h3>
@@ -818,9 +817,9 @@ class Variants extends Component {
                   });
                 }}
                 style={{
-                  marginBottom: "20px",
-                  marginTop: "10px",
-                  marginLeft: "30px",
+                  marginBottom: '20px',
+                  marginTop: '10px',
+                  marginLeft: '30px',
                 }}
               >
                 Add New Addon
@@ -836,14 +835,14 @@ class Variants extends Component {
                       <div className="checkbox_addon">
                         <input
                           type="checkbox"
-                          id={"addon" + item.id}
+                          id={'addon' + item.id}
                           name="addon"
-                          value={item.id}
+                          value={'addon' + item.id}
                           onChange={this.handleAddon}
                           className="form-check-input new_checkbox mr-4"
                           checked={this.state.object[item.id] ? true : false}
                         />
-                        <label for={"addon" + item.id}>
+                        <label for={'addon' + item.id}>
                           {item.addon_name} - <BiRupee /> {item.addon_price}
                         </label>
                       </div>
@@ -862,7 +861,7 @@ class Variants extends Component {
           onClose={() => this.setState({ newaddon: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -901,8 +900,8 @@ class Variants extends Component {
                       <button
                         className="btn btn-submit me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span

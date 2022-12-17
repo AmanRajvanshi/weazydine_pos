@@ -143,7 +143,8 @@ export class Kitchens extends Component {
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
-          console.log(json.msg);
+          var msg = json.msg;
+          toast.error(msg);
         } else {
           toast.success('Kitchen deleted');
           this.fetchKitchens();

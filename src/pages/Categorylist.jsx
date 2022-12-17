@@ -129,7 +129,6 @@ export class Categorylist extends Component {
   };
 
   delete = (id, name) => {
-    console.warn(id);
     fetch(global.api + "update_category_vendor", {
       method: "POST",
       headers: {
@@ -319,7 +318,7 @@ export class Categorylist extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -337,7 +336,7 @@ export class Categorylist extends Component {
                         onClick={() => {
                           this.add();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Add Category
                       </a>
@@ -380,7 +379,7 @@ export class Categorylist extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.is_buttonloding ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -398,7 +397,7 @@ export class Categorylist extends Component {
                         onClick={() => {
                           this.edit();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Update Category
                       </a>

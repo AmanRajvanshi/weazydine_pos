@@ -28,7 +28,6 @@ export class Orderreport extends Component {
     range: 'today',
   };
   handleSelect(ranges) {
-    console.log(ranges);
     // {
     //   selection: {
     //     startDate: [native Date Object],
@@ -68,7 +67,6 @@ export class Orderreport extends Component {
             this.setState({ data: [], is_loading: false });
           }
         } else {
-          console.log(json.data.data);
           this.setState({ data: json.data.data });
         }
         this.setState({ is_loading: false });
@@ -93,12 +91,12 @@ export class Orderreport extends Component {
       text: 'No',
     },
     {
-      dataField: 'order_code',
-      text: 'Order Code',
+      dataField: 'user.name',
+      text: 'Customer',
     },
     {
-      dataField: 'username',
-      text: 'Customer',
+      dataField: 'order_code',
+      text: 'Order Code',
     },
     {
       dataField: 'created_at',
@@ -109,11 +107,15 @@ export class Orderreport extends Component {
       text: 'Amount',
     },
     {
-      dataField: 'tax',
-      text: 'Tax',
+      dataField: 'sgst',
+      text: 'SGST',
     },
     {
-      dataField: 'discount',
+      dataField: 'cgst',
+      text: 'CGST',
+    },
+    {
+      dataField: 'order_discount',
       text: 'Discount',
     },
     {
@@ -121,11 +123,11 @@ export class Orderreport extends Component {
       text: 'Total Amount',
     },
     {
-      dataField: 'order_channel',
+      dataField: 'channel',
       text: 'Order Channel',
     },
     {
-      dataField: 'order_status',
+      dataField: 'status',
       text: 'Status',
     },
   ];
@@ -210,8 +212,8 @@ export class Orderreport extends Component {
       text: 'Order Type',
       sort: true,
       formatter: (cell, row) => {
-        return row.order_type != 'Takeaway' && row.order_type != 'Delivery'
-          ? 'Dine In'
+        return row.order_type != 'TakeAway' && row.order_type != 'Delivery'
+          ? 'Dine-In'
           : row.order_type;
       },
       dataField: 'order_type',

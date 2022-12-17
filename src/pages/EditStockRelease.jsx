@@ -60,7 +60,6 @@ export class EditStockPurchase extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn(json.data)
         if (!json.status) {
           toast.error('Something went wrong');
         } else {
@@ -175,7 +174,6 @@ export class EditStockPurchase extends Component {
   };
 
   create = () => {
-    console.log(this.state.rows);
     if (
       this.state.supplier_id == '' &&
       this.state.invoice_date == '' &&

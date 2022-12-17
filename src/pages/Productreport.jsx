@@ -29,7 +29,6 @@ export class Productreport extends Component {
     is_veg: 'all',
   };
   handleSelect(ranges) {
-    console.log(ranges);
     // {
     //   selection: {
     //     startDate: [native Date Object],
@@ -70,7 +69,6 @@ export class Productreport extends Component {
             this.setState({ data: [], is_loading: false });
           }
         } else {
-          console.log(json.data.data);
           this.setState({ data: json.data.data });
         }
         this.setState({ is_loading: false });

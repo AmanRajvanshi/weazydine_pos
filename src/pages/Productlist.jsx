@@ -132,7 +132,6 @@ export class Productlist extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn("delete_product",json)
         if (!json.status) {
           var msg = json.msg;
           // Toast.show(msg);
@@ -192,7 +191,6 @@ export class Productlist extends Component {
     return (
       <div className="main-wrapper">
         <Header />
-
         <div className="page-wrapper">
           <div className="content">
             <div className="page-header">
@@ -240,66 +238,65 @@ export class Productlist extends Component {
               </div>
             ) : (
               <>
-                <div
-                  className="comp-sec-wrapper mt-20"
-                  style={{ marginTop: -10 }}
-                >
-                  <section className="comp-section">
-                    <div className="row pb-4">
-                      <div className="col-md-9">
-                        <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
-                          <li className="nav-item">
-                            <a
-                              className="nav-link active"
-                              href="#solid-rounded-justified-tab1"
-                              data-bs-toggle="tab"
-                              onClick={() => {
-                                this.setState({ is_loading: true });
-                                this.fetchProducts(
-                                  this.state.active_cat,
-                                  'product',
-                                  1
-                                );
-                              }}
-                            >
-                              Product
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              className="nav-link"
-                              href="#solid-rounded-justified-tab1"
-                              data-bs-toggle="tab"
-                              onClick={() => {
-                                this.setState({ is_loading: true });
-                                this.fetchProducts(
-                                  this.state.active_cat,
-                                  'package',
-                                  1
-                                );
-                              }}
-                            >
-                              Combos
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="col-md-3">
-                        <input
-                          type={'text'}
-                          className={'form-control'}
-                          onChange={(e) => {
-                            this.search(e);
-                          }}
-                          placeholder={'Search Product'}
-                        />
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
                 {this.state.products.length > 0 ? (
                   <>
+                    <div
+                      className="comp-sec-wrapper mt-20"
+                      style={{ marginTop: -10 }}
+                    >
+                      <section className="comp-section">
+                        <div className="row pb-4">
+                          <div className="col-md-9">
+                            <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
+                              <li className="nav-item">
+                                <a
+                                  className="nav-link active"
+                                  href="#solid-rounded-justified-tab1"
+                                  data-bs-toggle="tab"
+                                  onClick={() => {
+                                    this.setState({ is_loading: true });
+                                    this.fetchProducts(
+                                      this.state.active_cat,
+                                      'product',
+                                      1
+                                    );
+                                  }}
+                                >
+                                  Product
+                                </a>
+                              </li>
+                              <li className="nav-item">
+                                <a
+                                  className="nav-link"
+                                  href="#solid-rounded-justified-tab1"
+                                  data-bs-toggle="tab"
+                                  onClick={() => {
+                                    this.setState({ is_loading: true });
+                                    this.fetchProducts(
+                                      this.state.active_cat,
+                                      'package',
+                                      1
+                                    );
+                                  }}
+                                >
+                                  Combos
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                          <div className="col-md-3">
+                            <input
+                              type={'text'}
+                              className={'form-control'}
+                              onChange={(e) => {
+                                this.search(e);
+                              }}
+                              placeholder={'Search Product'}
+                            />
+                          </div>
+                        </div>
+                      </section>
+                    </div>
                     <div className="card">
                       <div className="card-body">
                         <div className="table-responsive">

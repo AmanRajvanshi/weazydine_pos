@@ -34,7 +34,6 @@ class Salesreport extends Component {
   };
 
   handleSelect(ranges) {
-    console.log(ranges);
   }
 
   componentDidMount() {

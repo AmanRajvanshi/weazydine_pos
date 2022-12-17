@@ -23,7 +23,6 @@ class Crm extends Component {
     };
   }
   handleSelect(ranges) {
-    console.log(ranges);
     // {
     //   selection: {
     //     startDate: [native Date Object],
@@ -61,7 +60,6 @@ class Crm extends Component {
             this.setState({ data: [], is_loading: false });
           }
         } else {
-         console.log(json.data.data);
           this.setState({ data: json.data.data });
         }
         this.setState({ is_loading: false });

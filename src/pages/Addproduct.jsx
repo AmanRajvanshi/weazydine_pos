@@ -511,7 +511,7 @@ export class Addproduct extends Component {
                             </div>
                             <div className="col-lg-12">
                               <a
-                                className="btn btn-submit me-2"
+                                className="btn btn-primary btn-sm  me-2"
                                 onClick={() => this.add()}
                               >
                                 Submit
@@ -529,7 +529,7 @@ export class Addproduct extends Component {
                         <div className="col-lg-12">
                           {this.state.save_and_continue ? (
                             <button
-                              className="btn btn-submit me-2"
+                              className="btn btn-primary btn-sm  me-2"
                               style={{
                                 pointerEvents: "none",
                                 opacity: "0.8",
@@ -546,7 +546,7 @@ export class Addproduct extends Component {
                               onClick={() => {
                                 this.create();
                               }}
-                              className="btn btn-submit me-2"
+                              className="btn btn-primary btn-sm  me-2"
                             >
                               Save and continue
                             </a>
@@ -596,7 +596,7 @@ export class Addproduct extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.add_category_loading ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm  me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -614,7 +614,7 @@ export class Addproduct extends Component {
                         onClick={() => {
                           this.add();
                         }}
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm  me-2"
                       >
                         Add Category
                       </a>
@@ -806,12 +806,12 @@ class Variants extends Component {
               <h6>Create Product Varients & Addons</h6>
             </div>
             <div>
-              <Link to="/productlist" className="btn btn-cancel mx-2">
+              <Link to="/productlist" className="btn btn-cancel btn-sm mx-2">
                 No, This product has no variants or addons
               </Link>
               {this.state.add_on_loading ? (
                 <button
-                  className="btn btn-submit mx-2"
+                  className="btn btn-primary btn-sm  mx-2"
                   style={{
                     pointerEvents: "none",
                     opacity: "0.8",
@@ -825,7 +825,7 @@ class Variants extends Component {
                 </button>
               ) : (
                 <a
-                  className="btn btn-submit mx-2"
+                  className="btn btn-primary btn-sm  mx-2"
                   onClick={() => this.update_product_variant()}
                 >
                   Save Now
@@ -906,7 +906,7 @@ class Variants extends Component {
                   >
                     <button
                       onClick={this.handleAddRow}
-                      className="btn btn-outline-secondary"
+                      className="btn btn-primary btn-sm "
                       style={{
                         marginBottom: "20px",
                         marginTop: "10px",
@@ -926,7 +926,7 @@ class Variants extends Component {
               >
                 <button
                   onClick={this.handleAddRow}
-                  className="btn btn-outline-secondary"
+                  className="btn btn-primary btn-sm "
                   style={{
                     marginBottom: "20px",
                     marginTop: "10px",
@@ -945,7 +945,7 @@ class Variants extends Component {
             >
               <h3 className="mb-3 py-2 underline">Addons</h3>
               <button
-                className="btn btn-outline-secondary"
+                className="btn btn-primary btn-sm "
                 onClick={() => {
                   this.setState({
                     newaddon: true,
@@ -1032,7 +1032,7 @@ class Variants extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.newaddonLoading ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm  me-2"
                         style={{
                           pointerEvents: "none",
                           opacity: "0.8",
@@ -1050,7 +1050,7 @@ class Variants extends Component {
                           this.create_addon();
                         }}
                         href="javascript:void(0);"
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm  me-2"
                       >
                         Add New Addon
                       </a>

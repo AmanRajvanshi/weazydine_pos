@@ -141,7 +141,6 @@ class Pos extends Component {
           this.setState({ category: json.data });
           // this.fetchProducts(0, this.state.type, 1);
         }
-        // console.warn(json.data)
         this.setState({ load_item: false, isloading: false });
         return json;
       })

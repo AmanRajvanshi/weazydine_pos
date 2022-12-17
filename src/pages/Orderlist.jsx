@@ -331,7 +331,10 @@ class Orderlist extends Component {
                                     justifyContent: 'end',
                                   }}
                                 >
-                                  <Link target="_blank" to={'/orderdetails/' + item.order_code}>
+                                  <Link
+                                    target="_blank"
+                                    to={'/orderdetails/' + item.order_code}
+                                  >
                                     <button
                                       className="btn btn-primary"
                                       style={{

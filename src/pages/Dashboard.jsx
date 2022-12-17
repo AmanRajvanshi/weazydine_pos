@@ -33,7 +33,6 @@ export class Dashboard extends Component {
 
   onSelect = (value, states) => {
     this.setState({ value, states });
-    console.log(value);
   };
 
   get_vendor_data = (range) => {
@@ -54,8 +53,6 @@ export class Dashboard extends Component {
       .then((json) => {
         if (json.status) {
           this.setState({ item: json.data });
-          //   console.warn(json.data)
-          //    alert(this.state.item.shop_visit)
         }
         return json;
       })
@@ -125,116 +122,116 @@ export class Dashboard extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/orderreport">
-                  <div className="dash-widget">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash1.svg"
-                          alt="img"
-                        />
-                      </span>
+                  <Link to="/orderreport">
+                    <div className="dash-widget">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash1.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h6>Total Orders</h6>
+                        <h5>
+                          {this.state.isloading ? (
+                            <Skeletonloader height={23} count={1} />
+                          ) : (
+                            <span className="counters">{item.orders}</span>
+                          )}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                        {this.state.isloading ? (
-                          <Skeletonloader height={23} count={1} />
-                        ) : (
-                          <span className="counters">{item.orders}</span>
-                        )}
-                      </h5>
-                      <h6>Total Orders</h6>
-                    </div>
-                  </div>
                   </Link>
                 </div>
                 <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
+                  <Link to="/salesreport">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h6>Total Sales</h6>
+                        <h5>
+                          {this.state.isloading ? (
+                            <Skeletonloader height={23} count={1} />
+                          ) : (
+                            <>
+                              <BiRupee />
+                              <span className="counters">
+                                {item.total_earnning.toFixed(2)}
+                              </span>
+                            </>
+                          )}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                        {this.state.isloading ? (
-                          <Skeletonloader height={23} count={1} />
-                        ) : (
-                          <>
-                            <BiRupee />
-                            <span className="counters">
-                              {item.total_earnning.toFixed(2)}
-                            </span>
-                          </>
-                        )}
-                      </h5>
-                      <h6>Total Sales</h6>
-                    </div>
-                  </div>
-                  </Link>
-                </div>
-
-                <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
-                    </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                        {this.state.isloading ? (
-                          <Skeletonloader height={23} count={1} />
-                        ) : (
-                          <>
-                            <BiRupee />
-                            <span className="counters">
-                              {item.cashsale.toFixed(2)}
-                            </span>
-                          </>
-                        )}
-                      </h5>
-                      <h6>Cash Sales</h6>
-                    </div>
-                  </div>
                   </Link>
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
-                <Link to="/salesreport">
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
-                          alt="img"
-                        />
-                      </span>
+                  <Link to="/salesreport">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h6>Cash Sales</h6>
+                        <h5>
+                          {this.state.isloading ? (
+                            <Skeletonloader height={23} count={1} />
+                          ) : (
+                            <>
+                              <BiRupee />
+                              <span className="counters">
+                                {item.cashsale.toFixed(2)}
+                              </span>
+                            </>
+                          )}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                        {this.state.isloading ? (
-                          <Skeletonloader height={23} count={1} />
-                        ) : (
-                          <>
-                            <BiRupee />
-                            <span className="counters">
-                              {item.online.toFixed(2)}
-                            </span>
-                          </>
-                        )}
-                      </h5>
-                      <h6>Online Sales</h6>
+                  </Link>
+                </div>
+
+                <div className="col-lg-3 col-sm-3 col-12">
+                  <Link to="/salesreport">
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/dash2.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h6>Online Sales</h6>
+                        <h5>
+                          {this.state.isloading ? (
+                            <Skeletonloader height={23} count={1} />
+                          ) : (
+                            <>
+                              <BiRupee />
+                              <span className="counters">
+                                {item.online.toFixed(2)}
+                              </span>
+                            </>
+                          )}
+                        </h5>
+                      </div>
                     </div>
-                  </div>
                   </Link>
                 </div>
 
@@ -249,6 +246,7 @@ export class Dashboard extends Component {
                       </span>
                     </div>
                     <div className="dash-widgetcontent">
+                      <h6>Weazy Pay</h6>
                       <h5>
                         {this.state.isloading ? (
                           <Skeletonloader height={23} count={1} />
@@ -261,7 +259,6 @@ export class Dashboard extends Component {
                           </>
                         )}
                       </h5>
-                      <h6>Weazy Pay</h6>
                     </div>
                   </div>
                 </div>
@@ -277,6 +274,7 @@ export class Dashboard extends Component {
                       </span>
                     </div>
                     <div className="dash-widgetcontent">
+                      <h6>Total QR Scans</h6>
                       <h5>
                         {this.state.isloading ? (
                           <Skeletonloader height={23} count={1} />
@@ -284,33 +282,32 @@ export class Dashboard extends Component {
                           <span className="counters">{item.shop_visit}</span>
                         )}
                       </h5>
-                      <h6>Total QR Scans</h6>
                     </div>
                   </div>
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
-                  <Link to={"/crm"} >
-                  <div className="dash-widget dash1">
-                    <div className="dash-widgetimg">
-                      <span>
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/user.svg"
-                          alt="img"
-                        />
-                      </span>
+                  <Link to={'/crm'}>
+                    <div className="dash-widget dash1">
+                      <div className="dash-widgetimg">
+                        <span>
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/user.svg"
+                            alt="img"
+                          />
+                        </span>
+                      </div>
+                      <div className="dash-widgetcontent">
+                        <h6>Total Customers</h6>
+                        <h5>
+                          {this.state.isloading ? (
+                            <Skeletonloader height={23} count={1} />
+                          ) : (
+                            <span className="counters">{item.customer}</span>
+                          )}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="dash-widgetcontent">
-                      <h5>
-                        {this.state.isloading ? (
-                          <Skeletonloader height={23} count={1} />
-                        ) : (
-                          <span className="counters">{item.customer}</span>
-                        )}
-                      </h5>
-                      <h6>Total Customers</h6>
-                    </div>
-                  </div>
                   </Link>
                 </div>
                 <div className="row">
@@ -380,7 +377,7 @@ class Tables extends Component {
   render() {
     return (
       <>
-        <div className='row' style={{ marginTop: 10 }} id="dashboard_row_tabs">
+        <div className="row" style={{ marginTop: 10 }} id="dashboard_row_tabs">
           {this.state.is_loading ? (
             <Skeletonloader count={1} height={100} />
           ) : (

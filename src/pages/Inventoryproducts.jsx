@@ -127,10 +127,8 @@ class Inventoryproducts extends Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        // console.warn("delete_product",json)
         if (!json.status) {
           var msg = json.msg;
-          // Toast.show(msg);
           toast.success(msg);
         } else {
           toast.success('Product Deleted Successfully');

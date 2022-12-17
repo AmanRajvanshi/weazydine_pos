@@ -24,7 +24,6 @@ export class Kot extends Component {
   }
 
   componentDidMount() {
-    console.log(this.context.token);
     this.fetch_order(this.state.page, 'all');
     window.Echo.private(`KotstatusChannel.` + this.context.user.id).listen(
       '.kot.status',
