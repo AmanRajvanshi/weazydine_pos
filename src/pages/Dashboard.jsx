@@ -342,6 +342,7 @@ class Tables extends Component {
       '.server.created',
       (e) => {
         this.setState({ data: e.tables });
+        alert('hello')
       }
     );
   }

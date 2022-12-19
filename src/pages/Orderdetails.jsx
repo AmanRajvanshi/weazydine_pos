@@ -365,6 +365,65 @@ export class Orderdetails extends Component {
                               Order Status: {this.state.data.order_status}
                             </span>
                           </h6>
+
+                          {this.state.transaction_details.length == 0 ? (
+                            <></>
+                          ) : (
+                            <h6 className="order_date mt-2">
+                              Payment Method:
+                              {this.state.transaction_details.length == 1 ? (
+                                <span>
+                                  {'  '}
+                                  {
+                                    this.state.transaction_details[0].txn_method
+                                  }{' '}
+                                  - ₹{' '}
+                                  {this.state.transaction_details[0].txn_amount}{' '}
+                                  {this.state.transaction_details[0]
+                                    .txn_status == 'success' ? (
+                                    <span style={{ color: 'green' }}>
+                                      Success
+                                    </span>
+                                  ) : (
+                                    <span style={{ color: 'red' }}>Failed</span>
+                                  )}
+                                  <br />
+                                  Txn ID:{' '}
+                                  {
+                                    this.state.transaction_details[0]
+                                      .payment_txn_id
+                                  }
+                                </span>
+                              ) : (
+                                <>
+                                  <strong>{'  '}Split </strong>(
+                                  {this.state.transaction_details.map(
+                                    (item, i) => {
+                                      return (
+                                        <span key={i}>
+                                          {' '}
+                                          {item.txn_method} - ₹{' '}
+                                          {item.txn_amount}{" "}
+                                          {item.txn_status == 'success' ? (
+                                            <span style={{ color: 'green' }}>
+                                              Success
+                                            </span>
+                                          ) : (
+                                            <span style={{ color: 'red' }}>
+                                              Failed
+                                            </span>
+                                          )}
+                                          <br />
+                                          Txn ID: {item.payment_txn_id}
+                                        </span>
+                                      );
+                                    }
+                                  )}
+                                  )
+                                </>
+                              )}
+                            </h6>
+                          )}
                         </div>
                         <div>
                           {this.state.data.order_type != 'TakeAway' &&

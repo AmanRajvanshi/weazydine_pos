@@ -61,7 +61,6 @@ export class ViewTableOrder extends Component {
   componentDidMount() {
     this.orderDetails(this.props.id);
     this.fetch_table_vendors();
-    console.log(this.context.token);
   }
 
   orderDetails = (id) => {

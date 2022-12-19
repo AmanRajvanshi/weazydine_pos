@@ -10,8 +10,9 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../AuthContextProvider';
 import Skeletonloader from '../othercomponent/Skeletonloader';
 import { Bars } from 'react-loader-spinner';
+import { Toggle } from '../othercomponent/Toggle';
 
-export class ReleaseStock extends Component {
+export class UpdateProductRecipe extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -51,45 +52,6 @@ export class ReleaseStock extends Component {
   componentDidMount() {
     this.fetchProducts();
   }
-
-  create = () => {
-    if (this.state.rows.length == 0) {
-      toast.error('Add atleast one product !');
-    } else if (this.state.rows[0].material_id == '') {
-      toast.error('Select product !');
-    } else {
-      this.setState({ save_and_continue: true, isLoading: true });
-
-      var form = new FormData();
-
-      form.append('purchase_order_product[]', JSON.stringify(this.state.rows));
-
-      fetch(global.api + 'release_inventory', {
-        method: 'POST',
-        body: form,
-        headers: {
-          Authorization: this.context.token,
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          if (!json.status) {
-            var msg = json.msg;
-            toast.error(msg);
-          } else {
-            toast.success(json.msg);
-            this.setState({ product_show: false, product_id: json.data.id });
-          }
-          return json;
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          this.setState({ isLoading: false, save_and_continue: false });
-        });
-    }
-  };
 
   fetchProducts = (id, page) => {
     fetch(global.api + 'fetch_inventory_products', {
@@ -165,9 +127,11 @@ export class ReleaseStock extends Component {
             {/* {this.state.product_show ? ( */}
             <div className="content">
               <div className="page-header">
-                <div className="page-title">
-                  <h4>Release Stocks</h4>
-                  <h6>Release stock in inventory</h6>
+                <div className="page-title w-100 d-flex align-items-center justify-content-between">
+                  <h4>Product Recipe</h4>
+                  <div>
+                    Live Inventory <Toggle />
+                  </div>
                 </div>
               </div>
               {this.state.is_loding ? (
@@ -191,30 +155,43 @@ export class ReleaseStock extends Component {
                 <div className="card">
                   <div className="card-body">
                     <div className="row">
-                      {/* <div className="col-lg-12">
-                        <div className="row">
-                          <div className="col-md-4">
-                            <div className="form-group">
-                              <label>Released To</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-4">
-                            <div className="form-group">
-                              <label>Releas Date</label>
-                              <input type="date" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-4">
-                            <div className="form-group">
-                              <label>Comments</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                          <div className="col-md-4"></div>
-                          <div className="col-md-4"></div>
+                      <div className="col-lg-6">
+                        <div className="form-group">
+                          <label>Product</label>
+                          <select
+                            className="form-control"
+                            name="material_id"
+                            onChange={this.handleChange(0)}
+                          >
+                            <option value="">Select Product</option>
+                            {this.state.products.map((item, key) => (
+                              <option value={item.id} unit={item.unit}>
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
                         </div>
-                      </div> */}
+                      </div>
+                      <div className="col-lg-6">
+                        <div className="form-group">
+                          <label>Quantity</label>
+                          <select
+                            className="form-control"
+                            name="material_id"
+                            onChange={this.handleChange(0)}
+                          >
+                            <option value="">Select Quantity</option>
+                            {this.state.products.map((item, key) => (
+                              <option value={item.id} unit={item.unit}>
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <h5>Select Semi-Finished Products</h5>
                       {this.state.rows.length > 0 ? (
                         <div className="col-lg-12">
                           <br />
@@ -337,32 +314,136 @@ export class ReleaseStock extends Component {
                           </button>
                         </div>
                       )}
-                      <div className="col-lg-12 d-flex justify-content-end">
-                        {this.state.save_and_continue ? (
-                          <button
-                            className="btn btn-primary btn-sm me-2"
+                    </div>
+                    <div className="row">
+                      <h5>Select Raw Materials</h5>
+                      {this.state.rows.length > 0 ? (
+                        <div className="col-lg-12">
+                          <br />
+                          <table
+                            className="table table-bordered table-hover"
+                            id="tab_logic"
                             style={{
-                              pointerEvents: 'none',
-                              opacity: '0.8',
+                              border: '1px solid #d9d9d9',
                             }}
                           >
-                            <span
-                              class="spinner-border spinner-border-sm me-2"
-                              role="status"
-                            ></span>
-                            Saving
+                            <thead>
+                              <tr>
+                                <th className="text-center">#</th>
+                                <th className="text-center">Name</th>
+                                <th className="text-center">Unit</th>
+                                <th className="text-center">Quantity</th>
+                                <th className="text-end">Action</th>
+                                <th />
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.rows.map((item, idx) => (
+                                <tr id="addr0" key={idx}>
+                                  <td>{idx + 1}</td>
+                                  <td>
+                                    <select
+                                      onChange={this.handleChange(idx)}
+                                      className="select-container"
+                                      name="material_id"
+                                    >
+                                      <option>Choose Material</option>
+                                      {this.state.products.length > 0 ? (
+                                        this.state.products.map(
+                                          (item, index) => (
+                                            <option
+                                              value={item.id}
+                                              unit={item.purchase_unit}
+                                              current_quantity={
+                                                item.current_stock
+                                              }
+                                            >
+                                              {item.inventory_product_name}
+                                            </option>
+                                          )
+                                        )
+                                      ) : (
+                                        <></>
+                                      )}
+                                    </select>
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="unit"
+                                      value={this.state.rows[idx].unit}
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      name="quantity"
+                                      value={
+                                        this.state.rows[idx].current_quantity
+                                      }
+                                      onChange={this.handleChange(idx)}
+                                      className="form-control"
+                                    />
+                                  </td>
+
+                                  <td className="text-end">
+                                    <button
+                                      className="btn btn-outline-danger btn-sm"
+                                      onClick={this.handleRemoveSpecificRow(
+                                        idx
+                                      )}
+                                    >
+                                      X
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'end',
+                            }}
+                          >
+                            <button
+                              onClick={this.handleAddRow}
+                              className="btn btn-outline-secondary"
+                              style={{
+                                marginBottom: '20px',
+                                marginTop: '10px',
+                              }}
+                            >
+                              Add New
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'end',
+                          }}
+                        >
+                          <button
+                            onClick={this.handleAddRow}
+                            className="btn btn-sm btn-outline-secondary"
+                            style={{
+                              marginBottom: '20px',
+                              marginTop: '10px',
+                            }}
+                          >
+                            Add A Row
                           </button>
-                        ) : (
-                          <a
-                            onClick={() => {
-                              this.create();
-                            }}
-                            className="btn btn-primary btn-sm me-2"
-                          >
-                            Save Changes
-                          </a>
-                        )}
-                      </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="d-flex justify-content-end">
+                      <button className="btn btn-primary btn-sm">
+                        Save Recipe
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -370,66 +451,6 @@ export class ReleaseStock extends Component {
             </div>
           </div>
         </div>
-        <Modal
-          open={this.state.open}
-          onClose={() => this.setState({ open: false })}
-          center
-          classNames={{
-            modal: 'customModal',
-          }}
-        >
-          <div className="content">
-            <div className="page-header">
-              <div className="page-title">
-                <h4>Add Supplier </h4>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label> Supplier Name</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ new_category_name: e.target.value });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-12 d-flex justify-content-end">
-                    {this.state.add_category_loading ? (
-                      <button
-                        className="btn btn-submit me-2"
-                        style={{
-                          pointerEvents: 'none',
-                          opacity: '0.8',
-                        }}
-                      >
-                        <span
-                          class="spinner-border spinner-border-sm me-2"
-                          role="status"
-                        ></span>
-                        Adding
-                      </button>
-                    ) : (
-                      <a
-                        href="javascript:void(0);"
-                        onClick={() => {
-                          this.add();
-                        }}
-                        className="btn btn-submit me-2"
-                      >
-                        Add Supplier
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
       </>
     );
   }
@@ -439,7 +460,7 @@ function Navigate(props) {
   const abcd = useNavigate();
   const location = useLocation();
   return (
-    <ReleaseStock
+    <UpdateProductRecipe
       {...props}
       {...useParams()}
       navigate={abcd}

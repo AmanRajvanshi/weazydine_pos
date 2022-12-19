@@ -49,6 +49,7 @@ import Supliers from './pages/Supliers.jsx';
 import Semifinishedrawmaterialproductsdetails from './pages/Semifinishedrawmaterialproductsdetails.jsx';
 import KitchenProducts from './pages/KitchenProducts.jsx';
 import DataTable from './pages/DataTable.jsx';
+import UpdateProductRecipe from './pages/UpdateProductRecipe.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -527,6 +528,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <KitchenProducts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/updateproductrecipe"
+              element={
+                <RequireAuth>
+                  <UpdateProductRecipe />
                 </RequireAuth>
               }
             />
