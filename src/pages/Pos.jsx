@@ -659,7 +659,7 @@ class Pos extends Component {
                                   Select The Product To Add
                                 </h5>
 
-                                <input
+                                {/* <input
                                   type="text"
                                   name=""
                                   id=""
@@ -674,7 +674,7 @@ class Pos extends Component {
                                     position: 'relative',
                                     margin: '10px 0 30px',
                                   }}
-                                />
+                                /> */}
                                 <div className="row">
                                   {!this.state.load_item ? (
                                     this.state.products.length > 0 ? (

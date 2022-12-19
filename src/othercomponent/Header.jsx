@@ -367,14 +367,14 @@ export class Header extends Component {
                     <MenuItem
                       routerLink={<Link to="/pos" />}
                       icon={
-                        <i className="fa-solid fa-cash-register sidebar_icons"></i>
+                        <i className="iconly-Info-Square icli sidebar_icons"></i>
                       }
                     >
                       <span>POS</span>
                     </MenuItem>
                     <MenuItem
                       routerLink={<Link to="/orderlist" />}
-                      icon={<i className="fa-solid fa-shopping-bag"></i>}
+                      icon={<i className="iconly-Bag icli sidebar_icons"></i>}
                     >
                       <span>Orders</span>
                     </MenuItem>
@@ -478,7 +478,7 @@ export class Header extends Component {
 
                     <MenuItem
                       routerLink={<Link to="/crm" />}
-                      icon={<i className="fa-solid fa-bars-progress"></i>}
+                      icon={<i className="iconly-User3 icli sidebar_icons"></i>}
                     >
                       <span>CRM</span>
                     </MenuItem>

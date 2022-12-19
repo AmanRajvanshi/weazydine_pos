@@ -44,6 +44,10 @@ export class ViewTableOrder extends Component {
       modalVisible: false,
       swap_table_buttonLoading: false,
       clear_table_buttonLoading: false,
+      edit_quantity_modal: false,
+      edit_quantity_name: '',
+      edit_quantity_initial: '',
+      edit_cart_id: '',
       split_payment: [
         { amount: 0, method: 'Cash' },
         { amount: 0, method: 'Card' },
@@ -56,6 +60,7 @@ export class ViewTableOrder extends Component {
   componentDidMount() {
     this.orderDetails(this.props.id);
     this.fetch_table_vendors();
+    console.log(this.context.token);
   }
 
   orderDetails = (id) => {
@@ -289,6 +294,40 @@ export class ViewTableOrder extends Component {
     afterUrl += 'package=ru.a402d.rawbtprinter;end;';
     document.location = beforeUrl + encodeURI(url) + afterUrl;
     return false;
+  };
+
+  update_product_quantity = (quantity) => {
+    this.setState({ update_product_quantity_buttonLoading: true });
+    fetch(global.api + 'update_order_items_pos', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        item_id: this.state.edit_cart_id,
+        quantity: quantity,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          this.setState({ edit_quantity_modal: false });
+          this.orderDetails(this.props.id);
+          toast.success('Product Quantity Updated');
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ update_product_quantity_buttonLoading: false });
+      });
   };
 
   render() {
@@ -528,6 +567,17 @@ export class ViewTableOrder extends Component {
                                             style={{
                                               fontWeight: '600px',
                                               marginRight: '10px',
+                                              cursor: 'pointer',
+                                            }}
+                                            onClick={() => {
+                                              this.setState({
+                                                edit_quantity_modal: true,
+                                                edit_quantity_name:
+                                                  item.product.product_name,
+                                                edit_quantity_initial:
+                                                  item.product_quantity,
+                                                edit_cart_id: item.id,
+                                              });
                                             }}
                                           >
                                             {item.product.product_name}
@@ -1120,7 +1170,6 @@ export class ViewTableOrder extends Component {
             </div>
           </div>
         </Modal>
-
         <Modal
           open={this.state.splitModal}
           onClose={() => this.setState({ splitModal: false })}
@@ -1195,6 +1244,114 @@ export class ViewTableOrder extends Component {
                         </a>
                       )
                     )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+        <Modal
+          open={this.state.edit_quantity_modal}
+          onClose={() => this.setState({ edit_quantity_modal: false })}
+          center
+          classNames={{
+            modal: 'customModal',
+          }}
+        >
+          <div className="content">
+            <div className="page-header m-0 text-center">
+              <div className="page-title text-center">
+                <h5>
+                  Edit Quantity of :{' '}
+                  <span
+                    style={{
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    {this.state.edit_quantity_name}
+                  </span>
+                </h5>
+              </div>
+            </div>
+            <div className="card border-none">
+              <div className="card-body p-0 pt-4">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-lg-12 d-flex justify-content-between align-items-center py-4">
+                      <div className="row w-100">
+                        <div className="col-md-4">
+                          <a
+                            className="btn btn-primary mx-2 w-100"
+                            onClick={() => {
+                              this.setState({
+                                edit_quantity_initial:
+                                  this.state.edit_quantity_initial - 1,
+                              });
+                            }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </a>
+                        </div>
+                        <div className="col-md-4">
+                          <input
+                            type="text"
+                            className="text-center mx-2 form-control w-100"
+                            onChange={(e) => {
+                              this.setState({
+                                edit_quantity_initial: e.target.value,
+                              });
+                            }}
+                            value={this.state.edit_quantity_initial}
+                            readOnly
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <a
+                            className="btn btn-primary mx-2 w-100"
+                            onClick={() => {
+                              this.setState({
+                                edit_quantity_initial:
+                                  this.state.edit_quantity_initial + 1,
+                              });
+                            }}
+                          >
+                            <i className="fa-solid fa-add"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-12 d-flex justify-content-between align-items-center mt-2">
+                      <button
+                        className="btn btn-danger btn-sm me-2"
+                        onClick={() => {
+                          Swal.fire({
+                            title: 'Are you sure',
+                            text: 'You want to clear this item from order',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, clear it!',
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              this.update_product_quantity(0);
+                            }
+                          });
+                        }}
+                      >
+                        Clear {this.state.edit_quantity_name} from Order
+                      </button>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.update_product_quantity(
+                            this.state.edit_quantity_initial
+                          );
+                        }}
+                      >
+                        Update Quantity Of {this.state.edit_quantity_name}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
