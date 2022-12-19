@@ -53,10 +53,10 @@ import DataTable from './pages/DataTable.jsx';
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
-global.api = 'https://dine-api.weazy.in/api/';
+// global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
-// global.api = ' https://beta-dine-api.weazy.in/api/';
+global.api = ' https://beta-dine-api.weazy.in/api/';
 
 //for local
 // global.api = 'http://127.0.0.1:8000/api/';
@@ -123,8 +123,8 @@ export class App extends Component {
     window.Pusher = Pusher;
     window.Echo = new Echo({
       broadcaster: 'pusher',
-      key: '714d1999a24b68c8bf87', // for production
-      // key: 'b8ba8023ac2fc3612e90', //for testing
+      // key: '714d1999a24b68c8bf87', // for production
+      key: 'b8ba8023ac2fc3612e90', //for testing
       cluster: 'ap2',
       forceTLS: true,
       disableStats: true,

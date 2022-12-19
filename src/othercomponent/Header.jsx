@@ -380,7 +380,7 @@ export class Header extends Component {
                     </MenuItem>
                     <MenuItem
                       routerLink={<a href="/kot" target="_blank" />}
-                      icon={<i className="fa-solid fa-print"></i>}
+                      icon={<i className="iconly-More-Circle icli sidebar_icons"></i>}
                     >
                       <span>
                         Kitchen Display
@@ -389,17 +389,17 @@ export class Header extends Component {
                     </MenuItem>
                     <SubMenu
                       label="Catalogue"
-                      icon={<i className="fa-solid fa-boxes"></i>}
+                      icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                     >
                       <MenuItem
                         routerLink={<Link to="/productlist" />}
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>Product List</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/categorylist" />}
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>Category List</span>
                       </MenuItem>
@@ -407,29 +407,29 @@ export class Header extends Component {
 
                     <SubMenu
                       label="Inventory"
-                      icon={<i className="fa-solid fa-boxes"></i>}
+                      icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                     >
                       <MenuItem
                         routerLink={<Link to="/inventoryproducts" />}
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>Raw Materials</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/inventorycategory" />}
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>Raw Materials Category</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/stock_purchase" />}
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>Stock Purchase</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/releaseStock" />}
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>Stock Release</span>
                       </MenuItem>
@@ -437,7 +437,7 @@ export class Header extends Component {
                         routerLink={
                           <Link to="/semifinishedrawmaterialproducts" />
                         }
-                        icon={<i className="fa-solid fa-box"></i>}
+                        icon={<i className="iconly-Folder icli sidebar_icons"></i>}
                       >
                         <span>
                           Semi-Finished <br /> Raw Material Recipe
@@ -446,31 +446,31 @@ export class Header extends Component {
 
                       <MenuItem
                         routerLink={<Link to="/supliers" />}
-                        icon={<i className="fa-solid fa-user"></i>}
+                        icon={<i className="iconly-User2 icli sidebar_icons"></i>}
                       >
-                        <span>Supliers</span>
+                        <span>Suppliers</span>
                       </MenuItem>
                     </SubMenu>
 
                     <SubMenu
                       label="Reports"
-                      icon={<i className="fa-solid fa-chart-bar"></i>}
+                      icon={<i className="iconly-Graph icli sidebar_icons"></i>}
                     >
                       <MenuItem
                         routerLink={<Link to="/salesreport" />}
-                        icon={<i className="fa-solid fa-chart-bar"></i>}
+                        icon={<i className="iconly-Graph icli sidebar_icons"></i>}
                       >
                         <span>Transactions</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/orderreport" />}
-                        icon={<i className="fa-solid fa-chart-bar"></i>}
+                        icon={<i className="iconly-Graph icli sidebar_icons"></i>}
                       >
                         <span>Sales Report</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/productreport" />}
-                        icon={<i className="fa-solid fa-chart-bar"></i>}
+                        icon={<i className="iconly-Graph icli sidebar_icons"></i>}
                       >
                         <span>Product Report</span>
                       </MenuItem>
@@ -485,11 +485,11 @@ export class Header extends Component {
 
                     <SubMenu
                       label="Setup"
-                      icon={<i className="fa-solid fa-cog"></i>}
+                      icon={<i className="iconly-Setting icli sidebar_icons"></i>}
                     >
                       <MenuItem
                         routerLink={<Link to="/dineinlisting" />}
-                        icon={<i className="fa-solid fa-cog"></i>}
+                        icon={<i className="iconly-Setting icli sidebar_icons"></i>}
                       >
                         <span>
                           Dine In
@@ -499,7 +499,7 @@ export class Header extends Component {
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/pickuppoint" />}
-                        icon={<i className="fa-solid fa-cog"></i>}
+                        icon={<i className="iconly-Setting icli sidebar_icons"></i>}
                       >
                         <span>
                           Pickup Points
@@ -509,13 +509,13 @@ export class Header extends Component {
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/kitchens" />}
-                        icon={<i className="fa-solid fa-cog"></i>}
+                        icon={<i className="iconly-Setting icli sidebar_icons"></i>}
                       >
                         <span>Kitchens Management</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/editprofile" />}
-                        icon={<i className="fa-solid fa-cog"></i>}
+                        icon={<i className="iconly-Setting icli sidebar_icons"></i>}
                       >
                         <span>Store Profile</span>
                       </MenuItem>

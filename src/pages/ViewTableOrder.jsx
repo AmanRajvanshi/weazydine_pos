@@ -45,6 +45,7 @@ export class ViewTableOrder extends Component {
       swap_table_buttonLoading: false,
       clear_table_buttonLoading: false,
       edit_quantity_modal: false,
+      update_product_quantity_buttonLoading: false,
       edit_quantity_name: '',
       edit_quantity_initial: '',
       edit_cart_id: '',
@@ -1280,17 +1281,35 @@ export class ViewTableOrder extends Component {
                     <div className="col-lg-12 d-flex justify-content-between align-items-center py-4">
                       <div className="row w-100">
                         <div className="col-md-4">
-                          <a
-                            className="btn btn-primary mx-2 w-100"
-                            onClick={() => {
-                              this.setState({
-                                edit_quantity_initial:
-                                  this.state.edit_quantity_initial - 1,
-                              });
-                            }}
-                          >
-                            <i className="fa-solid fa-minus"></i>
-                          </a>
+                          {this.state.edit_quantity_initial == 1 ? (
+                            <a
+                              className="btn btn-primary mx-2 w-100"
+                              style={{
+                                pointerEvents: 'none',
+                                opacity: '0.8',
+                              }}
+                              onClick={() => {
+                                this.setState({
+                                  edit_quantity_initial:
+                                    this.state.edit_quantity_initial - 1,
+                                });
+                              }}
+                            >
+                              <i className="fa-solid fa-minus"></i>
+                            </a>
+                          ) : (
+                            <a
+                              className="btn btn-primary mx-2 w-100"
+                              onClick={() => {
+                                this.setState({
+                                  edit_quantity_initial:
+                                    this.state.edit_quantity_initial - 1,
+                                });
+                              }}
+                            >
+                              <i className="fa-solid fa-minus"></i>
+                            </a>
+                          )}
                         </div>
                         <div className="col-md-4">
                           <input
@@ -1321,36 +1340,68 @@ export class ViewTableOrder extends Component {
                       </div>
                     </div>
                     <div className="col-lg-12 d-flex justify-content-between align-items-center mt-2">
-                      <button
-                        className="btn btn-danger btn-sm me-2"
-                        onClick={() => {
-                          Swal.fire({
-                            title: 'Are you sure',
-                            text: 'You want to clear this item from order',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, clear it!',
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              this.update_product_quantity(0);
-                            }
-                          });
-                        }}
-                      >
-                        Clear {this.state.edit_quantity_name} from Order
-                      </button>
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          this.update_product_quantity(
-                            this.state.edit_quantity_initial
-                          );
-                        }}
-                      >
-                        Update Quantity Of {this.state.edit_quantity_name}
-                      </button>
+                      {this.state.update_product_quantity_buttonLoading ? (
+                        <button
+                          className="btn btn-danger btn-sm me-2"
+                          style={{
+                            pointerEvents: 'none',
+                            opacity: '0.8',
+                          }}
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Please wait
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-danger btn-sm me-2"
+                          onClick={() => {
+                            Swal.fire({
+                              title: 'Are you sure',
+                              text: 'You want to clear this item from order',
+                              icon: 'warning',
+                              showCancelButton: true,
+                              confirmButtonColor: '#3085d6',
+                              cancelButtonColor: '#d33',
+                              confirmButtonText: 'Yes, clear it!',
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                this.update_product_quantity(0);
+                              }
+                            });
+                          }}
+                        >
+                          Clear {this.state.edit_quantity_name} from Order
+                        </button>
+                      )}
+                      {this.state.update_product_quantity_buttonLoading ? (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          style={{
+                            pointerEvents: 'none',
+                            opacity: '0.8',
+                          }}
+                        >
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Please wait
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => {
+                            this.update_product_quantity(
+                              this.state.edit_quantity_initial
+                            );
+                          }}
+                        >
+                          Update Quantity Of {this.state.edit_quantity_name}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
