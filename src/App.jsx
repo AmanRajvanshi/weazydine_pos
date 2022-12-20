@@ -22,7 +22,7 @@ import DineinList from './pages/DineinList.jsx';
 import Inventorycategory from './pages/Inventorycategory.jsx';
 import Inventoryproducts from './pages/Inventoryproducts.jsx';
 import Releaseinventory from './pages/Releaseinventory.jsx';
-import Crm from './pages/Crm.jsx';
+import Customers from './pages/Customers.jsx';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import OneSignal from 'react-onesignal';
@@ -50,6 +50,8 @@ import Semifinishedrawmaterialproductsdetails from './pages/Semifinishedrawmater
 import KitchenProducts from './pages/KitchenProducts.jsx';
 import DataTable from './pages/DataTable.jsx';
 import UpdateProductRecipe from './pages/UpdateProductRecipe.jsx';
+import ProductRecipe from './pages/ProductRecipe.jsx';
+import ComingSoon from './pages/ComingSoon.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -60,7 +62,7 @@ OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 global.api = ' https://beta-dine-api.weazy.in/api/';
 
 //for local
-// global.api = 'http://127.0.0.1:8000/api/';
+// global.api = 'http://192.168.1.33:8000/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -416,10 +418,10 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/crm"
+              path="/customers"
               element={
                 <RequireAuth>
-                  <Crm />
+                  <Customers />
                 </RequireAuth>
               }
             />
@@ -533,10 +535,28 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/updateproductrecipe"
+              path="/productrecipe"
+              element={
+                <RequireAuth>
+                  <ProductRecipe />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/updateproductrecipe/:id"
               element={
                 <RequireAuth>
                   <UpdateProductRecipe />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/comingsoon"
+              element={
+                <RequireAuth>
+                  <ComingSoon />
                 </RequireAuth>
               }
             />

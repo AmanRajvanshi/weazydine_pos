@@ -25,6 +25,8 @@ export class UpdateProductRecipe extends Component {
       new_category_name: '',
       category: [],
       products: [],
+      semifinishedrecipe: [],
+      rawmaterial: [],
       product_show: true,
       product_id: 0,
       name: '',
@@ -36,7 +38,16 @@ export class UpdateProductRecipe extends Component {
       is_veg: 1,
       save_and_continue: false,
       add_category_loading: false,
-      rows: [
+      rowsRaw: [
+        {
+          id: 1,
+          name: '',
+          quantity: '',
+          Unit: '',
+          material_id: '',
+        },
+      ],
+      rowsSemi: [
         {
           id: 1,
           name: '',
@@ -50,10 +61,45 @@ export class UpdateProductRecipe extends Component {
   }
 
   componentDidMount() {
-    this.fetchProducts();
+    this.fetchSemiFinishedRecipe();
+    this.fetchRawMaterial();
   }
 
-  fetchProducts = (id, page) => {
+  fetchSemiFinishedRecipe = (page) => {
+    fetch(global.api + 'fetch_semi_dishes', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        page: page,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          if (page == 1) {
+            this.setState({ semifinishedrecipe: [] });
+          }
+        } else {
+          if (json.data.length > 0) {
+            this.setState({ semifinishedrecipe: json.data });
+          }
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ isloading: false });
+      });
+  };
+
+  fetchRawMaterial = (id, page) => {
     fetch(global.api + 'fetch_inventory_products', {
       method: 'POST',
       headers: {
@@ -71,11 +117,13 @@ export class UpdateProductRecipe extends Component {
         if (!json.status) {
           var msg = json.msg;
           if (page == 1) {
-            this.setState({ products: [] });
+            this.setState({ rawmaterial: [] });
           }
         } else {
           if (json.data.data.length > 0) {
-            this.setState({ products: json.data.data });
+            this.setState({ rawmaterial: json.data.data });
+          } else {
+            this.setState({ rawmaterial: [] });
           }
         }
         return json;
@@ -88,8 +136,9 @@ export class UpdateProductRecipe extends Component {
       });
   };
 
-  handleChange = (idx) => (e) => {
-    const newRows = [...this.state.rows];
+
+  handleChangeRaw = (idx) => (e) => {
+    const newRows = [...this.state.rowsRaw];
 
     if (e.target.name == 'material_id') {
       var index = e.target.selectedIndex;
@@ -100,9 +149,27 @@ export class UpdateProductRecipe extends Component {
 
     newRows[idx][e.target.name] = e.target.value;
 
-    this.setState({ rows: newRows });
+    this.setState({ rowsRaw: newRows });
   };
-  handleAddRow = () => {
+
+
+  handleChangeSemi = (idx) => (e) => {
+    const newRows = [...this.state.rowsSemi];
+
+    if (e.target.name == 'material_id') {
+      var index = e.target.selectedIndex;
+      var optionElement = e.target.childNodes[index];
+      var option = optionElement.getAttribute('unit1');
+      newRows[idx]['unit1'] = option;
+    }
+
+    newRows[idx][e.target.name] = e.target.value;
+
+    this.setState({ rowsSemi: newRows });
+  };
+
+
+  handleAddRowRawMaterial = () => {
     const vari = [
       {
         id: 1,
@@ -111,13 +178,35 @@ export class UpdateProductRecipe extends Component {
         Unit: '',
       },
     ];
-    this.setState({ rows: [...this.state.rows, ...vari] });
+    this.setState({ rowsRaw: [...this.state.rowsRaw, ...vari] });
   };
-  handleRemoveSpecificRow = (idx) => () => {
-    const rows = [...this.state.rows];
-    rows.splice(idx, 1);
-    this.setState({ rows });
+
+
+  handleAddRowSemiFinished = () => {
+    const vari = [
+      {
+        id: 1,
+        name: '',
+        quantity: '',
+        Unit1: '',
+      },
+    ];
+    this.setState({ rowsSemi: [...this.state.rowsSemi, ...vari] });
   };
+
+  handleRemoveSpecificRowRaw = (idx) => () => {
+    const rowsRaw = [...this.state.rowsRaw];
+    rowsRaw.splice(idx, 1);
+    this.setState({ rowsRaw });
+  };
+
+  handleRemoveSpecificRowSemi = (idx) => () => {
+    const rowsSemi = [...this.state.rowsSemi];
+    rowsSemi.splice(idx, 1);
+    this.setState({ rowsSemi });
+  };
+
+
   render() {
     return (
       <>
@@ -127,11 +216,8 @@ export class UpdateProductRecipe extends Component {
             {/* {this.state.product_show ? ( */}
             <div className="content">
               <div className="page-header">
-                <div className="page-title w-100 d-flex align-items-center justify-content-between">
-                  <h4>Product Recipe</h4>
-                  <div>
-                    Live Inventory <Toggle />
-                  </div>
+                <div className="page-title">
+                  <h4>Update Product Recipe</h4>
                 </div>
               </div>
               {this.state.is_loding ? (
@@ -158,41 +244,19 @@ export class UpdateProductRecipe extends Component {
                       <div className="col-lg-6">
                         <div className="form-group">
                           <label>Product</label>
-                          <select
-                            className="form-control"
-                            name="material_id"
-                            onChange={this.handleChange(0)}
-                          >
-                            <option value="">Select Product</option>
-                            {this.state.products.map((item, key) => (
-                              <option value={item.id} unit={item.unit}>
-                                {item.name}
-                              </option>
-                            ))}
-                          </select>
+                          <label>Product</label>
                         </div>
                       </div>
                       <div className="col-lg-6">
                         <div className="form-group">
+                          <label>Variant</label>
                           <label>Quantity</label>
-                          <select
-                            className="form-control"
-                            name="material_id"
-                            onChange={this.handleChange(0)}
-                          >
-                            <option value="">Select Quantity</option>
-                            {this.state.products.map((item, key) => (
-                              <option value={item.id} unit={item.unit}>
-                                {item.name}
-                              </option>
-                            ))}
-                          </select>
                         </div>
                       </div>
                     </div>
                     <div className="row">
-                      <h5>Select Semi-Finished Products</h5>
-                      {this.state.rows.length > 0 ? (
+                      <h5>Select Raw Materials</h5>
+                      {this.state.rowsRaw.length > 0 ? (
                         <div className="col-lg-12">
                           <br />
                           <table
@@ -213,18 +277,18 @@ export class UpdateProductRecipe extends Component {
                               </tr>
                             </thead>
                             <tbody>
-                              {this.state.rows.map((item, idx) => (
+                              {this.state.rowsRaw.map((item, idx) => (
                                 <tr id="addr0" key={idx}>
                                   <td>{idx + 1}</td>
                                   <td>
                                     <select
-                                      onChange={this.handleChange(idx)}
+                                      onChange={this.handleChangeRaw(idx)}
                                       className="select-container"
                                       name="material_id"
                                     >
                                       <option>Choose Material</option>
-                                      {this.state.products.length > 0 ? (
-                                        this.state.products.map(
+                                      {this.state.rawmaterial.length > 0 ? (
+                                        this.state.rawmaterial.map(
                                           (item, index) => (
                                             <option
                                               value={item.id}
@@ -246,8 +310,8 @@ export class UpdateProductRecipe extends Component {
                                     <input
                                       type="text"
                                       name="unit"
-                                      value={this.state.rows[idx].unit}
-                                      onChange={this.handleChange(idx)}
+                                      value={this.state.rowsRaw[idx].unit}
+                                      onChange={this.handleChangeRaw(idx)}
                                       className="form-control"
                                     />
                                   </td>
@@ -256,9 +320,9 @@ export class UpdateProductRecipe extends Component {
                                       type="text"
                                       name="quantity"
                                       value={
-                                        this.state.rows[idx].current_quantity
+                                        this.state.rowsRaw[idx].current_quantity
                                       }
-                                      onChange={this.handleChange(idx)}
+                                      onChange={this.handleChangeRaw(idx)}
                                       className="form-control"
                                     />
                                   </td>
@@ -266,7 +330,7 @@ export class UpdateProductRecipe extends Component {
                                   <td className="text-end">
                                     <button
                                       className="btn btn-outline-danger btn-sm"
-                                      onClick={this.handleRemoveSpecificRow(
+                                      onClick={this.handleRemoveSpecificRowRaw(
                                         idx
                                       )}
                                     >
@@ -284,7 +348,7 @@ export class UpdateProductRecipe extends Component {
                             }}
                           >
                             <button
-                              onClick={this.handleAddRow}
+                              onClick={this.handleAddRowRawMaterial}
                               className="btn btn-outline-secondary"
                               style={{
                                 marginBottom: '20px',
@@ -303,7 +367,7 @@ export class UpdateProductRecipe extends Component {
                           }}
                         >
                           <button
-                            onClick={this.handleAddRow}
+                            onClick={this.handleAddRowRawMaterial}
                             className="btn btn-sm btn-outline-secondary"
                             style={{
                               marginBottom: '20px',
@@ -316,8 +380,8 @@ export class UpdateProductRecipe extends Component {
                       )}
                     </div>
                     <div className="row">
-                      <h5>Select Raw Materials</h5>
-                      {this.state.rows.length > 0 ? (
+                      <h5>Select Semi-Finished Products</h5>
+                      {this.state.rowsSemi.length > 0 ? (
                         <div className="col-lg-12">
                           <br />
                           <table
@@ -338,27 +402,28 @@ export class UpdateProductRecipe extends Component {
                               </tr>
                             </thead>
                             <tbody>
-                              {this.state.rows.map((item, idx) => (
+                              {this.state.rowsSemi.map((item, idx) => (
                                 <tr id="addr0" key={idx}>
                                   <td>{idx + 1}</td>
                                   <td>
                                     <select
-                                      onChange={this.handleChange(idx)}
+                                      onChange={this.handleChangeSemi(idx)}
                                       className="select-container"
                                       name="material_id"
                                     >
                                       <option>Choose Material</option>
-                                      {this.state.products.length > 0 ? (
-                                        this.state.products.map(
+                                      {this.state.semifinishedrecipe.length >
+                                      0 ? (
+                                        this.state.semifinishedrecipe.map(
                                           (item, index) => (
                                             <option
                                               value={item.id}
-                                              unit={item.purchase_unit}
+                                              unit1={item.recipe_quantity}
                                               current_quantity={
                                                 item.current_stock
                                               }
                                             >
-                                              {item.inventory_product_name}
+                                              {item.dish_name}
                                             </option>
                                           )
                                         )
@@ -371,8 +436,8 @@ export class UpdateProductRecipe extends Component {
                                     <input
                                       type="text"
                                       name="unit"
-                                      value={this.state.rows[idx].unit}
-                                      onChange={this.handleChange(idx)}
+                                      value={this.state.rowsSemi[idx].unit1}
+                                      onChange={this.handleChangeSemi(idx)}
                                       className="form-control"
                                     />
                                   </td>
@@ -381,9 +446,9 @@ export class UpdateProductRecipe extends Component {
                                       type="text"
                                       name="quantity"
                                       value={
-                                        this.state.rows[idx].current_quantity
+                                        this.state.rowsSemi[idx].current_quantity
                                       }
-                                      onChange={this.handleChange(idx)}
+                                      onChange={this.handleChangeSemi(idx)}
                                       className="form-control"
                                     />
                                   </td>
@@ -391,7 +456,7 @@ export class UpdateProductRecipe extends Component {
                                   <td className="text-end">
                                     <button
                                       className="btn btn-outline-danger btn-sm"
-                                      onClick={this.handleRemoveSpecificRow(
+                                      onClick={this.handleRemoveSpecificRowSemi(
                                         idx
                                       )}
                                     >
@@ -409,7 +474,7 @@ export class UpdateProductRecipe extends Component {
                             }}
                           >
                             <button
-                              onClick={this.handleAddRow}
+                              onClick={this.handleAddRowSemiFinished}
                               className="btn btn-outline-secondary"
                               style={{
                                 marginBottom: '20px',
@@ -428,7 +493,7 @@ export class UpdateProductRecipe extends Component {
                           }}
                         >
                           <button
-                            onClick={this.handleAddRow}
+                            onClick={this.handleAddRowSemiFinished}
                             className="btn btn-sm btn-outline-secondary"
                             style={{
                               marginBottom: '20px',

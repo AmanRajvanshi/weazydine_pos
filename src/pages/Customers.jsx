@@ -8,7 +8,7 @@ import moment from "moment";
 import no_order from "../assets/images/no_orders.webp";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 
-class Crm extends Component {
+class Customers extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -283,4 +283,4 @@ class Crm extends Component {
   }
 }
 
-export default Crm;
+export default Customers;

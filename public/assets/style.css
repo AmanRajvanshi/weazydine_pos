@@ -640,7 +640,7 @@ h6 {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 14px;
   color: #1a181e;
   line-height: 1.5;
@@ -9073,11 +9073,13 @@ span.select-container.select-container--default.select-container--open {
 
 .react-responsive-modal-modal {
   width: 600px;
+  animation-fill-mode: forwards !important;
 }
 
 @media only screen and (max-width: 600px) {
   .react-responsive-modal-modal {
     width: auto;
+    animation-fill-mode: forwards !important;
   }
 }
 
@@ -9455,4 +9457,26 @@ span.select-container.select-container--default.select-container--open {
 
 .sidebar_icons {
   font-size: 25px;
+}
+
+.coming_soon_timings {
+  margin: 20px;
+  font-size: 3.5em;
+  font-weight: 300;
+  line-height: 2em;
+  text-align: center;
+  height: 80px;
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border-style: dashed;
+  border-color: #5bc2c1;
+  border-width: 2px;
+}
+
+.react-responsive-modal-overlay,
+.react-responsive-modal-container {
+  animation-fill-mode: forwards !important;
 }

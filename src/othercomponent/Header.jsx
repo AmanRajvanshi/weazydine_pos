@@ -435,7 +435,10 @@ export class Header extends Component {
                           <i className="iconly-Folder icli sidebar_icons"></i>
                         }
                       >
-                        <span>Raw Materials Category</span>
+                        <span>
+                          Raw Materials
+                          <br /> Category
+                        </span>
                       </MenuItem>
                       <MenuItem
                         routerLink={<Link to="/stock_purchase" />}
@@ -459,9 +462,7 @@ export class Header extends Component {
                           <i className="iconly-Folder icli sidebar_icons"></i>
                         }
                       >
-                        <span>
-                          Product Recipe
-                        </span>
+                        <span>Product Recipe</span>
                       </MenuItem>
                       <MenuItem
                         routerLink={
@@ -516,11 +517,66 @@ export class Header extends Component {
                       </MenuItem>
                     </SubMenu>
 
-                    <MenuItem
-                      routerLink={<Link to="/crm" />}
+                    <SubMenu
+                      label="CRM"
                       icon={<i className="iconly-User3 icli sidebar_icons"></i>}
                     >
-                      <span>CRM</span>
+                      <MenuItem
+                        routerLink={<Link to="/customers" />}
+                        icon={
+                          <i className="iconly-User2 icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>Customers</span>
+                      </MenuItem>
+                      <MenuItem
+                        routerLink={<Link to="/comingsoon" />}
+                        icon={
+                          <i className="iconly-Category icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>Campaigns</span>
+                      </MenuItem>
+                      <MenuItem
+                        routerLink={<Link to="/comingsoon" />}
+                        icon={
+                          <i className="iconly-Heart icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>
+                          Customer <br />
+                          Feedback
+                        </span>
+                      </MenuItem>
+                      <MenuItem
+                        routerLink={<Link to="/comingsoon" />}
+                        icon={
+                          <i className="iconly-Lock icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>
+                          Branded Loyalty <br />
+                          Program
+                        </span>
+                      </MenuItem>
+                      <MenuItem
+                        routerLink={<Link to="/comingsoon" />}
+                        icon={
+                          <i className="iconly-Filter icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>
+                          Customer <br />
+                          Insights
+                        </span>
+                      </MenuItem>
+                    </SubMenu>
+
+                    <MenuItem
+                      routerLink={<Link to="/comingsoon" />}
+                      icon={<i className="iconly-Bag icli sidebar_icons"></i>}
+                    >
+                      <span>Offers</span>
                     </MenuItem>
 
                     <SubMenu
@@ -573,6 +629,13 @@ export class Header extends Component {
                         <span>Store Profile</span>
                       </MenuItem>
                     </SubMenu>
+
+                    <MenuItem
+                      routerLink={<Link to="/comingsoon" />}
+                      icon={<i className="iconly-Video icli sidebar_icons"></i>}
+                    >
+                      <span>Learning Center</span>
+                    </MenuItem>
                   </Menu>
                 </Sidebar>
               </div>

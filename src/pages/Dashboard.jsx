@@ -16,7 +16,15 @@ export class Dashboard extends Component {
     this.state = {
       data: [],
       isloading: true,
-      item: { total_earnning: 0, orders: 0, shop_visit: 0, customer: 0 },
+      item: {
+        total_earnning: 0,
+        orders: 0,
+        shop_visit: 0,
+        customer: 0,
+        cashsale: 0,
+        online: 0,
+        weazypay: 0,
+      },
       orders: [],
       isOpen: false,
       from: new Date(),

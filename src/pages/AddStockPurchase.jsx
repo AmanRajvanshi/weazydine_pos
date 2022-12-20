@@ -796,6 +796,7 @@ export class AddStockPurchase extends Component {
                       <label>Supplier Contact</label>
                       <input
                         type="text"
+                        maxLength={10}
                         onChange={(e) => {
                           this.setState({ contact: e.target.value });
                         }}

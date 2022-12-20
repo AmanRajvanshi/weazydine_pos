@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 import PrintKot from '../component/PrintKot';
 import PrintReceipt from '../component/PrintReceipt';
 import ReactToPrint from 'react-to-print';
+import Skeleton from 'react-loading-skeleton';
+import Skeletonloader from '../othercomponent/Skeletonloader';
 export class ViewTableOrder extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -55,6 +57,9 @@ export class ViewTableOrder extends Component {
         { amount: 0, method: 'UPI' },
       ],
       split_total: 0,
+      percentageDiscount: true,
+      price_loading: false,
+      discountAmount: '',
     };
   }
 
@@ -90,6 +95,7 @@ export class ViewTableOrder extends Component {
             table_data: json.data[0].table,
             total_amount: json.data[0].total_amount,
             order_code: json.data[0].order_code,
+            discountAmount: json.data[0].discount,
           });
         }
       })
@@ -97,8 +103,8 @@ export class ViewTableOrder extends Component {
       .finally(() => {});
   };
 
-  genrate_bill = () => {
-    this.setState({ generate_order_buttonLoading: true });
+  genrate_bill = (discount, type) => {
+    this.setState({ generate_order_buttonLoading: true, price_loading: true });
     fetch(global.api + 'generate_bill_by_table', {
       method: 'POST',
       headers: {
@@ -109,6 +115,8 @@ export class ViewTableOrder extends Component {
       body: JSON.stringify({
         table_id: this.props.id,
         order_id: this.state.order_code,
+        discount_type: type ? 'percentage' : 'fixed',
+        discount: discount,
       }),
     })
       .then((response) => response.json())
@@ -117,10 +125,14 @@ export class ViewTableOrder extends Component {
           var msg = json.msg;
         } else {
           if (json.data.length > 0) {
-            this.setState({ bill: json.data });
+            this.setState({
+              bill: json.data,
+              total_amount: json.data[0].total_amount,
+              data: json.data[0],
+            });
+            console.log(json.data);
             // this.setState({ cart: json.data.cart });
           }
-          this.setState({ generateBillModal: true });
         }
         return json;
       })
@@ -128,7 +140,10 @@ export class ViewTableOrder extends Component {
         console.error(error);
       })
       .finally(() => {
-        this.setState({ generate_order_buttonLoading: false });
+        this.setState({
+          generate_order_buttonLoading: false,
+          price_loading: false,
+        });
       });
   };
 
@@ -458,31 +473,6 @@ export class ViewTableOrder extends Component {
                                 )}
                               </h6>
                             </div>
-                            {this.state.generate_order_buttonLoading ? (
-                              <button
-                                className="btn btn-primary btn-sm"
-                                style={{
-                                  pointerEvents: 'none',
-                                  opacity: '0.8',
-                                }}
-                              >
-                                <span
-                                  class="spinner-border spinner-border-sm me-2"
-                                  role="status"
-                                ></span>
-                                Generating Bill
-                              </button>
-                            ) : (
-                              <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => {
-                                  this.genrate_bill();
-                                }}
-                              >
-                                <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                                Generate Bill
-                              </button>
-                            )}
                           </div>
                           <div className="card-body">
                             <h5 className="card-title">
@@ -491,48 +481,6 @@ export class ViewTableOrder extends Component {
                             </h5>
                             <div className="row">
                               <div className="col-md-12">
-                                {/* {this.state.cart.map((values) => {
-                              return (
-                                <div>
-                                  <div className="single_order_product_text my-2">
-                                    <p className="single_order_product_text">
-                                      {values.product.product_name}
-                                    </p>
-                                    {values.variant != "null" && (
-                                      <p className="single_order_product_text">
-                                        <strong>Variant: </strong>
-                                        {values.variant.variants_name}
-                                      </p>
-                                    )}
-                                    {values.addons.length > 0 && (
-                                      <>
-                                        {values.addons.map((value) => {
-                                          return (
-                                            <p className="single_order_product_text">
-                                              <strong>Addon:</strong>{" "}
-                                              {value.addon_name}
-                                            </p>
-                                          );
-                                        })}
-                                      </>
-                                    )}
-                                    <p className="single_order_product_text">
-                                      <span className="single_product_qty">
-                                        {values.product_quantity}
-                                      </span>{" "}
-                                      x <BiRupee />
-                                      {values.product_price} =
-                                      <span className="single_product_total">
-                                        <BiRupee />
-                                        {values.product_price *
-                                          values.product_quantity}
-                                      </span>
-                                    </p>
-                                  </div>
-                                </div>
-                              );
-                            })} */}
-
                                 <section
                                   className="item-section"
                                   style={{
@@ -623,85 +571,190 @@ export class ViewTableOrder extends Component {
                             </div>
                           </div>
                           <div className="card-footer text-muted">
-                            <div className="row">
-                              <div className="col-md-6">Item Total</div>
-                              <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
-                                <div className="d-flex align-items-center">
-                                  <BiRupee />
-                                  {this.state.data.order_amount}
-                                </div>
-                              </div>
-                            </div>
-                            {this.state.data.cgst > 0 ||
-                            this.state.data.sgst > 0 ? (
-                              <div className="row">
-                                <div
-                                  className="col-md-6"
-                                  style={{
-                                    color: '#28c76f',
-                                    margin: '10px 0px 0px',
-                                  }}
-                                >
-                                  Taxes and other Charges
-                                </div>
-                                <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
-                                  <div
-                                    className="d-flex align-items-center"
-                                    style={{
-                                      color: '#28c76f',
-                                      margin: '10px 0px 0px',
-                                    }}
-                                  >
-                                    <BiRupee />
-                                    {this.state.data.cgst +
-                                      this.state.data.sgst}
-                                  </div>
-                                </div>
-                              </div>
+                            {this.state.price_loading ? (
+                              <Skeletonloader height={24} count={4} />
                             ) : (
-                              <></>
-                            )}
-                            {this.state.data.order_discount > 0 && (
-                              <div className="row">
-                                <div
-                                  className="col-md-6"
-                                  style={{
-                                    color: '#ff0000',
-                                    margin: '10px 0px 0px',
-                                  }}
-                                >
-                                  Discount
-                                </div>
-                                <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
-                                  <div
-                                    className="d-flex align-items-center"
-                                    style={{
-                                      color: '#ff0000',
-                                      margin: '10px 0px 0px',
-                                    }}
-                                  >
-                                    <BiRupee />
-                                    {this.state.data.order_discount}
+                              <>
+                                <div className="row">
+                                  <div className="col-md-6">Item Total</div>
+                                  <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
+                                    <div className="d-flex align-items-center">
+                                      <BiRupee />
+                                      {this.state.data.order_amount}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                            <div className="row">
-                              <div className="col-md-6 grand_total">
-                                Grand Total
-                              </div>
-                              <div className="col-md-6 d-flex align-items-start justify-content-end">
-                                <div className="d-flex align-items-center grand_total">
-                                  <BiRupee />
-                                  {this.state.data.total_amount}
+                                {this.state.data.cgst > 0 ||
+                                this.state.data.sgst > 0 ? (
+                                  <div className="row">
+                                    <div
+                                      className="col-md-6"
+                                      style={{
+                                        color: '#28c76f',
+                                        margin: '10px 0px 0px',
+                                      }}
+                                    >
+                                      Taxes and other Charges
+                                    </div>
+                                    <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
+                                      <div
+                                        className="d-flex align-items-center"
+                                        style={{
+                                          color: '#28c76f',
+                                          margin: '10px 0px 0px',
+                                        }}
+                                      >
+                                        <BiRupee />
+                                        {this.state.data.cgst +
+                                          this.state.data.sgst}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <></>
+                                )}
+                                {this.state.data.order_discount > 0 && (
+                                  <div className="row">
+                                    <div
+                                      className="col-md-6"
+                                      style={{
+                                        color: '#ff0000',
+                                        margin: '10px 0px 0px',
+                                      }}
+                                    >
+                                      Discount
+                                    </div>
+                                    <div className="col-md-6 d-flex align-items-start justify-content-end item_total">
+                                      <div
+                                        className="d-flex align-items-center"
+                                        style={{
+                                          color: '#ff0000',
+                                          margin: '10px 0px 0px',
+                                        }}
+                                      >
+                                        <BiRupee />
+                                        {this.state.data.order_discount}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="row">
+                                  <div className="col-md-6 grand_total">
+                                    Grand Total
+                                  </div>
+                                  <div className="col-md-6 d-flex align-items-start justify-content-end">
+                                    <div className="d-flex align-items-center grand_total">
+                                      <BiRupee />
+                                      {this.state.data.total_amount}
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
+                              </>
+                            )}
                           </div>
                         </div>
                         {/* user details */}
                       </div>
                       <div className="col-4">
+                        <h5>Discount</h5>
+                        <div className="row d-flex align-items-center mb-2">
+                          <div className="col-lg-7">
+                            <div className="row">
+                              <div className="col-lg-6">
+                                <button
+                                  className={
+                                    this.state.percentageDiscount
+                                      ? 'btn btn-primary btn-sm'
+                                      : 'btn btn-outline btn-sm'
+                                  }
+                                  onClick={() => {
+                                    this.setState({
+                                      percentageDiscount:
+                                        !this.state.percentageDiscount,
+                                    });
+                                    if (this.state.discountAmount > 0) {
+                                      this.genrate_bill(
+                                        this.state.discountAmount,
+                                        true
+                                      );
+                                    }
+                                  }}
+                                >
+                                  Percentage
+                                </button>
+                              </div>
+                              <div className="col-lg-6">
+                                <button
+                                  className={
+                                    this.state.percentageDiscount
+                                      ? 'btn btn-outline btn-sm'
+                                      : 'btn btn-primary btn-sm'
+                                  }
+                                  onClick={() => {
+                                    this.setState({
+                                      percentageDiscount:
+                                        !this.state.percentageDiscount,
+                                    });
+                                    if (this.state.discountAmount > 0) {
+                                      this.genrate_bill(
+                                        this.state.discountAmount,
+                                        false
+                                      );
+                                    }
+                                  }}
+                                >
+                                  Fixed
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-lg-5">
+                            <div className="form-group m-0">
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Value"
+                                onChange={(e) => {
+                                  this.setState({
+                                    discountAmount: e.target.value,
+                                  });
+                                  this.genrate_bill(
+                                    e.target.value,
+                                    this.state.percentageDiscount
+                                  );
+                                }}
+                                value={this.state.discountAmount}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-end mb-3">
+                          {this.state.generate_order_buttonLoading ? (
+                            <button
+                              className="btn btn-primary btn-sm w-100"
+                              style={{
+                                pointerEvents: 'none',
+                                opacity: '0.8',
+                              }}
+                            >
+                              <span
+                                class="spinner-border spinner-border-sm me-2"
+                                role="status"
+                              ></span>
+                              Generating Bill
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-primary btn-sm w-100"
+                              onClick={() => {
+                                this.setState({ generateBillModal: true });
+                              }}
+                            >
+                              <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                              Generate Bill
+                            </button>
+                          )}
+                        </div>
                         <div className="card flex-fill bg-white">
                           <div className="card-header order_details">
                             <div className=" d-flex align-items-center justify-content-between">
@@ -1065,69 +1118,72 @@ export class ViewTableOrder extends Component {
             <div className="page-header m-0 text-center">
               <div className="page-title text-center">
                 <h4>Generating Bill</h4>
-                <p>
-                  Total Bill Amount - <BiRupee /> {this.state.total_amount}
-                </p>
               </div>
             </div>
             <div className="card border-none">
               <div className="card-body p-0 pt-4">
                 <div className="row">
                   <div className="col-lg-12">
-                    <div className="form-group">
-                      {/* <label>VEG/NON-VEG</label> */}
-                      <div>
-                        <RadioGroup
-                          onChange={(value) => {
-                            this.setState({ payment: value });
-                          }}
-                          value={this.state.payment}
-                        >
-                          <RadioButton
-                            value="UPI"
-                            pointColor="#5BC2C1"
-                            iconSize={20}
-                            rootColor="#f3c783"
-                            iconInnerSize={10}
-                            padding={10}
-                          >
-                            Google Pay/Paytm/UPI
-                          </RadioButton>
-                          <RadioButton
-                            value="Card"
-                            pointColor="#5BC2C1"
-                            iconSize={20}
-                            rootColor="#f3c783"
-                            iconInnerSize={10}
-                            padding={10}
-                          >
-                            Credit/Debit Card
-                          </RadioButton>
-                          <RadioButton
-                            value="Cash"
-                            pointColor="#5BC2C1"
-                            iconSize={20}
-                            rootColor="#f3c783"
-                            iconInnerSize={10}
-                            padding={10}
-                          >
-                            Cash
-                          </RadioButton>
-                          <RadioButton
-                            value="split"
-                            pointColor="#5BC2C1"
-                            iconSize={20}
-                            rootColor="#f3c783"
-                            iconInnerSize={10}
-                            padding={10}
-                          >
-                            Split Payment
-                          </RadioButton>
-                        </RadioGroup>
+                    <RadioGroup
+                      onChange={(value) => {
+                        this.setState({ payment: value });
+                      }}
+                      value={this.state.payment}
+                    >
+                      <RadioButton
+                        value="UPI"
+                        pointColor="#5BC2C1"
+                        iconSize={20}
+                        rootColor="#f3c783"
+                        iconInnerSize={10}
+                        padding={10}
+                      >
+                        Google Pay/Paytm/UPI
+                      </RadioButton>
+                      <RadioButton
+                        value="Card"
+                        pointColor="#5BC2C1"
+                        iconSize={20}
+                        rootColor="#f3c783"
+                        iconInnerSize={10}
+                        padding={10}
+                      >
+                        Credit/Debit Card
+                      </RadioButton>
+                      <RadioButton
+                        value="Cash"
+                        pointColor="#5BC2C1"
+                        iconSize={20}
+                        rootColor="#f3c783"
+                        iconInnerSize={10}
+                        padding={10}
+                      >
+                        Cash
+                      </RadioButton>
+                      <RadioButton
+                        value="split"
+                        pointColor="#5BC2C1"
+                        iconSize={20}
+                        rootColor="#f3c783"
+                        iconInnerSize={10}
+                        padding={10}
+                      >
+                        Split Payment
+                      </RadioButton>
+                    </RadioGroup>
+                  </div>
+                  <div className="col-md-6 d-flex justify-content-start align-items-center">
+                    <div className="row w-100">
+                      <div className="col-md-6 grand_total">Grand Total</div>
+                      <div className="col-md-6 d-flex align-items-start justify-content-end">
+                        <div className="d-flex align-items-center grand_total">
+                          <BiRupee />
+                          {this.state.data.total_amount}
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-12 d-flex justify-content-end">
+                  <div className="col-lg-6 d-flex justify-content-end align-items-center mt-2">
                     {this.state.mark_complete_buttonLoading ? (
                       <button
                         className="btn btn-primary btn-sm"

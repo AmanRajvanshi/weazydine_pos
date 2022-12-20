@@ -425,7 +425,7 @@ export class Orderdetails extends Component {
                             </h6>
                           )}
                         </div>
-                        <div>
+                        {/* <div>
                           {this.state.data.order_type != 'TakeAway' &&
                             this.state.data.order_type != 'Delivery' &&
                             this.state.data.order_status != 'completed' &&
@@ -455,7 +455,7 @@ export class Orderdetails extends Component {
                                 Generate Bill
                               </button>
                             ))}
-                        </div>
+                        </div> */}
                       </div>
                       <div className="card-body">
                         <h5 className="card-title">
