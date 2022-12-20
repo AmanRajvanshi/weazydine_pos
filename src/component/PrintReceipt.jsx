@@ -60,14 +60,38 @@ export class PrintReceipt extends Component {
         {/* <!-- End InvoiceTop --> */}
         <div id="mid">
           <div class="info">
-            {this.props.order.vendor.address != null ? (
-              <p>
+            <p
+              style={{
+                marginBottom: '10px',
+                lineHeight: '20px',
+              }}
+            >
+              {this.props.order.vendor.address != null ? (
                 <span>{this.props.order.vendor.address}</span>
-                <br />
-              </p>
-            ) : (
-              <></>
-            )}
+              ) : (
+                <></>
+              )}
+              {this.props.order.vendor.area != null ? (
+                <span>, {this.props.order.vendor.area}</span>
+              ) : (
+                <></>
+              )}
+              {this.props.order.vendor.city != null ? (
+                <span>, {this.props.order.vendor.city}</span>
+              ) : (
+                <></>
+              )}
+              {this.props.order.vendor.state != null ? (
+                <span>, {this.props.order.vendor.state}</span>
+              ) : (
+                <></>
+              )}
+              {this.props.order.vendor.pincode != null ? (
+                <span>, {this.props.order.vendor.pincode}</span>
+              ) : (
+                <></>
+              )}
+            </p>
 
             {this.props.order.vendor.gstin != null ? (
               <p>
@@ -85,11 +109,11 @@ export class PrintReceipt extends Component {
               {this.props.order.order_type != 'TakeAway' &&
               this.props.order.order_type != 'Delivery' ? (
                 <span>
-                  Dine-In -{' '}
+                  Dine-In
                   {this.props.order.table == null ? (
                     <span>Table Not Assigned</span>
                   ) : (
-                    <span>{this.props.order.table.table_name}</span>
+                    <span>({this.props.order.table.table_name})</span>
                   )}
                 </span>
               ) : (
@@ -236,7 +260,8 @@ export class PrintReceipt extends Component {
                             <strong> | AddOns: </strong>
                             {product.addons.map((pp) => (
                               <span>
-                                {" "}{pp.addon_name} - ₹{pp.addon_price}
+                                {' '}
+                                {pp.addon_name} - ₹{pp.addon_price}
                               </span>
                             ))}
                           </span>

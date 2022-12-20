@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../AuthContextProvider';
 
-
 export class Print extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -70,28 +69,73 @@ export class Print extends Component {
         </center>
         {/*End InvoiceTop*/}
         <div id="mid">
-          <div className="info">
-            <p>
-              {this.state.vendor_details.address != null && (
-                <>
-                  <>{this.state.vendor_details.address}</>
-                  <br />
-                </>
+          <div class="info">
+            <p
+              style={{
+                marginBottom: '10px',
+                lineHeight: '20px',
+              }}
+            >
+              {this.state.vendor_details.address != null ? (
+                <span
+                  style={{
+                    marginBottom: '5px',
+                  }}
+                >
+                  {this.state.vendor_details.address}
+                </span>
+              ) : (
+                <></>
               )}
-              {this.state.vendor_details.gstin != null && (
-                <>
-                  <br />
-                  <span>GST No. {this.state.vendor_details.gstin}</span>
-                </>
+              {this.state.vendor_details.area != null ? (
+                <span>, {this.state.vendor_details.area}</span>
+              ) : (
+                <></>
               )}
-              {/* {this.state.vendor_details.gstin != null && (
-                <>
-                  <br />
-                  <span>GST No. {this.state.vendor_details.gstin}</span>
-                </>
-              )} */}
+              {this.state.vendor_details.city != null ? (
+                <span>, {this.state.vendor_details.city}</span>
+              ) : (
+                <></>
+              )}
+              {this.state.vendor_details.state != null ? (
+                <span>, {this.state.vendor_details.state}</span>
+              ) : (
+                <></>
+              )}
+              {this.state.vendor_details.pincode != null ? (
+                <span>, {this.state.vendor_details.pincode}</span>
+              ) : (
+                <></>
+              )}
             </p>
-            <h3 className="new_h3">{this.state.data.order_type}</h3>
+
+            {this.state.vendor_details.gstin != null ? (
+              <p>
+                <span>
+                  <center style={{ textAlign: 'center' }}>
+                    GSTIN- {this.state.vendor_details.gstin}{' '}
+                  </center>
+                </span>
+              </p>
+            ) : (
+              <></>
+            )}
+
+            <h3 class="new_h3">
+              {/* {this.state.data.order_type != 'TakeAway' &&
+              this.state.data.order_type != 'Delivery' ? (
+                <span>
+                  Dine-In -{' '}
+                  {this.props.order.table == null ? (
+                    <span>Table Not Assigned</span>
+                  ) : (
+                    <span>{this.props.order.table.table_name}</span>
+                  )}
+                </span>
+              ) : ( */}
+              <span>{this.state.data.order_type}</span>
+              {/* )} */}
+            </h3>
           </div>
         </div>
         {/* customer-details */}
