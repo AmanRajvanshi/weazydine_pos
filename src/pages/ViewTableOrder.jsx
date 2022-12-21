@@ -130,7 +130,48 @@ export class ViewTableOrder extends Component {
               total_amount: json.data[0].total_amount,
               data: json.data[0],
             });
-            console.log(json.data);
+            // this.setState({ cart: json.data.cart });
+          }
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({
+          generate_order_buttonLoading: false,
+          price_loading: false,
+        });
+      });
+  };
+
+  genrate_bill_without_discount = () => {
+    this.setState({ generate_order_buttonLoading: true, price_loading: true });
+    fetch(global.api + 'generate_bill_by_table', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        table_id: this.props.id,
+        order_id: this.state.order_code,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+        } else {
+          if (json.data.length > 0) {
+            this.setState({
+              bill: json.data,
+              total_amount: json.data[0].total_amount,
+              data: json.data[0],
+              generateBillModal: true
+            });
             // this.setState({ cart: json.data.cart });
           }
         }
@@ -747,7 +788,7 @@ export class ViewTableOrder extends Component {
                             <button
                               className="btn btn-primary btn-sm w-100"
                               onClick={() => {
-                                this.setState({ generateBillModal: true });
+                                this.genrate_bill_without_discount();
                               }}
                             >
                               <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
