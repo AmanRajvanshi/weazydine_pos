@@ -9,6 +9,7 @@ import blackLogo from '../assets/images/logos/favicon.png';
 import logo from '../assets/images/logos/main_logo_black.png';
 import moment from 'moment';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 
 export class Header extends Component {
   static contextType = AuthContext;

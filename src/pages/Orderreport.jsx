@@ -261,7 +261,7 @@ export class Orderreport extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Order Report</h4>
+                <h4>Sales Report</h4>
               </div>
             </div>
             <div className="comp-sec-wrapper">

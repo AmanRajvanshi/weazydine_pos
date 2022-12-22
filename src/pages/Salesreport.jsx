@@ -208,7 +208,7 @@ class Salesreport extends Component {
           <div className="content">
             <div className="page-header">
               <div className="page-title">
-                <h4>Sales Report</h4>
+                <h4>Transactions Report</h4>
               </div>
             </div>
             <div

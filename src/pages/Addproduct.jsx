@@ -1,14 +1,16 @@
-import React, { Component } from "react";
-import Header from "../othercomponent/Header";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { Link } from "react-router-dom";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
-import { BiRupee } from "react-icons/bi";
-import { toast } from "react-toastify";
-import { AuthContext } from "../AuthContextProvider";
-import Skeletonloader from "../othercomponent/Skeletonloader";
+import React, { Component } from 'react';
+import Header from '../othercomponent/Header';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import { BiRupee } from 'react-icons/bi';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../AuthContextProvider';
+import Skeletonloader from '../othercomponent/Skeletonloader';
+
+
 export class Addproduct extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -18,16 +20,16 @@ export class Addproduct extends Component {
       images: [],
       variants_addons_div: false,
       newaddon: false,
-      new_category_name: "",
+      new_category_name: '',
       category: [],
       product_show: true,
       product_id: 0,
-      name: "",
-      c_id: "",
-      market_price: "",
-      our_price: "",
-      description: "",
-      type: "product",
+      name: '',
+      c_id: '',
+      market_price: '',
+      our_price: '',
+      description: '',
+      type: 'product',
       is_veg: 1,
       save_and_continue: false,
       add_category_loading: false,
@@ -39,11 +41,11 @@ export class Addproduct extends Component {
   }
 
   fetchCategories = () => {
-    fetch(global.api + "fetch_vendor_category", {
-      method: "POST",
+    fetch(global.api + 'fetch_vendor_category', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
     })
@@ -67,18 +69,18 @@ export class Addproduct extends Component {
   };
 
   add = () => {
-    if (this.state.new_category_name != "") {
+    if (this.state.new_category_name != '') {
       this.setState({ add_category_loading: true });
-      fetch(global.api + "create_category_vendor", {
-        method: "POST",
+      fetch(global.api + 'create_category_vendor', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
           category_name: this.state.new_category_name,
-          status: "active",
+          status: 'active',
         }),
       })
         .then((response) => response.json())
@@ -89,7 +91,7 @@ export class Addproduct extends Component {
           } else {
             this.setState({
               open: false,
-              new_category_name: "",
+              new_category_name: '',
             });
             toast.success(json.msg);
             this.fetchCategories();
@@ -103,7 +105,7 @@ export class Addproduct extends Component {
           this.setState({ add_category_loading: false });
         });
     } else {
-      toast.error("Please add Category first!");
+      toast.error('Please add Category first!');
     }
   };
 
@@ -113,48 +115,48 @@ export class Addproduct extends Component {
       this.state.market_price + this.state.our_price
     );
     if (
-      this.state.name == "" ||
-      this.state.market_price == "" ||
-      this.state.images == "" ||
-      this.state.our_price == "" ||
-      this.state.description == ""
+      this.state.name == '' ||
+      this.state.market_price == '' ||
+      this.state.images == '' ||
+      this.state.our_price == '' ||
+      this.state.description == ''
     ) {
-      toast.error("All fields are required !");
-    } else if (this.state.category == "") {
-      toast.error("Add category first !");
+      toast.error('All fields are required !');
+    } else if (this.state.category == '') {
+      toast.error('Add category first !');
     }
     // else if (this.state.market_price<this.state.our_price) {
     //     toast.error("Your price should be less than market price !");
     // }
-    else if (this.state.c_id == "") {
-      toast.error("Category is required !");
+    else if (this.state.c_id == '') {
+      toast.error('Category is required !');
     } else if (!isnumValid) {
-      toast.error("Price contains digits only!");
+      toast.error('Price contains digits only!');
     } else if (!isnumValid) {
-      toast.error("Price contains digits only!");
-    } else if (this.state.description == "") {
-      toast.error("Description is required !");
+      toast.error('Price contains digits only!');
+    } else if (this.state.description == '') {
+      toast.error('Description is required !');
     } else {
       this.setState({ save_and_continue: true, isLoading: true });
 
       var form = new FormData();
-      form.append("product_name", this.state.name);
+      form.append('product_name', this.state.name);
       // form.append("token",global.token);
-      form.append("vendor_category_id", this.state.c_id);
-      form.append("market_price", this.state.market_price);
-      form.append("price", this.state.our_price);
-      form.append("description", this.state.description);
-      form.append("type", this.state.type);
+      form.append('vendor_category_id', this.state.c_id);
+      form.append('market_price', this.state.market_price);
+      form.append('price', this.state.our_price);
+      form.append('description', this.state.description);
+      form.append('type', this.state.type);
 
       if (this.state.images.length > 0) {
         this.state.images.map((item, index) => {
-          form.append("product_img", item);
+          form.append('product_img', item);
         });
       }
 
-      form.append("is_veg", this.state.is_veg);
-      fetch(global.api + "vendor_add_product", {
-        method: "POST",
+      form.append('is_veg', this.state.is_veg);
+      fetch(global.api + 'vendor_add_product', {
+        method: 'POST',
         body: form,
         headers: {
           Authorization: this.context.token,
@@ -334,14 +336,14 @@ export class Addproduct extends Component {
                           <div
                             className="image-upload"
                             style={{
-                              width: "max-content",
+                              width: 'max-content',
                             }}
                           >
                             {this.state.images.length > 0 ? (
                               <></>
                             ) : (
                               <input
-                                type={"file"}
+                                type={'file'}
                                 accept=".png, .jpg, .jpeg,.svg,.webp"
                                 className="upload"
                                 onChange={(e) => {
@@ -357,8 +359,8 @@ export class Addproduct extends Component {
                                     id="target"
                                     src={URL.createObjectURL(item)}
                                     style={{
-                                      width: "200px",
-                                      height: "200px",
+                                      width: '200px',
+                                      height: '200px',
                                     }}
                                   />
                                 );
@@ -378,7 +380,7 @@ export class Addproduct extends Component {
                                 className="table table-bordered table-hover"
                                 id="tab_logic"
                                 style={{
-                                  border: "1px solid #d9d9d9",
+                                  border: '1px solid #d9d9d9',
                                 }}
                               >
                                 <thead>
@@ -444,16 +446,16 @@ export class Addproduct extends Component {
                               </table>
                               <div
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "end",
+                                  display: 'flex',
+                                  justifyContent: 'end',
                                 }}
                               >
                                 <button
                                   onClick={this.handleAddRow}
                                   className="btn btn-primary"
                                   style={{
-                                    marginBottom: "20px",
-                                    marginTop: "10px",
+                                    marginBottom: '20px',
+                                    marginTop: '10px',
                                   }}
                                 >
                                   Add Row
@@ -470,14 +472,14 @@ export class Addproduct extends Component {
                                     <div className="checkbox_addon">
                                       <input
                                         type="checkbox"
-                                        id={"addon" + item.id}
+                                        id={'addon' + item.id}
                                         name="addon"
                                         value={item.id}
                                         onChange={this.handleAddon}
                                         className="form-check-input new_checkbox mr-4"
                                       />
-                                      <label for={"addon" + item.id}>
-                                        {item.addon_name} - <BiRupee />{" "}
+                                      <label for={'addon' + item.id}>
+                                        {item.addon_name} - <BiRupee />{' '}
                                         {item.addon_price}
                                       </label>
                                     </div>
@@ -489,8 +491,8 @@ export class Addproduct extends Component {
 
                               <div
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "end",
+                                  display: 'flex',
+                                  justifyContent: 'end',
                                 }}
                               >
                                 <button
@@ -501,8 +503,8 @@ export class Addproduct extends Component {
                                     });
                                   }}
                                   style={{
-                                    marginBottom: "20px",
-                                    marginTop: "10px",
+                                    marginBottom: '20px',
+                                    marginTop: '10px',
                                   }}
                                 >
                                   Add New Addon
@@ -531,8 +533,8 @@ export class Addproduct extends Component {
                             <button
                               className="btn btn-primary btn-sm  me-2"
                               style={{
-                                pointerEvents: "none",
-                                opacity: "0.8",
+                                pointerEvents: 'none',
+                                opacity: '0.8',
                               }}
                             >
                               <span
@@ -570,7 +572,7 @@ export class Addproduct extends Component {
           onClose={() => this.setState({ open: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -598,8 +600,8 @@ export class Addproduct extends Component {
                       <button
                         className="btn btn-primary btn-sm  me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span
@@ -637,8 +639,8 @@ class Variants extends Component {
     this.state = {
       rows: [],
       add_data: [],
-      addon_name: "",
-      addon_price: "",
+      addon_name: '',
+      addon_price: '',
       object: [],
       add_on_loading: false,
       add_on_dataLoading: true,
@@ -650,11 +652,11 @@ class Variants extends Component {
   }
 
   fetch_addon = () => {
-    fetch(global.api + "fetch_product_addon", {
-      method: "POST",
+    fetch(global.api + 'fetch_product_addon', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -683,11 +685,11 @@ class Variants extends Component {
       }
     });
 
-    fetch(global.api + "vendor_update_product_options", {
-      method: "POST",
+    fetch(global.api + 'vendor_update_product_options', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -702,7 +704,7 @@ class Variants extends Component {
           toast.error(json.msg);
         } else {
           toast.success(json.msg);
-          this.props.navigate("/productlist");
+          this.props.navigate('/productlist');
         }
         this.setState({ isLoading2: false, add_on_loading: false });
         return json;
@@ -724,9 +726,9 @@ class Variants extends Component {
     const vari = [
       {
         id: 1,
-        variants_name: "",
-        variants_price: "",
-        variants_discounted_price: "",
+        variants_name: '',
+        variants_price: '',
+        variants_discounted_price: '',
       },
     ];
     this.setState({ rows: [...this.state.rows, ...vari] });
@@ -738,15 +740,15 @@ class Variants extends Component {
   };
 
   create_addon = () => {
-    if (this.state.addon_name == "" || this.state.addon_price == "") {
-      toast.error("All field is required!");
+    if (this.state.addon_name == '' || this.state.addon_price == '') {
+      toast.error('All field is required!');
     } else {
       this.setState({ newaddonLoading: true });
-      fetch(global.api + "add_product_addon", {
-        method: "POST",
+      fetch(global.api + 'add_product_addon', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -761,8 +763,8 @@ class Variants extends Component {
           } else {
             this.fetch_addon();
             this.setState({
-              addon_name: "",
-              addon_price: "",
+              addon_name: '',
+              addon_price: '',
               newaddonLoading: false,
               newaddon: false,
             });
@@ -813,8 +815,8 @@ class Variants extends Component {
                 <button
                   className="btn btn-primary btn-sm  mx-2"
                   style={{
-                    pointerEvents: "none",
-                    opacity: "0.8",
+                    pointerEvents: 'none',
+                    opacity: '0.8',
                   }}
                 >
                   <span
@@ -842,7 +844,7 @@ class Variants extends Component {
                     className="table table-bordered table-hover"
                     id="tab_logic"
                     style={{
-                      border: "1px solid #d9d9d9",
+                      border: '1px solid #d9d9d9',
                     }}
                   >
                     <thead>
@@ -900,16 +902,16 @@ class Variants extends Component {
                   </table>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "end",
+                      display: 'flex',
+                      justifyContent: 'end',
                     }}
                   >
                     <button
                       onClick={this.handleAddRow}
                       className="btn btn-primary btn-sm "
                       style={{
-                        marginBottom: "20px",
-                        marginTop: "10px",
+                        marginBottom: '20px',
+                        marginTop: '10px',
                       }}
                     >
                       Add New Varient
@@ -920,16 +922,16 @@ class Variants extends Component {
             ) : (
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
                 }}
               >
                 <button
                   onClick={this.handleAddRow}
                   className="btn btn-primary btn-sm "
                   style={{
-                    marginBottom: "20px",
-                    marginTop: "10px",
+                    marginBottom: '20px',
+                    marginTop: '10px',
                   }}
                 >
                   Add New Varient
@@ -939,8 +941,8 @@ class Variants extends Component {
 
             <div
               style={{
-                display: "flex",
-                justifyContent: "start",
+                display: 'flex',
+                justifyContent: 'start',
               }}
             >
               <h3 className="mb-3 py-2 underline">Addons</h3>
@@ -952,9 +954,9 @@ class Variants extends Component {
                   });
                 }}
                 style={{
-                  marginBottom: "20px",
-                  marginTop: "10px",
-                  marginLeft: "30px",
+                  marginBottom: '20px',
+                  marginTop: '10px',
+                  marginLeft: '30px',
                 }}
               >
                 Add New Addon
@@ -970,13 +972,13 @@ class Variants extends Component {
                       <div className="checkbox_addon">
                         <input
                           type="checkbox"
-                          id={"addon" + item.id}
+                          id={'addon' + item.id}
                           name="addon"
                           value={item.id}
                           onChange={this.handleAddon}
                           className="form-check-input new_checkbox mr-4"
                         />
-                        <label for={"addon" + item.id}>
+                        <label for={'addon' + item.id}>
                           {item.addon_name} - <BiRupee /> {item.addon_price}
                         </label>
                       </div>
@@ -995,7 +997,7 @@ class Variants extends Component {
           onClose={() => this.setState({ newaddon: false })}
           center
           classNames={{
-            modal: "customModal",
+            modal: 'customModal',
           }}
         >
           <div className="content">
@@ -1034,8 +1036,8 @@ class Variants extends Component {
                       <button
                         className="btn btn-primary btn-sm  me-2"
                         style={{
-                          pointerEvents: "none",
-                          opacity: "0.8",
+                          pointerEvents: 'none',
+                          opacity: '0.8',
                         }}
                       >
                         <span

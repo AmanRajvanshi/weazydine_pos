@@ -25,6 +25,7 @@ class Pos extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
+    this.inputRef = React.createRef();
     this.state = {
       category: [],
       products: [],
@@ -658,22 +659,23 @@ class Pos extends Component {
                                 >
                                   Select The Product To Add
                                 </h5>
-                                {/* <input
-                                  type="text"
-                                  name=""
-                                  id=""
-                                  onChange={(e) => this.search(e)}
-                                  placeholder="Search Here...."
-                                  style={{
-                                    width: '100%',
-                                    height: '40px',
-                                    borderRadius: '5px',
-                                    border: '1px solid #ccc',
-                                    padding: '0 10px',
-                                    position: 'relative',
-                                    margin: '10px 0 30px',
-                                  }}
-                                /> */}
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search"
+                                        value={this.state.search}
+                                        onChange={(e) => this.search(e)}
+                                        autoFocus={false}
+                                        ref={(input) =>
+                                          (this.search_input = input)
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
                                 <div className="row pos_divs_row">
                                   {!this.state.load_item ? (
                                     this.state.products.length > 0 ? (

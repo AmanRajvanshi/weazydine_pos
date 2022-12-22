@@ -2133,6 +2133,7 @@ a:hover {
   color: #141414;
   padding: 10px 15px;
   border-radius: 5px;
+  background: transparent;
 }
 
 .form-group .btn-filters {
@@ -9479,10 +9480,11 @@ span.select-container.select-container--default.select-container--open {
 .react-responsive-modal-overlay,
 .react-responsive-modal-container {
   animation-fill-mode: forwards !important;
+  overflow-y: hidden !important;
 }
 
 .pos_divs_row {
   max-height: 90vh;
   overflow-y: scroll;
-  padding: 20px 0;
+  padding: 20px 0 100px;
 }
