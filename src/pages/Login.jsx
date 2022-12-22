@@ -298,13 +298,13 @@ class Login extends Component {
                                       }
                                     }}
                                   />
-                                  <img
-                                    src="https://img.icons8.com/ios/50/000000/phone.png"
-                                    alt="img"
+                                  <i
+                                    className="iconly-Calling icli"
                                     style={{
-                                      width: 25,
-                                      height: 25,
-                                      marginTop: -8,
+                                      fontSize: 25,
+                                      position: 'absolute',
+                                      right: 8,
+                                      top: 8,
                                     }}
                                   />
                                 </div>

@@ -416,9 +416,9 @@ class StockPurchase extends Component {
                         >
                           <RadioButton
                             value="Cash"
-                            //   pointColor="#f3c783"
+                            pointColor="#296e84"
                             iconSize={20}
-                            //   rootColor="#065f0a"
+                            rootColor="#5bc2c1"
                             iconInnerSize={10}
                             padding={10}
                           >
@@ -426,29 +426,29 @@ class StockPurchase extends Component {
                           </RadioButton>
                           <RadioButton
                             value="Card"
-                            //   pointColor="#f3c783"
+                            pointColor="#296e84"
                             iconSize={20}
-                            //   rootColor="#065f0a"
+                            rootColor="#5bc2c1"
                             iconInnerSize={10}
                             padding={10}
                           >
                             Card
                           </RadioButton>
                           <RadioButton
-                            value="Chaque"
-                            //   pointColor="#f3c783"
+                            value="Cheque"
+                            pointColor="#296e84"
                             iconSize={20}
-                            //   rootColor="#065f0a"
+                            rootColor="#5bc2c1"
                             iconInnerSize={10}
                             padding={10}
                           >
-                            Chaque
+                            Cheque
                           </RadioButton>
                           <RadioButton
                             value="Online"
-                            //   pointColor="#f3c783"
+                            pointColor="#296e84"
                             iconSize={20}
-                            //   rootColor="#bf370d"
+                            rootColor="#5bc2c1"
                             iconInnerSize={10}
                             padding={10}
                           >

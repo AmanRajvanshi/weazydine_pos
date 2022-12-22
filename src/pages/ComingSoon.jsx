@@ -20,11 +20,6 @@ class ComingSoon extends Component {
   }
 
   render() {
-    const selectionRange = {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    };
     return (
       <div className="main-wrapper">
         <Header />

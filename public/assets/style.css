@@ -8529,10 +8529,10 @@ span.select-container.select-container--default.select-container--open {
 
 .productset {
   border: 1px solid #f8f8f8;
-  box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.25);
-  background: #fff;
+  box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.15);
+  background: #fbfbfb82;
   /* margin: 0 0 25px; */
   border-radius: 5px;
   position: relative;
@@ -9479,4 +9479,10 @@ span.select-container.select-container--default.select-container--open {
 .react-responsive-modal-overlay,
 .react-responsive-modal-container {
   animation-fill-mode: forwards !important;
+}
+
+.pos_divs_row {
+  max-height: 90vh;
+  overflow-y: scroll;
+  padding: 20px 0;
 }
