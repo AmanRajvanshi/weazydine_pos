@@ -176,7 +176,7 @@ export class Addsemifinishedrawmaterialproducts extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Add Semi-Finished Raw Material Products</h4>
+                  <h4>Add Semi-Finished Raw Material Recipe</h4>
                 </div>
               </div>
               <div className="card">

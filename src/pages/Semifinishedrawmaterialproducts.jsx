@@ -103,7 +103,7 @@ class Semifinishedrawmaterialproducts extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Semi Finished Raw Material Products</h4>
+                  <h4>Semi Finished Raw Material Recipe</h4>
                 </div>
                 <div className="page-btn">
                   <Link to="/addsemifinishedrawmaterialproducts">
@@ -113,7 +113,7 @@ class Semifinishedrawmaterialproducts extends Component {
                         alt="img"
                         className="me-1"
                       />
-                      Add New Product
+                      Add New Recipe
                     </a>
                   </Link>
                 </div>

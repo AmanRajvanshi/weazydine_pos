@@ -295,7 +295,7 @@ export class Dashboard extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-3 col-12">
-                  <Link to={'/crm'}>
+                  <Link to={'/customers'}>
                     <div className="dash-widget dash1">
                       <div className="dash-widgetimg">
                         <span>

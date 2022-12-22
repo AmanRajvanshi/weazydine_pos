@@ -554,14 +554,7 @@ class Order extends React.Component {
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-between">
-                    <a
-                      onClick={() => {
-                        this.add();
-                      }}
-                      className="btn btn-danger btn-sm me-2"
-                    >
-                      Cancel
-                    </a>
+                    <a className="btn btn-danger btn-sm me-2">Close</a>
                     {this.state.is_buttonloding ? (
                       <button
                         className="btn btn-primary btn-sm me-2"

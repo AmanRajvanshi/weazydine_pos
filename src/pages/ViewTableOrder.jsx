@@ -60,6 +60,7 @@ export class ViewTableOrder extends Component {
       percentageDiscount: true,
       price_loading: false,
       discountAmount: '',
+      discount_on_order: false,
     };
   }
 
@@ -130,7 +131,6 @@ export class ViewTableOrder extends Component {
               total_amount: json.data[0].total_amount,
               data: json.data[0],
             });
-            // this.setState({ cart: json.data.cart });
           }
         }
         return json;
@@ -170,7 +170,7 @@ export class ViewTableOrder extends Component {
               bill: json.data,
               total_amount: json.data[0].total_amount,
               data: json.data[0],
-              generateBillModal: true
+              generateBillModal: true,
             });
             // this.setState({ cart: json.data.cart });
           }
@@ -712,6 +712,7 @@ export class ViewTableOrder extends Component {
                                     this.setState({
                                       percentageDiscount:
                                         !this.state.percentageDiscount,
+                                      discount_on_order: true,
                                     });
                                     if (this.state.discountAmount > 0) {
                                       this.genrate_bill(
@@ -735,6 +736,7 @@ export class ViewTableOrder extends Component {
                                     this.setState({
                                       percentageDiscount:
                                         !this.state.percentageDiscount,
+                                      discount_on_order: true,
                                     });
                                     if (this.state.discountAmount > 0) {
                                       this.genrate_bill(
@@ -758,6 +760,7 @@ export class ViewTableOrder extends Component {
                                 onChange={(e) => {
                                   this.setState({
                                     discountAmount: e.target.value,
+                                    discount_on_order: true,
                                   });
                                   this.genrate_bill(
                                     e.target.value,
@@ -788,7 +791,17 @@ export class ViewTableOrder extends Component {
                             <button
                               className="btn btn-primary btn-sm w-100"
                               onClick={() => {
-                                this.genrate_bill_without_discount();
+                                if (this.state.discount_on_order == true) {
+                                  this.genrate_bill(
+                                    this.state.discountAmount,
+                                    this.state.percentageDiscount
+                                  );
+                                  window.setTimeout(() => {
+                                    this.setState({ generateBillModal: true });
+                                  }, 1200);
+                                } else {
+                                  this.genrate_bill_without_discount();
+                                }
                               }}
                             >
                               <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>

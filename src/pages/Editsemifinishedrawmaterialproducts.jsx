@@ -232,7 +232,7 @@ export class Editsemifinishedrawmaterialproducts extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Edit Semi-Finished Raw Material Products</h4>
+                  <h4>Edit Semi-Finished Raw Material Recipe</h4>
                 </div>
               </div>
               {this.state.is_loding ? (
