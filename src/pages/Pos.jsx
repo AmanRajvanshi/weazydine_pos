@@ -56,8 +56,10 @@ class Pos extends Component {
       product_show: false,
       posOrderComplete: false,
       order_code: '',
+      if_table_order: false,
       order: [],
       bill_show: false,
+      order_table_no: '',
     };
   }
 
@@ -469,6 +471,15 @@ class Pos extends Component {
             order_code: json.data[0].order_code,
             order: json.data,
           });
+          if (
+            json.data[0].order_type != 'TakeAway' ||
+            json.data[0].order_type != 'Delivery'
+          ) {
+            this.setState({
+              order_table_no: json.data[0].table.table_uu_id,
+              if_table_order: true,
+            });
+          }
           toast.success('Order Placed');
         }
         this.setState({ is_buttonloding: false });
@@ -669,9 +680,7 @@ class Pos extends Component {
                                         value={this.state.search}
                                         onChange={(e) => this.search(e)}
                                         autoFocus={false}
-                                        ref={(input) =>
-                                          (this.search_input = input)
-                                        }
+                                        ref={() => this.inputRef}
                                       />
                                     </div>
                                   </div>
@@ -1133,16 +1142,29 @@ class Pos extends Component {
                 )}
               </div>
               <div className="col-lg-4 d-flex align-items-center justify-content-center pl-0">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    this.props.navigate(
-                      '/orderdetails/' + this.state.order_code
-                    );
-                  }}
-                >
-                  View Order
-                </button>
+                {this.state.if_table_order ? (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      this.props.navigate(
+                        '/viewtableorder/' + this.state.order_table_no
+                      );
+                    }}
+                  >
+                    View Table Order
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      this.props.navigate(
+                        '/orderdetails/' + this.state.order_code
+                      );
+                    }}
+                  >
+                    View Order
+                  </button>
+                )}
               </div>
             </div>
           </div>
