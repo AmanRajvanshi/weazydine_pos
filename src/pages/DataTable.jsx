@@ -8,6 +8,9 @@ export class DataTable extends Component {
       currentPage: 1,
       totalPages: 10,
       search: '',
+      text: '',
+      index: 0,
+      texts: ['Text 1', 'Text 2', 'Text 3'],
     };
   }
 
@@ -19,6 +22,7 @@ export class DataTable extends Component {
 
   componentDidMount() {
     this.fetchUsers(this.state.currentPage);
+    this.type();
   }
 
   fetchUsers = (currentPage) => {
@@ -31,6 +35,25 @@ export class DataTable extends Component {
         });
       });
   };
+  type() {
+    const { texts } = this.state;
+    const currentText = texts[this.state.index % texts.length];
+    const currentChar = currentText.slice(0, this.state.text.length + 1);
+    this.setState({
+      text: currentChar,
+    });
+    if (currentChar.length === currentText.length) {
+      setTimeout(() => {
+        this.setState((prevState) => ({
+          index: prevState.index + 1,
+          text: '',
+        }));
+        this.type();
+      }, 2000);
+    } else {
+      setTimeout(() => this.type(), 100);
+    }
+  }
 
   updatePage = (pageNumber) => {
     this.setState({ currentPage: pageNumber });
@@ -201,6 +224,7 @@ export class DataTable extends Component {
             </button>
           )}
         </div>
+        <div>{this.state.text}</div>
       </div>
     );
   }

@@ -7,6 +7,7 @@ import { AuthContext } from '../AuthContextProvider.js';
 import Skeletonloader from '../othercomponent/Skeletonloader';
 import moment from 'moment';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import { Helmet } from 'react-helmet';
 
 export class Dashboard extends Component {
   static contextType = AuthContext;
@@ -81,6 +82,9 @@ export class Dashboard extends Component {
     let { item } = this.state;
     return (
       <>
+        <Helmet>
+          <title>Dashboard | Weazy Dine</title>
+        </Helmet>
         <div className="main-wrappers">
           <Header />
           <div className="page-wrapper">

@@ -520,16 +520,27 @@ export class Header extends Component {
                       label="CRM"
                       icon={<i className="iconly-User3 icli sidebar_icons"></i>}
                     >
-                      <MenuItem
+                      {/* <MenuItem
                         routerLink={<Link to="/customers" />}
                         icon={
                           <i className="iconly-User2 icli sidebar_icons"></i>
                         }
                       >
                         <span>Customers</span>
+                      </MenuItem> */}
+                      <MenuItem
+                        routerLink={<Link to="/customerinsights" />}
+                        icon={
+                          <i className="iconly-Filter icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>
+                          Customer <br />
+                          Insights
+                        </span>
                       </MenuItem>
                       <MenuItem
-                        routerLink={<Link to="/comingsoon" />}
+                        routerLink={<Link to="/crmcampaigns" />}
                         icon={
                           <i className="iconly-Category icli sidebar_icons"></i>
                         }
@@ -547,7 +558,7 @@ export class Header extends Component {
                           Feedback
                         </span>
                       </MenuItem>
-                      <MenuItem
+                      {/* <MenuItem
                         routerLink={<Link to="/comingsoon" />}
                         icon={
                           <i className="iconly-Lock icli sidebar_icons"></i>
@@ -557,18 +568,7 @@ export class Header extends Component {
                           Branded Loyalty <br />
                           Program
                         </span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/comingsoon" />}
-                        icon={
-                          <i className="iconly-Filter icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Customer <br />
-                          Insights
-                        </span>
-                      </MenuItem>
+                      </MenuItem> */}
                     </SubMenu>
 
                     <MenuItem

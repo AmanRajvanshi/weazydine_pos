@@ -22,14 +22,6 @@ class Customers extends Component {
       end_date: new Date(),
     };
   }
-  handleSelect(ranges) {
-    // {
-    //   selection: {
-    //     startDate: [native Date Object],
-    //     endDate: [native Date Object],
-    //   }
-    // }
-  }
   componentDidMount() {
     this.fetch_order(1, '');
     window.Echo.private(`orderstatus.(order_id)`).listen(
@@ -72,11 +64,6 @@ class Customers extends Component {
   };
 
   render() {
-    const selectionRange = {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    };
     return (
       <div className="main-wrapper">
         <Header />
@@ -87,89 +74,6 @@ class Customers extends Component {
                 <h4>Customers</h4>
               </div>
             </div>
-            {/* <div className="comp-sec-wrapper" style={{backgroundColor:'white',padding:10,borderRadius:10}}> */}
-            {/* <section className="comp-section">
-                <div className="row pb-4">
-                  <div className="col-md-12">
-                    <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
-                      <li className="nav-item">
-                        <label>
-                          From To
-                        </label>
-                        <DateRangePicker
-                          onChange={(value) =>
-                            this.setState({start_date:value[0].toLocaleDateString('zh-Hans-CN'),end_date:value[1].toLocaleDateString('zh-Hans-CN'),value:value})
-                            // console.log(value[1].toLocaleDateString())
-                          }
-                          format="dd/MM/y"
-                          value={this.state.value}
-                          maxDate={new Date()}
-                          className="date_range_picker_styling"
-                        />
-                      </li>
-                      <li className="nav-item">
-                      <label >
-                         Select type
-                        </label>
-                        <select
-                          className="form-control"
-                          onChange={(e) => {
-                            this.setState({
-                              parent_category_id: e.target.value,
-                            });
-                          }}
-
-                        style={{width:'150px'}}
-                          // className="select-container"
-                        >
-                          <option value="all">All</option>
-                          <option value="TakeAway">TakeAway</option>
-                          <option value="Delivery">Delivery</option>
-                          <option value="Dine-In">Dine-In</option>
-                        </select>
-                      </li>
-
-                      <li className="nav-item">
-                      <label>
-                         Order Status
-                        </label>
-                        <select
-                          className="form-control"
-                          onChange={(e) => {
-                            this.setState({
-                              parent_category_id: e.target.value,
-                            });
-                          }}
-
-                        style={{width:'150px'}}
-                          // className="select-container"
-                        >
-                         <option value="all">All</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="in_process">In process</option>
-                          <option value="processed">Processed</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
-                      </li>
-                      <li className="nav-item" style={{paddingTop:20}}>
-                        <a
-                          className="nav-link active mx-4"
-                          href="#solid-rounded-justified-tab1"
-                          data-bs-toggle="tab"
-                          onClick={() => {
-                            this.setState({ is_loading: true });
-                            this.fetch_order(1, "");
-                          }}
-                        >
-                          Search
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </section> */}
-            {/* </div> */}
             {!this.state.is_loading ? (
               <div className="card">
                 {this.state.data.length > 0 ? (
@@ -185,8 +89,6 @@ class Customers extends Component {
                             <th>Total Orders</th>
                             <th>Date of Joining</th>
                             <th>Date of Birth</th>
-                            {/* <th>Status</th> */}
-                            {/* <th style={{ textAlign: "end" }}>Action</th> */}
                           </tr>
                         </thead>
                         <tbody>
@@ -210,25 +112,6 @@ class Customers extends Component {
                                   ? 'N/A'
                                   : item.dob}
                               </td>
-
-                              {/* <td
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                <Link to={"/orderdetails/" + item.order_code}>
-                                  <button
-                                    className="btn btn-primary"
-                                    style={{
-                                      marginRight: "10px",
-                                      padding: "2px 6px",
-                                    }}
-                                  >
-                                    <i className="fa fa-eye"></i>
-                                  </button>
-                                </Link>
-                              </td> */}
                             </tr>
                           ))}
                         </tbody>

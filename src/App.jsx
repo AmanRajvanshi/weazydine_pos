@@ -52,6 +52,9 @@ import DataTable from './pages/DataTable.jsx';
 import UpdateProductRecipe from './pages/UpdateProductRecipe.jsx';
 import ProductRecipe from './pages/ProductRecipe.jsx';
 import ComingSoon from './pages/ComingSoon.jsx';
+import CustomerInsights from './pages/CustomerInsights.jsx';
+import Footer from './othercomponent/Footer.jsx';
+import CrmCampaigns from './pages/CrmCampaigns.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -560,11 +563,30 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
+            <Route
+              exact
+              path="/customerinsights"
+              element={
+                <RequireAuth>
+                  <CustomerInsights />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/crmcampaigns"
+              element={
+                <RequireAuth>
+                  <CrmCampaigns />
+                </RequireAuth>
+              }
+            />
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/datatable" element={<DataTable />} />
             {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
+          {/* <Footer /> */}
         </AuthContext.Provider>
         <ToastContainer
           position="bottom-left"

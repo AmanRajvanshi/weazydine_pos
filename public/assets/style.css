@@ -2273,6 +2273,12 @@ a:hover {
   padding: 6px 30px;
 }
 
+.comp-section .nav-tabs.nav-tabs-solid a:hover {
+  background-color: #5bc2c1 !important;
+  border-color: #5bc2c1;
+  color: #fff !important;
+}
+
 .comp-section .nav-tabs.nav-tabs-solid a.active {
   background-color: #5bc2c1;
   border-color: #5bc2c1;
@@ -6380,9 +6386,9 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .page-header h4 {
-  font-weight: 500;
-  color: #1a181e;
-  font-size: 24px;
+  font-weight: 300;
+  color: #353535;
+  font-size: 26px;
 }
 
 @media (max-width: 991px) {
@@ -6951,12 +6957,12 @@ span.select-container.select-container--default.select-container--open {
 
 .login-wrapper .login-content .login-userheading h3 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 400;
   margin: 0 0 15px;
   color: #000;
 }
 
-.login-wrapper .login-content .login-userheading h4 {
+.login-wrapper .login-content .login-userheading h5 {
   font-size: 14px;
   font-weight: 400;
   color: #1a181e;
@@ -9487,4 +9493,124 @@ span.select-container.select-container--default.select-container--open {
   max-height: 90vh;
   overflow-y: scroll;
   padding: 20px 0 100px;
+}
+
+.customer_snapshot_main_div {
+  height: 180px;
+  background-color: #7ad2d287;
+  margin: 30px 0 30px;
+  display: flex;
+  padding: 25px;
+  border-radius: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.crm_campaigns_main_div_color {
+  height: 280px;
+  background-color: #296e84;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.crm_campaigns_main_div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.5s ease-in-out;
+}
+
+.customer_snapshot_main_div h3 {
+  font-size: 16px;
+  line-height: 22px;
+  color: #354545;
+}
+
+.crm_campaigns_main_div h3 {
+  font-size: 25px;
+  line-height: 22px;
+  color: white;
+}
+
+.customer_snapshot_main_div h4 {
+  font-size: 35px;
+  line-height: 45px;
+  color: #354545;
+}
+
+.crm_campaigns_main_div h4 {
+  font-size: 18px;
+  line-height: 25px;
+  color: white;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 0.25rem;
+  position: sticky;
+  bottom: 0;
+  margin-top: 20px;
+  z-index: 1000000;
+}
+
+.react-tabs__tab-list {
+  border: none !important;
+}
+
+.react-tabs__tab {
+  border: none !important;
+  background-color: #7ad2d287;
+  margin: 5px;
+  border-radius: 3px !important;
+}
+
+.react-tabs__tab--selected {
+  border: none !important;
+  background-color: #5bc2c1 !important;
+  border-radius: 0px !important;
+  margin: 5px;
+  color: white !important;
+  border-radius: 3px !important;
+}
+
+.crm_campaigns_column {
+  width: 20%;
+}
+
+.crm_campaigns_column_div{
+  height: 140px;
+  background-color: #7ad2d287;
+  margin: 20px 0 30px;
+  display: flex;
+  padding: 25px;
+  border-radius: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.crm_campaigns_column_div h3 {
+  font-size: 16px;
+  line-height: 22px;
+  color: #354545;
+  letter-spacing: 1px;
+}
+
+.crm_campaigns_column_div h4 {
+  font-size: 35px;
+  line-height: 45px;
+  color: #354545;
 }

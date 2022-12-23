@@ -9,7 +9,7 @@ import { BiRupee } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../AuthContextProvider';
 import Skeletonloader from '../othercomponent/Skeletonloader';
-
+import Helmet from 'react-helmet';
 
 export class Addproduct extends Component {
   static contextType = AuthContext;
@@ -185,6 +185,9 @@ export class Addproduct extends Component {
   render() {
     return (
       <>
+        <Helmet>
+          <title>Add Product in Menu</title>
+        </Helmet>
         <div className="main-wrapper">
           <Header />
           <div className="page-wrapper">
