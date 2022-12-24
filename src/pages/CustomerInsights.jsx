@@ -12,19 +12,21 @@ import coming_soon from '../assets/images/coming_soon.png';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export class CustomerInsights extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      customer_data: [],
       is_loading: true,
       load_data: false,
       page: 1,
       value: [new Date(), new Date()],
       start_date: new Date(),
       end_date: new Date(),
+      // data: [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 }],
     };
   }
 
@@ -55,10 +57,10 @@ export class CustomerInsights extends Component {
       .then((json) => {
         if (!json.status) {
           if (page_id == 1) {
-            this.setState({ data: [], is_loading: false });
+            this.setState({ customer_data: [], is_loading: false });
           }
         } else {
-          this.setState({ data: json.data.data });
+          this.setState({ customer_data: json.data.data });
         }
         this.setState({ is_loading: false });
         return json;
@@ -83,13 +85,54 @@ export class CustomerInsights extends Component {
             <Tabs className="my-tabs">
               <TabList>
                 <Tab>
-                  <p>Customer List</p>
+                  <p>Customer Snapshot</p>
                 </Tab>
                 <Tab>
-                  <p>Customer Snapshot</p>
+                  <p>Customer List</p>
                 </Tab>
               </TabList>
 
+              <TabPanel>
+                <div className="card">
+                  <div className="card-body">
+                    <h3>
+                      <strong>Customer Snapshot</strong>
+                    </h3>
+                    <div className="row">
+                      <div className="col-md-3">
+                        <div className="customer_snapshot_main_div">
+                          <h3>Total Unique Customers</h3>
+                          <h4>0</h4>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="customer_snapshot_main_div">
+                          <h3>First time customers</h3>
+                          <h4>0</h4>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="customer_snapshot_main_div">
+                          <h3>Customers with more than 1 order</h3>
+                          <h4>0</h4>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="customer_snapshot_main_div">
+                          <h3>Customers won back</h3>
+                          <h4>0</h4>
+                        </div>
+                      </div>
+                    </div>
+                    {/* <LineChart width={600} height={300} data={data}>
+                      <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+                      <CartesianGrid stroke="#ccc" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                    </LineChart> */}
+                  </div>
+                </div>
+              </TabPanel>
               <TabPanel>
                 {!this.state.is_loading ? (
                   <div className="card">
@@ -177,41 +220,6 @@ export class CustomerInsights extends Component {
                     />
                   </div>
                 )}
-              </TabPanel>
-              <TabPanel>
-                <div className="card">
-                  <div className="card-body">
-                    <h3>
-                      <strong>Customer Snapshot</strong>
-                    </h3>
-                    <div className="row">
-                      <div className="col-md-3">
-                        <div className="customer_snapshot_main_div">
-                          <h3>Total Unique Customers</h3>
-                          <h4>0</h4>
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="customer_snapshot_main_div">
-                          <h3>First time customers</h3>
-                          <h4>0</h4>
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="customer_snapshot_main_div">
-                          <h3>Customers with more than 1 order</h3>
-                          <h4>0</h4>
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="customer_snapshot_main_div">
-                          <h3>Customers won back</h3>
-                          <h4>0</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </TabPanel>
             </Tabs>
           </div>

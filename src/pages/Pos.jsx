@@ -70,6 +70,9 @@ class Pos extends Component {
       this.orderDetails(this.props.table_id);
     }
     this.fetchCategories();
+    if (this.inputRef.current) {
+      this.inputRef.current.focus();
+    }
     // this.fetchProducts(0, this.state.type, 1);
   }
 
@@ -81,6 +84,7 @@ class Pos extends Component {
   onCloseModal = () => {
     this.setState({ product_show: false });
   };
+  
   sendUrlToPrint = (url) => {
     var beforeUrl = 'intent:';
     var afterUrl = '#Intent;';

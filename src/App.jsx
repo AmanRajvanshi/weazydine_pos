@@ -56,6 +56,8 @@ import CustomerInsights from './pages/CustomerInsights.jsx';
 import Footer from './othercomponent/Footer.jsx';
 import CrmCampaigns from './pages/CrmCampaigns.jsx';
 
+import loader from './assets/loader.png';
+
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
@@ -198,16 +200,8 @@ export class App extends Component {
 
   render() {
     return this.state.loading ? (
-      <div className="main_loader">
-        <Bars
-          height="80"
-          width="80"
-          color="#5BC2C1"
-          ariaLabel="bars-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />
+      <div className="preloader">
+        <img src={loader} alt="" className="image_loader" />
       </div>
     ) : (
       <>
