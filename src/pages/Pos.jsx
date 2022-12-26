@@ -1094,10 +1094,10 @@ class Pos extends Component {
               </div>
               <div className="row">
                 <div className="d-flex justify-content-center align-items-center">
-                  <img src={success_gif} alt="" />
+                  <img src={success_gif} alt="" style={{width:"150px"}}/>
                 </div>
               </div>
-              <div className="row my-4 pt-4">
+              <div className="row my-4">
                 <div className="col-lg-8 d-flex align-items-center justify-content-center pr-0">
                   {global.os != 'Windows' && global.os != 'Mac OS' ? (
                     <>
