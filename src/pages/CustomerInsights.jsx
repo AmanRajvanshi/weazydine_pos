@@ -136,7 +136,7 @@ export class CustomerInsights extends Component {
               <TabPanel>
                 {!this.state.is_loading ? (
                   <div className="card">
-                    {this.state.data.length > 0 ? (
+                    {this.state.customer_data.length > 0 ? (
                       <div className="card-body">
                         <div className="table-responsive">
                           <table className="table  datanew">
@@ -152,7 +152,7 @@ export class CustomerInsights extends Component {
                               </tr>
                             </thead>
                             <tbody>
-                              {this.state.data.map((item, index) => (
+                              {this.state.customer_data.map((item, index) => (
                                 <tr>
                                   <td>{index + 1}</td>
                                   <td>

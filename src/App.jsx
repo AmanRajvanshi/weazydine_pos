@@ -44,7 +44,6 @@ import Kitchens from './pages/Kitchens.jsx';
 import Semifinishedrawmaterialproducts from './pages/Semifinishedrawmaterialproducts.jsx';
 import Addsemifinishedrawmaterialproducts from './pages/Addsemifinishedrawmaterialproducts.jsx';
 import Editsemifinishedrawmaterialproducts from './pages/Editsemifinishedrawmaterialproducts.jsx';
-
 import Supliers from './pages/Supliers.jsx';
 import Semifinishedrawmaterialproductsdetails from './pages/Semifinishedrawmaterialproductsdetails.jsx';
 import KitchenProducts from './pages/KitchenProducts.jsx';
@@ -55,8 +54,8 @@ import ComingSoon from './pages/ComingSoon.jsx';
 import CustomerInsights from './pages/CustomerInsights.jsx';
 import Footer from './othercomponent/Footer.jsx';
 import CrmCampaigns from './pages/CrmCampaigns.jsx';
-
 import loader from './assets/loader.png';
+import CrmCampaignsCreate from './pages/CrmCampaignsCreate.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -572,6 +571,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <CrmCampaigns />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/crmcampaignscreate"
+              element={
+                <RequireAuth>
+                  <CrmCampaignsCreate />
                 </RequireAuth>
               }
             />

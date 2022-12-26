@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { toast } from "react-toastify";
-import { AuthContext } from "../AuthContextProvider";
-import Header from "../othercomponent/Header";
-import { Bars } from "react-loader-spinner";
+import React, { Component } from 'react';
+import { toast } from 'react-toastify';
+import { AuthContext } from '../AuthContextProvider';
+import Header from '../othercomponent/Header';
+import { Bars } from 'react-loader-spinner';
 
 export class Editprofile extends Component {
   static contextType = AuthContext;
@@ -11,13 +11,14 @@ export class Editprofile extends Component {
     this.state = {
       is_loading: true,
       submit_buttonLoading: false,
-      shop_name: "",
-      email: "",
-      website: "",
-      description: "",
-      whatsapp: "",
-      name: "",
-      contact: "",
+      shop_name: '',
+      email: '',
+      website: '',
+      description: '',
+      whatsapp: '',
+      name: '',
+      contact: '',
+      data: [],
     };
   }
 
@@ -26,10 +27,10 @@ export class Editprofile extends Component {
   }
 
   get_vendor_profile = () => {
-    fetch(global.api + "get_vendor_profile", {
-      method: "POST",
+    fetch(global.api + 'get_vendor_profile', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({}),
@@ -45,6 +46,7 @@ export class Editprofile extends Component {
             description: json.data[0].description,
             whatsapp: json.data[0].whatsapp,
             contact: json.data[0].contact,
+            data: json.data[0],
           });
         } else {
           toast.error(json.message);
@@ -62,20 +64,20 @@ export class Editprofile extends Component {
     this.setState({ submit_buttonLoading: true });
     // let numberValidation = /^[0]?[6789]\d{9}$/;
     // let isnumValid = numberValidation.test(this.state.whatsapp);
-    if (this.state.shop_name == "") {
-      toast.error("All fields are required !");
+    if (this.state.shop_name == '') {
+      toast.error('All fields are required !');
       this.setState({ submit_buttonLoading: false });
-    } else if (this.state.name == "") {
-      toast.error("Enter your Shop Name!");
+    } else if (this.state.name == '') {
+      toast.error('Enter your Shop Name!');
       this.setState({ submit_buttonLoading: false });
       // } else if (this.state.whatsapp != "" && !isnumValid) {
       //   toast.error("Enter valid whatsapp number!");
     } else {
-      fetch(global.api + "update_profile_vendor", {
-        method: "POST",
+      fetch(global.api + 'update_profile_vendor', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
@@ -115,14 +117,13 @@ export class Editprofile extends Component {
             <div className="page-header">
               <div className="page-title">
                 <h4>Profile</h4>
-                <h6>Edit Profile</h6>
               </div>
             </div>
             {this.state.is_loading ? (
               <div
                 className="main_loader"
                 style={{
-                  height: "60vh",
+                  height: '60vh',
                 }}
               >
                 <Bars
@@ -138,43 +139,29 @@ export class Editprofile extends Component {
             ) : (
               <div className="card">
                 <div className="card-body">
-                  <div className="profile-set">
-                    {/* <div className="profile-head"></div> */}
+                  {/* <div className="profile-set">
+                    <div className="profile-head"></div>
                     <div className="profile-top">
                       <div className="profile-content">
-                        {/* <div className="profile-contentimg">
-                        <img
-                          src="https://dreamspos.dreamguystech.com/html/template/assets/img/customer/customer5.jpg"
-                          alt="img"
-                          id="blah"
-                        />
-                        <div className="profileupload">
-                          <input type="file" id="imgInp" />
-                          <a href="javascript:void(0);">
-                            <img
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/edit-set.svg"
-                              alt="img"
-                            />
-                          </a>
+                        <div className="profile-contentimg">
+                          <img
+                            src="https://dreamspos.dreamguystech.com/html/template/assets/img/customer/customer5.jpg"
+                            alt="img"
+                            id="blah"
+                          />
+                          <div className="profileupload">
+                            <input type="file" id="imgInp" />
+                            <a href="javascript:void(0);">
+                              <img
+                                src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/edit-set.svg"
+                                alt="img"
+                              />
+                            </a>
+                          </div>
                         </div>
-                      </div> */}
-                        {/* <div className="profile-contentname">
-                        <h2>{this.state.name}</h2>
-                      </div> */}
                       </div>
-                      {/* <div className="ms-auto">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn btn-submit me-2"
-                      >
-                        Save
-                      </a>
-                      <a href="javascript:void(0);" className="btn btn-cancel">
-                        Cancel
-                      </a>
-                    </div> */}
                     </div>
-                  </div>
+                  </div> */}
                   <div className="row">
                     <div className="col-lg-6 col-sm-12">
                       <div className="form-group">
@@ -277,13 +264,102 @@ export class Editprofile extends Component {
                         />
                       </div>
                     </div>
+                    {this.state.data.address != null ? (
+                      <>
+                        <div className="col-lg-6 col-sm-12">
+                          <div className="form-group">
+                            <label>Address</label>
+                            <input
+                              type="text"
+                              placeholder="Address"
+                              value={this.state.data.address}
+                              onChange={(e) => {
+                                this.setState({
+                                  address: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-sm-12">
+                          <div className="form-group">
+                            <label>
+                              Area{' '}
+                              <span className="text-muted">
+                                (Cannot Be Edited)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Area"
+                              readOnly
+                              disabled
+                              value={this.state.data.area}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-sm-12">
+                          <div className="form-group">
+                            <label>
+                              City{' '}
+                              <span className="text-muted">
+                                (Cannot Be Edited)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="City"
+                              readOnly
+                              disabled
+                              value={this.state.data.city}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-sm-12">
+                          <div className="form-group">
+                            <label>
+                              State{' '}
+                              <span className="text-muted">
+                                (Cannot Be Edited)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="State"
+                              readOnly
+                              disabled
+                              value={this.state.data.state}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-sm-12">
+                          <div className="form-group">
+                            <label>
+                              Pin Code{' '}
+                              <span className="text-muted">
+                                (Cannot Be Edited)
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Pin Code"
+                              readOnly
+                              disabled
+                              value={this.state.data.pincode}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                     <div className="col-12 d-flex align-items-center justify-content-end">
                       {this.state.submit_buttonLoading ? (
                         <button
                           className="btn btn-primary btn-sm me-2"
                           style={{
-                            pointerEvents: "none",
-                            opacity: "0.8",
+                            pointerEvents: 'none',
+                            opacity: '0.8',
                           }}
                         >
                           <span

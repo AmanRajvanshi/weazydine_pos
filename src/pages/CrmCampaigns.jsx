@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../othercomponent/Header';
-import { BiRupee } from 'react-icons/bi';
-import { Bars } from 'react-loader-spinner';
-import { AuthContext } from '../AuthContextProvider';
-import moment from 'moment';
-import no_order from '../assets/images/no_orders.webp';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import Countdown from 'react-countdown';
-import coming_soon from '../assets/images/coming_soon.png';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
 import campaign from '../assets/images/campaign.png';
+import Modal from 'react-responsive-modal';
+import { Link } from 'react-router-dom';
 
 export class CrmCampaigns extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openModal: false,
+      selectedDiv: null,
+    };
+  }
   render() {
     return (
       <div className="main-wrapper">
@@ -33,7 +30,12 @@ export class CrmCampaigns extends Component {
                         and target your customers using customizable templates
                         to grow your business.
                       </h4>
-                      <div className="btn btn-primary btn-sm">
+                      <div
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.setState({ openModal: true });
+                        }}
+                      >
                         Create your first Campaign
                       </div>
                     </div>
@@ -47,11 +49,18 @@ export class CrmCampaigns extends Component {
             <div className="row mt-4 pt-4">
               <div className="d-flex align-items-center justify-content-between">
                 <h3>Overview</h3>
-                <button className="btn btn-primary">
-                  <h5>
-                    Credits : <strong>Rs. 3000</strong>
-                  </h5>
-                </button>
+                <div>
+                  <button className="btn btn-primary me-2">
+                    <h5>
+                      Credit Balance : <strong>Rs. 3000</strong>
+                    </h5>
+                  </button>
+                  <button className="btn btn-primary">
+                    <h5>
+                      Credits : <strong>Rs. 3000</strong>
+                    </h5>
+                  </button>
+                </div>
               </div>
               <div className="crm_campaigns_column">
                 <div className="crm_campaigns_column_div">
@@ -86,6 +95,67 @@ export class CrmCampaigns extends Component {
             </div>
           </div>
         </div>
+        <Modal
+          open={this.state.openModal}
+          onClose={() => this.setState({ openModal: false })}
+          center
+          classNames={{
+            modal: 'customModal',
+          }}
+          animationDuration={800}
+        >
+          <div className="container">
+            <h4>Choose a Service</h4>
+            <div className="row">
+              <div className="col-md-4">
+                <div
+                  className={
+                    this.state.selectedDiv === 'sms'
+                      ? 'campaign_social_media_boxes active'
+                      : 'campaign_social_media_boxes'
+                  }
+                  onClick={() => this.setState({ selectedDiv: 'sms' })}
+                >
+                  <i className="fa-solid fa-message campaign_social_media_icon"></i>
+                  <h5>SMS</h5>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div
+                  className={
+                    this.state.selectedDiv === 'whatsapp'
+                      ? 'campaign_social_media_boxes active'
+                      : 'campaign_social_media_boxes'
+                  }
+                  onClick={() => this.setState({ selectedDiv: 'whatsapp' })}
+                >
+                  <i className="fa-brands fa-whatsapp campaign_social_media_icon"></i>
+                  <h5>WhatsApp</h5>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div
+                  className={
+                    this.state.selectedDiv === 'email'
+                      ? 'campaign_social_media_boxes active'
+                      : 'campaign_social_media_boxes'
+                  }
+                  onClick={() => this.setState({ selectedDiv: 'email' })}
+                >
+                  <i className="fa-solid fa-envelope campaign_social_media_icon"></i>
+                  <h5>Email</h5>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12 d-flex justify-content-end align-items-center">
+                <Link to="/crmcampaignscreate">
+                  <button className="btn btn-primary btn-sm">Go Ahead</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Modal>
       </div>
     );
   }

@@ -84,7 +84,7 @@ class Pos extends Component {
   onCloseModal = () => {
     this.setState({ product_show: false });
   };
-  
+
   sendUrlToPrint = (url) => {
     var beforeUrl = 'intent:';
     var afterUrl = '#Intent;';
@@ -1233,9 +1233,9 @@ class PosAdd extends React.Component {
                 value="TakeAway"
                 pointColor="#5bc2c1"
                 iconSize={20}
-                rootColor="#bf370d"
+                rootColor="#37474f"
                 iconInnerSize={10}
-                padding={8}
+                padding={10}
               >
                 TakeAway
               </RadioButton>
@@ -1243,9 +1243,9 @@ class PosAdd extends React.Component {
                 value="Delivery"
                 pointColor="#5bc2c1"
                 iconSize={20}
-                rootColor="#065f0a"
+                rootColor="#37474f"
                 iconInnerSize={10}
-                padding={8}
+                padding={10}
               >
                 Delivery
               </RadioButton>
@@ -1254,9 +1254,9 @@ class PosAdd extends React.Component {
                 value="DineIn"
                 pointColor="#5bc2c1"
                 iconSize={20}
-                rootColor="#bf370d"
+                rootColor="#37474f"
                 iconInnerSize={10}
-                padding={8}
+                padding={10}
               >
                 DineIn
               </RadioButton>

@@ -529,7 +529,7 @@ export class Header extends Component {
                         <span>Customers</span>
                       </MenuItem> */}
                       <MenuItem
-                        routerLink={<Link to="/customerinsights" />}
+                        routerLink={<Link to="/comingsoon" />}
                         icon={
                           <i className="iconly-Filter icli sidebar_icons"></i>
                         }
@@ -540,7 +540,7 @@ export class Header extends Component {
                         </span>
                       </MenuItem>
                       <MenuItem
-                        routerLink={<Link to="/crmcampaigns" />}
+                        routerLink={<Link to="/comingsoon" />}
                         icon={
                           <i className="iconly-Category icli sidebar_icons"></i>
                         }

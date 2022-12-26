@@ -6355,7 +6355,7 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .page-header {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 @media (max-width: 575px) {
@@ -6387,8 +6387,8 @@ span.select-container.select-container--default.select-container--open {
 
 .page-header h4 {
   font-weight: 300;
-  color: #353535;
-  font-size: 26px;
+  color: #272727;
+  font-size: 23px;
 }
 
 @media (max-width: 991px) {
@@ -9587,7 +9587,7 @@ span.select-container.select-container--default.select-container--open {
   width: 20%;
 }
 
-.crm_campaigns_column_div{
+.crm_campaigns_column_div {
   height: 140px;
   background-color: #7ad2d287;
   margin: 20px 0 30px;
@@ -9653,4 +9653,69 @@ span.select-container.select-container--default.select-container--open {
     -webkit-transform: rotateY(360deg);
     transform: rotateY(360deg);
   }
+}
+
+.campaign_social_media_boxes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 20px;
+  flex-direction: column;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  height: 150px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  padding: 30px 20px;
+}
+
+.campaign_social_media_boxes:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.campaign_social_media_boxes.active {
+  box-shadow: 0 0 10px 0 #5bc2c17a;
+}
+
+.campaign_social_media_icon {
+  font-size: 35px;
+  color: #5bc2c1c7;
+}
+
+div[style*='cursor: pointer'][style*='color: rgb(55, 71, 79)'][style*='border-width: 1px'],
+div[style*='cursor: pointer'][style*='color: rgb(91, 194, 193)'][style*='border-width: 1px'] {
+  border-radius: 2px !important;
+}
+
+.sticky-container {
+  position: sticky;
+  top: 80px;
+}
+
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  color: white;
+  cursor: pointer;
+  height: 50px;
+  width: 30px;
+  border-radius: 13px;
+  align-items: center;
+  justify-content: center;
+  background: #5bc2c1b3;
+}
+
+#myBtn:hover {
+  background-color: #5bc2c1;
+}
+
+.MuiStepper-vertical {
+  padding: 25px 12px !important;
+  border-radius: 10px !important;
 }
