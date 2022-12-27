@@ -187,7 +187,7 @@ export class Header extends Component {
                 >
                   <i
                     className="fa-solid fa-bell"
-                    style={{ color: '#5bc2c1' }}
+                    style={{ color: '#2a6e84' }}
                   ></i>
                 </a>
               ) : (
@@ -198,7 +198,7 @@ export class Header extends Component {
                 >
                   <i
                     className="fa-solid fa-bell"
-                    style={{ color: '#5bc2c1' }}
+                    style={{ color: '#2a6e84' }}
                   ></i>
                 </a>
               )}

@@ -1246,7 +1246,7 @@ export class ViewTableOrder extends Component {
                     </div>
                   </div>
                   <div className="col-lg-6 d-flex justify-content-end align-items-center mt-2">
-                    {/* {this.state.mark_complete_buttonLoading ? (
+                    {this.state.mark_complete_buttonLoading ? (
                       <button
                         className="btn btn-primary btn-sm"
                         style={{
@@ -1272,7 +1272,7 @@ export class ViewTableOrder extends Component {
                       >
                         Complete Order
                       </a>
-                    ) : ( */}
+                    ) : (
                     <a
                       className="btn btn-primary btn-sm"
                       onClick={() => {
@@ -1281,7 +1281,7 @@ export class ViewTableOrder extends Component {
                     >
                       Complete Order
                     </a>
-                    {/* )} */}
+                    )}
                   </div>
                 </div>
               </div>
