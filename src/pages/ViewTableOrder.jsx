@@ -64,7 +64,9 @@ export class ViewTableOrder extends Component {
       kot:0
     };
 
-    this.componentRef = React.createRef();
+    this.componentRef = React.createRef([]);
+    this.componentRef=[];
+
   }
 
   componentDidMount() {
@@ -972,7 +974,8 @@ export class ViewTableOrder extends Component {
                                       </a>
                                     )}
                                     
-                                    content={() => this.componentRef}
+                                    content={() => {
+                                      return(this.componentRef[index])}}
                                     key={index}
                                   />
                                   </>
@@ -995,7 +998,8 @@ export class ViewTableOrder extends Component {
                             this.state.data.kot.map((kot, index) => (
                               <>
                           <PrintKot
-                            ref={(el) => (this.componentRef = el)} 
+                            ref={(el) => (this.componentRef[index] = el)} 
+                            id={index}
                            order={this.state.data}
                             kot={kot.kot}
                         />
