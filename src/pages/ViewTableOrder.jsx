@@ -61,12 +61,11 @@ export class ViewTableOrder extends Component {
       price_loading: false,
       discountAmount: '',
       discount_on_order: false,
-      kot:0
+      kot: 0,
     };
 
     this.componentRef = React.createRef([]);
-    this.componentRef=[];
-
+    this.componentRef = [];
   }
 
   componentDidMount() {
@@ -884,7 +883,7 @@ export class ViewTableOrder extends Component {
                           </div>
                         </div>
                         {this.state.data.order_status != 'cancelled' && (
-                          <div className="d-flex align-items-center justify-content-center">
+                          <div className="d-flex align-items-center justify-content-center flex-wrap">
                             {global.os != 'Windows' && global.os != 'Mac OS' ? (
                               <>
                                 <a
@@ -948,40 +947,41 @@ export class ViewTableOrder extends Component {
                               <>
                                 <ReactToPrint
                                   trigger={() => (
-                                    <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center">
+                                    <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center">
                                       <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                                       <p>Print Receipt</p>
                                     </a>
                                   )}
                                   content={() => this.componentRef2}
                                 />
-
-                                {this.state.data.order_status !=
-                                  'completed' && (
-
-                                    (this.state.data.kot.length>0) &&
-
+                                <ReactToPrint
+                                  trigger={() => (
+                                    <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center">
+                                      <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                      <p>Print KOT - All</p>
+                                    </a>
+                                  )}
+                                  content={() => this.componentRef['all']}
+                                />
+                                {this.state.data.order_status != 'completed' &&
+                                  this.state.data.kot.length > 1 &&
                                   this.state.data.kot.map((kot, index) => (
                                     <>
-                                    <br/>
-                                  <ReactToPrint
-                                    trigger={() => (
-                                      <a
-                                        className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
-                                       >
-                                        <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                                        <p>Print KOT - {kot.kot}</p>
-                                      </a>
-                                    )}
-                                    
-                                    content={() => {
-                                      return(this.componentRef[index])}}
-                                    key={index}
-                                  />
-                                  </>
-                                  )
-                                  )
-                                )}
+                                      <br />
+                                      <ReactToPrint
+                                        trigger={() => (
+                                          <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center">
+                                            <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                                            <p>Print KOT - {kot.kot}</p>
+                                          </a>
+                                        )}
+                                        content={() => {
+                                          return this.componentRef[index];
+                                        }}
+                                        key={index}
+                                      />
+                                    </>
+                                  ))}
                               </>
                             )}
                           </div>
@@ -991,25 +991,23 @@ export class ViewTableOrder extends Component {
                             display: 'none',
                           }}
                         >
-                          {
-                            
-                            (this.state.data.kot.length>0) &&
-
-                            this.state.data.kot.map((kot, index) => (
-                              <>
                           <PrintKot
-                            ref={(el) => (this.componentRef[index] = el)} 
-                            id={index}
-                           order={this.state.data}
-                            kot={kot.kot}
-                        />
-                        </>
-                            ))
-   
-                          }
+                            ref={(el) => (this.componentRef['all'] = el)}
+                            order={this.state.data}
+                            kot={'all'}
+                          />
+
+                          {this.state.data.kot.length > 0 &&
+                            this.state.data.kot.map((kot, index) => (
+                              <PrintKot
+                                ref={(el) => (this.componentRef[index] = el)}
+                                id={index}
+                                order={this.state.data}
+                                kot={kot.kot}
+                              />
+                            ))}
                           <PrintReceipt
                             ref={(el2) => (this.componentRef2 = el2)}
-                            
                             order={this.state.data}
                           />
                         </div>
@@ -1275,14 +1273,14 @@ export class ViewTableOrder extends Component {
                         Complete Order
                       </a>
                     ) : ( */}
-                      <a
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          this.mark_complete();
-                        }}
-                      >
-                        Complete Order
-                      </a>
+                    <a
+                      className="btn btn-primary btn-sm"
+                      onClick={() => {
+                        this.mark_complete();
+                      }}
+                    >
+                      Complete Order
+                    </a>
                     {/* )} */}
                   </div>
                 </div>

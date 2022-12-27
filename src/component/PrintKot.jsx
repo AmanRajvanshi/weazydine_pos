@@ -47,7 +47,6 @@ export class PrintKot extends Component {
       .finally(() => {});
   };
 
-
   render() {
     return (
       <div id="invoice-POS">
@@ -100,63 +99,63 @@ export class PrintKot extends Component {
                   </td>
                 </tr>
                 {this.props.order.cart.map((values, index) => {
-                  if(values.kot == this.props.kot)
-                  {
-                  return (
-                    <tr class="service">
-                      <td
-                        class="tableitem"
-                        style={{
-                          textAlign: 'center',
-                          width: '20%',
-                        }}
-                      >
-                        <p class="itemtext" style={{ fontSize: '1em' }}>
-                          {index + 1}
-                        </p>
-                      </td>
-                      <td
-                        class="tableitem"
-                        style={{
-                          textAlign: 'center',
-                          width: '60%',
-                        }}
-                      >
-                        <p class="itemtext" style={{ fontSize: '1em' }}>
-                          {values.product.product_name}
-                          {values.variant != null ? (
-                            <span> | Variant:  {values.variant.variants_name}</span>
-                          ) : (
-                            <></>
-                          )}
-                          {values.addons.length > 0 ? (
-                          <span>
-                            <strong> | AddOns: </strong>
-                            {values.addons.map((pp) => (
+                  if (values.kot == this.props.kot || this.props.kot == 'all') {
+                    return (
+                      <tr class="service">
+                        <td
+                          class="tableitem"
+                          style={{
+                            textAlign: 'center',
+                            width: '20%',
+                          }}
+                        >
+                          <p class="itemtext" style={{ fontSize: '1em' }}>
+                            {index + 1}
+                          </p>
+                        </td>
+                        <td
+                          class="tableitem"
+                          style={{
+                            textAlign: 'center',
+                            width: '60%',
+                          }}
+                        >
+                          <p class="itemtext" style={{ fontSize: '1em' }}>
+                            {values.product.product_name}
+                            {values.variant != null ? (
                               <span>
-                                {" "}{pp.addon_name}
+                                {' '}
+                                | Variant: {values.variant.variants_name}
                               </span>
-                            ))}
-                          </span>
-                        ) : (
-                          <></>
-                        )}
-                        </p>
-                      </td>
-                      <td
-                        class="tableitem"
-                        style={{
-                          textAlign: 'center',
-                          width: '20%',
-                        }}
-                      >
-                        <p class="itemtext" style={{ fontSize: '1em' }}>
-                          {values.product_quantity}
-                        </p>
-                      </td>
-                    </tr>
-                  );
-                      }
+                            ) : (
+                              <></>
+                            )}
+                            {values.addons.length > 0 ? (
+                              <span>
+                                <strong> | AddOns: </strong>
+                                {values.addons.map((pp) => (
+                                  <span> {pp.addon_name}</span>
+                                ))}
+                              </span>
+                            ) : (
+                              <></>
+                            )}
+                          </p>
+                        </td>
+                        <td
+                          class="tableitem"
+                          style={{
+                            textAlign: 'center',
+                            width: '20%',
+                          }}
+                        >
+                          <p class="itemtext" style={{ fontSize: '1em' }}>
+                            {values.product_quantity}
+                          </p>
+                        </td>
+                      </tr>
+                    );
+                  }
                 })}
               </tbody>
             </table>

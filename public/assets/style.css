@@ -9719,3 +9719,8 @@ div[style*='cursor: pointer'][style*='color: rgb(91, 194, 193)'][style*='border-
   padding: 25px 12px !important;
   border-radius: 10px !important;
 }
+
+.w-45 {
+  width: 45% !important;
+  margin: 5px;
+}

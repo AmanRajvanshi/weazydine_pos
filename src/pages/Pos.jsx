@@ -61,6 +61,7 @@ class Pos extends Component {
       order: [],
       bill_show: false,
       order_table_no: '',
+      kot_id: '',
     };
   }
 
@@ -70,10 +71,6 @@ class Pos extends Component {
       this.orderDetails(this.props.table_id);
     }
     this.fetchCategories();
-    if (this.inputRef.current) {
-      this.inputRef.current.focus();
-    }
-    // this.fetchProducts(0, this.state.type, 1);
   }
 
   active_cat = (id) => {
@@ -366,13 +363,14 @@ class Pos extends Component {
             }
             toast.success('done');
           }
-          this.setState({ is_buttonloding: false });
           return json;
         })
         .catch((error) => {
           console.error(error);
         })
-        .finally(() => {});
+        .finally(() => {
+          this.setState({ is_buttonloding: false });
+        });
     }
   };
 
@@ -475,6 +473,7 @@ class Pos extends Component {
             posOrderComplete: true,
             order_code: json.data[0].order_code,
             order: json.data,
+            kot_id: json.data[0].kot,
           });
           if (
             json.data[0].order_type != 'TakeAway' ||
@@ -494,7 +493,7 @@ class Pos extends Component {
         console.error(error);
       })
       .finally(() => {
-        // this.setState({ isloading: false });
+        this.setState({ is_buttonloding: false });
       });
   };
 
@@ -679,21 +678,22 @@ class Pos extends Component {
                                   >
                                     Select The Product To Add
                                   </h5>
-                                  <div className="row">
+                                  {/* <div className="row">
                                     <div className="col-md-12">
                                       <div className="form-group">
                                         <input
                                           type="text"
+                                          id='pos_search_bar'
                                           className="form-control"
                                           placeholder="Search"
                                           value={this.state.search}
                                           onChange={(e) => this.search(e)}
                                           autoFocus={false}
-                                          ref={() => this.inputRef}
+                                          ref={this.inputRef}
                                         />
                                       </div>
                                     </div>
-                                  </div>
+                                  </div> */}
                                   <div className="row pos_divs_row">
                                     {!this.state.load_item ? (
                                       this.state.products.length > 0 ? (
@@ -1094,7 +1094,7 @@ class Pos extends Component {
               </div>
               <div className="row">
                 <div className="d-flex justify-content-center align-items-center">
-                  <img src={success_gif} alt="" style={{width:"150px"}}/>
+                  <img src={success_gif} alt="" style={{ width: '150px' }} />
                 </div>
               </div>
               <div className="row my-4">
@@ -1130,7 +1130,6 @@ class Pos extends Component {
                           }}
                           trigger={() => (
                             <a className="btn btn-primary w-100 me-2 d-flex align-items-center justify-content-center">
-                              {/* <i className="fa-solid fa-file-invoice  print-receipt-icon"></i> */}
                               <p>Print Receipt</p>
                             </a>
                           )}
@@ -1144,11 +1143,12 @@ class Pos extends Component {
                           }}
                           trigger={() => (
                             <a className="btn btn-primary w-100 d-flex align-items-center justify-content-center">
-                              {/* <i className="fa-solid fa-file-invoice  print-receipt-icon"></i> */}
                               <p>Print KOT</p>
                             </a>
                           )}
-                          content={() => this.componentRef}
+                          content={() => {
+                            return this.componentRef;
+                          }}
                         />
                       </div>
                     </div>
@@ -1191,6 +1191,7 @@ class Pos extends Component {
               <PrintKot
                 ref={(el) => (this.componentRef = el)}
                 order={this.state.order[0]}
+                kot={this.state.kot_id}
               />
               <PrintReceipt
                 ref={(el2) => (this.componentRef2 = el2)}
