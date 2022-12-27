@@ -61,7 +61,10 @@ export class ViewTableOrder extends Component {
       price_loading: false,
       discountAmount: '',
       discount_on_order: false,
+      kot:0
     };
+
+    this.componentRef = React.createRef();
   }
 
   componentDidMount() {
@@ -953,37 +956,28 @@ export class ViewTableOrder extends Component {
 
                                 {this.state.data.order_status !=
                                   'completed' && (
+
+                                    (this.state.data.kot.length>0) &&
+
+                                  this.state.data.kot.map((kot, index) => (
+                                    <>
+                                    <br/>
                                   <ReactToPrint
                                     trigger={() => (
                                       <a
                                         className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
-                                        onClick={() => {
-                                          if (
-                                            global.os == 'Windows' ||
-                                            global.os == 'Mac OS'
-                                          ) {
-                                            window.open(
-                                              global.api +
-                                                this.state.data.order_code +
-                                                '/kot.pdf',
-                                              'PRINT',
-                                              'height=400,width=600'
-                                            );
-                                          } else {
-                                            this.sendUrlToPrint(
-                                              global.api +
-                                                this.state.data.order_code +
-                                                '/kot.pdf'
-                                            );
-                                          }
-                                        }}
-                                      >
+                                       >
                                         <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
-                                        <p>Print KOT</p>
+                                        <p>Print KOT - {kot.kot}</p>
                                       </a>
                                     )}
+                                    
                                     content={() => this.componentRef}
+                                    key={index}
                                   />
+                                  </>
+                                  )
+                                  )
                                 )}
                               </>
                             )}
@@ -994,12 +988,24 @@ export class ViewTableOrder extends Component {
                             display: 'none',
                           }}
                         >
+                          {
+                            
+                            (this.state.data.kot.length>0) &&
+
+                            this.state.data.kot.map((kot, index) => (
+                              <>
                           <PrintKot
-                            ref={(el) => (this.componentRef = el)}
-                            order={this.state.data}
-                          />
+                            ref={(el) => (this.componentRef = el)} 
+                           order={this.state.data}
+                            kot={kot.kot}
+                        />
+                        </>
+                            ))
+   
+                          }
                           <PrintReceipt
                             ref={(el2) => (this.componentRef2 = el2)}
+                            
                             order={this.state.data}
                           />
                         </div>
@@ -1238,7 +1244,7 @@ export class ViewTableOrder extends Component {
                     </div>
                   </div>
                   <div className="col-lg-6 d-flex justify-content-end align-items-center mt-2">
-                    {this.state.mark_complete_buttonLoading ? (
+                    {/* {this.state.mark_complete_buttonLoading ? (
                       <button
                         className="btn btn-primary btn-sm"
                         style={{
@@ -1264,7 +1270,7 @@ export class ViewTableOrder extends Component {
                       >
                         Complete Order
                       </a>
-                    ) : (
+                    ) : ( */}
                       <a
                         className="btn btn-primary btn-sm"
                         onClick={() => {
@@ -1273,7 +1279,7 @@ export class ViewTableOrder extends Component {
                       >
                         Complete Order
                       </a>
-                    )}
+                    {/* )} */}
                   </div>
                 </div>
               </div>

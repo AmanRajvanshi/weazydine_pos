@@ -71,26 +71,6 @@ export class PrintReceipt extends Component {
               ) : (
                 <></>
               )}
-              {this.props.order.vendor.area != null ? (
-                <span>, {this.props.order.vendor.area}</span>
-              ) : (
-                <></>
-              )}
-              {this.props.order.vendor.city != null ? (
-                <span>, {this.props.order.vendor.city}</span>
-              ) : (
-                <></>
-              )}
-              {this.props.order.vendor.state != null ? (
-                <span>, {this.props.order.vendor.state}</span>
-              ) : (
-                <></>
-              )}
-              {this.props.order.vendor.pincode != null ? (
-                <span>, {this.props.order.vendor.pincode}</span>
-              ) : (
-                <></>
-              )}
             </p>
 
             {this.props.order.vendor.gstin != null ? (
@@ -330,7 +310,7 @@ export class PrintReceipt extends Component {
                   <tr class="tabletitle">
                     <td class="Rate" style={{ width: '60%' }}>
                       <h2 style={{ fontSize: '2.15em', fontWeight: '300' }}>
-                        Tax(C.G.S.T)
+                        CGST@ 2.5%
                       </h2>
                     </td>
                     <td style={{ width: '20%' }}></td>
@@ -354,7 +334,7 @@ export class PrintReceipt extends Component {
                   <tr class="tabletitle">
                     <td class="Rate" style={{ width: '60%' }}>
                       <h2 style={{ fontSize: '2.15em', fontWeight: '300' }}>
-                        Tax(S.G.S.T)
+                        SGST@ 2.5%
                       </h2>
                     </td>
                     <td style={{ width: '20%' }}></td>

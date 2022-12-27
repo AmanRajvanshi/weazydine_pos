@@ -46,12 +46,16 @@ export class PrintKot extends Component {
       .catch((error) => console.error(error))
       .finally(() => {});
   };
+
+
   render() {
     return (
       <div id="invoice-POS">
         <div id="legalcopy">
           <p class="kot_dT" style={{ fontSize: '16px' }}>
             Token For: {this.props.order.order_code}
+            <br />
+            KOT No: {this.props.kot}
             <br
               style={{
                 marginTop: '10px',
@@ -96,6 +100,8 @@ export class PrintKot extends Component {
                   </td>
                 </tr>
                 {this.props.order.cart.map((values, index) => {
+                  if(values.kot == this.props.kot)
+                  {
                   return (
                     <tr class="service">
                       <td
@@ -150,6 +156,7 @@ export class PrintKot extends Component {
                       </td>
                     </tr>
                   );
+                      }
                 })}
               </tbody>
             </table>
