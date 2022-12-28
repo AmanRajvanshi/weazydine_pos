@@ -33,8 +33,7 @@ class Salesreport extends Component {
     weazypay: 0,
   };
 
-  handleSelect(ranges) {
-  }
+  handleSelect(ranges) {}
 
   componentDidMount() {
     this.fetch_order(1, '', 'today');
@@ -455,21 +454,19 @@ class Salesreport extends Component {
                       </ToolkitProvider>
                     </div>
                   ) : (
-                    <div className="page-wrapper">
-                      <div
-                        className="content"
-                        style={{
-                          height: '60vh',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          flexDirection: 'column',
-                          margin: '40px 0',
-                        }}
-                      >
-                        <img src={no_order} alt="" />
-                        <h3>No Records Found</h3>
-                      </div>
+                    <div
+                      className="content"
+                      style={{
+                        height: '60vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        margin: '40px 0',
+                      }}
+                    >
+                      <img src={no_order} alt="" />
+                      <h3>No Records Found</h3>
                     </div>
                   )}
                 </div>

@@ -56,6 +56,7 @@ import Footer from './othercomponent/Footer.jsx';
 import CrmCampaigns from './pages/CrmCampaigns.jsx';
 import loader from './assets/loader.png';
 import CrmCampaignsCreate from './pages/CrmCampaignsCreate.jsx';
+import ProductAddons from './pages/ProductAddons.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -580,6 +581,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <CrmCampaignsCreate />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/productaddons"
+              element={
+                <RequireAuth>
+                  <ProductAddons />
                 </RequireAuth>
               }
             />
