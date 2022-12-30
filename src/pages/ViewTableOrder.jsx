@@ -887,7 +887,7 @@ export class ViewTableOrder extends Component {
                             {global.os != 'Windows' && global.os != 'Mac OS' ? (
                               <>
                                 <a
-                                  className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center"
+                                  className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center "
                                   onClick={() => {
                                     if (
                                       global.os == 'Windows' ||
@@ -947,7 +947,7 @@ export class ViewTableOrder extends Component {
                               <>
                                 <ReactToPrint
                                   trigger={() => (
-                                    <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center">
+                                    <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center button-secondary-color">
                                       <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                                       <p>Print Receipt</p>
                                     </a>
@@ -956,7 +956,7 @@ export class ViewTableOrder extends Component {
                                 />
                                 <ReactToPrint
                                   trigger={() => (
-                                    <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center">
+                                    <a className="btn btn-primary w-45 d-flex align-items-center justify-content-center button-secondary-color">
                                       <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                                       <p>Print KOT - All</p>
                                     </a>
@@ -1273,14 +1273,14 @@ export class ViewTableOrder extends Component {
                         Complete Order
                       </a>
                     ) : (
-                    <a
-                      className="btn btn-primary btn-sm"
-                      onClick={() => {
-                        this.mark_complete();
-                      }}
-                    >
-                      Complete Order
-                    </a>
+                      <a
+                        className="btn btn-primary btn-sm"
+                        onClick={() => {
+                          this.mark_complete();
+                        }}
+                      >
+                        Complete Order
+                      </a>
                     )}
                   </div>
                 </div>

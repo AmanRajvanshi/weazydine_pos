@@ -71,9 +71,9 @@ class Login extends Component {
     }
   };
 
-  otpVerification = () => {
+  otpVerification = (otp) => {
     this.setState({ verifyotploading: true });
-    if (this.state.otp === '') {
+    if (otp === '') {
       toast.error('OTP is required');
       this.setState({ verifyotploading: false });
     } else {
@@ -85,7 +85,7 @@ class Login extends Component {
         },
         body: JSON.stringify({
           contact: this.state.phoneNumber,
-          otp: this.state.otp,
+          otp: otp,
           verification_type: 'vendor',
         }),
       })
@@ -137,7 +137,6 @@ class Login extends Component {
   };
 
   resendOtp = () => {
-    toast.success('OTP Resend successfully');
     fetch(global.api + 'mobile-verification', {
       method: 'POST',
       headers: {
@@ -153,6 +152,10 @@ class Login extends Component {
       .then((response) => response.json())
       .then((json) => {
         if (json.msg === 'ok') {
+          toast.success('OTP Resend successfully');
+          this.setState({
+            otp: '',
+          });
         } else {
           toast.error(json.msg);
         }
@@ -204,8 +207,8 @@ class Login extends Component {
                           </div>
 
                           <div className="login-userheading">
-                            <h3>{this.state.heading}</h3>
-                            <h4>{this.state.subheading}</h4>
+                            <h2 className="mb-1">{this.state.heading}</h2>
+                            <h5>{this.state.subheading}</h5>
                           </div>
                           {this.state.otpButton ? (
                             <>
@@ -234,6 +237,9 @@ class Login extends Component {
                                     value={this.state.otp}
                                     onChange={(otp) => {
                                       this.setState({ otp: otp });
+                                      if (otp.length === 4) {
+                                        this.otpVerification(otp);
+                                      }
                                     }}
                                     numInputs={4}
                                     separator={<span>-</span>}
@@ -260,7 +266,7 @@ class Login extends Component {
                                   <div
                                     className="btn btn-login"
                                     onClick={() => {
-                                      this.otpVerification();
+                                      this.otpVerification(this.state.otp);
                                     }}
                                   >
                                     Verify OTP

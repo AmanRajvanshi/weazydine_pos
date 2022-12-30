@@ -360,21 +360,19 @@ class Orderlist extends Component {
                       </div>
                     </div>
                   ) : (
-                    <div className="page-wrapper">
-                      <div
-                        className="content"
-                        style={{
-                          height: '60vh',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          flexDirection: 'column',
-                          margin: '40px 0',
-                        }}
-                      >
-                        <img src={no_order} alt="" />
-                        <h3>No Order Found</h3>
-                      </div>
+                    <div
+                      className="content"
+                      style={{
+                        height: '60vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        margin: '40px 0',
+                      }}
+                    >
+                      <img src={no_order} alt="" />
+                      <h3>No Order Found</h3>
                     </div>
                   )}
                 </div>

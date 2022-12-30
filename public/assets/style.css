@@ -5,6 +5,10 @@
   src: url('../assets/FakeReceipt.ttf');
 }
 
+:root {
+  --bs-btn-active-border-color: #2a6e84;
+}
+
 .css-equal-content,
 .css-equal-heights {
   display: flex;
@@ -9722,5 +9726,47 @@ div[style*='cursor: pointer'][style*='color: rgb(91, 194, 193)'][style*='border-
 
 .w-45 {
   width: 45% !important;
-  margin: 5px;
+  margin: 5px 5px 10px;
+}
+
+.button-secondary-color {
+  background-color: #2a6e84 !important;
+  border-color: #2a6e84 !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.buy_credits_box{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 20px;
+  flex-direction: column;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  height: 100px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  padding: 30px 20px;
+}
+
+.buy_credits_box h5{
+  font-size: 17px;
+  line-height: 22px;
+  color: #354545;
+}
+
+.buy_credits_box h6{
+  font-size: 16px;
+  color: #354545;
 }

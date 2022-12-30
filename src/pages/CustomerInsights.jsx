@@ -167,15 +167,12 @@ export class CustomerInsights extends Component {
                                       ? 'N/A'
                                       : item.orders}
                                   </td>
-                                  <td>
-                                    {moment(item.created_at).format('ll')}
-                                    {}
-                                  </td>
+                                  <td>{moment(item.created_at).format('L')}</td>
                                   <td>
                                     {item.dob == null ||
                                     item.dob == '02/02/1996'
                                       ? 'N/A'
-                                      : item.dob}
+                                      : moment(item.dob).format('L')}
                                   </td>
                                 </tr>
                               ))}

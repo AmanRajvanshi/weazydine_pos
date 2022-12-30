@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../AuthContextProvider';
 import { Bars } from 'react-loader-spinner';
 import Skeletonloader from '../othercomponent/Skeletonloader';
+import { Helmet } from 'react-helmet';
 export class Editproduct extends Component {
   static contextType = AuthContext;
   constructor(props) {
@@ -24,7 +25,6 @@ export class Editproduct extends Component {
       product_id: 0,
       name: '',
       c_id: '',
-      market_price: '',
       our_price: '',
       description: '',
       type: '',
@@ -33,6 +33,8 @@ export class Editproduct extends Component {
       v_data: [],
       product_image: '',
       addon_object: [],
+      createNewCategoryButton: false,
+      isLoading: false,
     };
   }
 
@@ -82,7 +84,6 @@ export class Editproduct extends Component {
           var obj = json.data[0];
           this.setState({ product_id: obj.id });
           this.setState({ name: obj.product_name });
-          this.setState({ market_price: obj.market_price });
           this.setState({ our_price: obj.our_price });
           this.setState({ description: obj.description });
           this.setState({ image: obj.product_img });
@@ -109,6 +110,7 @@ export class Editproduct extends Component {
 
   add = () => {
     if (this.state.new_category_name != '') {
+      this.setState({ createNewCategoryButton: true });
       fetch(global.api + 'create_category_vendor', {
         method: 'POST',
         headers: {
@@ -137,7 +139,7 @@ export class Editproduct extends Component {
           console.error(error);
         })
         .finally(() => {
-          this.setState({ isloading: false });
+          this.setState({ createNewCategoryButton: false });
         });
     } else {
       toast.error('Please add Category first!');
@@ -147,13 +149,10 @@ export class Editproduct extends Component {
   create = () => {
     this.update_product_variant();
     let numberValidation = /^[0-9]+$/;
-    let isnumValid = numberValidation.test(
-      this.state.market_price + this.state.our_price
-    );
+    let isnumValid = numberValidation.test(this.state.our_price);
 
     if (
       this.state.name == '' ||
-      this.state.market_price == '' ||
       this.state.product_img == '' ||
       this.state.our_price == '' ||
       this.state.description == ''
@@ -161,11 +160,7 @@ export class Editproduct extends Component {
       toast.error('All fields are required !');
     } else if (this.state.category == '') {
       toast.error('Add category first !');
-    }
-    // else if (this.state.market_price<this.state.our_price) {
-    //     toast.error("Your price should be less than market price !");
-    // }
-    else if (this.state.c_id == '') {
+    } else if (this.state.c_id == '') {
       toast.error('Category is required !');
     } else if (!isnumValid) {
       toast.error('Price contains digits only!');
@@ -179,7 +174,6 @@ export class Editproduct extends Component {
       var form = new FormData();
       form.append('product_name', this.state.name);
       form.append('vendor_category_id', this.state.c_id);
-      form.append('market_price', this.state.market_price);
       form.append('price', this.state.our_price);
       form.append('description', this.state.description);
       form.append('type', this.state.type);
@@ -257,6 +251,9 @@ export class Editproduct extends Component {
   render() {
     return (
       <>
+        <Helmet>
+          <title>Edit Product | Weazy Dine</title>
+        </Helmet>
         <div className="main-wrapper">
           <Header />
           {!this.state.is_loading ? (
@@ -265,14 +262,29 @@ export class Editproduct extends Component {
                 <div className="page-header">
                   <div className="page-title">
                     <h4>Edit Product</h4>
-                    <h6>Edit your product</h6>
                   </div>
-                  <a
-                    className="btn btn-primary btn-sm me-2"
-                    onClick={() => this.create()}
-                  >
-                    Save
-                  </a>
+                  {this.state.isLoading ? (
+                    <button
+                      className="btn btn-primary btn-sm me-2"
+                      style={{
+                        pointerEvents: 'none',
+                        opacity: '0.8',
+                      }}
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></span>
+                      Saving
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary btn-sm me-2"
+                      onClick={() => this.create()}
+                    >
+                      Save
+                    </button>
+                  )}
                 </div>
                 <div className="card">
                   <div className="card-body">
@@ -331,18 +343,6 @@ export class Editproduct extends Component {
                       </div>
                       <div className="col-lg-3 col-sm-6 col-12">
                         <div className="form-group">
-                          <label>Market Price</label>
-                          <input
-                            type="text"
-                            value={this.state.market_price}
-                            onChange={(e) => {
-                              this.setState({ market_price: e.target.value });
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-sm-6 col-12">
-                        <div className="form-group">
                           <label>Our Price</label>
                           <input
                             value={this.state.our_price}
@@ -365,7 +365,7 @@ export class Editproduct extends Component {
                           >
                             <RadioButton
                               value="1"
-                              pointColor="#f3c783"
+                              pointColor="#5bc2c1"
                               iconSize={20}
                               rootColor="#065f0a"
                               iconInnerSize={10}
@@ -375,7 +375,7 @@ export class Editproduct extends Component {
                             </RadioButton>
                             <RadioButton
                               value="0"
-                              pointColor="#f3c783"
+                              pointColor="#5bc2c1"
                               iconSize={20}
                               rootColor="#bf370d"
                               iconInnerSize={10}
@@ -400,7 +400,7 @@ export class Editproduct extends Component {
                           </select>
                         </div>
                       </div>
-                      <div className="col-lg-6">
+                      <div className="col-lg-9">
                         <div className="form-group">
                           <label>Description</label>
                           <input
@@ -427,14 +427,13 @@ export class Editproduct extends Component {
                             ) : (
                               <input
                                 type={'file'}
-                                accept=".png, .jpg, .jpeg,.svg"
+                                accept=".png, .jpg, .jpeg,.svg,.webp"
                                 className="upload"
                                 onChange={(e) => {
                                   this.uploadImage(e);
                                 }}
                               />
                             )}
-
                             {this.state.product_image != '' ? (
                               <img
                                 id="target"
@@ -447,7 +446,7 @@ export class Editproduct extends Component {
                             ) : (
                               <></>
                             )}
-                            {this.state.images.length > 0 ? (
+                            {this.state.images.length > 0 &&
                               this.state.images.map((item, index) => {
                                 return (
                                   <img
@@ -459,10 +458,7 @@ export class Editproduct extends Component {
                                     }}
                                   />
                                 );
-                              })
-                            ) : (
-                              <></>
-                            )}
+                              })}
                           </div>
                         </div>
                       </div>
@@ -522,15 +518,30 @@ export class Editproduct extends Component {
                     </div>
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
-                    <a
-                      href="javascript:void(0);"
-                      onClick={() => {
-                        this.add();
-                      }}
-                      className="btn btn-submit me-2"
-                    >
-                      Add Category
-                    </a>
+                    {this.state.createNewCategoryButton ? (
+                      <button
+                        className="btn btn-primary btn-sm me-2"
+                        style={{
+                          pointerEvents: 'none',
+                          opacity: '0.8',
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Adding
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          this.add();
+                        }}
+                        className="btn btn-primary btn-sm me-2"
+                      >
+                        Add Category
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -693,7 +704,6 @@ class Variants extends Component {
           <div className="page-header">
             <div className="page-title" style={{ marginTop: '-50px' }}>
               <h4>Product Varients & Addons</h4>
-              <h6>Create Product Varients & Addons</h6>
             </div>
           </div>
           <div className="card" style={{ padding: 20 }}>
@@ -805,25 +815,51 @@ class Variants extends Component {
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'start',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <h3 className="mb-3 py-2 underline">Addons</h3>
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => {
-                  this.setState({
-                    newaddon: true,
-                  });
-                }}
-                style={{
-                  marginBottom: '20px',
-                  marginTop: '10px',
-                  marginLeft: '30px',
-                }}
-              >
-                Add New Addon
-              </button>
+              <div className="d-flex align-items-center">
+                <h6 className="py-2 underline">Addons</h6>
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => {
+                    this.setState({
+                      newaddon: true,
+                    });
+                  }}
+                  style={{
+                    marginLeft: '10px',
+                  }}
+                >
+                  Add New Addon
+                </button>
+              </div>
+              <div className="d-flex align-items-center">
+                <h6 className="py-2 underline">Maximum Addons Count</h6>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  onChange={(e) => {
+                    this.setState({
+                      max_product_addons: e.target.value,
+                    });
+                  }}
+                >
+                  <option>Select Maximum Addons Count</option>
+                  <option value="0">
+                    Unlimited (User can select any number of addons)
+                  </option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
             </div>
             <div className="row">
               <div className="col-mg-12">

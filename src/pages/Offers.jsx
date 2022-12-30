@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 import no_img from '../assets/images/no_products_found.png';
 import { BiRupee } from 'react-icons/bi';
 
-export class ProductAddons extends Component {
+export class Offers extends Component {
   static contextType = AuthContext;
   constructor(props) {
     super(props);
@@ -181,7 +181,7 @@ export class ProductAddons extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Product Addons</h4>
+                  <h4>Offers</h4>
                 </div>
                 <div className="page-btn">
                   <a
@@ -195,7 +195,7 @@ export class ProductAddons extends Component {
                       alt="img"
                       className="me-1"
                     />
-                    Create a new Addon
+                    Create a new Offer
                   </a>
                 </div>
               </div>
@@ -447,4 +447,4 @@ export class ProductAddons extends Component {
   }
 }
 
-export default ProductAddons;
+export default Offers;

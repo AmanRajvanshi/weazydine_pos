@@ -26,7 +26,6 @@ export class Addproduct extends Component {
       product_id: 0,
       name: '',
       c_id: '',
-      market_price: '',
       our_price: '',
       description: '',
       type: 'product',
@@ -111,12 +110,9 @@ export class Addproduct extends Component {
 
   create = () => {
     let numberValidation = /^[0-9]+$/;
-    let isnumValid = numberValidation.test(
-      this.state.market_price + this.state.our_price
-    );
+    let isnumValid = numberValidation.test(this.state.our_price);
     if (
       this.state.name == '' ||
-      this.state.market_price == '' ||
       this.state.images == '' ||
       this.state.our_price == '' ||
       this.state.description == ''
@@ -124,11 +120,7 @@ export class Addproduct extends Component {
       toast.error('All fields are required !');
     } else if (this.state.category == '') {
       toast.error('Add category first !');
-    }
-    // else if (this.state.market_price<this.state.our_price) {
-    //     toast.error("Your price should be less than market price !");
-    // }
-    else if (this.state.c_id == '') {
+    } else if (this.state.c_id == '') {
       toast.error('Category is required !');
     } else if (!isnumValid) {
       toast.error('Price contains digits only!');
@@ -143,7 +135,6 @@ export class Addproduct extends Component {
       form.append('product_name', this.state.name);
       // form.append("token",global.token);
       form.append('vendor_category_id', this.state.c_id);
-      form.append('market_price', this.state.market_price);
       form.append('price', this.state.our_price);
       form.append('description', this.state.description);
       form.append('type', this.state.type);
@@ -196,7 +187,6 @@ export class Addproduct extends Component {
                 <div className="page-header">
                   <div className="page-title">
                     <h4>Product Add</h4>
-                    <h6>Create new product</h6>
                   </div>
                 </div>
                 <div className="card">
@@ -253,18 +243,7 @@ export class Addproduct extends Component {
                       </div>
                       <div className="col-lg-3 col-sm-6 col-12">
                         <div className="form-group">
-                          <label> Price</label>
-                          <input
-                            type="text"
-                            onChange={(e) => {
-                              this.setState({ market_price: e.target.value });
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-sm-6 col-12">
-                        <div className="form-group">
-                          <label>Offer Price</label>
+                          <label>Price</label>
                           <input
                             onChange={(e) => {
                               this.setState({ our_price: e.target.value });
@@ -321,7 +300,7 @@ export class Addproduct extends Component {
                           </select>
                         </div>
                       </div>
-                      <div className="col-lg-6">
+                      <div className="col-lg-9">
                         <div className="form-group">
                           <label>Description</label>
                           <input
@@ -407,17 +386,6 @@ export class Addproduct extends Component {
                                           type="text"
                                           name="name"
                                           value={this.state.rows[idx].name}
-                                          onChange={this.handleChange(idx)}
-                                          className="form-control"
-                                        />
-                                      </td>
-                                      <td>
-                                        <input
-                                          type="text"
-                                          name="market_price"
-                                          value={
-                                            this.state.rows[idx].market_price
-                                          }
                                           onChange={this.handleChange(idx)}
                                           className="form-control"
                                         />
@@ -876,15 +844,6 @@ class Variants extends Component {
                           <td>
                             <input
                               type="text"
-                              name="variants_price"
-                              value={this.state.rows[idx].market_price}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
                               name="variants_discounted_price"
                               value={this.state.rows[idx].offer_price}
                               onChange={this.handleChange(idx)}
@@ -945,25 +904,51 @@ class Variants extends Component {
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'start',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <h3 className="mb-3 py-2 underline">Addons</h3>
-              <button
-                className="btn btn-primary btn-sm "
-                onClick={() => {
-                  this.setState({
-                    newaddon: true,
-                  });
-                }}
-                style={{
-                  marginBottom: '20px',
-                  marginTop: '10px',
-                  marginLeft: '30px',
-                }}
-              >
-                Add New Addon
-              </button>
+              <div className="d-flex align-items-center">
+                <h6 className="py-2 underline">Addons</h6>
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => {
+                    this.setState({
+                      newaddon: true,
+                    });
+                  }}
+                  style={{
+                    marginLeft: '10px',
+                  }}
+                >
+                  Add New Addon
+                </button>
+              </div>
+              <div className="d-flex align-items-center">
+                <h6 className="py-2 underline">Maximum Addons Count</h6>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  onChange={(e) => {
+                    this.setState({
+                      max_product_addons: e.target.value,
+                    });
+                  }}
+                >
+                  <option>Select Maximum Addons Count</option>
+                  <option value="0">
+                    Unlimited (User can select any number of addons)
+                  </option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
             </div>
             <div className="row">
               <div className="col-mg-12">

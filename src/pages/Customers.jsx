@@ -103,10 +103,7 @@ class Customers extends Component {
                                   ? 'N/A'
                                   : item.orders}
                               </td>
-                              <td>
-                                {moment(item.created_at).format('ll')}
-                                {}
-                              </td>
+                              <td>{moment(item.created_at).format('ll')}</td>
                               <td>
                                 {item.dob == null || item.dob == '02/02/1996'
                                   ? 'N/A'

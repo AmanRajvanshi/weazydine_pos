@@ -412,6 +412,14 @@ export class Header extends Component {
                       >
                         <span>Category List</span>
                       </MenuItem>
+                      <MenuItem
+                        routerLink={<Link to="/productaddons" />}
+                        icon={
+                          <i className="iconly-Folder icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>Addons List</span>
+                      </MenuItem>
                     </SubMenu>
 
                     <SubMenu
@@ -529,7 +537,7 @@ export class Header extends Component {
                         <span>Customers</span>
                       </MenuItem> */}
                       <MenuItem
-                        routerLink={<Link to="/comingsoon" />}
+                        routerLink={<Link to="/customerinsights" />}
                         icon={
                           <i className="iconly-Filter icli sidebar_icons"></i>
                         }
@@ -540,7 +548,7 @@ export class Header extends Component {
                         </span>
                       </MenuItem>
                       <MenuItem
-                        routerLink={<Link to="/comingsoon" />}
+                        routerLink={<Link to="/crmcampaigns" />}
                         icon={
                           <i className="iconly-Category icli sidebar_icons"></i>
                         }
@@ -572,7 +580,7 @@ export class Header extends Component {
                     </SubMenu>
 
                     <MenuItem
-                      routerLink={<Link to="/comingsoon" />}
+                      routerLink={<Link to="/offers" />}
                       icon={<i className="iconly-Bag icli sidebar_icons"></i>}
                     >
                       <span>Offers</span>
