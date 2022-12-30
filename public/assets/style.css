@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
 @font-face {
   font-family: 'PrintFont';
   src: url('../assets/FakeReceipt.ttf');
@@ -644,7 +642,7 @@ h6 {
 }
 
 body {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Nunito', sans-serif !important;
   font-size: 14px;
   color: #1a181e;
   line-height: 1.5;
@@ -1694,13 +1692,13 @@ div#global-loader,
 .fc-toolbar h2 {
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Nunito', sans-serif;
   line-height: 30px;
   text-transform: uppercase;
 }
 
 .fc-day-grid-event .fc-time {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .fc-day {
@@ -1799,13 +1797,13 @@ div#global-loader,
 .fc-basic-view td.fc-week-number span {
   padding-right: 8px;
   font-weight: 700;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .fc-basic-view td.fc-day-number {
   padding-right: 8px;
   font-weight: 700;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .event-form .input-group .form-control {

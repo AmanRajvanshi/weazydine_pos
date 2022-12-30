@@ -23,6 +23,12 @@ export class CrmCampaigns extends Component {
       transaction_amount: '',
       tax_amount: '',
       order_amount: '',
+      vendor_name: '',
+      vendor_email: '',
+      vendor_contact: '',
+      payment_id: '',
+      order_id: '',
+      payment_loading: false,
     };
   }
 
@@ -53,6 +59,11 @@ export class CrmCampaigns extends Component {
             transaction_amount: json.txn_amount,
             tax_amount: json.tax,
             order_amount: json.order_amount,
+            vendor_name: json.customer.name,
+            vendor_email: json.customer.email,
+            vendor_contact: json.customer.contact,
+            payment_id: json.payment_id,
+            order_id: json.order_id,
           });
         } else {
           toast.error(json.message);
@@ -63,6 +74,83 @@ export class CrmCampaigns extends Component {
       })
       .finally(() => {
         this.setState({ buy_credit_loader: false });
+      });
+  };
+
+  openPaymentGateway = () => {
+    this.setState({ payment_loading: true });
+    var obj = this;
+    var options = {
+      key: this.state.payment_id,
+      amount: this.state.transaction_amount,
+      currency: 'INR',
+      description: 'Weazy Dine',
+      image: 'https://weazydine.com/assets/favicon_io/apple-touch-icon.png',
+      order_id: this.state.order_id,
+      redirect: false,
+      handler: function (response) {
+        obj
+          .verify_payment
+          // response.razorpay_payment_id,
+          // this.state.transaction_id
+          // this.state.transaction_id
+          ();
+      },
+      prefill: {
+        name: this.state.vendor_name,
+        contact: this.state.vendor_contact,
+        email: this.state.vendor_email,
+      },
+      modal: {
+        ondismiss: function () {
+          toast.error('Payment Cancelled, Please try again', {
+            toastId: 'paymentdeclined',
+          });
+        },
+      },
+      theme: {
+        color: '#5bc2c1',
+      },
+    };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
+  verify_payment = () => {
+    fetch(global.api + 'verify_transaction', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Application: 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        txn_id: this.state.transaction_id,
+        payment_id: this.state.payment_id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status) {
+          // toast.success('Payment Successful', {
+          //   toastId: 'paymentdeclined',
+          // });
+          // this.setState({
+          //   inVoiceModal: false,
+          // });
+          console.log(json);
+        } else {
+          // toast.error(json.message, {
+          //   toastId: 'paymentdeclined',
+          // });
+          console.log(json);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        // this.setState({ payment_loading: false });
       });
   };
 
@@ -156,6 +244,8 @@ export class CrmCampaigns extends Component {
             </div>
           </div>
         </div>
+
+        {/* modal for choosing a service */}
         <Modal
           open={this.state.openModal}
           onClose={() => this.setState({ openModal: false })}
@@ -217,6 +307,7 @@ export class CrmCampaigns extends Component {
             </div>
           </div>
         </Modal>
+        {/* modal for buying credits */}
         <Modal
           open={this.state.buyCreditsModal}
           center
@@ -316,10 +407,11 @@ export class CrmCampaigns extends Component {
             </div>
           </div>
         </Modal>
+        {/* modal for order details */}
         <Modal
           open={this.state.inVoiceModal}
-          onClose={() => this.setState({ inVoiceModal: false })}
           center
+          showCloseIcon={false}
           classNames={{ modal: 'customModal' }}
         >
           <div
@@ -332,31 +424,68 @@ export class CrmCampaigns extends Component {
             }}
           >
             <h3 className="my-4">Order Details</h3>
-            <div className="row">
-              <div className="col-md-12 d-flex align-items-center justify-content-around my-2">
+            <div className="row my-2 w-100">
+              <div className="col-md-6 d-flex align-items-center justify-content-end">
                 <h5>Order Id</h5>
-                <h6>{this.state.transaction_id}</h6>
               </div>
-              <div className="col-md-12 d-flex align-items-center justify-content-around my-2">
+              <div className="col-md-6 d-flex align-items-center justify-content-start">
+                <h5>{this.state.transaction_id}</h5>
+              </div>
+            </div>
+            <div className="row my-2 w-100">
+              <div className="col-md-6 d-flex align-items-center justify-content-end">
                 <h5>Order Amount</h5>
-                <h6>₹ {this.state.order_amount}</h6>
               </div>
-              <div className="col-md-12 d-flex align-items-center justify-content-around my-2">
+              <div className="col-md-6 d-flex align-items-center justify-content-start">
+                <h5>₹ {this.state.order_amount}</h5>
+              </div>
+            </div>
+            <div className="row my-2 w-100">
+              <div className="col-md-6 d-flex align-items-center justify-content-end">
                 <h5>
                   G.S.T (<span className="text-muted">18%</span>)
                 </h5>
-                <h6>₹ {this.state.tax_amount}</h6>
               </div>
-              <hr />
-              <div className="col-md-12 d-flex align-items-center justify-content-around mb-2">
+              <div className="col-md-6 d-flex align-items-center justify-content-start">
+                <h5>₹ {this.state.tax_amount}</h5>
+              </div>
+            </div>
+            <hr className="w-100" />
+            <div className="row my-2 w-100">
+              <div className="col-md-6 d-flex align-items-center justify-content-end">
                 <h5>Final Amount</h5>
-                <h6>₹ {this.state.transaction_amount}</h6>
               </div>
-              <div className="d-flex align-items-center justify-content-center my-2">
-                <button className="btn btn-primary btn-sm w-75">
+              <div className="col-md-6 d-flex align-items-center justify-content-start">
+                <h5>₹ {this.state.transaction_amount}</h5>
+              </div>
+            </div>
+            <hr className="w-100" />
+            <div className="d-flex align-items-center justify-content-center my-2 w-100">
+              {this.state.payment_loading ? (
+                <button
+                  className="btn btn-primary btn-sm w-75"
+                  style={{
+                    pointerEvents: 'none',
+                    opacity: '0.8',
+                  }}
+                  disabled
+                >
+                  <span
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                  ></span>
+                  Please Wait...
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary btn-sm w-75"
+                  onClick={() => {
+                    this.openPaymentGateway();
+                  }}
+                >
                   Initiate Transaction
                 </button>
-              </div>
+              )}
             </div>
           </div>
         </Modal>
