@@ -268,18 +268,11 @@ export class EditCoupons extends Component {
                                     type="checkbox"
                                     id="customer_status"
                                     className="check"
-                                    value={this.state.show_to_customer}
-                                    onChange={(e) => {
-                                      if (e.target.checked) {
-                                        this.setState({
-                                          show_to_customer: 1,
-                                        });
-                                      } else {
-                                        this.setState({
-                                          show_to_customer: 0,
-                                        });
-                                      }
-                                    }}
+                                    checked={
+                                      this.state.show_to_customer === 1
+                                        ? true
+                                        : false
+                                    }
                                     disabled
                                   />
                                   <label
