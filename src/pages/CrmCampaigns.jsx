@@ -29,11 +29,12 @@ export class CrmCampaigns extends Component {
       payment_id: '',
       order_id: '',
       payment_loading: false,
+      credit_loader: true,
     };
   }
 
   componentDidMount() {
-    this.setState({ weazy_credits: this.context.weazy_credits });
+    this.get_vendor_profile();
   }
 
   buy_credits = () => {
@@ -89,12 +90,11 @@ export class CrmCampaigns extends Component {
       order_id: this.state.order_id,
       redirect: false,
       handler: function (response) {
-        obj
-          .verify_payment
-          // response.razorpay_payment_id,
+        obj.verify_payment(
+          response.razorpay_payment_id
           // this.state.transaction_id
           // this.state.transaction_id
-          ();
+        );
       },
       prefill: {
         name: this.state.vendor_name,
@@ -116,7 +116,34 @@ export class CrmCampaigns extends Component {
     rzp.open();
   };
 
-  verify_payment = () => {
+  get_vendor_profile = () => {
+    fetch(global.api + 'get_vendor_profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.status) {
+          this.setState({
+            weazy_credits: json.data[0].weazy_credits,
+          });
+        } else {
+          toast.error(json.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        this.setState({ credit_loader: false });
+      });
+  };
+
+  verify_payment = (payment_id) => {
     fetch(global.api + 'verify_transaction', {
       method: 'POST',
       headers: {
@@ -126,23 +153,23 @@ export class CrmCampaigns extends Component {
       },
       body: JSON.stringify({
         txn_id: this.state.transaction_id,
-        payment_id: this.state.payment_id,
+        payment_id: payment_id,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (json.status) {
-          // toast.success('Payment Successful', {
-          //   toastId: 'paymentdeclined',
-          // });
-          // this.setState({
-          //   inVoiceModal: false,
-          // });
-          console.log(json);
+          toast.success('Payment Successful', {
+            toastId: 'paymentdeclined',
+          });
+          this.setState({
+            inVoiceModal: false,
+          });
+          this.get_vendor_profile();
         } else {
-          // toast.error(json.message, {
-          //   toastId: 'paymentdeclined',
-          // });
+          toast.error(json.message, {
+            toastId: 'paymentdeclined',
+          });
           console.log(json);
         }
       })
@@ -197,17 +224,31 @@ export class CrmCampaigns extends Component {
               <div className="d-flex align-items-center justify-content-between">
                 <h3>Overview</h3>
                 <div>
-                  {this.state.weazy_credits > 0 ? (
-                    <button className="btn btn-primary me-2">
-                      <h5>
-                        Credit Balance :{' '}
-                        <strong>{this.state.weazy_credits}</strong>
-                      </h5>
-                    </button>
+                  {this.state.credit_loader ? (
+                    <></>
                   ) : (
-                    <button className="btn btn-danger me-2">
-                      <h5>Out of Credits</h5>
-                    </button>
+                    <>
+                      <button
+                        className="btn btn-primary me-2"
+                        onClick={() => {
+                          this.setState({ buyCreditsModal: true });
+                        }}
+                      >
+                        <h5>Add Credits</h5>
+                      </button>
+                      {this.state.weazy_credits > 0 ? (
+                        <button className="btn btn-primary me-2">
+                          <h5>
+                            Credit Balance :{' '}
+                            <strong>{this.state.weazy_credits}</strong>
+                          </h5>
+                        </button>
+                      ) : (
+                        <button className="btn btn-danger me-2">
+                          <h5>Out of Credits</h5>
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

@@ -27,6 +27,7 @@ export class Header extends Component {
 
   componentDidMount() {
     this.fetch_notifications(this.state.page);
+    console.log(this.context.token);
   }
 
   logOut = () => {
@@ -521,6 +522,14 @@ export class Header extends Component {
                         }
                       >
                         <span>Product Report</span>
+                      </MenuItem>
+                      <MenuItem
+                        routerLink={<Link to="/orderinvoices" />}
+                        icon={
+                          <i className="iconly-Graph icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>Order Invoices</span>
                       </MenuItem>
                     </SubMenu>
 

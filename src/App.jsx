@@ -58,6 +58,9 @@ import loader from './assets/loader.png';
 import CrmCampaignsCreate from './pages/CrmCampaignsCreate.jsx';
 import ProductAddons from './pages/ProductAddons.jsx';
 import Offers from './pages/Offers.jsx';
+import CreateCoupon from './pages/CreateCoupon.jsx';
+import EditCoupons from './pages/EditCoupons.jsx';
+import Orderinvoices from './pages/Orderinvoices.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -600,6 +603,33 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Offers />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/createcoupon"
+              element={
+                <RequireAuth>
+                  <CreateCoupon />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/editcoupon/:id"
+              element={
+                <RequireAuth>
+                  <EditCoupons />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/orderinvoices"
+              element={
+                <RequireAuth>
+                  <Orderinvoices />
                 </RequireAuth>
               }
             />

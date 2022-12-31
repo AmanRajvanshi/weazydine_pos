@@ -8,8 +8,9 @@ import { AuthContext } from '../AuthContextProvider';
 import { toast } from 'react-toastify';
 import { Bars } from 'react-loader-spinner';
 import Swal from 'sweetalert2';
-import no_img from '../assets/images/no_products_found.png';
+import no_img from '../assets/images/no_offers.webp';
 import { BiRupee } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 
 export class Offers extends Component {
   static contextType = AuthContext;
@@ -19,7 +20,7 @@ export class Offers extends Component {
       open: false,
       openedit: false,
       is_loding: true,
-      add_data: [],
+      offers_data: [],
       edit_addon_name: '',
       edit_addon_price: '',
       edit_addon_id: '',
@@ -32,11 +33,11 @@ export class Offers extends Component {
   }
 
   componentDidMount() {
-    this.fetch_addon();
+    this.fetch_offers();
   }
 
-  fetch_addon = () => {
-    fetch(global.api + 'fetch_product_addon', {
+  fetch_offers = () => {
+    fetch(global.api + 'fetch_offers', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -49,9 +50,9 @@ export class Offers extends Component {
       .then((json) => {
         if (!json.status) {
           toast.error(json.msg);
-          this.setState({ add_data: [] });
+          this.setState({ offers_data: [] });
         } else {
-          this.setState({ add_data: json.data });
+          this.setState({ offers_data: json.data });
         }
         this.setState({ is_loding: false });
         return json;
@@ -59,46 +60,6 @@ export class Offers extends Component {
       .catch((error) => {
         console.error(error);
       });
-  };
-
-  create_addon = () => {
-    if (this.state.addon_name == '' || this.state.addon_price == '') {
-      toast.error('All field is required!');
-    } else {
-      this.setState({ newaddonLoading: true });
-      fetch(global.api + 'add_product_addon', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: this.context.token,
-        },
-        body: JSON.stringify({
-          addon_name: this.state.addon_name,
-          addon_price: this.state.addon_price,
-        }),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          if (!json.status) {
-            toast.error(json.msg);
-          } else {
-            this.fetch_addon();
-            this.setState({
-              addon_name: '',
-              addon_price: '',
-              newaddonLoading: false,
-              open: false,
-            });
-            toast.success(json.msg);
-          }
-
-          return json;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
   };
 
   edit_addon = () => {
@@ -181,29 +142,21 @@ export class Offers extends Component {
             <div className="content">
               <div className="page-header">
                 <div className="page-title">
-                  <h4>Offers</h4>
+                  <h4>Offers & Discount Coupons</h4>
                 </div>
                 <div className="page-btn">
-                  <a
-                    className="btn btn-added"
-                    onClick={() => {
-                      this.setState({ open: true });
-                    }}
-                  >
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                      alt="img"
-                      className="me-1"
-                    />
-                    Create a new Offer
-                  </a>
+                  <Link to="/createcoupon">
+                    <button className="btn btn-added">
+                      Create a new Coupon
+                    </button>
+                  </Link>
                 </div>
               </div>
               {this.state.is_loding ? (
                 <div
                   className="main_loader"
                   style={{
-                    height: '50vh',
+                    height: '80vh',
                   }}
                 >
                   <Bars
@@ -217,68 +170,96 @@ export class Offers extends Component {
                   />
                 </div>
               ) : (
-                <div className="card">
-                  {this.state.add_data.length > 0 ? (
-                    <div className="card-body">
-                      <div className="table-responsive">
-                        <table className="table  datanew">
-                          <thead>
-                            <tr>
-                              <th>S.no</th>
-                              <th>Addon Name</th>
-                              <th>Addon Price</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {this.state.add_data.map((item, index) => (
-                              <tr>
-                                <td>{index + 1}</td>
-                                <td>{item.addon_name}</td>
-                                <td>
-                                  <BiRupee />
-                                  {item.addon_price}
-                                </td>
-                                <td>
-                                  <a
-                                    className="me-3"
-                                    onClick={() => {
-                                      this.setState({
-                                        openedit: true,
-                                        edit_addon_id: item.id,
-                                        edit_addon_name: item.addon_name,
-                                        edit_addon_price: item.addon_price,
-                                      });
+                <>
+                  {this.state.offers_data.length > 0 ? (
+                    <div className="row">
+                      {this.state.offers_data.map((values, index) => {
+                        return (
+                          <div className="col-md-4">
+                            <div class="card flex-fill bg-white">
+                              <div class="card-header pb-0 d-flex align-items-center justify-content-between">
+                                <Link
+                                  to={'/editcoupon/' + values.id}
+                                  style={{
+                                    color: '#000',
+                                  }}
+                                >
+                                  <h3
+                                    className="d-flex align-items-center"
+                                    style={{
+                                      textTransform: 'uppercase',
                                     }}
                                   >
-                                    <img src={edit_icon} alt="img" />
-                                  </a>
-                                  <a
-                                    className="confirm-text"
-                                    onClick={() => {
-                                      Swal.fire({
-                                        title: 'Are you sure?',
-                                        text: "You won't be able to revert this!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes, delete it!',
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          this.delete_addon(item.id);
-                                        }
-                                      });
-                                    }}
-                                  >
-                                    <img src={delete_icon} alt="img" />
-                                  </a>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                                    <i
+                                      className="iconly-Discount me-2"
+                                      style={{
+                                        fontSize: '24px',
+                                        color: '#296e84',
+                                      }}
+                                    ></i>
+                                    {values.offer_code}
+                                  </h3>
+                                </Link>
+                                <Toggle
+                                  status={values.status}
+                                  id={values.id}
+                                  fetch_offers={this.fetch_offers}
+                                />
+                              </div>
+
+                              <Link
+                                to={'/editcoupon/' + values.id}
+                                style={{
+                                  color: '#000',
+                                }}
+                              >
+                                <div class="card-body pt-2">
+                                  {values.offer_name != '' ? (
+                                    <h5 class="card-title">
+                                      {values.offer_name}
+                                    </h5>
+                                  ) : (
+                                    <></>
+                                  )}
+                                  {values.offer_description != '' ? (
+                                    <p class="card-text">
+                                      {values.offer_description}
+                                    </p>
+                                  ) : (
+                                    <></>
+                                  )}
+                                  <div className="d-flex justify-content-between align-items-center">
+                                    <div className="d-flex justify-content-start flex-column">
+                                      <p class="card-text mb-1">TIMES USED</p>
+                                      <h5>{values.total_uses}</h5>
+                                    </div>
+                                    <div className="d-flex justify-content-end flex-column">
+                                      <p class="card-text mb-1">
+                                        TOTAL SALES GENERATED
+                                      </p>
+                                      <h5>₹ {values.total_sales_genrated}</h5>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Link>
+                              <div
+                                class="card-footer text-muted py-2 d-flex justify-content-center align-items-center"
+                                style={{
+                                  borderTop: '1px dashed #e9ecef',
+                                }}
+                              >
+                                <h5 className="me-2">Share</h5>
+                                <i
+                                  className="iconly-Send icli"
+                                  style={{
+                                    fontSize: '20px',
+                                  }}
+                                ></i>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div
@@ -294,154 +275,87 @@ export class Offers extends Component {
                           height: '250px',
                         }}
                       />
-                      <h4>No Category Found</h4>
+                      <h3>Get more sales with coupons</h3>
+                      <h5 className="text-center">
+                        Now you can create and share coupons for your store to
+                        get more and
+                        <br /> more orders on your store.
+                      </h5>
                     </div>
                   )}
-                </div>
+                </>
               )}
             </div>
           </div>
         </div>
-        <Modal
-          open={this.state.open}
-          onClose={() => this.setState({ open: false })}
-          center
-          classNames={{
-            modal: 'customModal',
+      </>
+    );
+  }
+}
+
+class Toggle extends React.Component {
+  static contextType = AuthContext;
+  constructor(props) {
+    super(props);
+    var status = this.props.status;
+    if (status == 'active') {
+      status = true;
+    } else {
+      status = false;
+    }
+    this.state = {
+      status: status,
+      id: this.props.id,
+    };
+  }
+
+  update_offer = (status, id) => {
+    fetch(global.api + 'update_offer_status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Application: 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        status: status,
+        id: id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status == true) {
+          toast.success('Offer status updated successfully');
+          this.props.fetch_offers();
+        } else {
+          toast.error('Something went wrong');
+        }
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      })
+      .finally(() => {
+        this.setState({ is_loding: false });
+      });
+  };
+
+  render() {
+    return (
+      <>
+        <input
+          type="checkbox"
+          id={this.props.id}
+          className="check"
+          checked={this.props.status == 'active' ? true : false}
+          onChange={(e) => {
+            if (e.target.checked) {
+              this.update_offer('active', this.props.id);
+            } else {
+              this.update_offer('inactive', this.props.id);
+            }
           }}
-        >
-          <div className="content">
-            <div className="page-header">
-              <div className="page-title">
-                <h4>Add Addons</h4>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Addon Name</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ addon_name: e.target.value });
-                        }}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Addon Price</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ addon_price: e.target.value });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-12 d-flex justify-content-end">
-                    {this.state.newaddonLoading ? (
-                      <button
-                        className="btn btn-primary btn-sm me-2"
-                        style={{
-                          pointerEvents: 'none',
-                          opacity: '0.8',
-                        }}
-                      >
-                        <span
-                          class="spinner-border spinner-border-sm me-2"
-                          role="status"
-                        ></span>
-                        Adding
-                      </button>
-                    ) : (
-                      <a
-                        href="javascript:void(0);"
-                        onClick={() => {
-                          this.create_addon();
-                        }}
-                        className="btn btn-primary btn-sm me-2"
-                      >
-                        Add Addon
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
-        <Modal
-          open={this.state.openedit}
-          onClose={() => this.setState({ openedit: false })}
-          center
-          classNames={{
-            modal: 'customModal',
-          }}
-        >
-          <div className="content">
-            <div className="page-header">
-              <div className="page-title">
-                <h4>Edit Addon</h4>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-body">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Addon Name</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ edit_addon_name: e.target.value });
-                        }}
-                        value={this.state.edit_addon_name}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Addon Price</label>
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          this.setState({ edit_addon_price: e.target.value });
-                        }}
-                        value={this.state.edit_addon_price}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-lg-12 d-flex justify-content-end">
-                    {this.state.editaddonLoading ? (
-                      <button
-                        className="btn btn-primary btn-sm me-2"
-                        style={{
-                          pointerEvents: 'none',
-                          opacity: '0.8',
-                        }}
-                      >
-                        <span
-                          class="spinner-border spinner-border-sm me-2"
-                          role="status"
-                        ></span>
-                        Updating
-                      </button>
-                    ) : (
-                      <a
-                        href="javascript:void(0);"
-                        onClick={() => {
-                          this.edit_addon();
-                        }}
-                        className="btn btn-primary btn-sm me-2"
-                      >
-                        Update Addon
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
+        />
+        <label htmlFor={this.props.id} className="checktoggle"></label>
       </>
     );
   }
