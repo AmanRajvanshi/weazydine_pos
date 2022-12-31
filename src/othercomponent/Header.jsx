@@ -637,6 +637,14 @@ export class Header extends Component {
                         </span>
                       </MenuItem>
                       <MenuItem
+                        routerLink={<Link to="/staffaccounts" />}
+                        icon={
+                          <i className="iconly-User2 icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>Staff Accounts</span>
+                      </MenuItem>
+                      <MenuItem
                         routerLink={<Link to="/editprofile" />}
                         icon={
                           <i className="iconly-Setting icli sidebar_icons"></i>

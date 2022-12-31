@@ -20,6 +20,7 @@ class Orderlist extends Component {
       page: 1,
       next_page: '',
       status: '',
+      search: '',
     };
   }
 
@@ -78,6 +79,59 @@ class Orderlist extends Component {
         console.error(error);
       })
       .finally(() => {});
+  };
+
+  search_order = (e, page_id) => {
+    if (!e.target.value.length < 1) {
+      this.setState({ data: [], is_loading: true, page_id: 1 });
+      fetch(global.api + 'search_order', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          order_code: e.target.value,
+          page: page_id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.status) {
+            if (page_id == 1) {
+              this.setState({ data: [], is_loading: false });
+            }
+          } else {
+            this.setState({
+              next_page: json.data.next_page_url,
+            });
+            if (page_id == 1) {
+              this.setState({ data: json.data.data });
+            } else {
+              {
+                this.state.next_page
+                  ? this.setState({
+                      data: [...this.state.data, ...json.data.data],
+                      page: this.state.page + 1,
+                    })
+                  : this.setState({
+                      data: json.data.data,
+                    });
+              }
+            }
+          }
+          this.setState({ is_loading: false });
+          return json;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {});
+    } else {
+      this.setState({ is_loading: true, page_id: 1 });
+      this.fetch_order(1, '');
+    }
   };
 
   render() {
@@ -216,6 +270,21 @@ class Orderlist extends Component {
                   </div>
                 </section>
               </div>
+              <div className="row">
+                <div className="col-md-8"></div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search using order id"
+                      onChange={(e) => {
+                        this.search_order(e);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
               {!this.state.is_loading ? (
                 <div className="card">
                   {this.state.data.length > 0 ? (
@@ -238,7 +307,7 @@ class Orderlist extends Component {
                             this.state.data.length > 0
                           }
                           loader={
-                            <div className="d-flex align-items-center justify-content-center w-full mt-xl">
+                            <div className="d-flex align-items-center justify-content-center w-full">
                               <Circles height="40" width="40" color="#5bc2c1" />
                             </div>
                           }

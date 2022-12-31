@@ -61,6 +61,7 @@ import Offers from './pages/Offers.jsx';
 import CreateCoupon from './pages/CreateCoupon.jsx';
 import EditCoupons from './pages/EditCoupons.jsx';
 import Orderinvoices from './pages/Orderinvoices.jsx';
+import Staffaccounts from './pages/Staffaccounts.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -630,6 +631,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Orderinvoices />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/staffaccounts"
+              element={
+                <RequireAuth>
+                  <Staffaccounts />
                 </RequireAuth>
               }
             />

@@ -43,7 +43,7 @@ export class CrmCampaigns extends Component {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Application: 'application/json',
+        Accept: 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
@@ -90,11 +90,7 @@ export class CrmCampaigns extends Component {
       order_id: this.state.order_id,
       redirect: false,
       handler: function (response) {
-        obj.verify_payment(
-          response.razorpay_payment_id
-          // this.state.transaction_id
-          // this.state.transaction_id
-        );
+        obj.verify_payment(response.razorpay_payment_id);
       },
       prefill: {
         name: this.state.vendor_name,
@@ -148,7 +144,7 @@ export class CrmCampaigns extends Component {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Application: 'application/json',
+        Accept: 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({

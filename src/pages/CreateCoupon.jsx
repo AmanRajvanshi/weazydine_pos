@@ -68,7 +68,7 @@ export class CreateCoupon extends Component {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Application: 'application/json',
+        Accept: 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({

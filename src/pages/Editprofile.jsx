@@ -268,7 +268,17 @@ export class Editprofile extends Component {
                       <>
                         <div className="col-lg-6 col-sm-12">
                           <div className="form-group">
-                            <label>Address</label>
+                            <label>
+                              Address{' '}
+                              <span
+                                className="text-muted"
+                                style={{
+                                  fontSize: '12px',
+                                }}
+                              >
+                                (Can only be changed by Weazy Dine Application)
+                              </span>
+                            </label>
                             <input
                               type="text"
                               placeholder="Address"
@@ -278,6 +288,7 @@ export class Editprofile extends Component {
                                   address: e.target.value,
                                 });
                               }}
+                              disabled
                             />
                           </div>
                         </div>
