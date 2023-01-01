@@ -152,6 +152,7 @@ export class Productlist extends Component {
 
   search = (e) => {
     if (e.target.value.length > 1) {
+      this.setState({ products: [], is_loding: true });
       fetch(global.api + 'search_product', {
         method: 'POST',
         headers: {
@@ -166,23 +167,20 @@ export class Productlist extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // if (!json.status) {
-          //   var msg = json.msg;
-
-          // } else {
-
-          this.setState({ products: json.data });
-
-          // }
-          // this.setState({ isloading: false, load_data: false });
+          if (!json.status) {
+            var msg = json.msg;
+            toast.success(msg);
+            this.setState({ products: [] });
+          } else {
+            this.setState({ products: json.data });
+          }
+          this.setState({ is_loding: false });
           return json;
         })
         .catch((error) => {
           console.error(error);
         })
-        .finally(() => {
-          this.setState({ isloading: false });
-        });
+        .finally(() => {});
     } else {
       this.fetchProducts(this.state.active_cat, this.state.type, 1);
     }
@@ -223,6 +221,60 @@ export class Productlist extends Component {
                 />
               )}
 
+              <div className="comp-sec-wrapper mt-20">
+                <section className="comp-section">
+                  <div className="row pb-4">
+                    <div className="col-md-9">
+                      <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
+                        <li className="nav-item">
+                          <a
+                            className="nav-link active"
+                            href="#solid-rounded-justified-tab1"
+                            data-bs-toggle="tab"
+                            onClick={() => {
+                              this.setState({ is_loading: true });
+                              this.fetchProducts(
+                                this.state.active_cat,
+                                'product',
+                                1
+                              );
+                            }}
+                          >
+                            Product
+                          </a>
+                        </li>
+                        <li className="nav-item">
+                          <a
+                            className="nav-link"
+                            href="#solid-rounded-justified-tab1"
+                            data-bs-toggle="tab"
+                            onClick={() => {
+                              this.setState({ is_loading: true });
+                              this.fetchProducts(
+                                this.state.active_cat,
+                                'package',
+                                1
+                              );
+                            }}
+                          >
+                            Combos
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="col-md-3">
+                      <input
+                        type={'text'}
+                        className={'form-control'}
+                        onChange={(e) => {
+                          this.search(e);
+                        }}
+                        placeholder={'Search Product'}
+                      />
+                    </div>
+                  </div>
+                </section>
+              </div>
               {this.state.is_loding ? (
                 <div
                   className="main_loader"
@@ -242,63 +294,6 @@ export class Productlist extends Component {
                 </div>
               ) : (
                 <>
-                  <div
-                    className="comp-sec-wrapper mt-20"
-                    style={{ marginTop: -10 }}
-                  >
-                    <section className="comp-section">
-                      <div className="row pb-4">
-                        <div className="col-md-9">
-                          <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified">
-                            <li className="nav-item">
-                              <a
-                                className="nav-link active"
-                                href="#solid-rounded-justified-tab1"
-                                data-bs-toggle="tab"
-                                onClick={() => {
-                                  this.setState({ is_loading: true });
-                                  this.fetchProducts(
-                                    this.state.active_cat,
-                                    'product',
-                                    1
-                                  );
-                                }}
-                              >
-                                Product
-                              </a>
-                            </li>
-                            <li className="nav-item">
-                              <a
-                                className="nav-link"
-                                href="#solid-rounded-justified-tab1"
-                                data-bs-toggle="tab"
-                                onClick={() => {
-                                  this.setState({ is_loading: true });
-                                  this.fetchProducts(
-                                    this.state.active_cat,
-                                    'package',
-                                    1
-                                  );
-                                }}
-                              >
-                                Combos
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="col-md-3">
-                          <input
-                            type={'text'}
-                            className={'form-control'}
-                            onChange={(e) => {
-                              this.search(e);
-                            }}
-                            placeholder={'Search Product'}
-                          />
-                        </div>
-                      </div>
-                    </section>
-                  </div>
                   {this.state.products.length > 0 ? (
                     <>
                       <div className="card">
