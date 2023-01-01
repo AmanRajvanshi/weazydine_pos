@@ -27,7 +27,6 @@ export class Header extends Component {
 
   componentDidMount() {
     this.fetch_notifications(this.state.page);
-    console.log(this.context.token);
   }
 
   logOut = () => {
@@ -280,7 +279,7 @@ export class Header extends Component {
               </a>
               <div className="dropdown-menu menu-drop-user">
                 <div className="profilename">
-                  <Link to="/editprofile" className="dropdown-item">
+                  <a className="dropdown-item">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width={24}
@@ -296,8 +295,11 @@ export class Header extends Component {
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                       <circle cx={12} cy={7} r={4} />
                     </svg>
-                    My Profile
-                  </Link>
+                    Hi,{' '}
+                    {this.context.role.length !== 0
+                      ? this.context.role.name
+                      : this.context.user.name}
+                  </a>
                   <hr className="m-0" />
                   <a
                     className="dropdown-item logout pb-0"
@@ -360,306 +362,340 @@ export class Header extends Component {
                   overflow="scroll"
                 >
                   <Menu>
-                    <MenuItem
-                      routerLink={<Link to="/" />}
-                      icon={<i className="iconly-Home icli sidebar_icons"></i>}
-                    >
-                      <span>Dashboard</span>
-                    </MenuItem>
-                    <MenuItem
-                      routerLink={<Link to="/pos" />}
-                      icon={
-                        <i className="iconly-Info-Square icli sidebar_icons"></i>
-                      }
-                    >
-                      <span>POS</span>
-                    </MenuItem>
-                    <MenuItem
-                      routerLink={<Link to="/orderlist" />}
-                      icon={<i className="iconly-Bag icli sidebar_icons"></i>}
-                    >
-                      <span>Orders</span>
-                    </MenuItem>
-                    <MenuItem
-                      routerLink={<a href="/kot" target="_blank" />}
-                      icon={
-                        <i className="iconly-More-Circle icli sidebar_icons"></i>
-                      }
-                    >
-                      <span>
-                        Kitchen Display
-                        <br /> System
-                      </span>
-                    </MenuItem>
-                    <SubMenu
-                      label="Catalogue"
-                      icon={
-                        <i className="iconly-Folder icli sidebar_icons"></i>
-                      }
-                    >
+                    {/* dashboard */}
+                    {this.context.role.role === 'waiter' && (
                       <MenuItem
-                        routerLink={<Link to="/productlist" />}
+                        routerLink={<Link to="/" />}
                         icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
+                          <i className="iconly-Home icli sidebar_icons"></i>
                         }
                       >
-                        <span>Product List</span>
+                        <span>Dashboard</span>
                       </MenuItem>
+                    )}
+                    {/* pos */}
+                    {this.context.role.role === 'waiter' && (
                       <MenuItem
-                        routerLink={<Link to="/categorylist" />}
+                        routerLink={<Link to="/pos" />}
                         icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
+                          <i className="iconly-Info-Square icli sidebar_icons"></i>
                         }
                       >
-                        <span>Category List</span>
+                        <span>POS</span>
                       </MenuItem>
+                    )}
+                    {/* orders */}
+                    {this.context.role.role === 'waiter' && (
                       <MenuItem
-                        routerLink={<Link to="/productaddons" />}
-                        icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
-                        }
+                        routerLink={<Link to="/orderlist" />}
+                        icon={<i className="iconly-Bag icli sidebar_icons"></i>}
                       >
-                        <span>Addons List</span>
+                        <span>Orders</span>
                       </MenuItem>
-                    </SubMenu>
-
-                    <SubMenu
-                      label="Inventory"
-                      icon={
-                        <i className="iconly-Folder icli sidebar_icons"></i>
-                      }
-                    >
+                    )}
+                    {/* kot */}
+                    {this.context.role.role === 'waiter' && (
                       <MenuItem
-                        routerLink={<Link to="/inventoryproducts" />}
+                        routerLink={<a href="/kot" target="_blank" />}
                         icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Raw Materials</span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/inventorycategory" />}
-                        icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
+                          <i className="iconly-More-Circle icli sidebar_icons"></i>
                         }
                       >
                         <span>
-                          Raw Materials
-                          <br /> Category
+                          Kitchen Display
+                          <br /> System
                         </span>
                       </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/stock_purchase" />}
+                    )}
+                    {/* catalogue */}
+                    {this.context.role.role === 'waiter' && (
+                      <SubMenu
+                        label="Catalogue"
                         icon={
                           <i className="iconly-Folder icli sidebar_icons"></i>
                         }
                       >
-                        <span>Stock Purchase</span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/releaseStock" />}
+                        <MenuItem
+                          routerLink={<Link to="/productlist" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Product List</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/categorylist" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Category List</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/productaddons" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Addons List</span>
+                        </MenuItem>
+                      </SubMenu>
+                    )}
+                    {/* inventory */}
+                    {this.context.role.role === 'waiter' && (
+                      <SubMenu
+                        label="Inventory"
                         icon={
                           <i className="iconly-Folder icli sidebar_icons"></i>
                         }
                       >
-                        <span>Stock Release</span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/productrecipe" />}
-                        icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Product Recipe</span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={
-                          <Link to="/semifinishedrawmaterialproducts" />
-                        }
-                        icon={
-                          <i className="iconly-Folder icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Semi-Finished <br /> Raw Material Recipe
-                        </span>
-                      </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/inventoryproducts" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Raw Materials</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/inventorycategory" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Raw Materials
+                            <br /> Category
+                          </span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/stock_purchase" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Stock Purchase</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/releaseStock" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Stock Release</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/productrecipe" />}
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Product Recipe</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={
+                            <Link to="/semifinishedrawmaterialproducts" />
+                          }
+                          icon={
+                            <i className="iconly-Folder icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Semi-Finished <br /> Raw Material Recipe
+                          </span>
+                        </MenuItem>
 
-                      <MenuItem
-                        routerLink={<Link to="/supliers" />}
-                        icon={
-                          <i className="iconly-User2 icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Suppliers</span>
-                      </MenuItem>
-                    </SubMenu>
-
-                    <SubMenu
-                      label="Reports"
-                      icon={<i className="iconly-Graph icli sidebar_icons"></i>}
-                    >
-                      <MenuItem
-                        routerLink={<Link to="/salesreport" />}
+                        <MenuItem
+                          routerLink={<Link to="/supliers" />}
+                          icon={
+                            <i className="iconly-User2 icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Suppliers</span>
+                        </MenuItem>
+                      </SubMenu>
+                    )}
+                    {/* reports */}
+                    {this.context.role.role === 'waiter' && (
+                      <SubMenu
+                        label="Reports"
                         icon={
                           <i className="iconly-Graph icli sidebar_icons"></i>
                         }
                       >
-                        <span>Transactions</span>
-                      </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/salesreport" />}
+                          icon={
+                            <i className="iconly-Graph icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Transactions</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/orderreport" />}
+                          icon={
+                            <i className="iconly-Graph icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Sales Report</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/productreport" />}
+                          icon={
+                            <i className="iconly-Graph icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Product Report</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/orderinvoices" />}
+                          icon={
+                            <i className="iconly-Graph icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Order Invoices</span>
+                        </MenuItem>
+                      </SubMenu>
+                    )}
+                    {/* marketing */}
+                    {this.context.role.role === 'waiter' && (
+                      <SubMenu
+                        label="Marketing"
+                        icon={
+                          <i className="iconly-Ticket icli sidebar_icons"></i>
+                        }
+                      >
+                        <MenuItem
+                          routerLink={<Link to="/crmcampaigns" />}
+                          icon={
+                            <i className="iconly-Category icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Campaigns</span>
+                        </MenuItem>
+                      </SubMenu>
+                    )}
+                    {/* customers */}
+                    {this.context.role.role === 'waiter' && (
+                      <SubMenu
+                        label="Customers"
+                        icon={
+                          <i className="iconly-User3 icli sidebar_icons"></i>
+                        }
+                      >
+                        <MenuItem
+                          routerLink={<Link to="/customers" />}
+                          icon={
+                            <i className="iconly-User3 icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Customers</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/customerinsights" />}
+                          icon={
+                            <i className="iconly-Filter icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Customer <br />
+                            Insights
+                          </span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/customerfeedback" />}
+                          icon={
+                            <i className="iconly-Heart icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Customer <br />
+                            Feedback
+                          </span>
+                        </MenuItem>
+                      </SubMenu>
+                    )}
+                    {/* offers */}
+                    {this.context.role.role === 'waiter' && (
                       <MenuItem
-                        routerLink={<Link to="/orderreport" />}
-                        icon={
-                          <i className="iconly-Graph icli sidebar_icons"></i>
-                        }
+                        routerLink={<Link to="/offers" />}
+                        icon={<i className="iconly-Bag icli sidebar_icons"></i>}
                       >
-                        <span>Sales Report</span>
+                        <span>Offers</span>
                       </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/productreport" />}
+                    )}
+                    {/* setup */}
+                    {this.context.role.role === 'waiter' && (
+                      <SubMenu
+                        label="Setup"
                         icon={
-                          <i className="iconly-Graph icli sidebar_icons"></i>
+                          <i className="iconly-Setting icli sidebar_icons"></i>
                         }
                       >
-                        <span>Product Report</span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/orderinvoices" />}
-                        icon={
-                          <i className="iconly-Graph icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Order Invoices</span>
-                      </MenuItem>
-                    </SubMenu>
-
-                    <SubMenu
-                      label="CRM"
-                      icon={<i className="iconly-User3 icli sidebar_icons"></i>}
-                    >
-                      {/* <MenuItem
-                        routerLink={<Link to="/customers" />}
-                        icon={
-                          <i className="iconly-User2 icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Customers</span>
-                      </MenuItem> */}
-                      <MenuItem
-                        routerLink={<Link to="/customerinsights" />}
-                        icon={
-                          <i className="iconly-Filter icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Customer <br />
-                          Insights
-                        </span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/crmcampaigns" />}
-                        icon={
-                          <i className="iconly-Category icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Campaigns</span>
-                      </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/dineinlisting" />}
+                          icon={
+                            <i className="iconly-Setting icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Dine In
+                            <br />
+                            Management
+                          </span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/pickuppoint" />}
+                          icon={
+                            <i className="iconly-Setting icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Pickup Points
+                            <br />
+                            Management
+                          </span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/kitchens" />}
+                          icon={
+                            <i className="iconly-Setting icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>
+                            Kitchens <br />
+                            Management
+                          </span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/staffaccounts" />}
+                          icon={
+                            <i className="iconly-User2 icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Staff Accounts</span>
+                        </MenuItem>
+                        <MenuItem
+                          routerLink={<Link to="/editprofile" />}
+                          icon={
+                            <i className="iconly-Setting icli sidebar_icons"></i>
+                          }
+                        >
+                          <span>Store Profile</span>
+                        </MenuItem>
+                      </SubMenu>
+                    )}
+                    {/* learning center */}
+                    {this.context.role.role === 'waiter' && (
                       <MenuItem
                         routerLink={<Link to="/comingsoon" />}
                         icon={
-                          <i className="iconly-Heart icli sidebar_icons"></i>
+                          <i className="iconly-Video icli sidebar_icons"></i>
                         }
                       >
-                        <span>
-                          Customer <br />
-                          Feedback
-                        </span>
+                        <span>Learning Center</span>
                       </MenuItem>
-                      {/* <MenuItem
-                        routerLink={<Link to="/comingsoon" />}
-                        icon={
-                          <i className="iconly-Lock icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Branded Loyalty <br />
-                          Program
-                        </span>
-                      </MenuItem> */}
-                    </SubMenu>
-
-                    <MenuItem
-                      routerLink={<Link to="/offers" />}
-                      icon={<i className="iconly-Bag icli sidebar_icons"></i>}
-                    >
-                      <span>Offers</span>
-                    </MenuItem>
-
-                    <SubMenu
-                      label="Setup"
-                      icon={
-                        <i className="iconly-Setting icli sidebar_icons"></i>
-                      }
-                    >
-                      <MenuItem
-                        routerLink={<Link to="/dineinlisting" />}
-                        icon={
-                          <i className="iconly-Setting icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Dine In
-                          <br />
-                          Management
-                        </span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/pickuppoint" />}
-                        icon={
-                          <i className="iconly-Setting icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Pickup Points
-                          <br />
-                          Management
-                        </span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/kitchens" />}
-                        icon={
-                          <i className="iconly-Setting icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>
-                          Kitchens <br />
-                          Management
-                        </span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/staffaccounts" />}
-                        icon={
-                          <i className="iconly-User2 icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Staff Accounts</span>
-                      </MenuItem>
-                      <MenuItem
-                        routerLink={<Link to="/editprofile" />}
-                        icon={
-                          <i className="iconly-Setting icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Store Profile</span>
-                      </MenuItem>
-                    </SubMenu>
-
-                    <MenuItem
-                      routerLink={<Link to="/comingsoon" />}
-                      icon={<i className="iconly-Video icli sidebar_icons"></i>}
-                    >
-                      <span>Learning Center</span>
-                    </MenuItem>
+                    )}
                   </Menu>
                 </Sidebar>
               </div>

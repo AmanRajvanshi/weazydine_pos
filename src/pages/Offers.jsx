@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import Header from '../othercomponent/Header';
 import 'react-responsive-modal/styles.css';
-import { Modal } from 'react-responsive-modal';
-import delete_icon from '../assets/images/icons/delete.svg';
-import edit_icon from '../assets/images/icons/edit.svg';
 import { AuthContext } from '../AuthContextProvider';
 import { toast } from 'react-toastify';
 import { Bars } from 'react-loader-spinner';
-import Swal from 'sweetalert2';
 import no_img from '../assets/images/no_offers.webp';
-import { BiRupee } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
 export class Offers extends Component {
@@ -184,7 +179,7 @@ export class Offers extends Component {
                                     color: '#000',
                                   }}
                                 >
-                                  <h3
+                                  <h4
                                     className="d-flex align-items-center"
                                     style={{
                                       textTransform: 'uppercase',
@@ -198,7 +193,7 @@ export class Offers extends Component {
                                       }}
                                     ></i>
                                     {values.offer_code}
-                                  </h3>
+                                  </h4>
                                 </Link>
                                 <Toggle
                                   status={values.status}
@@ -221,13 +216,13 @@ export class Offers extends Component {
                                   ) : (
                                     <></>
                                   )}
-                                  {values.offer_description != '' ? (
+                                  {/* {values.offer_description != '' ? (
                                     <p class="card-text">
                                       {values.offer_description}
                                     </p>
                                   ) : (
                                     <></>
-                                  )}
+                                  )} */}
                                   <div className="d-flex justify-content-between align-items-center">
                                     <div className="d-flex justify-content-start flex-column">
                                       <p class="card-text mb-1">TIMES USED</p>
@@ -248,13 +243,15 @@ export class Offers extends Component {
                                   borderTop: '1px dashed #e9ecef',
                                 }}
                               >
-                                <h5 className="me-2">Share</h5>
-                                <i
-                                  className="iconly-Send icli"
-                                  style={{
-                                    fontSize: '20px',
-                                  }}
-                                ></i>
+                                <a className="d-flex justify-content-center align-items-center">
+                                  <h6 className="me-2">Share</h6>
+                                  <i
+                                    className="iconly-Send icli"
+                                    style={{
+                                      fontSize: '24px',
+                                    }}
+                                  ></i>
+                                </a>
                               </div>
                             </div>
                           </div>

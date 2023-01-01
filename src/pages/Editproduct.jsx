@@ -33,8 +33,10 @@ export class Editproduct extends Component {
       v_data: [],
       product_image: '',
       addon_object: [],
+      max_product_addons: 0,
       createNewCategoryButton: false,
       isLoading: false,
+      tax: 0,
     };
   }
 
@@ -93,6 +95,8 @@ export class Editproduct extends Component {
           this.setState({ v_data: obj.variants });
           this.setState({ addon: obj.addon_map });
           this.setState({ type: obj.type });
+          this.setState({ max_product_addons: obj.max_product_addons });
+          this.setState({ tax: obj.tax });
         }
 
         this.setState({ is_loading: false });
@@ -150,6 +154,8 @@ export class Editproduct extends Component {
     this.update_product_variant();
     let numberValidation = /^[0-9]+$/;
     let isnumValid = numberValidation.test(this.state.our_price);
+    var taxValidation = /^[0-9]+$/;
+    var isTaxValid = taxValidation.test(this.state.tax);
 
     if (
       this.state.name == '' ||
@@ -164,8 +170,8 @@ export class Editproduct extends Component {
       toast.error('Category is required !');
     } else if (!isnumValid) {
       toast.error('Price contains digits only!');
-    } else if (!isnumValid) {
-      toast.error('Price contains digits only!');
+    } else if (!isTaxValid) {
+      toast.error('Tax contains digits only!');
     } else if (this.state.description == '') {
       toast.error('Description is required !');
     } else {
@@ -178,6 +184,7 @@ export class Editproduct extends Component {
       form.append('description', this.state.description);
       form.append('type', this.state.type);
       form.append('product_id', this.state.product_id);
+      form.append('tax', this.state.tax);
       if (this.state.images.length > 0) {
         this.state.images.map((item, index) => {
           form.append('product_img', item);
@@ -229,6 +236,7 @@ export class Editproduct extends Component {
         variants: this.state.v_data,
         addons: add,
         product_id: this.state.product_id,
+        max_product_addon: this.state.max_product_addons,
       }),
     })
       .then((response) => response.json())
@@ -400,7 +408,7 @@ export class Editproduct extends Component {
                           </select>
                         </div>
                       </div>
-                      <div className="col-lg-9">
+                      <div className="col-lg-6">
                         <div className="form-group">
                           <label>Description</label>
                           <input
@@ -413,6 +421,21 @@ export class Editproduct extends Component {
                           />
                         </div>
                       </div>
+                      {this.context.user.gstin !== null && (
+                        <div className="col-lg-3">
+                          <div className="form-group">
+                            <label>G.S.T(in percentage)</label>
+                            <input
+                              type="text"
+                              onChange={(e) => {
+                                this.setState({ tax: e.target.value });
+                              }}
+                              value={this.state.tax}
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+                      )}
                       <div className="col-lg-12">
                         <div className="form-group">
                           <label> Product Image</label>
@@ -473,6 +496,7 @@ export class Editproduct extends Component {
                 variants={this.state.v_data}
                 addons={this.state.addon}
                 update_child={this.update_variant_from_child}
+                max_product_addons={this.state.max_product_addons}
               />
             </div>
           ) : (
@@ -566,6 +590,7 @@ class Variants extends Component {
       add_on_loading: false,
       add_on_dataLoading: true,
       newaddon: false,
+      max_product_addons: this.props.max_product_addons,
     };
   }
 
@@ -625,7 +650,6 @@ class Variants extends Component {
       {
         id: 1,
         variants_name: '',
-        variants_price: '',
         variants_discounted_price: '',
       },
     ];
@@ -683,6 +707,8 @@ class Variants extends Component {
     // to get the checked value
     const checkedValue = e.target.value;
 
+    // alert(checkedValue);
+
     if (this.state.object[checkedValue]) {
       var object = this.state.object;
       object[checkedValue] = false;
@@ -722,7 +748,6 @@ class Variants extends Component {
                       <tr>
                         <th className="text-center">#</th>
                         <th className="text-center">Name</th>
-                        <th className="text-center">Market Price</th>
                         <th className="text-center">Offer Price</th>
                         <th className="text-end">Action</th>
                         <th />
@@ -737,15 +762,6 @@ class Variants extends Component {
                               type="text"
                               name="variants_name"
                               value={this.state.rows[idx].variants_name}
-                              onChange={this.handleChange(idx)}
-                              className="form-control"
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              name="variants_price"
-                              value={this.state.rows[idx].variants_price}
                               onChange={this.handleChange(idx)}
                               className="form-control"
                             />
@@ -836,7 +852,7 @@ class Variants extends Component {
                 </button>
               </div>
               <div className="d-flex align-items-center">
-                <h6 className="py-2 underline">Maximum Addons Count</h6>
+                <h6 className="py-2 underline">Free Addons</h6>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -845,10 +861,12 @@ class Variants extends Component {
                       max_product_addons: e.target.value,
                     });
                   }}
+                  value={this.state.max_product_addons}
                 >
                   <option>Select Maximum Addons Count</option>
-                  <option value="0">
-                    Unlimited (User can select any number of addons)
+                  <option value="0">No Addons (All addons are paid)</option>
+                  <option value="-1">
+                    Unlimited Addons (All addons are free)
                   </option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -868,12 +886,12 @@ class Variants extends Component {
                 ) : this.state.add_data.length > 0 ? (
                   this.state.add_data.map((item, index) => {
                     return (
-                      <div className="checkbox_addon">
+                      <div className="checkbox_addon" for={'addon' + item.id}>
                         <input
                           type="checkbox"
                           id={'addon' + item.id}
                           name="addon"
-                          value={'addon' + item.id}
+                          value={item.id}
                           onChange={this.handleAddon}
                           className="form-check-input new_checkbox mr-4"
                           checked={this.state.object[item.id] ? true : false}

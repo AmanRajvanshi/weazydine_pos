@@ -279,6 +279,37 @@ export class CrmCampaigns extends Component {
                 </div>
               </div>
             </div>
+            <div className="row">
+              <div className="col-md-12">
+                <h3 className="mt-4">Campaigns</h3>
+                <div className="crm_campaigns_table_div">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>S.no</th>
+                        <th>Campaign Name</th>
+                        <th>Campaign Type</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Sample Campaign</td>
+                        <td>SMS</td>
+                        <td>
+                          <span className="badge bg-success">Active</span>
+                        </td>
+                        <td>12/12/2020</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

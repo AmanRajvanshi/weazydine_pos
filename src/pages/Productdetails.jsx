@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { BiRupee } from "react-icons/bi";
-import { Bars } from "react-loader-spinner";
-import { Link, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Header } from "../othercomponent/Header";
+import React, { Component } from 'react';
+import { BiRupee } from 'react-icons/bi';
+import { Bars } from 'react-loader-spinner';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Header } from '../othercomponent/Header';
 
 export class Productdetails extends Component {
   constructor(props) {
@@ -18,10 +18,10 @@ export class Productdetails extends Component {
   }
 
   productDetails = () => {
-    fetch(global.api + "get_product_details?product_id=" + this.props.id, {
-      method: "GET",
+    fetch(global.api + 'get_product_details?product_id=' + this.props.id, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((response) => response.json())
@@ -74,16 +74,16 @@ export class Productdetails extends Component {
                     <div
                       className="card-body"
                       style={{
-                        height: "200px",
-                        width: "200px",
+                        height: '200px',
+                        width: '200px',
                       }}
                     >
                       <img
                         src={this.state.product.product_img}
                         alt="img"
                         style={{
-                          height: "100%",
-                          width: "100%",
+                          height: '100%',
+                          width: '100%',
                         }}
                       />
                     </div>
@@ -128,17 +128,11 @@ export class Productdetails extends Component {
                           </li>
                           <li>
                             <h4>VEG/NON-VEG</h4>
-                            {this.state.product.is_veg == "1" ? (
+                            {this.state.product.is_veg == '1' ? (
                               <h6>VEG</h6>
                             ) : (
                               <h6>NON-VEG</h6>
                             )}
-                          </li>
-                          <li>
-                            <h4>Market Price</h4>
-                            <h6>
-                              <BiRupee /> {this.state.product.market_price}
-                            </h6>
                           </li>
                           <li>
                             <h4>Our Price</h4>
@@ -163,20 +157,10 @@ export class Productdetails extends Component {
                                     <li>
                                       <h6
                                         style={{
-                                          width: "100%",
+                                          width: '100%',
                                         }}
                                       >
                                         {item.variants_name}
-                                        <span
-                                          className="mx-2"
-                                          style={{
-                                            textDecoration: "line-through",
-                                            opacity: "0.9",
-                                          }}
-                                        >
-                                          <BiRupee />
-                                          {item.variants_price}
-                                        </span>
                                         <span className="mx-2">
                                           <BiRupee />
                                           {item.variants_discounted_price}
@@ -197,7 +181,7 @@ export class Productdetails extends Component {
                                     <li>
                                       <h6
                                         style={{
-                                          width: "100%",
+                                          width: '100%',
                                         }}
                                       >
                                         {item.addon_name}

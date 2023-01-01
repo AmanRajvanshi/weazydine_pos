@@ -642,7 +642,7 @@ h6 {
 }
 
 body {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 14px;
   color: #1a181e;
   line-height: 1.5;
@@ -1692,13 +1692,13 @@ div#global-loader,
 .fc-toolbar h2 {
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
   line-height: 30px;
   text-transform: uppercase;
 }
 
 .fc-day-grid-event .fc-time {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .fc-day {
@@ -1797,13 +1797,13 @@ div#global-loader,
 .fc-basic-view td.fc-week-number span {
   padding-right: 8px;
   font-weight: 700;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .fc-basic-view td.fc-day-number {
   padding-right: 8px;
   font-weight: 700;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .event-form .input-group .form-control {
@@ -1918,8 +1918,8 @@ div#global-loader,
 }
 
 .card .card-body .card-title {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 500;
   color: gray;
   margin: 0 0 10px;
 }
@@ -6424,10 +6424,11 @@ span.select-container.select-container--default.select-container--open {
 
 .page-header .btn-added {
   background: #5bc2c1;
-  padding: 7px 15px;
+  padding: 6px 12px;
   color: #fff;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 14px;
+  border-radius: 3px;
 }
 
 .page-header .btn-added img {
@@ -8930,7 +8931,7 @@ span.select-container.select-container--default.select-container--open {
 
 .Toastify__toast-body {
   color: #fff;
-  font-size: 15px;
+  font-size: 12px;
   padding-left: 20px;
   line-height: 23px;
   padding: 0px;
@@ -9740,11 +9741,11 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
-.buy_credits_box{
+.buy_credits_box {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9758,13 +9759,17 @@ input[type=number] {
   padding: 30px 20px;
 }
 
-.buy_credits_box h5{
+.buy_credits_box h5 {
   font-size: 17px;
   line-height: 22px;
   color: #354545;
 }
 
-.buy_credits_box h6{
+.buy_credits_box h6 {
   font-size: 16px;
   color: #354545;
+}
+
+.ml-3{
+  margin-left: 8px;
 }

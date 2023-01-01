@@ -44,21 +44,19 @@ class ProductRecipe extends Component {
   }
 
   fetchData = () => {
-    fetch(global.api + 'fetch_purchase_order', {
+    fetch(global.api + 'fetch_recipe_products', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
-      body: JSON.stringify({
-        range: 'lifetime',
-      }),
+      body: JSON.stringify({}),
     })
       .then((response) => response.json())
       .then((json) => {
         if (json.status) {
-          this.setState({ category: json.data.data });
+          this.setState({ category: json.vendor_products });
           this.setState({ is_loding: false });
         } else {
           this.setState({ category: [], is_loding: false });
@@ -101,6 +99,33 @@ class ProductRecipe extends Component {
       .finally(() => {});
   };
 
+  live_inventory = (e) => {
+    this.setState({ is_live_inventory: e.target.checked });
+    fetch(global.api + 'update_live_inventory_status', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        live_inventory_status: e.target.checked ? 1 : 0,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status) {
+          toast.success(json.msg);
+          this.context.get_vendor_profile(this.context.token);
+        } else {
+          toast.error(json.msg);
+        }
+        return json;
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+  };
+
   render() {
     return (
       <>
@@ -112,8 +137,25 @@ class ProductRecipe extends Component {
                 <div className="page-title">
                   <h4>Recipes for Products</h4>
                 </div>
-                <div className="page-btn">
-                  Live Inventory <Toggle />
+                <div className="page-btn d-flex align-items-center">
+                  Live Inventory
+                  <div className="status-toggle ml-3">
+                    <input
+                      type="checkbox"
+                      id="live_inventory"
+                      className="check"
+                      checked={
+                        this.context.user.live_inventory == '1' ? true : false
+                      }
+                      onChange={(e) => {
+                        this.live_inventory(e);
+                      }}
+                    />
+                    <label
+                      htmlFor="live_inventory"
+                      className="checktoggle"
+                    ></label>
+                  </div>
                 </div>
               </div>
               {this.state.is_loding ? (
@@ -151,50 +193,28 @@ class ProductRecipe extends Component {
                             {this.state.category.map((item, index) => (
                               <tr>
                                 <td>{index + 1}</td>
-                                <td>{item.supplier.supplier_name}</td>
-                                <td>{item.po_no}</td>
+                                <td>{item.product_name}</td>
+                                <td>{item.varient_name}</td>
                                 <td>
-                                  <Link
-                                    className="me-3"
-                                    to={'/updateproductrecipe/' + item.id}
-                                  >
-                                    <button className="btn btn-primary btn-sm">
-                                      Update Recipe
-                                    </button>
-                                  </Link>
-                                  {/* <a
-                                    className="me-3"
-                                    onClick={() => {
-                                      this.setState({
-                                        openedit: true,
-                                        purchase_id: item.id,
-                                      });
-                                    }}
-                                  >
-                                    <img src={money_icon} alt="img" />
-                                  </a>
-
-                                  <a
-                                    className="confirm-text"
-                                    onClick={() => {
-                                      Swal.fire({
-                                        title:
-                                          'Are you sure you want to delete this category?',
-                                        text: 'All the products under this category will also be deleted',
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#5bc2c1',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes, delete it!',
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          this.delete(item.id);
-                                        }
-                                      });
-                                    }}
-                                  >
-                                    <img src={delete_icon} alt="img" />
-                                  </a> */}
+                                  {item.recipe_status == '1' ? (
+                                    <Link
+                                      className="me-3"
+                                      to={'/updateproductrecipe/' + item.id}
+                                    >
+                                      <button className="btn btn-primary btn-sm">
+                                        Update Recipe
+                                      </button>
+                                    </Link>
+                                  ) : (
+                                    <Link
+                                      className="me-3"
+                                      to={'/updateproductrecipe/' + item.id}
+                                    >
+                                      <button className="btn btn-danger btn-sm">
+                                        Create Recipe
+                                      </button>
+                                    </Link>
+                                  )}
                                 </td>
                               </tr>
                             ))}

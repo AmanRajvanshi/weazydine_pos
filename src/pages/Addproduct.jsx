@@ -29,6 +29,7 @@ export class Addproduct extends Component {
       our_price: '',
       description: '',
       type: 'product',
+      tax: 0,
       is_veg: 1,
       save_and_continue: false,
       add_category_loading: false,
@@ -37,6 +38,7 @@ export class Addproduct extends Component {
 
   componentDidMount() {
     this.fetchCategories();
+    this.setState({ tax: this.context.user.gst_percentage });
   }
 
   fetchCategories = () => {
@@ -111,6 +113,8 @@ export class Addproduct extends Component {
   create = () => {
     let numberValidation = /^[0-9]+$/;
     let isnumValid = numberValidation.test(this.state.our_price);
+    var taxValidation = /^[0-9]+$/;
+    var isTaxValid = taxValidation.test(this.state.tax);
     if (
       this.state.name == '' ||
       this.state.images == '' ||
@@ -124,8 +128,8 @@ export class Addproduct extends Component {
       toast.error('Category is required !');
     } else if (!isnumValid) {
       toast.error('Price contains digits only!');
-    } else if (!isnumValid) {
-      toast.error('Price contains digits only!');
+    } else if (!isTaxValid) {
+      toast.error('Tax contains digits only!');
     } else if (this.state.description == '') {
       toast.error('Description is required !');
     } else {
@@ -138,6 +142,7 @@ export class Addproduct extends Component {
       form.append('price', this.state.our_price);
       form.append('description', this.state.description);
       form.append('type', this.state.type);
+      form.append('tax', this.state.tax);
 
       if (this.state.images.length > 0) {
         this.state.images.map((item, index) => {
@@ -300,7 +305,7 @@ export class Addproduct extends Component {
                           </select>
                         </div>
                       </div>
-                      <div className="col-lg-9">
+                      <div className="col-lg-6">
                         <div className="form-group">
                           <label>Description</label>
                           <input
@@ -312,6 +317,22 @@ export class Addproduct extends Component {
                           />
                         </div>
                       </div>
+                      {this.context.user.gstin !== null && (
+                        <div className="col-lg-3">
+                          <div className="form-group">
+                            <label>G.S.T(in percentage)</label>
+                            <input
+                              type="text"
+                              onChange={(e) => {
+                                this.setState({ tax: e.target.value });
+                              }}
+                              value={this.state.tax}
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+                      )}
+
                       <div className="col-lg-12">
                         <div className="form-group">
                           <label> Product Image</label>
@@ -616,6 +637,7 @@ class Variants extends Component {
       add_on_loading: false,
       add_on_dataLoading: true,
       newaddon: false,
+      max_product_addons: 0,
     };
   }
   componentDidMount() {
@@ -667,12 +689,13 @@ class Variants extends Component {
         variants: this.state.rows,
         addons: add,
         product_id: this.props.product_id,
+        max_product_addon: this.state.max_product_addons,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
-          toast.error(json.msg);
+          toast.error(json.errors[0]);
         } else {
           toast.success(json.msg);
           this.props.navigate('/productlist');
@@ -698,7 +721,6 @@ class Variants extends Component {
       {
         id: 1,
         variants_name: '',
-        variants_price: '',
         variants_discounted_price: '',
       },
     ];
@@ -822,7 +844,6 @@ class Variants extends Component {
                       <tr>
                         <th className="text-center">#</th>
                         <th className="text-center">Name</th>
-                        <th className="text-center">Market Price</th>
                         <th className="text-center">Offer Price</th>
                         <th className="text-end">Action</th>
                         <th />
@@ -925,7 +946,7 @@ class Variants extends Component {
                 </button>
               </div>
               <div className="d-flex align-items-center">
-                <h6 className="py-2 underline">Maximum Addons Count</h6>
+                <h6 className="py-2 underline">Free Addons</h6>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -936,8 +957,9 @@ class Variants extends Component {
                   }}
                 >
                   <option>Select Maximum Addons Count</option>
-                  <option value="0">
-                    Unlimited (User can select any number of addons)
+                  <option value="0">No Addons (All addons are paid)</option>
+                  <option value="-1">
+                    Unlimited Addons (All addons are free)
                   </option>
                   <option value="1">1</option>
                   <option value="2">2</option>

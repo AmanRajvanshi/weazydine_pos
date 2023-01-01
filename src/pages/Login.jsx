@@ -116,7 +116,7 @@ class Login extends Component {
               global.msg = 'Welcome';
             }
 
-            this.context.login('done', json.data, json.token);
+            this.context.login('done', json.data, json.user, json.token);
             const path = this.props.location.state?.path || '/';
 
             this.props.navigate(path, { replace: true });

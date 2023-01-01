@@ -62,6 +62,7 @@ import CreateCoupon from './pages/CreateCoupon.jsx';
 import EditCoupons from './pages/EditCoupons.jsx';
 import Orderinvoices from './pages/Orderinvoices.jsx';
 import Staffaccounts from './pages/Staffaccounts.jsx';
+import Customerfeedback from './pages/Customerfeedback.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -83,6 +84,7 @@ export class App extends Component {
       loading: true,
       user: [],
       play: false,
+      login_data: [],
     };
   }
 
@@ -121,13 +123,14 @@ export class App extends Component {
     global.os = os;
   };
 
-  login = (step, user, token) => {
+  login = (step, user, role, token) => {
     this.setState({
       is_login: true,
       step: step,
       user: user,
       token: token,
       loading: false,
+      login_data: role,
     });
 
     OneSignal.sendTag('id', '' + user.id);
@@ -184,8 +187,7 @@ export class App extends Component {
         }
         if (!json.status) {
         } else {
-          this.login(json.step, json.data[0], token);
-          //this.setState({ user: json.data[0] });
+          this.login(json.step, json.data[0], json.user, token);
         }
         return json;
       })
@@ -200,7 +202,13 @@ export class App extends Component {
 
   logout = () => {
     localStorage.clear();
-    this.setState({ is_login: false, loading: false, token: '', user: [] });
+    this.setState({
+      is_login: false,
+      loading: false,
+      token: '',
+      user: [],
+      login_data: [],
+    });
   };
 
   render() {
@@ -217,6 +225,8 @@ export class App extends Component {
             is_login: this.state.is_login,
             token: this.state.token,
             user: this.state.user,
+            role: this.state.login_data,
+            get_vendor_profile: this.get_profile,
           }}
         >
           <Routes>
@@ -640,6 +650,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Staffaccounts />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/customerfeedback"
+              element={
+                <RequireAuth>
+                  <Customerfeedback />
                 </RequireAuth>
               }
             />

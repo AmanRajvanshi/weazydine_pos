@@ -20,7 +20,7 @@ export class Staffaccounts extends Component {
       openedit: false,
       is_loding: true,
       add_data: [],
-    
+
       edit: false,
       newaddonLoading: false,
       editaddonLoading: false,
@@ -29,15 +29,13 @@ export class Staffaccounts extends Component {
       staff_name: '',
       staff_role: '',
 
-      staff_id:'',
+      staff_id: '',
       staff_edit_role: '',
       staff_edit_name: '',
-      
     };
   }
 
   componentDidMount() {
-
     this.fetch_staff();
   }
 
@@ -78,51 +76,48 @@ export class Staffaccounts extends Component {
     }
   };
 
-//edit staff
+  //edit staff
 
-edit_staff = () => {
-
-  this.setState({ newaddonLoading: true });
-  const { staff_id, staff_edit_name, staff_edit_role } = this.state;
-  if (staff_edit_name == '' || staff_edit_role == '') {
-    toast.error('Please fill all the fields');
-    this.setState({ newaddonLoading: false });
-  } else {
-    fetch(global.api + 'update_staff', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: this.context.token,
-      },
-      body: JSON.stringify({
-        staff_id: staff_id,
-        staff_name: staff_edit_name,
-        staff_role: staff_edit_role,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status) {
-          toast.success(data.msg);
-          this.setState({ newaddonLoading: false, edit: false });
-          this.fetch_staff();
-        } else {
-          toast.error(data.msg);
-          this.setState({ newaddonLoading: false });
-        }
+  edit_staff = () => {
+    this.setState({ newaddonLoading: true });
+    const { staff_id, staff_edit_name, staff_edit_role } = this.state;
+    if (staff_edit_name == '' || staff_edit_role == '') {
+      toast.error('Please fill all the fields');
+      this.setState({ newaddonLoading: false });
+    } else {
+      fetch(global.api + 'update_staff', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          staff_id: staff_id,
+          staff_name: staff_edit_name,
+          staff_role: staff_edit_role,
+        }),
       })
-      .catch((err) => {
-        // toast.error('Something went wrong');
-        // this.setState({ newaddonLoading: false });
-      });
-  }
-};
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status) {
+            toast.success(data.msg);
+            this.setState({ newaddonLoading: false, edit: false });
+            this.fetch_staff();
+          } else {
+            toast.error(data.msg);
+            this.setState({ newaddonLoading: false });
+          }
+        })
+        .catch((err) => {
+          // toast.error('Something went wrong');
+          // this.setState({ newaddonLoading: false });
+        });
+    }
+  };
 
+  delete_staff = (id) => {
+    this.setState({ newaddonLoading: true });
 
-delete_staff = (id) => {
-
-  this.setState({ newaddonLoading: true });
- 
     fetch(global.api + 'delete_staff', {
       method: 'POST',
       headers: {
@@ -148,9 +143,7 @@ delete_staff = (id) => {
         // toast.error('Something went wrong');
         // this.setState({ newaddonLoading: false });
       });
-  
-};
-
+  };
 
   fetch_staff = () => {
     this.setState({ is_loding: true });
@@ -173,7 +166,6 @@ delete_staff = (id) => {
         this.setState({ is_loding: false });
       });
   };
-  
 
   render() {
     return (
@@ -246,63 +238,49 @@ delete_staff = (id) => {
                                 <td>{item.staff_name}</td>
                                 <td>{item.staff_contact}</td>
                                 <td>{item.staff_role}</td>
-                                <td className="d-flex align-items-center">
-                                  {/* <a
-                                    className="confirm-text me-3"
-                                    onClick={() => {
-                                      Swal.fire({
-                                        title: 'Are you sure?',
-                                        text: "You won't be able to revert this!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes, delete it!',
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          this.delete_addon(item.id);
+                                <td>
+                                  {item.staff_role !== 'owner' ? (
+                                    <>
+                                      <a>
+                                        <img
+                                          className="me-3"
+                                          src={edit_icon}
+                                          alt="img"
+                                          onClick={() => {
+                                            this.setState({
+                                              staff_edit_name: item.staff_name,
+                                              staff_edit_role: item.staff_role,
+                                              edit: true,
+                                              staff_id: item.staff_id,
+                                            });
+                                          }}
+                                        />
+                                      </a>
+                                      <a
+                                        className="confirm-text"
+                                        onClick={() =>
+                                          Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: "You won't be able to revert this!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText:
+                                              'Yes, delete it!',
+                                          }).then((result) => {
+                                            if (result.isConfirmed) {
+                                              this.delete_staff(item.staff_id);
+                                            }
+                                          })
                                         }
-                                      });
-                                    }}
-                                  >
-                                    <img src={delete_icon} alt="img" />
-                                  </a> */}
-
-                                  <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => {
-                                      this.setState({
-                                        staff_edit_name: item.staff_name,
-                                        staff_edit_role: item.staff_role,
-                                        edit: true,
-                                        staff_id: item.staff_id,
-                                      });
-                                    }}
-                                  >
-                                    Change Role
-                                  </button>
-
-                                    &nbsp;&nbsp;&nbsp;
-                                  <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => {
-                                      Swal.fire({
-                                        title: 'Are you sure?',
-                                        text: "You won't be able to revert this!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes, delete it!',
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          this.delete_staff(item.id);
-                                        }
-                                      });
-                                    }}
-                                  >
-                                    Remove Staff
-                                  </button>
+                                      >
+                                        <img src={delete_icon} alt="img" />
+                                      </a>
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}
                                 </td>
                               </tr>
                             ))}
@@ -369,6 +347,7 @@ delete_staff = (id) => {
                       </label>
                       <input
                         type="text"
+                        maxLength={10}
                         onChange={(e) => {
                           this.setState({
                             staff_contact: e.target.value,
@@ -383,22 +362,21 @@ delete_staff = (id) => {
                         <span className="text-danger">*</span>
                       </label>
 
-                        <select onChange={(e) => {
+                      <select
+                        onChange={(e) => {
                           this.setState({
                             staff_role: e.target.value,
                           });
                         }}
                         className="form-control"
-                        >
-                          <option value="0">Select Role</option>
-                          <option value="admin">Admin</option>
-                          <option value="manager">Manager</option>
-                          <option value="waiter">Waiter</option>
-                          <option value="staff">Staff</option>
-                        </select>
+                      >
+                        <option value="0">Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="manager">Manager</option>
+                        <option value="waiter">Waiter</option>
+                        <option value="staff">Staff</option>
+                      </select>
                     </div>
-
-
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.newaddonLoading ? (
@@ -409,11 +387,11 @@ delete_staff = (id) => {
                           opacity: '0.8',
                         }}
                       >
+                        Adding...
                         <span
                           class="spinner-border spinner-border-sm me-2"
                           role="status"
                         ></span>
-                        Adding
                       </button>
                     ) : (
                       <a
@@ -432,7 +410,6 @@ delete_staff = (id) => {
             </div>
           </div>
         </Modal>
-
 
         <Modal
           open={this.state.edit}
@@ -486,23 +463,22 @@ delete_staff = (id) => {
                         <span className="text-danger">*</span>
                       </label>
 
-                        <select onChange={(e) => {
+                      <select
+                        onChange={(e) => {
                           this.setState({
                             staff_edit_role: e.target.value,
                           });
                         }}
                         className="form-control"
                         value={this.state.staff_edit_role}
-                        >
-                          <option value="0">Select Role</option>
-                          <option value="admin">Admin</option>
-                          <option value="manager">Manager</option>
-                          <option value="waiter">Waiter</option>
-                          <option value="staff">Staff</option>
-                        </select>
+                      >
+                        <option value="0">Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="manager">Manager</option>
+                        <option value="waiter">Waiter</option>
+                        <option value="staff">Staff</option>
+                      </select>
                     </div>
-
-
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.newaddonLoading ? (
