@@ -36,7 +36,7 @@ class Login extends Component {
       toast.error('Please enter valid mobile number');
       this.setState({ sendotploading: false, isLoading: false });
     } else {
-      fetch(global.api + 'mobile-verification', {
+      fetch(global.api + 'staff-mobile-verification', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -77,7 +77,7 @@ class Login extends Component {
       toast.error('OTP is required');
       this.setState({ verifyotploading: false });
     } else {
-      fetch(global.api + 'otp-verification', {
+      fetch(global.api + 'staff-otp-verification', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

@@ -20,157 +20,160 @@ export class Staffaccounts extends Component {
       openedit: false,
       is_loding: true,
       add_data: [],
-      edit_addon_name: '',
-      edit_addon_price: '',
-      edit_addon_id: '',
+    
+      edit: false,
       newaddonLoading: false,
       editaddonLoading: false,
       is_buttonloding: false,
-      addon_name: '',
-      addon_price: '',
+      staff_contact: '',
+      staff_name: '',
+      staff_role: '',
+
+      staff_id:'',
+      staff_edit_role: '',
+      staff_edit_name: '',
+      
     };
   }
 
   componentDidMount() {
-    this.fetch_addon();
+
+    this.fetch_staff();
   }
 
-  fetch_addon = () => {
-    fetch(global.api + 'fetch_product_addon', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.context.token,
-      },
-      body: JSON.stringify({}),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (!json.status) {
-          toast.error(json.msg);
-          this.setState({ add_data: [] });
-        } else {
-          this.setState({ add_data: json.data });
-        }
-        this.setState({ is_loding: false });
-        return json;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  create_addon = () => {
-    if (this.state.addon_name == '' || this.state.addon_price == '') {
-      toast.error('All field is required!');
+  add_staff = () => {
+    this.setState({ newaddonLoading: true });
+    const { staff_contact, staff_name, staff_role } = this.state;
+    if (staff_contact == '' || staff_name == '' || staff_role == '') {
+      toast.error('Please fill all the fields');
+      this.setState({ newaddonLoading: false });
     } else {
-      this.setState({ newaddonLoading: true });
-      fetch(global.api + 'add_product_addon', {
+      fetch(global.api + 'add_staff', {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'application/json',
           Authorization: this.context.token,
         },
         body: JSON.stringify({
-          addon_name: this.state.addon_name,
-          addon_price: this.state.addon_price,
+          staff_contact: staff_contact,
+          staff_name: staff_name,
+          staff_role: staff_role,
         }),
       })
-        .then((response) => response.json())
-        .then((json) => {
-          if (!json.status) {
-            toast.error(json.msg);
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status) {
+            toast.success(data.message);
+            this.setState({ newaddonLoading: false, open: false });
+            this.fetch_staff();
           } else {
-            this.fetch_addon();
-            this.setState({
-              addon_name: '',
-              addon_price: '',
-              newaddonLoading: false,
-              open: false,
-            });
-            toast.success(json.msg);
+            toast.error(data.message);
+            this.setState({ newaddonLoading: false });
           }
-
-          return json;
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((err) => {
+          // toast.error('Something went wrong');
+          // this.setState({ newaddonLoading: false });
         });
     }
   };
 
-  edit_addon = () => {
-    if (this.state.edit_addon_name == '' || this.state.edit_addon_price == '') {
-      toast.error('All field is required!');
-    } else {
-      this.setState({ editaddonLoading: true });
-      fetch(global.api + 'update_product_addon', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: this.context.token,
-        },
-        body: JSON.stringify({
-          addon_id: this.state.edit_addon_id,
-          addon_name: this.state.edit_addon_name,
-          addon_price: this.state.edit_addon_price,
-        }),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          if (!json.status) {
-            toast.error(json.msg);
-          } else {
-            this.fetch_addon();
-            this.setState({
-              openedit: false,
-            });
-            toast.success(json.msg);
-          }
+//edit staff
 
-          return json;
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => {
-          this.setState({ editaddonLoading: false });
-        });
-    }
-  };
+edit_staff = () => {
 
-  delete_addon = (id) => {
-    fetch(global.api + 'delete_product_addon', {
+  this.setState({ newaddonLoading: true });
+  const { staff_id, staff_edit_name, staff_edit_role } = this.state;
+  if (staff_edit_name == '' || staff_edit_role == '') {
+    toast.error('Please fill all the fields');
+    this.setState({ newaddonLoading: false });
+  } else {
+    fetch(global.api + 'update_staff', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: this.context.token,
       },
       body: JSON.stringify({
-        addon_id: id,
+        staff_id: staff_id,
+        staff_name: staff_edit_name,
+        staff_role: staff_edit_role,
       }),
     })
-      .then((response) => response.json())
-      .then((json) => {
-        if (!json.status) {
-          var msg = json.msg;
-          // Toast.show(msg);
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status) {
+          toast.success(data.msg);
+          this.setState({ newaddonLoading: false, edit: false });
+          this.fetch_staff();
         } else {
-          toast.success('Category deleted');
-          this.fetch_addon();
+          toast.error(data.msg);
+          this.setState({ newaddonLoading: false });
         }
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((err) => {
+        // toast.error('Something went wrong');
+        // this.setState({ newaddonLoading: false });
+      });
+  }
+};
+
+
+delete_staff = (id) => {
+
+  this.setState({ newaddonLoading: true });
+ 
+    fetch(global.api + 'delete_staff', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        staff_id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status) {
+          toast.success(data.msg);
+          this.setState({ newaddonLoading: false, edit: false });
+          this.fetch_staff();
+        } else {
+          toast.error(data.msg);
+          this.setState({ newaddonLoading: false });
+        }
       })
-      .finally(() => {
-        this.setState({ isloading: false });
+      .catch((err) => {
+        // toast.error('Something went wrong');
+        // this.setState({ newaddonLoading: false });
+      });
+  
+};
+
+
+  fetch_staff = () => {
+    this.setState({ is_loding: true });
+    fetch(global.api + 'fetch_staff', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status) {
+          this.setState({ add_data: data.data, is_loding: false });
+        } else {
+          this.setState({ is_loding: false });
+        }
+      })
+      .catch((err) => {
+        this.setState({ is_loding: false });
       });
   };
+  
 
   render() {
     return (
@@ -189,7 +192,7 @@ export class Staffaccounts extends Component {
                         fontSize: '14px',
                       }}
                     >
-                      (0 of 10)
+                      ({this.state.add_data.length} of 10)
                     </span>
                   </h4>
                 </div>
@@ -232,6 +235,7 @@ export class Staffaccounts extends Component {
                               <th>S.no</th>
                               <th>Name</th>
                               <th>Phone Number</th>
+                              <th>Role</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -239,8 +243,9 @@ export class Staffaccounts extends Component {
                             {this.state.add_data.map((item, index) => (
                               <tr>
                                 <td>{index + 1}</td>
-                                <td>{item.addon_name}</td>
-                                <td>{item.addon_price}</td>
+                                <td>{item.staff_name}</td>
+                                <td>{item.staff_contact}</td>
+                                <td>{item.staff_role}</td>
                                 <td className="d-flex align-items-center">
                                   {/* <a
                                     className="confirm-text me-3"
@@ -262,6 +267,22 @@ export class Staffaccounts extends Component {
                                   >
                                     <img src={delete_icon} alt="img" />
                                   </a> */}
+
+                                  <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => {
+                                      this.setState({
+                                        staff_edit_name: item.staff_name,
+                                        staff_edit_role: item.staff_role,
+                                        edit: true,
+                                        staff_id: item.staff_id,
+                                      });
+                                    }}
+                                  >
+                                    Change Role
+                                  </button>
+
+                                    &nbsp;&nbsp;&nbsp;
                                   <button
                                     className="btn btn-primary btn-sm"
                                     onClick={() => {
@@ -275,7 +296,7 @@ export class Staffaccounts extends Component {
                                         confirmButtonText: 'Yes, delete it!',
                                       }).then((result) => {
                                         if (result.isConfirmed) {
-                                          this.delete_addon(item.id);
+                                          this.delete_staff(item.id);
                                         }
                                       });
                                     }}
@@ -337,7 +358,7 @@ export class Staffaccounts extends Component {
                       <input
                         type="text"
                         onChange={(e) => {
-                          this.setState({ staff_account_name: e.target.value });
+                          this.setState({ staff_name: e.target.value });
                         }}
                       />
                     </div>
@@ -350,11 +371,34 @@ export class Staffaccounts extends Component {
                         type="text"
                         onChange={(e) => {
                           this.setState({
-                            staff_account_number: e.target.value,
+                            staff_contact: e.target.value,
                           });
                         }}
                       />
                     </div>
+
+                    <div className="form-group">
+                      <label>
+                        Role
+                        <span className="text-danger">*</span>
+                      </label>
+
+                        <select onChange={(e) => {
+                          this.setState({
+                            staff_role: e.target.value,
+                          });
+                        }}
+                        className="form-control"
+                        >
+                          <option value="0">Select Role</option>
+                          <option value="admin">Admin</option>
+                          <option value="manager">Manager</option>
+                          <option value="waiter">Waiter</option>
+                          <option value="staff">Staff</option>
+                        </select>
+                    </div>
+
+
                   </div>
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.newaddonLoading ? (
@@ -375,11 +419,115 @@ export class Staffaccounts extends Component {
                       <a
                         href="javascript:void(0);"
                         onClick={() => {
-                          this.create_addon();
+                          this.add_staff();
                         }}
                         className="btn btn-primary btn-sm me-2"
                       >
                         Add Staff
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+
+
+        <Modal
+          open={this.state.edit}
+          onClose={() => this.setState({ edit: false })}
+          center
+          classNames={{
+            modal: 'customModal',
+          }}
+        >
+          <div className="content">
+            <div className="page-header">
+              <div className="page-title">
+                <h4>Edit Role</h4>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>
+                        Name
+                        <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({ staff_edit_name: e.target.value });
+                        }}
+                        value={this.state.staff_edit_name}
+                      />
+                    </div>
+                    {/* <div className="form-group">
+                      <label>
+                        Mobile number
+                        <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          this.setState({
+                            staff_contact: e.target.value,
+                          });
+                        }}
+                      />
+                    </div> */}
+
+                    <div className="form-group">
+                      <label>
+                        Role
+                        <span className="text-danger">*</span>
+                      </label>
+
+                        <select onChange={(e) => {
+                          this.setState({
+                            staff_edit_role: e.target.value,
+                          });
+                        }}
+                        className="form-control"
+                        value={this.state.staff_edit_role}
+                        >
+                          <option value="0">Select Role</option>
+                          <option value="admin">Admin</option>
+                          <option value="manager">Manager</option>
+                          <option value="waiter">Waiter</option>
+                          <option value="staff">Staff</option>
+                        </select>
+                    </div>
+
+
+                  </div>
+                  <div className="col-lg-12 d-flex justify-content-end">
+                    {this.state.newaddonLoading ? (
+                      <button
+                        className="btn btn-primary btn-sm me-2"
+                        style={{
+                          pointerEvents: 'none',
+                          opacity: '0.8',
+                        }}
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        ></span>
+                        Updating
+                      </button>
+                    ) : (
+                      <a
+                        href="javascript:void(0);"
+                        onClick={() => {
+                          this.edit_staff();
+                        }}
+                        className="btn btn-primary btn-sm me-2"
+                      >
+                        Update Staff
                       </a>
                     )}
                   </div>
