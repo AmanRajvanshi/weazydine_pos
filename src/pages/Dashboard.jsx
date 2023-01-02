@@ -8,6 +8,7 @@ import Skeletonloader from '../othercomponent/Skeletonloader';
 import moment from 'moment';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { Helmet } from 'react-helmet';
+import { toast } from 'react-toastify';
 
 export class Dashboard extends Component {
   static contextType = AuthContext;
@@ -30,11 +31,13 @@ export class Dashboard extends Component {
       isOpen: false,
       from: new Date(),
       to: new Date(),
+      shop_status: 1,
     };
   }
 
   componentDidMount() {
     this.get_vendor_data('today');
+    this.setState({ shop_status: this.context.user.shop_open });
   }
   loader = (value) => {
     this.setState({ isloading: value });
@@ -73,6 +76,33 @@ export class Dashboard extends Component {
       });
   };
 
+  update_shop_status = (e) => {
+    this.setState({ shop_status: e.target.checked ? 1 : 0 });
+    fetch(global.api + 'update_shop_status', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        shop_status: e.target.checked ? 1 : 0,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status) {
+          this.context.get_vendor_profile(this.context.token);
+        } else {
+          toast.error(json.msg);
+          this.setState({ shop_status: this.context.user.shop_open });
+        }
+        return json;
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+  };
+
   render() {
     const selectionRange = {
       startDate: new Date(),
@@ -93,9 +123,27 @@ export class Dashboard extends Component {
                 <div className="col-sm-2 col-2">
                   <h4>Overview</h4>
                 </div>
-                <div className="col-sm-10 col-10 d-flex justify-content-end mb-4 flex-column align-items-end">
+                <div className="col-sm-10 col-10 d-flex justify-content-end mb-4 align-items-center">
+                  <div className="d-flex align-items-center">
+                    <h6>Shop Status</h6>
+                    <div className="status-toggle ml-3">
+                      <input
+                        type="checkbox"
+                        id="live_inventory"
+                        className="check"
+                        checked={this.state.shop_status == 1 ? true : false}
+                        onChange={(e) => {
+                          this.update_shop_status(e);
+                        }}
+                      />
+                      <label
+                        htmlFor="live_inventory"
+                        className="checktoggle"
+                      ></label>
+                    </div>
+                  </div>
                   <select
-                    className="form-control"
+                    className="form-control ml-3"
                     onChange={(e) => {
                       if (e.target.value == 'customrange') {
                         this.setState({ isOpen: !this.state.isOpen });
@@ -498,6 +546,8 @@ class OngoingOrders extends Component {
                       <th>Sno</th>
                       <th>Order ID</th>
                       <th>Order Type</th>
+                      <th>Name</th>
+                      <th>Contact</th>
                       <th>Time</th>
                       <th>Amount</th>
                     </tr>
@@ -520,6 +570,12 @@ class OngoingOrders extends Component {
                             >
                               {values.order_type}
                             </td>
+                            <td>
+                              {values.user.name === 'null'
+                                ? 'N/A'
+                                : values.user.name}
+                            </td>
+                            <td>{values.user.contact}</td>
                             <td>{moment(values.updated_at).format('llll')}</td>
                             <td>
                               <BiRupee />

@@ -62,6 +62,7 @@ class Pos extends Component {
       bill_show: false,
       order_table_no: '',
       kot_id: '',
+      offers: [],
     };
   }
 
@@ -71,6 +72,7 @@ class Pos extends Component {
       this.orderDetails(this.props.table_id);
     }
     this.fetchCategories();
+    this.fetch_current_offers_vendor();
   }
 
   active_cat = (id) => {
@@ -294,6 +296,7 @@ class Pos extends Component {
 
   search = (e) => {
     if (e.target.value.length > 3) {
+      this.setState({ products: [] });
       fetch(global.api + 'search_product', {
         method: 'POST',
         headers: {
@@ -307,15 +310,7 @@ class Pos extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
-          // if (!json.status) {
-          //   var msg = json.msg;
-
-          // } else {
-
           this.setState({ products: json.data });
-
-          // }
-          // this.setState({ isloading: false, load_data: false });
           return json;
         })
         .catch((error) => {
@@ -559,6 +554,29 @@ class Pos extends Component {
     this.setState({ split_payment: split, split_total: tt });
   };
 
+  fetch_current_offers_vendor = () => {
+    fetch(global.api + 'fetch_current_offers_vendor', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        vendor_id: this.context.user.id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          this.setState({ offers: [] });
+        } else {
+          this.setState({ offers: json.data });
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {});
+  };
+
   render() {
     return (
       <>
@@ -666,6 +684,7 @@ class Pos extends Component {
                                 classNames={{
                                   modal: 'new_modal_styling new_modal_styling2',
                                 }}
+                                focusTrapped={false}
                               >
                                 <div className="w-100">
                                   <h5
@@ -678,12 +697,12 @@ class Pos extends Component {
                                   >
                                     Select The Product To Add
                                   </h5>
-                                  {/* <div className="row">
+                                  <div className="row">
                                     <div className="col-md-12">
                                       <div className="form-group">
                                         <input
                                           type="text"
-                                          id='pos_search_bar'
+                                          id="pos_search_bar"
                                           className="form-control"
                                           placeholder="Search"
                                           value={this.state.search}
@@ -693,7 +712,7 @@ class Pos extends Component {
                                         />
                                       </div>
                                     </div>
-                                  </div> */}
+                                  </div>
                                   <div className="row pos_divs_row">
                                     {!this.state.load_item ? (
                                       this.state.products.length > 0 ? (
@@ -755,6 +774,7 @@ class Pos extends Component {
                         grandTotal={this.state.grandTotal}
                         taxes={this.state.taxes}
                         update_order_method={this.update_order_method}
+                        offers={this.state.offers}
                       />
                     </div>
                   </div>
@@ -770,6 +790,7 @@ class Pos extends Component {
             classNames={{
               modal: 'customModal',
             }}
+            focusTrapped={false}
           >
             <div className="content">
               <div className="page-header">
@@ -1268,6 +1289,20 @@ class PosAdd extends React.Component {
             <>
               <div className="card-body py-0">
                 <div className="totalitem">
+                  {this.props.offers.length > 0 && (
+                    <a
+                      style={{
+                        cursor: 'pointer',
+                        color: '#5bc2c1',
+                      }}
+                      onClick={() => {
+                        this.setState({ offersModal: true });
+                      }}
+                    >
+                      Offers
+                    </a>
+                  )}
+
                   <h4>Total items : {this.props.cart.length}</h4>
                   <a
                     style={{

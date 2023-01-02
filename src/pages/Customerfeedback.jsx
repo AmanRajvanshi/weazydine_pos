@@ -10,6 +10,7 @@ import { Bars } from 'react-loader-spinner';
 import Swal from 'sweetalert2';
 import no_img from '../assets/images/no_products_found.png';
 import { BiRupee } from 'react-icons/bi';
+import moment from 'moment';
 
 export class Customerfeedback extends Component {
   static contextType = AuthContext;
@@ -101,6 +102,7 @@ export class Customerfeedback extends Component {
                               <th>S.no</th>
                               <th>Rating</th>
                               <th>Feedback</th>
+                              <th>Date & Time</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -109,6 +111,9 @@ export class Customerfeedback extends Component {
                                 <td>{index + 1}</td>
                                 <td>{item.user_rating} / 5</td>
                                 <td>{item.user_description}</td>
+                                <td>
+                                  {moment(item.created_at).format('llll')}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
