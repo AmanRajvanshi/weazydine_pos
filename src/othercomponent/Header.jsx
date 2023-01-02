@@ -359,6 +359,7 @@ export class Header extends Component {
                   <Menu>
                     {/* dashboard */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       this.context.role.role === 'staff' ||
                       (this.context.role.role === 'manager' && (
                         <MenuItem
@@ -372,6 +373,7 @@ export class Header extends Component {
                       ))}
                     {/* pos */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       this.context.role.role === 'staff' ||
                       (this.context.role.role === 'manager' && (
                         <MenuItem
@@ -385,6 +387,7 @@ export class Header extends Component {
                       ))}
                     {/* orders */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       this.context.role.role === 'staff' ||
                       (this.context.role.role === 'manager' && (
                         <MenuItem
@@ -398,6 +401,7 @@ export class Header extends Component {
                       ))}
                     {/* kot */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       this.context.role.role === 'staff' ||
                       (this.context.role.role === 'manager' && (
                         <MenuItem
@@ -414,6 +418,7 @@ export class Header extends Component {
                       ))}
                     {/* catalogue */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       (this.context.role.role === 'manager' && (
                         <SubMenu
                           label="Catalogue"
@@ -449,6 +454,7 @@ export class Header extends Component {
                       ))}
                     {/* inventory */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       this.context.role.role === 'staff' ||
                       (this.context.role.role === 'manager' && (
                         <SubMenu
@@ -525,6 +531,7 @@ export class Header extends Component {
                       ))}
                     {/* reports */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       (this.context.role.role === 'manager' && (
                         <SubMenu
                           label="Reports"
@@ -587,6 +594,7 @@ export class Header extends Component {
                       ))}
                     {/* customers */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       (this.context.role.role === 'manager' && (
                         <SubMenu
                           label="Customers"
@@ -628,6 +636,7 @@ export class Header extends Component {
                       ))}
                     {/* offers */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       (this.context.role.role === 'manager' && (
                         <MenuItem
                           routerLink={<Link to="/offers" />}
@@ -702,6 +711,7 @@ export class Header extends Component {
                       ))}
                     {/* learning center */}
                     {this.context.role.role === 'owner' ||
+                      this.context.role.role === 'admin' ||
                       this.context.role.role === 'staff' ||
                       (this.context.role.role === 'manager' && (
                         <MenuItem
