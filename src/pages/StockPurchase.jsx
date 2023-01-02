@@ -147,7 +147,6 @@ class StockPurchase extends Component {
                               <th>PO No</th>
                               <th>Purchase date</th>
                               <th>Total</th>
-
                               <th>Paid Amount</th>
                               <th>Balance</th>
                               <th>Stock Added</th>
@@ -198,17 +197,19 @@ class StockPurchase extends Component {
                                   >
                                     <img src={edit_icon} alt="img" />
                                   </Link>
-                                  <a
-                                    className="me-3"
-                                    onClick={() => {
-                                      this.setState({
-                                        openedit: true,
-                                        purchase_id: item.id,
-                                      });
-                                    }}
-                                  >
-                                    <img src={money_icon} alt="img" />
-                                  </a>
+                                  {item.is_paid == 0 && (
+                                    <a
+                                      className="me-3"
+                                      onClick={() => {
+                                        this.setState({
+                                          openedit: true,
+                                          purchase_id: item.id,
+                                        });
+                                      }}
+                                    >
+                                      <img src={money_icon} alt="img" />
+                                    </a>
+                                  )}
 
                                   <a
                                     className="confirm-text"

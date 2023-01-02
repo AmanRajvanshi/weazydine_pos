@@ -38,12 +38,13 @@ export class UpdateProductRecipe extends Component {
       is_veg: 1,
       save_and_continue: false,
       add_category_loading: false,
+      is_save_button_loding: false,
       rowsRaw: [
         {
           id: 1,
           name: '',
           quantity: '',
-          Unit: '',
+          unit: '',
           material_id: '',
         },
       ],
@@ -52,18 +53,85 @@ export class UpdateProductRecipe extends Component {
           id: 1,
           name: '',
           quantity: '',
-          Unit: '',
+          unit: '',
           material_id: '',
         },
       ],
       total: 0,
+      product_name: '',
+      variant_name: '',
     };
   }
 
   componentDidMount() {
     this.fetchSemiFinishedRecipe();
     this.fetchRawMaterial();
+    this.fetch_product_recipe();
   }
+
+  fetch_product_recipe = () => {
+    fetch(global.api + 'fetch_product_recipe', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        product_id: this.props.product_id,
+        varient_id: this.props.variant_id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          toast.error(msg);
+        } else {
+          if (json.raw_materials.length > 0) {
+            const vari = [];
+            json.raw_materials.map((item, index) => {
+              var one = {
+                id: item.raw_product_id,
+                name: 'one',
+                quantity: item.raw_product_quantity,
+                unit: item.raw_product_unit,
+              };
+              vari.push(one);
+            });
+
+            this.setState({ rowsRaw: vari });
+          }
+          if (json.semi_dishes.length > 0) {
+            const vari = [];
+            json.semi_dishes.map((item, index) => {
+              var one = {
+                id: item.semi_product_id,
+                name: 'one',
+                quantity: item.semi_product_quantity,
+                unit: item.semi_product_unit,
+              };
+              vari.push(one);
+            });
+
+            this.setState({ rowsSemi: vari });
+          }
+          this.setState({
+            // rowsRaw: json.raw_materials,
+            // rowsSemi: json.semi_dishes,
+            product_name: json.product.product_name,
+            variant_name: json.varient.variants_name,
+          });
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ is_loding: false });
+      });
+  };
 
   fetchSemiFinishedRecipe = (page) => {
     fetch(global.api + 'fetch_semi_dishes', {
@@ -136,7 +204,6 @@ export class UpdateProductRecipe extends Component {
       });
   };
 
-
   handleChangeRaw = (idx) => (e) => {
     const newRows = [...this.state.rowsRaw];
 
@@ -152,15 +219,14 @@ export class UpdateProductRecipe extends Component {
     this.setState({ rowsRaw: newRows });
   };
 
-
   handleChangeSemi = (idx) => (e) => {
     const newRows = [...this.state.rowsSemi];
 
     if (e.target.name == 'material_id') {
       var index = e.target.selectedIndex;
       var optionElement = e.target.childNodes[index];
-      var option = optionElement.getAttribute('unit1');
-      newRows[idx]['unit1'] = option;
+      var option = optionElement.getAttribute('unit');
+      newRows[idx]['unit'] = option;
     }
 
     newRows[idx][e.target.name] = e.target.value;
@@ -168,19 +234,17 @@ export class UpdateProductRecipe extends Component {
     this.setState({ rowsSemi: newRows });
   };
 
-
   handleAddRowRawMaterial = () => {
     const vari = [
       {
         id: 1,
         name: '',
         quantity: '',
-        Unit: '',
+        unit: '',
       },
     ];
     this.setState({ rowsRaw: [...this.state.rowsRaw, ...vari] });
   };
-
 
   handleAddRowSemiFinished = () => {
     const vari = [
@@ -188,7 +252,7 @@ export class UpdateProductRecipe extends Component {
         id: 1,
         name: '',
         quantity: '',
-        Unit1: '',
+        unit: '',
       },
     ];
     this.setState({ rowsSemi: [...this.state.rowsSemi, ...vari] });
@@ -206,6 +270,41 @@ export class UpdateProductRecipe extends Component {
     this.setState({ rowsSemi });
   };
 
+  update_product_recipe = () => {
+    this.setState({ is_save_button_loding: true });
+    fetch(global.api + 'update_product_recipe', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.context.token,
+      },
+      body: JSON.stringify({
+        product_id: this.props.product_id,
+        varient_id: this.props.variant_id,
+        raw_materials: this.state.rowsRaw,
+        semi_dishes: this.state.rowsSemi,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (!json.status) {
+          var msg = json.msg;
+          this.setState({ is_save_button_loding: false });
+          this.setState({ is_error: true, error_msg: msg });
+        } else {
+          this.setState({ is_save_button_loding: false });
+          this.setState({ is_success: true, success_msg: json.msg });
+        }
+        return json;
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        this.setState({ is_save_button_loding: false });
+      });
+  };
 
   render() {
     return (
@@ -243,14 +342,14 @@ export class UpdateProductRecipe extends Component {
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="form-group">
-                          <label>Product</label>
-                          <label>Product</label>
+                          <label>Product Name : </label>
+                          <span>{this.state.product_name}</span>
                         </div>
                       </div>
                       <div className="col-lg-6">
                         <div className="form-group">
-                          <label>Variant</label>
-                          <label>Quantity</label>
+                          <label>Variant Name : </label>
+                          <span>{this.state.variant_name}</span>
                         </div>
                       </div>
                     </div>
@@ -285,6 +384,7 @@ export class UpdateProductRecipe extends Component {
                                       onChange={this.handleChangeRaw(idx)}
                                       className="select-container"
                                       name="material_id"
+                                      value={this.state.rowsRaw[idx].id}
                                     >
                                       <option>Choose Material</option>
                                       {this.state.rawmaterial.length > 0 ? (
@@ -319,9 +419,7 @@ export class UpdateProductRecipe extends Component {
                                     <input
                                       type="text"
                                       name="quantity"
-                                      value={
-                                        this.state.rowsRaw[idx].current_quantity
-                                      }
+                                      value={this.state.rowsRaw[idx].quantity}
                                       onChange={this.handleChangeRaw(idx)}
                                       className="form-control"
                                     />
@@ -410,6 +508,7 @@ export class UpdateProductRecipe extends Component {
                                       onChange={this.handleChangeSemi(idx)}
                                       className="select-container"
                                       name="material_id"
+                                      value={this.state.rowsSemi[idx].id}
                                     >
                                       <option>Choose Material</option>
                                       {this.state.semifinishedrecipe.length >
@@ -418,7 +517,7 @@ export class UpdateProductRecipe extends Component {
                                           (item, index) => (
                                             <option
                                               value={item.id}
-                                              unit1={item.recipe_quantity}
+                                              unit={item.recipe_quantity}
                                               current_quantity={
                                                 item.current_stock
                                               }
@@ -436,7 +535,7 @@ export class UpdateProductRecipe extends Component {
                                     <input
                                       type="text"
                                       name="unit"
-                                      value={this.state.rowsSemi[idx].unit1}
+                                      value={this.state.rowsSemi[idx].unit}
                                       onChange={this.handleChangeSemi(idx)}
                                       className="form-control"
                                     />
@@ -445,9 +544,7 @@ export class UpdateProductRecipe extends Component {
                                     <input
                                       type="text"
                                       name="quantity"
-                                      value={
-                                        this.state.rowsSemi[idx].current_quantity
-                                      }
+                                      value={this.state.rowsSemi[idx].quantity}
                                       onChange={this.handleChangeSemi(idx)}
                                       className="form-control"
                                     />
@@ -506,9 +603,32 @@ export class UpdateProductRecipe extends Component {
                       )}
                     </div>
                     <div className="d-flex justify-content-end">
-                      <button className="btn btn-primary btn-sm">
-                        Save Recipe
-                      </button>
+                      {this.state.is_save_button_loding ? (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          disabled
+                          style={{
+                            cursor: 'not-allowed',
+                            opacity: '0.8',
+                          }}
+                        >
+                          Saving...
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => {
+                            this.update_product_recipe();
+                          }}
+                        >
+                          Save Recipe
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

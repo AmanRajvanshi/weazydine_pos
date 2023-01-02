@@ -556,7 +556,7 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/updateproductrecipe/:id"
+              path="/updateproductrecipe/:product_id/:variant_id"
               element={
                 <RequireAuth>
                   <UpdateProductRecipe />
@@ -665,7 +665,7 @@ export class App extends Component {
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/datatable" element={<DataTable />} />
-            {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
+            <Route exact path="/loginpassword" element={<LoginPassword />} />
           </Routes>
           {/* <Footer /> */}
         </AuthContext.Provider>

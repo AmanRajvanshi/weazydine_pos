@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../othercomponent/Header';
-import { BiRupee } from 'react-icons/bi';
 import delete_icon from '../assets/images/icons/delete.svg';
 import edit_icon from '../assets/images/icons/edit.svg';
 import eye_icon from '../assets/images/icons/eye.svg';
 import { AuthContext } from '../AuthContextProvider';
 import { Bars } from 'react-loader-spinner';
-import { Toggle } from '../othercomponent/Toggle';
-import Skeletonloader from '../othercomponent/Skeletonloader';
 import no_img from '../assets/images/no_products_found.png';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import 'react-responsive-modal/styles.css';
-import { Modal } from 'react-responsive-modal';
 
 class Semifinishedrawmaterialproducts extends Component {
   static contextType = AuthContext;
@@ -146,6 +142,7 @@ class Semifinishedrawmaterialproducts extends Component {
                             <th>Dish Name</th>
                             <th>Current Stock</th>
                             <th>Expiry</th>
+                            <th>Add Stock</th>
                             <th style={{ textAlign: 'end' }}>Action</th>
                           </tr>
                         </thead>
@@ -163,6 +160,11 @@ class Semifinishedrawmaterialproducts extends Component {
                                   {item.dish_expiry > 1
                                     ? item.dish_expiry + ' Days'
                                     : item.dish_expiry + ' Day'}
+                                </td>
+                                <td>
+                                  <button className="btn btn-primary btn-sm">
+                                    Add Stock
+                                  </button>
                                 </td>
                                 <td style={{ textAlign: 'end' }}>
                                   <Link

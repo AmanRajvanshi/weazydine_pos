@@ -42,7 +42,7 @@ export class AddStockPurchase extends Component {
       po: '',
       note: '',
       stock_added: 0,
-      payment_type: 1,
+      payment_type: 0,
       igst: 0,
       sgst: 0,
       cgst: 0,
@@ -52,6 +52,9 @@ export class AddStockPurchase extends Component {
       contact: '',
       address: '',
       gstin: '',
+      payment_date: moment(new Date()).format('YYYY-MM-DD'),
+      payment_mode: '',
+      txn_note: '',
     };
   }
 
@@ -190,14 +193,11 @@ export class AddStockPurchase extends Component {
       toast.error('Add category first !');
     } else if (this.state.rows.length == 0) {
       toast.error('Add atleast one product !');
-    }
-    else if(!isValid){
-      toast.error("PO number should be numeric !");
-    }
-    // else if (this.state.market_price<this.state.our_price) {
-    //     toast.error("Your price should be less than market price !");
-    // }
-    else if (this.state.supplier_id == '') {
+    } else if (!isValid) {
+      toast.error('PO number should be numeric !');
+    } else if (this.state.po_no == '') {
+      toast.error('PO number is required !');
+    } else if (this.state.supplier_id == '') {
       toast.error('supplier is required !');
     } else {
       this.setState({ save_and_continue: true, isLoading: true });
@@ -235,8 +235,12 @@ export class AddStockPurchase extends Component {
             toast.error(msg);
           } else {
             toast.success(json.msg);
-            this.props.navigate('/stock_purchase');
-            this.setState({ product_show: false, product_id: json.data.id });
+            this.setState({ product_show: false });
+            if (this.state.payment_type === '1') {
+              this.addPayment(json.purchase_order_id);
+            } else {
+              this.props.navigate('/stock_purchase');
+            }
           }
           return json;
         })
@@ -245,6 +249,51 @@ export class AddStockPurchase extends Component {
         })
         .finally(() => {
           this.setState({ isLoading: false, save_and_continue: false });
+        });
+    }
+  };
+
+  addPayment = (id) => {
+    if (this.state.payment_mode == '') {
+      toast.error('Payment mode is required !');
+    } else if (this.state.payment_date == '') {
+      toast.error('Payment date is required !');
+    }
+    // else if (this.state.txn_note == '') {
+    //   toast.error('Transaction note is required !');
+    // }
+    else if (this.state.total == '') {
+      toast.error('Total amount is required !');
+    } else {
+      fetch(global.api + 'add_payment_purchase_order', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.context.token,
+        },
+        body: JSON.stringify({
+          purchase_id: id,
+          txn_amount: this.state.total,
+          txn_method: this.state.payment_mode,
+          txn_notes: this.state.txn_note,
+          txn_date: moment(this.state.payment_date).format('YYYY-MM-DD'),
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.status) {
+            toast.success(json.msg);
+            this.setState({ open: false });
+            this.props.navigate('/stock_purchase');
+          } else {
+            toast.error(json.msg);
+          }
+          return json;
+        })
+        .catch((error) => console.error(error))
+        .finally(() => {
+          this.setState({ save_and_continue: false });
         });
     }
   };
@@ -467,7 +516,8 @@ export class AddStockPurchase extends Component {
                       <div className="form-group">
                         <label> Invoice Date</label>
                         <input
-                          type="text"
+                          type="date"
+                          className="form-control"
                           value={this.state.invoice_date}
                           onChange={(e) => {
                             this.setState({ invoice_date: e.target.value });
@@ -484,39 +534,6 @@ export class AddStockPurchase extends Component {
                           }}
                           type="text"
                         />
-                      </div>
-                    </div>
-                    <div className="col-md-3 col-sm-6 col-12">
-                      <div className="form-group">
-                        <label>Payment type</label>
-                        <RadioGroup
-                          value={this.state.payment_type}
-                          onChange={(e) => {
-                            this.setState({ payment_type: e });
-                          }}
-                          horizontal
-                        >
-                          <RadioButton
-                            value="1"
-                            pointColor="#f3c783"
-                            iconSize={20}
-                            rootColor="#065f0a"
-                            iconInnerSize={10}
-                            padding={10}
-                          >
-                            Paid
-                          </RadioButton>
-                          <RadioButton
-                            value="0"
-                            pointColor="#f3c783"
-                            iconSize={20}
-                            rootColor="#bf370d"
-                            iconInnerSize={10}
-                            padding={10}
-                          >
-                            Unpaid
-                          </RadioButton>
-                        </RadioGroup>
                       </div>
                     </div>
 
@@ -675,23 +692,122 @@ export class AddStockPurchase extends Component {
                       </div>
                     ) : (
                       <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'end',
+                        }}
+                      >
+                        <button
+                          onClick={this.handleAddRow}
+                          className="btn btn-sm btn-outline-secondary"
                           style={{
-                            display: 'flex',
-                            justifyContent: 'end',
+                            marginBottom: '20px',
+                            marginTop: '10px',
                           }}
                         >
-                          <button
-                            onClick={this.handleAddRow}
-                            className="btn btn-sm btn-outline-secondary"
-                            style={{
-                              marginBottom: '20px',
-                              marginTop: '10px',
-                            }}
-                          >
-                            Add A Row
-                          </button>
-                        </div>
+                          Add A Row
+                        </button>
+                      </div>
                     )}
+
+                    <div className="col-md-3 col-sm-6 col-12">
+                      <div className="form-group">
+                        <label>Payment type</label>
+                        <RadioGroup
+                          value={this.state.payment_type}
+                          onChange={(e) => {
+                            this.setState({ payment_type: e });
+                          }}
+                          horizontal
+                        >
+                          <RadioButton
+                            value="0"
+                            pointColor="#f3c783"
+                            iconSize={20}
+                            rootColor="#bf370d"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Unpaid
+                          </RadioButton>
+                          <RadioButton
+                            value="1"
+                            pointColor="#f3c783"
+                            iconSize={20}
+                            rootColor="#065f0a"
+                            iconInnerSize={10}
+                            padding={10}
+                          >
+                            Paid
+                          </RadioButton>
+                        </RadioGroup>
+                      </div>
+                    </div>
+
+                    {this.state.payment_type == 1 && (
+                      <>
+                        <div className="col-md-3">
+                          <div className="form-group">
+                            <label>Paid Amount</label>
+                            <input
+                              type="text"
+                              name="paid_amount"
+                              value={this.state.total}
+                              disabled
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-3 col-sm-6 col-12">
+                          <div className="form-group">
+                            <label>Payment Method</label>
+                            <select
+                              className="form-control"
+                              name="payment_mode"
+                              onChange={(e) => {
+                                this.setState({
+                                  payment_mode: e.target.value,
+                                });
+                              }}
+                            >
+                              <option>Select</option>
+                              <option value="Cash">Cash</option>
+                              <option value="Card">Card</option>
+                              <option value="Cheque">Cheque</option>
+                              <option value="Online">Online</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="col-md-3 col-sm-6 col-12">
+                          <div className="form-group">
+                            <label>Payment Date</label>
+                            <input
+                              type="date"
+                              name="payment_date"
+                              value={this.state.payment_date}
+                              onChange={(e) =>
+                                this.setState({ payment_date: e })
+                              }
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+                        <div className="xol-md-">
+                          <div className="form-group">
+                            <label>Payment Note</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={this.state.payment_note}
+                              onChange={(e) =>
+                                this.setState({ payment_note: e.target.value })
+                              }
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
                     <div className="d-flex align-items-center single_checkbox new_checkbox w-100 my-3">
                       <input
                         type="checkbox"

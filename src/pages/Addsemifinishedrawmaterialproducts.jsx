@@ -66,7 +66,7 @@ export class Addsemifinishedrawmaterialproducts extends Component {
         'production_quantity_estimate',
         this.state.production_quantity_estimate
       );
-      form.append('production_materials[]', JSON.stringify(this.state.rows));
+      form.append('production_materials', JSON.stringify(this.state.rows));
 
       fetch(global.api + 'add_semi_dishes', {
         method: 'POST',

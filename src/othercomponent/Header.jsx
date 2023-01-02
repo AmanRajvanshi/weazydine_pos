@@ -27,6 +27,7 @@ export class Header extends Component {
 
   componentDidMount() {
     this.fetch_notifications(this.state.page);
+    console.log(this.context.token);
   }
 
   logOut = () => {

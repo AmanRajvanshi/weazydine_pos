@@ -199,7 +199,13 @@ class ProductRecipe extends Component {
                                   {item.recipe_status == '1' ? (
                                     <Link
                                       className="me-3"
-                                      to={'/updateproductrecipe/' + item.id}
+                                      to={
+                                        '/updateproductrecipe/' +
+                                        item.id +
+                                        '/' +
+                                        item.varient_id
+                                      }
+                                      target="_blank"
                                     >
                                       <button className="btn btn-primary btn-sm">
                                         Update Recipe
@@ -208,7 +214,13 @@ class ProductRecipe extends Component {
                                   ) : (
                                     <Link
                                       className="me-3"
-                                      to={'/updateproductrecipe/' + item.id}
+                                      to={
+                                        '/updateproductrecipe/' +
+                                        item.id +
+                                        '/' +
+                                        item.varient_id
+                                      }
+                                      target="_blank"
                                     >
                                       <button className="btn btn-danger btn-sm">
                                         Create Recipe
