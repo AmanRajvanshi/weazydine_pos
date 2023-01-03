@@ -86,9 +86,10 @@ class Customers extends Component {
                             <th>Customer Name</th>
                             <th>Contact </th>
                             <th>Email</th>
+                            <th>Last Order</th>
+                            <th>Last Order Value</th>
                             <th>Total Orders</th>
                             <th>Date of Joining</th>
-                            <th>Date of Birth</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -99,16 +100,36 @@ class Customers extends Component {
                               <td>{item.contact}</td>
                               <td>{item.email == null ? 'N/A' : item.email}</td>
                               <td>
-                                {item.orders == null || item.orders == 0
-                                  ? 'N/A'
-                                  : item.orders}
+                                <Link
+                                  to={
+                                    '/orderdetails/' +
+                                    item.last_order.order_code
+                                  }
+                                  target="_blank"
+                                >
+                                  {moment(item.last_order.created_at).fromNow()}
+                                </Link>
+                              </td>
+                              <td>
+                                <Link
+                                  to={
+                                    '/orderdetails/' +
+                                    item.last_order.order_code
+                                  }
+                                  target="_blank"
+                                >
+                                  <BiRupee />
+                                  {item.last_order.total_amount}
+                                </Link>
+                              </td>
+                              <td>
+                                <Link to={'/peruserorder/' + item.user_uu_id}>
+                                  {item.orders == null || item.orders == 0
+                                    ? 'N/A'
+                                    : item.orders}
+                                </Link>
                               </td>
                               <td>{moment(item.created_at).format('ll')}</td>
-                              <td>
-                                {item.dob == null || item.dob == '02/02/1996'
-                                  ? 'N/A'
-                                  : item.dob}
-                              </td>
                             </tr>
                           ))}
                         </tbody>

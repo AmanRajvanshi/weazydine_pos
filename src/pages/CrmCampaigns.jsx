@@ -383,6 +383,7 @@ export class CrmCampaigns extends Component {
           classNames={{
             modal: 'customModal',
           }}
+          focusTrapped={false}
         >
           <div className="container">
             <h4>Buy Credits</h4>

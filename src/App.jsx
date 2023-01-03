@@ -63,17 +63,18 @@ import EditCoupons from './pages/EditCoupons.jsx';
 import Orderinvoices from './pages/Orderinvoices.jsx';
 import Staffaccounts from './pages/Staffaccounts.jsx';
 import Customerfeedback from './pages/Customerfeedback.jsx';
+import PerUserOrder from './pages/PerUserOrder.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
-// global.api = 'https://dine-api.weazy.in/api/';
+global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
 // global.api = ' https://beta-dine-api.weazy.in/api/';
 
 //for local
-global.api = 'http://3.108.209.160/weazy-dine-api/public/api/';
+// global.api = 'http://3.108.209.160/weazy-dine-api/public/api/';
 
 export class App extends Component {
   constructor(props) {
@@ -139,8 +140,8 @@ export class App extends Component {
     window.Pusher = Pusher;
     window.Echo = new Echo({
       broadcaster: 'pusher',
-      // key: '714d1999a24b68c8bf87', // for production
-      key: 'b8ba8023ac2fc3612e90', //for testing
+      key: '714d1999a24b68c8bf87', // for production
+      // key: 'b8ba8023ac2fc3612e90', //for testing
       cluster: 'ap2',
       forceTLS: true,
       disableStats: true,
@@ -662,10 +663,19 @@ export class App extends Component {
                 </RequireAuth>
               }
             />
+            <Route
+              exact
+              path="/peruserorder/:id"
+              element={
+                <RequireAuth>
+                  <PerUserOrder />
+                </RequireAuth>
+              }
+            />
             <Route path="*" element={<Pagenotfound />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/datatable" element={<DataTable />} />
-            <Route exact path="/loginpassword" element={<LoginPassword />} />
+            {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
           {/* <Footer /> */}
         </AuthContext.Provider>

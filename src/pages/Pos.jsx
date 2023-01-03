@@ -1289,7 +1289,7 @@ class PosAdd extends React.Component {
             <>
               <div className="card-body py-0">
                 <div className="totalitem">
-                  {this.props.offers.length > 0 && (
+                  {/* {this.props.offers.length > 0 && (
                     <a
                       style={{
                         cursor: 'pointer',
@@ -1301,7 +1301,7 @@ class PosAdd extends React.Component {
                     >
                       Offers
                     </a>
-                  )}
+                  )} */}
 
                   <h4>Total items : {this.props.cart.length}</h4>
                   <a

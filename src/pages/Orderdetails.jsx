@@ -403,7 +403,7 @@ export class Orderdetails extends Component {
                                         <span key={i}>
                                           {' '}
                                           {item.txn_method} - ₹{' '}
-                                          {item.txn_amount}{" "}
+                                          {item.txn_amount}{' '}
                                           {item.txn_status == 'success' ? (
                                             <span style={{ color: 'green' }}>
                                               Success
@@ -916,7 +916,7 @@ export class Orderdetails extends Component {
                           <>
                             <ReactToPrint
                               trigger={() => (
-                                <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center">
+                                <a className="btn btn-primary me-2 w-50 d-flex align-items-center justify-content-center button-secondary-color">
                                   <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                                   <p>Print Receipt</p>
                                 </a>
@@ -928,7 +928,7 @@ export class Orderdetails extends Component {
                               <ReactToPrint
                                 trigger={() => (
                                   <a
-                                    className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                                    className="btn btn-primary w-50 d-flex align-items-center justify-content-center button-secondary-color"
                                     onClick={() => {
                                       if (
                                         global.os == 'Windows' ||

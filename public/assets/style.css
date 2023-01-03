@@ -4715,7 +4715,6 @@ span.select-container.select-container--default.select-container--open {
 
 .sidebar1 {
   background-color: #fff;
-  border-right: 1px solid transparent;
   margin-top: 0;
   z-index: 1001;
   position: fixed;
@@ -4725,7 +4724,6 @@ span.select-container.select-container--default.select-container--open {
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
-  border-right: 1px solid #e8ebed;
   width: 250px;
 }
 
@@ -9776,4 +9774,14 @@ input[type='number'] {
 
 .w-33{
   width: 33.33%;
+}
+
+.offer_card{
+  border:none !important;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease-in-out;
+}
+
+.offer_card:hover{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
 }

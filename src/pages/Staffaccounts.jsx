@@ -61,11 +61,11 @@ export class Staffaccounts extends Component {
         .then((res) => res.json())
         .then((data) => {
           if (data.status) {
-            toast.success(data.message);
+            toast.success("Staff's account created successfully");
             this.setState({ newaddonLoading: false, open: false });
             this.fetch_staff();
           } else {
-            toast.error(data.message);
+            toast.error("Staff's account not created");
             this.setState({ newaddonLoading: false });
           }
         })
@@ -131,11 +131,11 @@ export class Staffaccounts extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.status) {
-          toast.success(data.msg);
+          toast.success("Staff's account deleted successfully");
           this.setState({ newaddonLoading: false, edit: false });
           this.fetch_staff();
         } else {
-          toast.error(data.msg);
+          toast.error("Staff's account not deleted");
           this.setState({ newaddonLoading: false });
         }
       })

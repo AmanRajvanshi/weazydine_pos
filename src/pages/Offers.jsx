@@ -171,7 +171,7 @@ export class Offers extends Component {
                       {this.state.offers_data.map((values, index) => {
                         return (
                           <div className="col-md-4">
-                            <div class="card flex-fill bg-white">
+                            <div class="card flex-fill bg-white offer_card">
                               <div class="card-header pb-0 d-flex align-items-center justify-content-between">
                                 <Link
                                   to={'/editcoupon/' + values.id}
