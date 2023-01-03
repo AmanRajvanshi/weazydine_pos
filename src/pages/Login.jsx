@@ -89,6 +89,7 @@ class Login extends Component {
       })
         .then((response) => response.json())
         .then((json) => {
+          console.log(json);
           if (json.msg === 'ok') {
             toast.success('OTP verified successfully');
             global.vendor = json.usr;
