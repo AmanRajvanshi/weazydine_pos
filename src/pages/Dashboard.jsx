@@ -494,6 +494,15 @@ class OngoingOrders extends Component {
 
   componentDidMount() {
     this.fetch_order(1);
+
+    window.Echo.private(`OrderstatusChannel.` + this.context.user.id).listen(
+      '.server.created',
+      (e) => {
+        this.fetch_order();
+        // this.setState({ data: e.tables });
+      }
+    );
+
   }
 
   fetch_order = (page_id) => {

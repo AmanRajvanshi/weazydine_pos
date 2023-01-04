@@ -93,12 +93,13 @@ export class CrmCampaigns extends Component {
         obj.verify_payment(response.razorpay_payment_id);
       },
       prefill: {
-        name: this.state.vendor_name,
-        contact: this.state.vendor_contact,
-        email: this.state.vendor_email,
+        name: this.context.user.shop_name,
+        contact: this.context.user.contact,
+        email: this.context.user.email,
       },
       modal: {
         ondismiss: function () {
+          obj.setState({ payment_loading: false,inVoiceModal:false });
           toast.error('Payment Cancelled, Please try again', {
             toastId: 'paymentdeclined',
           });
