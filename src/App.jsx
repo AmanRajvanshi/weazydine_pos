@@ -68,13 +68,13 @@ import PerUserOrder from './pages/PerUserOrder.jsx';
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
 //for Release point
-global.api = 'https://dine-api.weazy.in/api/';
+// global.api = 'https://dine-api.weazy.in/api/';
 
 //for Testing point
 // global.api = ' https://beta-dine-api.weazy.in/api/';
 
 //for local
-// global.api = 'http://3.108.209.160/weazy-dine-api/public/api/';
+global.api = 'http://3.108.209.160/weazy-dine-api/public/api/';
 
 export class App extends Component {
   constructor(props) {

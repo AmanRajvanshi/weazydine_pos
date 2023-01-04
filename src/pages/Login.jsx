@@ -244,7 +244,7 @@ class Login extends Component {
                                     separator={<span>-</span>}
                                     isInputNum={true}
                                     shouldAutoFocus={true}
-                                    placeholder={'####'}
+                                    placeholder={'######'}
                                     inputStyle={{
                                       width: '3rem',
                                       height: '3rem',
