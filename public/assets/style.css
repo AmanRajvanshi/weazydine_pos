@@ -1739,7 +1739,7 @@ div#global-loader,
 .sidebar_scroll {
   height: 85vh;
   overflow-y: scroll;
-  padding-bottom: 50px;
+  /* padding-bottom: 50px; */
 }
 
 .fc-button {
@@ -7983,7 +7983,6 @@ span.select-container.select-container--default.select-container--open {
 .productimg .productcontet h4 {
   font-size: 14px;
   color: #000;
-  font-weight: 600;
   margin-bottom: 5px;
   display: flex;
   justify-content: start;
@@ -8470,17 +8469,16 @@ span.select-container.select-container--default.select-container--open {
 
 .totalitem h4 {
   padding: 7px 13px;
-  background: #f8f8f8;
   color: #5bc2c1;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  border-radius: 50px;
 }
 
 .totalitem a {
-  font-size: 14px;
+  font-size: 16px;
   color: #ea5455;
   font-weight: 700;
+  padding: 7px 13px;
 }
 
 .card.card-order {
@@ -9093,15 +9091,12 @@ span.select-container.select-container--default.select-container--open {
 
 .pos_add_div {
   margin: 10px;
-  margin-bottom: 13px;
-  padding-bottom: 10px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
   border-bottom: 1px solid #6c6c6c;
   border-radius: 5px;
-  padding: 16px 8px;
-  width: 96%;
+  padding: 8px 16px
 }
 
 .pos_add_div:last-child {

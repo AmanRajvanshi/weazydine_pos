@@ -813,9 +813,9 @@ export class Orderdetails extends Component {
                       </div>
                       <div className="card-body">
                         <div className="row">
-                          <div className="col-lg-6 col-12">
+                          <div className="col-lg-6 col-sm-12">
                             <div className="form-group">
-                              <label>Customer Name</label>
+                              <label>Name</label>
                               <input
                                 type="text"
                                 readOnly
@@ -828,7 +828,7 @@ export class Orderdetails extends Component {
                               />
                             </div>
                           </div>
-                          <div className="col-lg-6 col-12">
+                          <div className="col-lg-6 col-sm-12">
                             <div className="form-group">
                               <label>Mobile</label>
                               <input

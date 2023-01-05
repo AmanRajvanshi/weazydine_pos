@@ -295,8 +295,7 @@ class Pos extends Component {
   };
 
   search = (e) => {
-    if (e.target.value.length > 3) {
-      this.setState({ products: [] });
+    if (e.target.value.length >= 3) {
       fetch(global.api + 'search_product', {
         method: 'POST',
         headers: {
@@ -654,129 +653,104 @@ class Pos extends Component {
                           <></>
                         )}
                       </div>
-                      <div
-                        style={{
-                          position: 'fixed',
-                          width: '60%',
-                          height: '70vh',
-                          overflowX: 'scroll',
+                      <Modal
+                        open={this.state.product_show}
+                        onClose={() => this.onCloseModal()}
+                        center
+                        showCloseIcon={true}
+                        styles={{
+                          modal: {
+                            width: '100%',
+                            maxWidth: '60vw',
+                          },
                         }}
+                        classNames={{
+                          modal: 'new_modal_styling new_modal_styling2',
+                        }}
+                        focusTrapped={false}
                       >
-                        <div className="tabs_container">
-                          <div className="tab_content active" data-tab="fruits">
-                            <div
-                              className="row m-0"
-                              style={{
-                                paddingTop: '20px',
-                              }}
-                            >
-                              <Modal
-                                open={this.state.product_show}
-                                onClose={() => this.onCloseModal()}
-                                center
-                                showCloseIcon={true}
-                                styles={{
-                                  modal: {
-                                    width: '100%',
-                                    maxWidth: '60vw',
-                                  },
-                                }}
-                                classNames={{
-                                  modal: 'new_modal_styling new_modal_styling2',
-                                }}
-                                focusTrapped={false}
-                              >
-                                <div className="w-100">
-                                  <h5
-                                    className="mb-2 fw-600 font-md"
-                                    style={{
-                                      paddingLeft: '10px',
-                                      paddingBottom: '10px',
-                                      borderBottom: '1px solid #e0e0e0',
-                                    }}
-                                  >
-                                    Select The Product To Add
-                                  </h5>
-                                  <div className="row">
-                                    <div className="col-md-12">
-                                      <div className="form-group">
-                                        <input
-                                          type="text"
-                                          id="pos_search_bar"
-                                          className="form-control"
-                                          placeholder="Search"
-                                          value={this.state.search}
-                                          onChange={(e) => this.search(e)}
-                                          autoFocus={false}
-                                          ref={this.inputRef}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="row pos_divs_row">
-                                    {!this.state.load_item ? (
-                                      this.state.products.length > 0 ? (
-                                        this.state.products.map(
-                                          (item, index) => {
-                                            return (
-                                              <Products
-                                                key={index}
-                                                data={item}
-                                                product_show={
-                                                  this.state.product_show
-                                                }
-                                                cart={this.add_to_cart}
-                                              />
-                                            );
-                                          }
-                                        )
-                                      ) : (
-                                        <div className="d-flex align-items-center justify-content-center flex-column">
-                                          <img
-                                            src={no_product}
-                                            alt=""
-                                            style={{
-                                              height: '300px',
-                                              paddingBottom: '20px',
-                                            }}
-                                          />
-                                          <h6>No Product Found.</h6>
-                                        </div>
-                                      )
-                                    ) : (
-                                      <Skeletonloader height={85} count={2} />
-                                    )}
-                                  </div>
-                                </div>
-                              </Modal>
+                        <div className="w-100">
+                          <h5
+                            className="mb-2 fw-600 font-md"
+                            style={{
+                              paddingLeft: '10px',
+                              paddingBottom: '10px',
+                              borderBottom: '1px solid #e0e0e0',
+                            }}
+                          >
+                            Select The Product To Add
+                          </h5>
+                          <div className="row">
+                            <div className="col-md-12">
+                              <div className="form-group">
+                                <input
+                                  type="text"
+                                  id="pos_search_bar"
+                                  className="form-control"
+                                  placeholder="Search"
+                                  value={this.state.search}
+                                  onChange={(e) => this.search(e)}
+                                  autoFocus={false}
+                                  ref={this.inputRef}
+                                />
+                              </div>
                             </div>
                           </div>
+                          <div className="row pos_divs_row">
+                            {!this.state.load_item ? (
+                              this.state.products.length > 0 ? (
+                                this.state.products.map((item, index) => {
+                                  return (
+                                    <Products
+                                      key={index}
+                                      data={item}
+                                      product_show={this.state.product_show}
+                                      cart={this.add_to_cart}
+                                    />
+                                  );
+                                })
+                              ) : (
+                                <div className="d-flex align-items-center justify-content-center flex-column">
+                                  <img
+                                    src={no_product}
+                                    alt=""
+                                    style={{
+                                      height: '300px',
+                                      paddingBottom: '20px',
+                                    }}
+                                  />
+                                  <h6>No Product Found.</h6>
+                                </div>
+                              )
+                            ) : (
+                              <Skeletonloader height={85} count={2} />
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </Modal>
                     </div>
                   )}
-                  <div className="col-lg-4 col-sm-12 sidebar_scroll">
-                    <div
-                      style={{
-                        position: 'fixed',
-                        zIndex: 99,
-                        width: '30%',
-                        height: '80%',
-                      }}
-                    >
-                      <PosAdd
-                        order_method={this.state.order_method}
-                        next_step={this.next_step}
-                        clear={this.clear_cart}
-                        cart={this.state.cart}
-                        update_cart={this.update_cart}
-                        subTotal={this.state.subTotal}
-                        grandTotal={this.state.grandTotal}
-                        taxes={this.state.taxes}
-                        update_order_method={this.update_order_method}
-                        offers={this.state.offers}
-                      />
-                    </div>
+                  <div
+                    className="col-lg-4 col-sm-12 sidebar_scroll"
+                    style={{
+                      position: 'fixed',
+                      zIndex: 99,
+                      right: 0,
+                      overflowY: 'scroll',
+                    }}
+                  >
+                    <PosAdd
+                      order_method={this.state.order_method}
+                      next_step={this.next_step}
+                      clear={this.clear_cart}
+                      cart={this.state.cart}
+                      update_cart={this.update_cart}
+                      subTotal={this.state.subTotal}
+                      grandTotal={this.state.grandTotal}
+                      taxes={this.state.taxes}
+                      update_order_method={this.update_order_method}
+                      offers={this.state.offers}
+                    />
                   </div>
                 </div>
               </div>
@@ -1141,6 +1115,25 @@ class Pos extends Component {
                         <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
                         <p>Print Receipt</p>
                       </a>
+                      <a
+                        className="btn btn-primary w-50 d-flex align-items-center justify-content-center"
+                        onClick={() => {
+                          if (global.os == 'Windows' || global.os == 'Mac OS') {
+                            window.open(
+                              global.api + this.state.order_code + '/kot.pdf',
+                              'PRINT',
+                              'height=400,width=600'
+                            );
+                          } else {
+                            this.sendUrlToPrint(
+                              global.api + this.state.order_code + '/kot.pdf'
+                            );
+                          }
+                        }}
+                      >
+                        <i className="fa-solid fa-file-invoice  print-receipt-icon"></i>
+                        <p>Print KOT</p>
+                      </a>
                     </>
                   ) : (
                     <div className="row  w-100">
@@ -1236,8 +1229,8 @@ class PosAdd extends React.Component {
   render() {
     return (
       <>
-        <div className="card card-order h-100">
-          <div className="card-header">
+        <div className="card card-order">
+          <div className="card-header p-2">
             <RadioGroup
               value={this.props.order_method}
               // value={this.state.is_veg}
@@ -1257,7 +1250,7 @@ class PosAdd extends React.Component {
                 iconSize={20}
                 rootColor="#37474f"
                 iconInnerSize={10}
-                padding={10}
+                padding={5}
               >
                 TakeAway
               </RadioButton>
@@ -1267,7 +1260,7 @@ class PosAdd extends React.Component {
                 iconSize={20}
                 rootColor="#37474f"
                 iconInnerSize={10}
-                padding={10}
+                padding={5}
               >
                 Delivery
               </RadioButton>
@@ -1278,7 +1271,7 @@ class PosAdd extends React.Component {
                 iconSize={20}
                 rootColor="#37474f"
                 iconInnerSize={10}
-                padding={10}
+                padding={5}
               >
                 DineIn
               </RadioButton>
@@ -1287,8 +1280,8 @@ class PosAdd extends React.Component {
 
           {this.props.cart.length > 0 ? (
             <>
-              <div className="card-body py-0">
-                <div className="totalitem">
+              <div className="card-body py-0 px-2">
+                <div className="totalitem mb-1">
                   {/* {this.props.offers.length > 0 && (
                     <a
                       style={{
@@ -1321,9 +1314,9 @@ class PosAdd extends React.Component {
                   {this.props.cart.map((item, index) => {
                     return (
                       <ul key={index} className="product-lists pos_add_div">
-                        <li>
+                        <li style={{ width: '75%' }}>
                           <div className="productimg">
-                            <div className="productcontet">
+                            <div className="productcontet w-100">
                               <h4 className="text-start">
                                 {item.product.product_name}
                                 {item.product.variants.map((i, index) => {
@@ -1341,70 +1334,71 @@ class PosAdd extends React.Component {
                                   }
                                 })}
                               </div>
-                              <div className="row">
-                                <div className="col-6">
-                                  <AddDelete
-                                    key_id={index}
-                                    quantity={item.quantity}
-                                    update_cart={this.props.update_cart}
-                                  />
-                                </div>
-                                <div className="col-6">
-                                  <p style={{ marginTop: '10px' }}>
-                                    X {(item.price / item.quantity).toFixed(2)}
-                                  </p>
+                              <div className="col-md-12">
+                                <div className="row">
+                                  <div className="col-6">
+                                    <AddDelete
+                                      key_id={index}
+                                      quantity={item.quantity}
+                                      update_cart={this.props.update_cart}
+                                    />
+                                  </div>
+                                  <div
+                                    className="col-6"
+                                    style={{
+                                      margin: '0px',
+                                      display: 'flex',
+                                      alignItems: 'end',
+                                    }}
+                                  >
+                                    <p>
+                                      X{' '}
+                                      {(item.price / item.quantity).toFixed(2)}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </li>
-                        <li>
-                          {' '}
-                          <BiRupee />
-                          {item.price}
-                        </li>
-                        <li className="d-flex align-items-start">
-                          <a className="confirm-text" href="#!">
-                            <img
-                              src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/delete-2.svg"
-                              alt="img"
+                        <li
+                          className="d-flex align-items-end flex-column justify-content-between"
+                          style={{ width: '25%' }}
+                        >
+                          <a className="confirm-text">
+                            <i
+                              className="fa fa-trash"
+                              aria-hidden="true"
+                              style={{
+                                cursor: 'pointer',
+                                color: 'red',
+                              }}
                               onClick={() => {
                                 this.props.update_cart(index, 0);
                               }}
-                            />
+                            ></i>
                           </a>
+                          <p style={{ marginTop: '10px' }}>₹ {item.price}</p>
                         </li>
                       </ul>
                     );
                   })}
                 </div>
               </div>
-              <div className="card-footer pt-0 pb-2">
+              <div className="card-footer py-0 px-2">
                 <div className="setvalue">
                   <ul>
                     <li>
                       <h5>Subtotal</h5>
-                      <h6>
-                        {' '}
-                        <BiRupee />
-                        {this.props.subTotal}
-                      </h6>
+                      <h6>₹ {this.props.subTotal}</h6>
                     </li>
                     <li>
                       <h5>Tax</h5>
-                      <h6>
-                        {' '}
-                        <BiRupee />
-                        {this.props.taxes}
-                      </h6>
+                      <h6>₹ {this.props.taxes}</h6>
                     </li>
                     <li className="total-value">
                       <h5>Total</h5>
-                      <h6>
-                        {' '}
-                        <BiRupee />
-                        {this.props.grandTotal}
-                      </h6>
+                      <h6>₹ {this.props.grandTotal}</h6>
                     </li>
                   </ul>
                 </div>
@@ -1464,7 +1458,7 @@ class AddDelete extends React.Component {
               // this.setState({ count: this.state.count - 1 });
             }}
           />
-          <div style={{ marginLeft: 5, marginRight: 5 }}>
+          <div style={{ marginLeft: '10px', marginRight: '10px' }}>
             {this.props.quantity}
           </div>
 
