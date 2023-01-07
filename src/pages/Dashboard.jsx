@@ -93,6 +93,7 @@ export class Dashboard extends Component {
       .then((json) => {
         if (json.status) {
           this.context.get_vendor_profile(this.context.token);
+          toast.success('Shop Status Updated Successfully');
         } else {
           toast.error(json.msg);
           this.setState({ shop_status: this.context.user.shop_open });
@@ -502,7 +503,6 @@ class OngoingOrders extends Component {
         // this.setState({ data: e.tables });
       }
     );
-
   }
 
   fetch_order = (page_id) => {

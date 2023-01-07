@@ -1385,7 +1385,7 @@ class PosAdd extends React.Component {
                   })}
                 </div>
               </div>
-              <div className="card-footer py-0 px-2">
+              <div className="card-footer py-0 px-2 pb-2">
                 <div className="setvalue">
                   <ul>
                     <li>

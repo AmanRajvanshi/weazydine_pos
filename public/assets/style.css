@@ -2132,8 +2132,8 @@ a:hover {
   width: 100%;
   font-size: 14px;
   font-weight: 500;
-  color: #141414;
-  padding: 10px 15px;
+  color: #2a2a2a;
+  padding: 5px 15px;
   border-radius: 5px;
   background: transparent;
 }
@@ -7623,9 +7623,14 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .card-sales-split {
-  padding-bottom: 25px;
+  padding-bottom: 15px;
   border-bottom: 1px solid #e9ecef;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
 
 @media (max-width: 991px) {
   .card-sales-split {
@@ -8968,6 +8973,8 @@ span.select-container.select-container--default.select-container--open {
   width: 10%;
   border-right: 1px solid #f1f1f1;
   padding-left: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .item_name_column {
@@ -8980,17 +8987,23 @@ span.select-container.select-container--default.select-container--open {
   width: 10%;
   border-right: 1px solid #f1f1f1;
   padding-left: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .price_column {
   width: 15%;
   border-right: 1px solid #f1f1f1;
   padding-left: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .amount_column {
   width: 15%;
   padding-left: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .sno_column_heading {
@@ -9096,7 +9109,7 @@ span.select-container.select-container--default.select-container--open {
   -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
   border-bottom: 1px solid #6c6c6c;
   border-radius: 5px;
-  padding: 8px 16px
+  padding: 8px 16px;
 }
 
 .pos_add_div:last-child {
@@ -9763,20 +9776,24 @@ input[type='number'] {
   color: #354545;
 }
 
-.ml-3{
+.ml-3 {
   margin-left: 8px;
 }
 
-.w-33{
+.w-33 {
   width: 33.33%;
 }
 
-.offer_card{
-  border:none !important;
+.offer_card {
+  border: none !important;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   transition: all 0.5s ease-in-out;
 }
 
-.offer_card:hover{
+.offer_card:hover {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.text-primary{
+  color: #5bc2c1 !important;
 }

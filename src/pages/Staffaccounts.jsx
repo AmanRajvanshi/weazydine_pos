@@ -237,7 +237,13 @@ export class Staffaccounts extends Component {
                                 <td>{index + 1}</td>
                                 <td>{item.staff_name}</td>
                                 <td>{item.staff_contact}</td>
-                                <td>{item.staff_role}</td>
+                                <td
+                                  style={{
+                                    textTransform: 'capitalize',
+                                  }}
+                                >
+                                  {item.staff_role}
+                                </td>
                                 <td>
                                   {item.staff_role !== 'owner' ? (
                                     <>

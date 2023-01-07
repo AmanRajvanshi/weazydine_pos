@@ -212,11 +212,11 @@ export class UpdateProductRecipe extends Component {
       var optionElement = e.target.childNodes[index];
       var option = optionElement.getAttribute('unit');
       newRows[idx]['unit'] = option;
+      newRows[idx][e.target.name] = e.target.value;
     }
 
-    newRows[idx][e.target.name] = e.target.value;
-
     this.setState({ rowsRaw: newRows });
+    console.log(this.state.rowsRaw);
   };
 
   handleChangeSemi = (idx) => (e) => {

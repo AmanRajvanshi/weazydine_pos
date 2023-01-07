@@ -64,6 +64,7 @@ import Orderinvoices from './pages/Orderinvoices.jsx';
 import Staffaccounts from './pages/Staffaccounts.jsx';
 import Customerfeedback from './pages/Customerfeedback.jsx';
 import PerUserOrder from './pages/PerUserOrder.jsx';
+import Newtableorder from './pages/Newtableorder.jsx';
 
 OneSignal.init({ appId: '49e49fa7-d31e-42d9-b1d5-536c4d3758cc' });
 
@@ -660,6 +661,15 @@ export class App extends Component {
               element={
                 <RequireAuth>
                   <Customerfeedback />
+                </RequireAuth>
+              }
+            />
+            <Route
+              exact
+              path="/newtableorder"
+              element={
+                <RequireAuth>
+                  <Newtableorder />
                 </RequireAuth>
               }
             />

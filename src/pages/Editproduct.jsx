@@ -33,10 +33,11 @@ export class Editproduct extends Component {
       v_data: [],
       product_image: '',
       addon_object: [],
-      max_product_addons: 0,
       createNewCategoryButton: false,
       isLoading: false,
       tax: 0,
+      max_addon: 0,
+      free_addon: 0,
     };
   }
 
@@ -95,7 +96,8 @@ export class Editproduct extends Component {
           this.setState({ v_data: obj.variants });
           this.setState({ addon: obj.addon_map });
           this.setState({ type: obj.type });
-          this.setState({ max_product_addons: obj.max_product_addons });
+          this.setState({ max_product_addon: obj.max_addon });
+          this.setState({ max_free_product_addon: obj.free_addon });
           this.setState({ tax: obj.tax });
         }
 
@@ -236,7 +238,8 @@ export class Editproduct extends Component {
         variants: this.state.v_data,
         addons: add,
         product_id: this.state.product_id,
-        max_product_addon: this.state.max_product_addons,
+        max_product_addon: this.state.max_addon,
+        max_free_product_addon: this.state.free_addon,
       }),
     })
       .then((response) => response.json())
@@ -496,7 +499,8 @@ export class Editproduct extends Component {
                 variants={this.state.v_data}
                 addons={this.state.addon}
                 update_child={this.update_variant_from_child}
-                max_product_addons={this.state.max_product_addons}
+                max_addons={this.state.max_addon}
+                free_addons={this.state.free_addon}
               />
             </div>
           ) : (
@@ -590,7 +594,8 @@ class Variants extends Component {
       add_on_loading: false,
       add_on_dataLoading: true,
       newaddon: false,
-      max_product_addons: this.props.max_product_addons,
+      max_addon: 0,
+      free_addon: 0,
     };
   }
 
@@ -828,14 +833,8 @@ class Variants extends Component {
               </div>
             )}
 
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div className="d-flex align-items-center">
+            <div className="row">
+              <div className="col-md-4 d-flex align-items-center">
                 <h6 className="py-2 underline">Addons</h6>
                 <button
                   className="btn btn-outline-secondary"
@@ -851,19 +850,43 @@ class Variants extends Component {
                   Add New Addon
                 </button>
               </div>
-              <div className="d-flex align-items-center">
-                <h6 className="py-2 underline">Free Addons</h6>
+              <div className="col-md-4 d-flex align-items-center">
+                <label className="py-2">Max Addons Count</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
                   onChange={(e) => {
                     this.setState({
-                      max_product_addons: e.target.value,
+                      max_addon: e.target.value,
                     });
                   }}
-                  value={this.state.max_product_addons}
+                  value={this.state.max_addon}
                 >
-                  <option>Select Maximum Addons Count</option>
+                  <option>Max Addons Count</option>
+                  <option value="-1">Unlimited</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
+              <div className="col-md-4 d-flex align-items-center">
+                <label className="py-2">Free Addons Count</label>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  onChange={(e) => {
+                    this.setState({
+                      free_addon: e.target.value,
+                    });
+                  }}
+                  value={this.state.free_addon}
+                >
+                  <option>Free Addons Count</option>
                   <option value="0">No Addons (All addons are paid)</option>
                   <option value="-1">
                     Unlimited Addons (All addons are free)

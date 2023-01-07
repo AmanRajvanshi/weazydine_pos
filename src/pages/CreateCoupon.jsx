@@ -60,7 +60,10 @@ export class CreateCoupon extends Component {
         max_discount_text;
     } else {
       var offer_name =
-        '₹' + this.state.discount + ' OFF on all orders' + minimum_order_value;
+        'Flat ₹' +
+        this.state.discount +
+        ' OFF on all orders' +
+        minimum_order_value;
     }
 
     this.setState({ loading: true });
