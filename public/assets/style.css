@@ -7631,7 +7631,6 @@ span.select-container.select-container--default.select-container--open {
   justify-content: space-between;
 }
 
-
 @media (max-width: 991px) {
   .card-sales-split {
     padding-bottom: 10px;
@@ -9794,6 +9793,15 @@ input[type='number'] {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
 }
 
-.text-primary{
+.text-primary {
   color: #5bc2c1 !important;
+}
+
+.font-weight-normal {
+  font-weight: 400 !important;
+}
+
+.nav-link {
+  padding: 3px 7px;
+  border-radius: 4px !important;
 }

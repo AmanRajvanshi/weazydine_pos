@@ -103,14 +103,7 @@ class Semifinishedrawmaterialproducts extends Component {
                 </div>
                 <div className="page-btn">
                   <Link to="/addsemifinishedrawmaterialproducts">
-                    <a className="btn btn-added">
-                      <img
-                        src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                        alt="img"
-                        className="me-1"
-                      />
-                      Add New Recipe
-                    </a>
+                    <a className="btn btn-added">Add New Recipe</a>
                   </Link>
                 </div>
               </div>

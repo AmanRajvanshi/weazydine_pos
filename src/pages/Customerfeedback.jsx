@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import no_img from '../assets/images/no_products_found.png';
 import { BiRupee } from 'react-icons/bi';
 import moment from 'moment';
+import { Rating } from '@mui/material';
 
 export class Customerfeedback extends Component {
   static contextType = AuthContext;
@@ -109,7 +110,12 @@ export class Customerfeedback extends Component {
                             {this.state.feed_data.map((item, index) => (
                               <tr>
                                 <td>{index + 1}</td>
-                                <td>{item.user_rating} / 5</td>
+                                <td>
+                                  <Rating
+                                    name="read-only"
+                                    value={item.user_rating}
+                                  />
+                                </td>
                                 <td>{item.user_description}</td>
                                 <td>
                                   {moment(item.created_at).format('llll')}

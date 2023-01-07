@@ -199,11 +199,6 @@ export class Supliers extends Component {
                       this.setState({ open: true });
                     }}
                   >
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                      alt="img"
-                      className="me-1"
-                    />
                     Add New Supplier
                   </a>
                 </div>
@@ -450,7 +445,9 @@ export class Supliers extends Component {
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Supplier Name<span className="text-danger"> *</span></label>
+                      <label>
+                        Supplier Name<span className="text-danger"> *</span>
+                      </label>
                       <input
                         type="text"
                         onChange={(e) => {
@@ -463,7 +460,9 @@ export class Supliers extends Component {
 
                   <div className="col-lg-6">
                     <div className="form-group">
-                      <label>Supplier Contact<span className="text-danger"> *</span></label>
+                      <label>
+                        Supplier Contact<span className="text-danger"> *</span>
+                      </label>
                       <input
                         type="text"
                         onChange={(e) => {

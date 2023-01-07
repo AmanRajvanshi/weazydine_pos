@@ -30,6 +30,7 @@ export class Newtableorder extends Component {
         ],
       },
     ],
+    discount_mode: 'fixed',
   };
   render() {
     return (
@@ -44,20 +45,81 @@ export class Newtableorder extends Component {
                   <span className="text-primary">WD-12124234123</span>
                 </h4>
               </div>
+              <a
+                href="javascript:void(0);"
+                className="btn btn-primary btn-sm me-2"
+              >
+                Generate Bill
+              </a>
             </div>
             <div className="card">
               <div className="card-body">
                 <div className="card-sales-split">
-                  <h2>Table Number : 2</h2>
-                  <h2>Date : Thu, 10 Dec 2020 12:00:00</h2>
-                  <h2>Customer Name : dghfgkl</h2>
-                  <h2>Customer Number : 000000000</h2>
+                  <h2>
+                    Table Number :{' '}
+                    <span className="text-primary font-weight-normal">
+                      2212121
+                    </span>
+                  </h2>
+                  <h2>
+                    Date :{' '}
+                    <span className="text-primary font-weight-normal">
+                      Thu, 10 Dec 2020 12:00:00
+                    </span>
+                  </h2>
+                  <h2>
+                    Customer Name :{' '}
+                    <span className="text-primary font-weight-normal">
+                      Thu, 10 Dec 2020 12:00:00
+                    </span>
+                  </h2>
+                  <h2>
+                    Customer Number :{' '}
+                    <span className="text-primary font-weight-normal">
+                      Thu, 10 Dec 2020 12:00:00
+                    </span>
+                  </h2>
                 </div>
                 <div className="row">
                   <div className="col-lg-3 col-sm-6 col-12">
                     <div className="form-group">
-                      <label>Order Tax</label>
-                      <input type="text" />
+                      <label>Discount Type</label>
+                      <ul className="nav nav-pills">
+                        <li className="nav-item me-2">
+                          <a
+                            className={
+                              'nav-link ' +
+                              (this.state.discount_mode == 'fixed'
+                                ? 'active'
+                                : '')
+                            }
+                            onClick={() => {
+                              this.setState({
+                                discount_mode: 'fixed',
+                              });
+                            }}
+                          >
+                            Fixed
+                          </a>
+                        </li>
+                        <li className="nav-item me-2">
+                          <a
+                            className={
+                              'nav-link ' +
+                              (this.state.discount_mode != 'fixed'
+                                ? 'active'
+                                : '')
+                            }
+                            onClick={() => {
+                              this.setState({
+                                discount_mode: 'percentage',
+                              });
+                            }}
+                          >
+                            Percentage
+                          </a>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                   <div className="col-lg-3 col-sm-6 col-12">
@@ -192,15 +254,12 @@ export class Newtableorder extends Component {
                       </ul>
                     </div>
                   </div>
-                  <div className="col-lg-12">
+                  <div className="col-lg-12 d-flex justify-content-end">
                     <a
                       href="javascript:void(0);"
-                      className="btn btn-submit me-2"
+                      className="btn btn-primary btn-sm me-2"
                     >
-                      Update
-                    </a>
-                    <a href="javascript:void(0);" className="btn btn-cancel">
-                      Cancel
+                      Generate Bill
                     </a>
                   </div>
                 </div>

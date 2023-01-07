@@ -202,11 +202,6 @@ export class Productlist extends Component {
                 </div>
                 <div className="page-btn">
                   <Link to="/addproduct" className="btn btn-added">
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                      alt="img"
-                      className="me-1"
-                    />
                     Add New Product
                   </Link>
                 </div>

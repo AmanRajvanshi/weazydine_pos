@@ -177,11 +177,6 @@ export class Kitchens extends Component {
                       this.setState({ open: true });
                     }}
                   >
-                    <img
-                      src="https://dreamspos.dreamguystech.com/html/template/assets/img/icons/plus.svg"
-                      alt="img"
-                      className="me-1"
-                    />
                     Add New Kitchen
                   </a>
                 </div>

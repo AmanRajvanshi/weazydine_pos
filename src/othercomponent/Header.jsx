@@ -34,8 +34,6 @@ export class Header extends Component {
       .join('/')
       .concat('/');
     this.setState({ remove_last_slash_and_word: remove_last_slash_and_word });
-
-    console.log(this.context.role.role);
   }
 
   logOut = () => {
@@ -361,7 +359,7 @@ export class Header extends Component {
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
                     this.context.role.role != 'waiter' ||
-                    this.context.role.role === 'staff' ? (
+                    this.context.role.role != 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/" />}
                         icon={
@@ -680,10 +678,10 @@ export class Header extends Component {
                     )}
                     {/* setup */}
                     {this.context.role.role === 'owner' ||
-                    this.context.role.role === 'admin' ||
-                    this.context.role.role === 'manager' ||
-                    this.context.role.role === 'waiter' ||
-                    this.context.role.role === 'staff' ? (
+                    this.context.role.role != 'admin' ||
+                    this.context.role.role != 'manager' ||
+                    this.context.role.role != 'waiter' ||
+                    this.context.role.role != 'staff' ? (
                       <SubMenu
                         label="Setup"
                         icon={
