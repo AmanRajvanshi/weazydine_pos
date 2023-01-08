@@ -415,8 +415,8 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
-                    !this.context.role.role === 'staff' ? (
+                    this.context.role.role === 'waiter' ||
+                    this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/" />}
                         icon={
@@ -424,6 +424,23 @@ export class Header extends Component {
                         }
                       >
                         <span>Dashboard</span>
+                      </MenuItem>
+                    ) : (
+                      <></>
+                    )}
+                    {/* invoicedashboard */}
+                    {this.context.role.role === 'owner' ||
+                    this.context.role.role === 'admin' ||
+                    this.context.role.role === 'manager' ||
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
+                      <MenuItem
+                        routerLink={<Link to="/invoicedashboard" />}
+                        icon={
+                          <i className="iconly-Home icli sidebar_icons"></i>
+                        }
+                      >
+                        <span>Invoice Dashboard</span>
                       </MenuItem>
                     ) : (
                       <></>
