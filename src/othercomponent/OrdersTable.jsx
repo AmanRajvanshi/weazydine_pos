@@ -19,7 +19,12 @@ export class OrdersTable extends Component {
         }}
         hasMore={this.props.next_page !== null && this.props.data.length > 0}
         loader={
-          <div className="d-flex align-items-center justify-content-center w-full">
+          <div
+            className="d-flex align-items-center justify-content-center w-full"
+            style={{
+              marginTop: '50px',
+            }}
+          >
             <Circles height="40" width="40" color="#5bc2c1" />
           </div>
         }

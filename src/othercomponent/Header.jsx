@@ -178,8 +178,7 @@ export class Header extends Component {
             </span>
           </a>
           <ul className="nav user-menu w-33 d-flex justify-content-end">
-            {!this.context.role.role === 'staff' ||
-            !this.context.role.role === 'waiter' ? (
+            {this.context.role.role !== 'staff' ? (
               <li className="nav-item dropdown d-flex align-items-center">
                 <div className="status-toggle ml-3">
                   <input

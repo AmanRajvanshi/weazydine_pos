@@ -396,30 +396,38 @@ export class Orderdetails extends Component {
                                 </span>
                               ) : (
                                 <>
-                                  <strong>{'  '}Split </strong>(
+                                  <strong>{'  '}Split </strong>
                                   {this.state.transaction_details.map(
                                     (item, i) => {
                                       return (
-                                        <span key={i}>
-                                          {' '}
-                                          {item.txn_method} - ₹{' '}
-                                          {item.txn_amount}{' '}
-                                          {item.txn_status == 'success' ? (
-                                            <span style={{ color: 'green' }}>
-                                              Success
-                                            </span>
-                                          ) : (
-                                            <span style={{ color: 'red' }}>
-                                              Failed
-                                            </span>
-                                          )}
+                                        <>
                                           <br />
-                                          Txn ID: {item.payment_txn_id}
-                                        </span>
+                                          <span key={i}>
+                                            {' '}
+                                            {item.txn_method} - ₹{' '}
+                                            {item.txn_amount}{' '}
+                                            <span
+                                              style={{
+                                                fontWeight: 'bold',
+                                              }}
+                                            >
+                                              Txn ID
+                                            </span>
+                                            : {item.payment_txn_id}{' '}
+                                            {item.txn_status == 'success' ? (
+                                              <span style={{ color: 'green' }}>
+                                                Success
+                                              </span>
+                                            ) : (
+                                              <span style={{ color: 'red' }}>
+                                                Failed
+                                              </span>
+                                            )}
+                                          </span>
+                                        </>
                                       );
                                     }
                                   )}
-                                  )
                                 </>
                               )}
                             </h6>
