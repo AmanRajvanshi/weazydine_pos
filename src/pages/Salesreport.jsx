@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../othercomponent/Header';
 import { BiRupee } from 'react-icons/bi';
 import { Bars, Circles } from 'react-loader-spinner';
@@ -7,13 +6,6 @@ import { AuthContext } from '../AuthContextProvider';
 import moment from 'moment';
 import no_order from '../assets/images/no_orders.webp';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, {
-  Search,
-  CSVExport,
-  ColumnToggle,
-} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 class Salesreport extends Component {
@@ -58,7 +50,6 @@ class Salesreport extends Component {
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
-          var msg = json.msg;
           if (page_id == 1) {
             this.setState({ data: [] });
           }
