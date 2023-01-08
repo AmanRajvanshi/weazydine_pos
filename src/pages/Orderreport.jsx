@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../othercomponent/Header';
 import { BiRupee } from 'react-icons/bi';
-import { Bars } from 'react-loader-spinner';
+import { Bars, Circles } from 'react-loader-spinner';
 import { AuthContext } from '../AuthContextProvider';
 import moment from 'moment';
 import no_order from '../assets/images/no_orders.webp';
@@ -14,6 +14,7 @@ import ToolkitProvider, {
   CSVExport,
   ColumnToggle,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export class Orderreport extends Component {
   static contextType = AuthContext;
@@ -45,7 +46,7 @@ export class Orderreport extends Component {
     );
   }
 
-  fetch_order = (page_id, status) => {
+  fetch_order = (page_id) => {
     fetch(global.api + 'fetch_order_reports', {
       method: 'POST',
       headers: {
@@ -58,202 +59,45 @@ export class Orderreport extends Component {
         start_date: this.state.start_date,
         end_date: this.state.end_date,
         range: this.state.range,
+        is_veg: this.state.is_veg,
       }),
     })
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
+          var msg = json.msg;
           if (page_id == 1) {
-            this.setState({ data: [], is_loading: false });
+            this.setState({ data: [] });
           }
         } else {
-          this.setState({ data: json.data.data });
+          this.setState({
+            next_page: json.data.next_page_url,
+          });
+          if (page_id == 1) {
+            this.setState({ data: json.data.data });
+          } else {
+            {
+              this.state.next_page
+                ? this.setState({
+                    data: [...this.state.data, ...json.data.data],
+                    page: this.state.page + 1,
+                  })
+                : this.setState({
+                    data: json.data.data,
+                  });
+            }
+          }
         }
-        this.setState({ is_loading: false });
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
-      .finally(() => {});
+      .finally(() => {
+        this.setState({ is_loading: false });
+      });
   };
-
-  defaultSorted = [
-    {
-      dataField: 'name',
-      order: 'asc',
-    },
-  ];
-
-  columns = [
-    {
-      dataField: 'id',
-      text: 'No',
-    },
-    {
-      dataField: 'user.name',
-      text: 'Customer',
-    },
-    {
-      dataField: 'order_code',
-      text: 'Order Code',
-    },
-    {
-      dataField: 'created_at',
-      text: 'Time',
-    },
-    {
-      dataField: 'order_amount',
-      text: 'Amount',
-    },
-    {
-      dataField: 'sgst',
-      text: 'SGST',
-    },
-    {
-      dataField: 'cgst',
-      text: 'CGST',
-    },
-    {
-      dataField: 'order_discount',
-      text: 'Discount',
-    },
-    {
-      dataField: 'total_amount',
-      text: 'Total Amount',
-    },
-    {
-      dataField: 'channel',
-      text: 'Order Channel',
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-    },
-  ];
-
-  sortableColumn = [
-    {
-      text: 'No',
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => {
-        return rowIndex + 1;
-      },
-      dataField: 'id',
-    },
-    {
-      text: 'Customer',
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => {
-        return row.user.name;
-      },
-      dataField: 'user.name',
-    },
-    {
-      dataField: 'order_code',
-      text: 'Order Code',
-      sort: true,
-    },
-    {
-      text: 'Time',
-      sort: true,
-      formatter: (cell, row) => {
-        return moment(row.created_at).format('llll');
-      },
-      dataField: 'created_at',
-    },
-    {
-      text: 'Amount',
-      sort: true,
-      formatter: (cell, row) => {
-        return '₹ ' + row.order_amount;
-      },
-      dataField: 'order_amount',
-    },
-    {
-      text: 'SGST',
-      sort: true,
-      formatter: (cell, row) => {
-        return '₹ ' + row.sgst;
-      },
-      dataField: 'sgst',
-    },
-    {
-      text: 'CGST',
-      sort: true,
-      formatter: (cell, row) => {
-        return '₹ ' + row.cgst;
-      },
-      dataField: 'cgst',
-    },
-    {
-      text: 'Discount',
-      sort: true,
-      formatter: (cell, row) => {
-        return '₹ ' + row.order_discount;
-      },
-      dataField: 'order_discount',
-    },
-    {
-      text: 'Total Amount',
-      sort: true,
-      formatter: (cell, row) => {
-        return '₹ ' + row.total_amount;
-      },
-      dataField: 'total_amount',
-    },
-    {
-      dataField: 'channel',
-      text: 'Order Channel',
-      sort: true,
-    },
-
-    {
-      text: 'Order Type',
-      sort: true,
-      formatter: (cell, row) => {
-        return row.order_type != 'TakeAway' && row.order_type != 'Delivery'
-          ? 'Dine-In'
-          : row.order_type;
-      },
-      dataField: 'order_type',
-    },
-    {
-      text: 'Order Status',
-      sort: true,
-      formatter: (cell, row) => {
-        return row.order_status;
-      },
-      dataField: 'order_status',
-    },
-  ];
-
-  paginationOptions = {
-    // custom: true,
-    paginationSize: 5,
-    pageStartIndex: 1,
-    firstPageText: 'First',
-    prePageText: 'Back',
-    nextPageText: 'Next',
-    lastPageText: 'Last',
-    nextPageTitle: 'First page',
-    prePageTitle: 'Pre page',
-    firstPageTitle: 'Next page',
-    lastPageTitle: 'Last page',
-    showTotal: true,
-    totalSize: this.state.data.length,
-  };
-
   render() {
-    const selectionRange = {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: 'selection',
-    };
-
-    const { ExportCSVButton } = CSVExport;
-    let { data } = this.state;
-    let { SearchBar } = Search;
     return (
       <div className="main-wrapper">
         <Header />
@@ -380,39 +224,73 @@ export class Orderreport extends Component {
               <div className="card">
                 {this.state.data.length > 0 ? (
                   <div className="card-body">
-                    <ToolkitProvider
-                      striped
-                      keyField="id"
-                      data={this.state.data}
-                      columns={this.sortableColumn}
-                      search
-                      exportCSV
-                    >
-                      {(props) => (
-                        <>
-                          <div className="d-flex justify-content-between align-items-center mb-4">
-                            <ExportCSVButton {...props.csvProps}>
-                              Export CSV!!
-                            </ExportCSVButton>
-                            <SearchBar {...props.searchProps} />
+                    <div className="table-responsive">
+                      <InfiniteScroll
+                        dataLength={this.state.data.length}
+                        next={() => {
+                          this.fetch_order(this.state.page + 1);
+                          this.setState({
+                            // page: this.state.page + 1,
+                            loadMore: true,
+                          });
+                        }}
+                        hasMore={
+                          this.state.next_page !== null &&
+                          this.state.data.length > 0
+                        }
+                        loader={
+                          <div className="d-flex align-items-center justify-content-center w-full mt-xl">
+                            <Circles height="40" width="40" color="#5bc2c1" />
                           </div>
-                          <BootstrapTable
-                            {...props.baseProps}
-                            bootstrap4
-                            pagination={paginationFactory(
-                              this.paginationOptions
-                            )}
-                            noDataIndication={() => {
+                        }
+                      >
+                        <table className="table  datanew">
+                          <thead>
+                            <tr>
+                              <th>S.no</th>
+                              <th>Customer</th>
+                              <th>Order Code</th>
+                              <th>Time</th>
+                              <th>Amount</th>
+                              <th>SGST</th>
+                              <th>CGST</th>
+                              <th>Discount</th>
+                              <th>Total Amount</th>
+                              <th>Channel</th>
+                              <th>Order Type</th>
+                              <th>Order Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.data.map((item, index) => {
                               return (
-                                <div className="text-center">
-                                  <h5>No Records Found</h5>
-                                </div>
+                                <tr>
+                                  <td>{index + 1}</td>
+                                  <td>{item.user.name}</td>
+                                  <td>{item.order_code}</td>
+                                  <td>
+                                    {moment(item.created_at).format('llll')}
+                                  </td>
+                                  <td>₹ {item.order_amount}</td>
+                                  <td>₹ {item.sgst}</td>
+                                  <td>₹ {item.cgst}</td>
+                                  <td>₹ {item.order_discount}</td>
+                                  <td>₹ {item.total_amount}</td>
+                                  <td>{item.channel}</td>
+                                  <td>
+                                    {item.order_type != 'TakeAway' &&
+                                    item.order_type != 'Delivery'
+                                      ? 'Dine In'
+                                      : item.order_type}
+                                  </td>
+                                  <td>{item.order_status}</td>
+                                </tr>
                               );
-                            }}
-                          />
-                        </>
-                      )}
-                    </ToolkitProvider>
+                            })}
+                          </tbody>
+                        </table>
+                      </InfiniteScroll>
+                    </div>
                   </div>
                 ) : (
                   <div

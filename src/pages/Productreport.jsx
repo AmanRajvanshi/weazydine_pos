@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../othercomponent/Header';
 import { BiRupee } from 'react-icons/bi';
-import { Bars } from 'react-loader-spinner';
+import { Bars, Circles } from 'react-loader-spinner';
 import { AuthContext } from '../AuthContextProvider';
 import moment from 'moment';
 import no_order from '../assets/images/no_orders.webp';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, {
-  Search,
-  CSVExport,
-  ColumnToggle,
-} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export class Productreport extends Component {
   static contextType = AuthContext;
@@ -46,7 +39,7 @@ export class Productreport extends Component {
     );
   }
 
-  fetch_order = (page_id, status) => {
+  fetch_order = (page_id) => {
     fetch(global.api + 'fetch_product_reports', {
       method: 'POST',
       headers: {
@@ -65,110 +58,37 @@ export class Productreport extends Component {
       .then((response) => response.json())
       .then((json) => {
         if (!json.status) {
+          var msg = json.msg;
           if (page_id == 1) {
-            this.setState({ data: [], is_loading: false });
+            this.setState({ data: [] });
           }
         } else {
-          this.setState({ data: json.data.data });
+          this.setState({
+            next_page: json.data.next_page_url,
+          });
+          if (page_id == 1) {
+            this.setState({ data: json.data.data });
+          } else {
+            {
+              this.state.next_page
+                ? this.setState({
+                    data: [...this.state.data, ...json.data.data],
+                    page: this.state.page + 1,
+                  })
+                : this.setState({
+                    data: json.data.data,
+                  });
+            }
+          }
         }
-        this.setState({ is_loading: false });
         return json;
       })
       .catch((error) => {
         console.error(error);
       })
-      .finally(() => {});
-  };
-  defaultSorted = [
-    {
-      dataField: 'name',
-      order: 'asc',
-    },
-  ];
-
-  columns = [
-    {
-      dataField: 'id',
-      text: 'No',
-    },
-    {
-      dataField: 'product_name',
-      text: 'Product Name',
-    },
-    {
-      dataField: 'price',
-      text: 'Price',
-    },
-    {
-      dataField: 'veg/non-veg',
-      text: 'Veg/Non-Veg',
-    },
-    {
-      dataField: 'sales count',
-      text: 'Sales Count',
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-    },
-  ];
-
-  sortableColumn = [
-    {
-      text: 'No',
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => {
-        return rowIndex + 1;
-      },
-      dataField: 'id',
-    },
-    { dataField: 'product_name', text: 'Product Name', sort: true },
-    {
-      text: 'Price',
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => {
-        return '₹ ' + row.market_price;
-      },
-      dataField: 'market_price',
-    },
-    {
-      text: 'Offer Price',
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => {
-        return '₹ ' + row.our_price;
-      },
-      dataField: 'our_price',
-    },
-    {
-      text: 'Veg/Non-Veg',
-      sort: true,
-      formatter: (cell, row, rowIndex, extraData) => {
-        if (row.is_veg == 1) {
-          return 'Veg';
-        } else {
-          return 'Non-Veg';
-        }
-      },
-      dataField: 'is_veg',
-    },
-    { dataField: 'salesCount', text: 'Sales Count', sort: true },
-    // { dataField: 'status', text: 'Status', sort: true },
-  ];
-
-  paginationOptions = {
-    // custom: true,
-    paginationSize: 5,
-    pageStartIndex: 1,
-    firstPageText: 'First',
-    prePageText: 'Back',
-    nextPageText: 'Next',
-    lastPageText: 'Last',
-    nextPageTitle: 'First page',
-    prePageTitle: 'Pre page',
-    firstPageTitle: 'Next page',
-    lastPageTitle: 'Last page',
-    showTotal: true,
-    totalSize: this.state.data.length,
+      .finally(() => {
+        this.setState({ is_loading: false });
+      });
   };
 
   render() {
@@ -177,10 +97,6 @@ export class Productreport extends Component {
       endDate: new Date(),
       key: 'selection',
     };
-
-    const { ExportCSVButton } = CSVExport;
-    let { data } = this.state;
-    let { SearchBar } = Search;
     return (
       <div className="main-wrapper">
         <Header />
@@ -282,39 +198,57 @@ export class Productreport extends Component {
               <div className="card">
                 {this.state.data.length > 0 ? (
                   <div className="card-body">
-                    <ToolkitProvider
-                      striped
-                      keyField="id"
-                      data={this.state.data}
-                      columns={this.sortableColumn}
-                      search
-                      exportCSV
-                    >
-                      {(props) => (
-                        <>
-                          <div className="d-flex justify-content-between align-items-center mb-4">
-                            <ExportCSVButton {...props.csvProps}>
-                              Export CSV!!
-                            </ExportCSVButton>
-                            <SearchBar {...props.searchProps} />
+                    <div className="table-responsive">
+                      <InfiniteScroll
+                        dataLength={this.state.data.length}
+                        next={() => {
+                          this.fetch_order(this.state.page + 1);
+                          this.setState({
+                            // page: this.state.page + 1,
+                            loadMore: true,
+                          });
+                        }}
+                        hasMore={
+                          this.state.next_page !== null &&
+                          this.state.data.length > 0
+                        }
+                        loader={
+                          <div className="d-flex align-items-center justify-content-center w-full mt-xl">
+                            <Circles height="40" width="40" color="#5bc2c1" />
                           </div>
-                          <BootstrapTable
-                            {...props.baseProps}
-                            bootstrap4
-                            pagination={paginationFactory(
-                              this.paginationOptions
-                            )}
-                            noDataIndication={() => {
+                        }
+                      >
+                        <table className="table  datanew">
+                          <thead>
+                            <tr>
+                              <th>S.no</th>
+                              <th>Product Name</th>
+                              <th>Price</th>
+                              <th>Type</th>
+                              <th>Sales Count</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.data.map((item, index) => {
                               return (
-                                <div className="text-center">
-                                  <h5>No Records Found</h5>
-                                </div>
+                                <tr>
+                                  <td>{index + 1}</td>
+                                  <td>{item.product_name}</td>
+                                  <td>
+                                    <BiRupee />
+                                    {item.our_price}
+                                  </td>
+                                  <td>
+                                    {item.is_veg ? <>Veg</> : <> Non-Veg</>}
+                                  </td>
+                                  <td>{item.salesCount}</td>
+                                </tr>
                               );
-                            }}
-                          />
-                        </>
-                      )}
-                    </ToolkitProvider>
+                            })}
+                          </tbody>
+                        </table>
+                      </InfiniteScroll>
+                    </div>
                   </div>
                 ) : (
                   <div

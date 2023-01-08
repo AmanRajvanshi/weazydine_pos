@@ -975,7 +975,7 @@ class Inventoryproducts extends Component {
 class Category extends Component {
   render() {
     return (
-      <div className="row">
+      <div>
         {this.props.category.length > 0 && (
           <ul className="tabs horizontal_scroll">
             <li

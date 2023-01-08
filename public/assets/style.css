@@ -8386,7 +8386,7 @@ span.select-container.select-container--default.select-container--open {
 
 .product-details {
   background: #fff;
-  border-radius: 50px;
+  border-radius: 5px !important;
   padding: 0px 20px;
   box-shadow: 0px 4px 4px 0px #ededed40;
   border: 1px solid #5bc2c1 !important;
@@ -9803,5 +9803,5 @@ input[type='number'] {
 
 .nav-link {
   padding: 3px 7px;
-  border-radius: 4px !important;
+  border-radius: 5px !important;
 }
