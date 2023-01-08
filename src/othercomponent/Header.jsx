@@ -178,7 +178,8 @@ export class Header extends Component {
             </span>
           </a>
           <ul className="nav user-menu w-33 d-flex justify-content-end">
-            {this.state.role !== 'staff' ? (
+            {!this.context.role.role === 'staff' ||
+            !this.context.role.role === 'waiter' ? (
               <li className="nav-item dropdown d-flex align-items-center">
                 <div className="status-toggle ml-3">
                   <input
@@ -414,8 +415,8 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/" />}
                         icon={
@@ -483,8 +484,8 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Catalogue"
                         icon={
@@ -523,8 +524,8 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Inventory"
                         icon={
@@ -602,9 +603,9 @@ export class Header extends Component {
                     {/* reports */}
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
-                    this.context.role.role !== 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'manager' ||
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Reports"
                         icon={
@@ -650,9 +651,9 @@ export class Header extends Component {
                     {/* marketing */}
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
-                    this.context.role.role !== 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'manager' ||
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Marketing"
                         icon={
@@ -675,8 +676,8 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Customers"
                         icon={
@@ -721,8 +722,8 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/offers" />}
                         icon={<i className="iconly-Bag icli sidebar_icons"></i>}
@@ -735,9 +736,9 @@ export class Header extends Component {
                     {/* setup */}
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
-                    this.context.role.role !== 'manager' ||
-                    this.context.role.role !== 'waiter' ||
-                    this.context.role.role !== 'staff' ? (
+                    !this.context.role.role === 'manager' ||
+                    !this.context.role.role === 'waiter' ||
+                    !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Setup"
                         icon={

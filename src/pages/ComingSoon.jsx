@@ -15,7 +15,7 @@ class ComingSoon extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: '2023/01/09',
+      date: '2023/01/15',
     };
   }
 
