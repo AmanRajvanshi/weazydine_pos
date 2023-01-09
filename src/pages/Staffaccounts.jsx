@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { Bars } from 'react-loader-spinner';
 import Swal from 'sweetalert2';
 import no_img from '../assets/images/no_products_found.png';
-import { BiRupee } from 'react-icons/bi';
 
 export class Staffaccounts extends Component {
   static contextType = AuthContext;
@@ -42,7 +41,7 @@ export class Staffaccounts extends Component {
   add_staff = () => {
     this.setState({ newaddonLoading: true });
     const { staff_contact, staff_name, staff_role } = this.state;
-    if (staff_contact == '' || staff_name == '' || staff_role == '') {
+    if (staff_contact === '' || staff_name === '' || staff_role === '') {
       toast.error('Please fill all the fields');
       this.setState({ newaddonLoading: false });
     } else {
@@ -81,7 +80,7 @@ export class Staffaccounts extends Component {
   edit_staff = () => {
     this.setState({ newaddonLoading: true });
     const { staff_id, staff_edit_name, staff_edit_role } = this.state;
-    if (staff_edit_name == '' || staff_edit_role == '') {
+    if (staff_edit_name === '' || staff_edit_role === '') {
       toast.error('Please fill all the fields');
       this.setState({ newaddonLoading: false });
     } else {
@@ -146,7 +145,6 @@ export class Staffaccounts extends Component {
   };
 
   fetch_staff = () => {
-    this.setState({ is_loding: true });
     fetch(global.api + 'fetch_staff', {
       method: 'POST',
       headers: {
@@ -379,7 +377,6 @@ export class Staffaccounts extends Component {
                         <option value="0">Select Role</option>
                         <option value="admin">Admin</option>
                         <option value="manager">Manager</option>
-                        <option value="waiter">Waiter</option>
                         <option value="staff">Staff</option>
                       </select>
                     </div>
@@ -481,7 +478,6 @@ export class Staffaccounts extends Component {
                         <option value="0">Select Role</option>
                         <option value="admin">Admin</option>
                         <option value="manager">Manager</option>
-                        <option value="waiter">Waiter</option>
                         <option value="staff">Staff</option>
                       </select>
                     </div>

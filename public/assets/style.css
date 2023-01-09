@@ -4,7 +4,7 @@
 }
 
 :root {
-  --bs-btn-active-border-color: #2a6e84;
+  --bs-btn-active-border-color: #296e84;
 }
 
 .css-equal-content,
@@ -9734,8 +9734,8 @@ div[style*='cursor: pointer'][style*='color: rgb(91, 194, 193)'][style*='border-
 }
 
 .button-secondary-color {
-  background-color: #2a6e84 !important;
-  border-color: #2a6e84 !important;
+  background-color: #296e84 !important;
+  border-color: #296e84 !important;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -9795,6 +9795,10 @@ input[type='number'] {
 
 .text-primary {
   color: #5bc2c1 !important;
+}
+
+.text-secondary{
+  color: #296e84 !important;
 }
 
 .font-weight-normal {

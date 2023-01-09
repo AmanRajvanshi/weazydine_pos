@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import { Link, NavLink, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Bars, Circles } from 'react-loader-spinner';
-import profile from '../assets/images/profile.png';
+import { Bars } from 'react-loader-spinner';
 import { AuthContext } from '../AuthContextProvider';
-import blackLogo from '../assets/images/logos/favicon.png';
 import logo from '../assets/images/logos/main_logo_black.png';
 import moment from 'moment';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 
 export class Header extends Component {
   static contextType = AuthContext;
@@ -40,6 +37,7 @@ export class Header extends Component {
       shop_status: this.context.user.shop_open,
       role: this.context.role.role,
     });
+    console.log(this.context.token);
   }
 
   logOut = () => {
@@ -89,7 +87,7 @@ export class Header extends Component {
             total_count: json.data.total,
             next_page: json.data.next_page_url,
           });
-          if (page == 1) {
+          if (page === 1) {
             this.setState({ data: json.data.data });
           } else {
             {
@@ -185,7 +183,7 @@ export class Header extends Component {
                     type="checkbox"
                     id="live_inventory"
                     className="dropdown-toggle nav-link align-items-center d-flex check"
-                    checked={this.state.shop_status == 1 ? true : false}
+                    checked={this.state.shop_status === 1 ? true : false}
                     onChange={(e) => {
                       this.update_shop_status(e);
                     }}
@@ -398,7 +396,7 @@ export class Header extends Component {
           </ul>
         </div>
         {/* /sidebar */}
-        {this.props.sidebar != false && (
+        {this.props.sidebar !== false && (
           <div className="sidebar1" id="sidebar1">
             <div className="sidebar-inner slimscroll">
               <div id="sidebar-menu" className="sidebar-menu">
@@ -414,7 +412,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role === 'waiter' ||
                     this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/" />}
@@ -427,28 +424,10 @@ export class Header extends Component {
                     ) : (
                       <></>
                     )}
-                    {/* invoicedashboard */}
-                    {this.context.role.role === 'owner' ||
-                    this.context.role.role === 'admin' ||
-                    this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
-                    !this.context.role.role === 'staff' ? (
-                      <MenuItem
-                        routerLink={<Link to="/invoicedashboard" />}
-                        icon={
-                          <i className="iconly-Home icli sidebar_icons"></i>
-                        }
-                      >
-                        <span>Invoice Dashboard</span>
-                      </MenuItem>
-                    ) : (
-                      <></>
-                    )}
                     {/* pos */}
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role === 'waiter' ||
                     this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/pos" />}
@@ -465,7 +444,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role === 'waiter' ||
                     this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/orderlist" />}
@@ -480,7 +458,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role === 'waiter' ||
                     this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<a href="/kot" target="_blank" />}
@@ -500,7 +477,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
                     !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Catalogue"
@@ -540,8 +516,7 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
-                    !this.context.role.role === 'staff' ? (
+                    this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Inventory"
                         icon={
@@ -619,8 +594,7 @@ export class Header extends Component {
                     {/* reports */}
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
-                    !this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
+                    this.context.role.role === 'manager' ||
                     !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Reports"
@@ -658,7 +632,7 @@ export class Header extends Component {
                             <i className="iconly-Graph icli sidebar_icons"></i>
                           }
                         >
-                          <span>Order Invoices</span>
+                          <span>Weazy Invoices</span>
                         </MenuItem>
                       </SubMenu>
                     ) : (
@@ -667,8 +641,7 @@ export class Header extends Component {
                     {/* marketing */}
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
-                    !this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
+                    this.context.role.role === 'manager' ||
                     !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Marketing"
@@ -692,7 +665,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
                     !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Customers"
@@ -738,7 +710,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
                     !this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/offers" />}
@@ -753,7 +724,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     !this.context.role.role === 'manager' ||
-                    !this.context.role.role === 'waiter' ||
                     !this.context.role.role === 'staff' ? (
                       <SubMenu
                         label="Setup"
@@ -820,7 +790,6 @@ export class Header extends Component {
                     {this.context.role.role === 'owner' ||
                     this.context.role.role === 'admin' ||
                     this.context.role.role === 'manager' ||
-                    this.context.role.role === 'waiter' ||
                     this.context.role.role === 'staff' ? (
                       <MenuItem
                         routerLink={<Link to="/comingsoon" />}

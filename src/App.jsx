@@ -16,7 +16,7 @@ import { RequireAuth } from './RequireAuth';
 import Productdetails from './pages/Productdetails.jsx';
 import Editproduct from './pages/Editproduct.jsx';
 import Editprofile from './pages/Editprofile.jsx';
-import { ToastContainer, Flip, Zoom, Slide } from 'react-toastify';
+import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DineinList from './pages/DineinList.jsx';
 import Inventorycategory from './pages/Inventorycategory.jsx';
@@ -26,7 +26,6 @@ import Customers from './pages/Customers.jsx';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import OneSignal from 'react-onesignal';
-import { Bars } from 'react-loader-spinner';
 import Pickuppoint from './pages/Pickuppoint.jsx';
 import Subscription from './pages/Subscription.jsx';
 import Salesreport from './pages/Salesreport.jsx';
@@ -37,8 +36,7 @@ import StockPurchase from './pages/StockPurchase.jsx';
 import ReleaseStock from './pages/ReleaseStock.jsx';
 import AddStockPurchase from './pages/AddStockPurchase.jsx';
 import EditStockPurchase from './pages/EditStockRelease.jsx';
-import LoginPassword from './pages/LoginPassword.jsx';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 import { toast } from 'react-toastify';
 import Kitchens from './pages/Kitchens.jsx';
 import Semifinishedrawmaterialproducts from './pages/Semifinishedrawmaterialproducts.jsx';
@@ -52,7 +50,6 @@ import UpdateProductRecipe from './pages/UpdateProductRecipe.jsx';
 import ProductRecipe from './pages/ProductRecipe.jsx';
 import ComingSoon from './pages/ComingSoon.jsx';
 import CustomerInsights from './pages/CustomerInsights.jsx';
-import Footer from './othercomponent/Footer.jsx';
 import CrmCampaigns from './pages/CrmCampaigns.jsx';
 import loader from './assets/loader.png';
 import CrmCampaignsCreate from './pages/CrmCampaignsCreate.jsx';
@@ -676,7 +673,7 @@ export class App extends Component {
             />
             <Route
               exact
-              path="/newtableorder"
+              path="/newtableorder/:id"
               element={
                 <RequireAuth>
                   <Newtableorder />
@@ -697,7 +694,6 @@ export class App extends Component {
             <Route exact path="/datatable" element={<DataTable />} />
             {/* <Route exact path="/loginpassword" element={<LoginPassword />} /> */}
           </Routes>
-          {/* <Footer /> */}
         </AuthContext.Provider>
         <ToastContainer
           position="bottom-left"

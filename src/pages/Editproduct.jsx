@@ -96,10 +96,12 @@ export class Editproduct extends Component {
           this.setState({ v_data: obj.variants });
           this.setState({ addon: obj.addon_map });
           this.setState({ type: obj.type });
-          this.setState({ max_product_addon: obj.max_addon });
-          this.setState({ max_free_product_addon: obj.free_addon });
+          this.setState({ max_addon: obj.max_product_addons });
+          this.setState({ free_addon: obj.max_free_product_addons });
           this.setState({ tax: obj.tax });
         }
+
+        console.log(obj.max_product_addons, obj.max_free_product_addons);
 
         this.setState({ is_loading: false });
         return json;
@@ -594,12 +596,13 @@ class Variants extends Component {
       add_on_loading: false,
       add_on_dataLoading: true,
       newaddon: false,
-      max_addon: 0,
-      free_addon: 0,
+      max_addon: this.props.max_addons,
+      free_addon: this.props.free_addons,
     };
   }
 
   componentDidMount() {
+    console.log(this.props.max_addons, this.props.free_addons);
     this.fetch_addon();
     if (this.props.addons != undefined && this.props.addons.length > 0) {
       this.props.addons.map((item, index) => {
