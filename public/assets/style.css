@@ -6914,18 +6914,19 @@ span.select-container.select-container--default.select-container--open {
   width: 100%;
   overflow: hidden;
   height: 100vh;
-  background-color: #5bc2c1;
+  /* background-color: #5bc2c1; */
 }
 
 .login-wrapper .login-content {
-  /* width: 40%; */
-  /* height: 100vh; */
+  width: 35%;
+  height: 100vh;
   padding: 30px;
   overflow: auto;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
+  margin: auto;
 }
 
 @media (max-width: 991px) {
@@ -7190,7 +7191,19 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .login-wrapper .login-img {
-  width: 60%;
+  background: #5bc2c1;
+  width: 30%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+}
+
+.login-wrapper .login-img h1{
+  font-size: 60px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 991px) {

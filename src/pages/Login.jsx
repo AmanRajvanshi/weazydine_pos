@@ -178,170 +178,153 @@ class Login extends Component {
       <div className="main-wrapper">
         <div className="account-content">
           <div className="login-wrapper">
-            <div className="container">
-              <div
-                className="row"
-                style={{
-                  height: '100vh',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <div className="col-md-3"></div>
-                <div className="col-md-6">
-                  <div className="card">
-                    <div className="card-body main_login_card">
-                      <div className="login-content">
-                        <div className="login-userset">
-                          <div className="login-logo">
-                            <img
-                              src={logo}
-                              alt="img"
-                              style={{
-                                maxWidth: '60%',
-                                margin: '20px auto 40px',
-                              }}
-                            />
-                          </div>
+            <div class="login-img">
+              <h1>Login to your account.</h1>
+            </div>
 
-                          <div className="login-userheading">
-                            <h2 className="mb-1">{this.state.heading}</h2>
-                            <h5>{this.state.subheading}</h5>
-                          </div>
-                          {this.state.otpButton ? (
-                            <>
-                              <p
-                                onClick={() => {
-                                  this.setState({
-                                    heading: 'Log in',
-                                    subheading:
-                                      'Continue to WeazyDine Dashboard',
-                                    otpButton: false,
-                                    otp: '',
-                                  });
-                                }}
-                                style={{
-                                  cursor: 'pointer',
-                                  textDecoration: 'underline',
-                                  marginTop: -20,
-                                }}
-                              >
-                                <i className="fa fa-edit" />{' '}
-                                <span>{this.state.phoneNumber}</span>
-                              </p>
-                              <div className="form-login">
-                                <div className="pass-group d-flex justify-content-center my-3">
-                                  <OtpInput
-                                    value={this.state.otp}
-                                    onChange={(otp) => {
-                                      this.setState({ otp: otp });
-                                      if (otp.length === 6) {
-                                        this.otpVerification(otp);
-                                      }
-                                    }}
-                                    numInputs={6}
-                                    separator={<span>-</span>}
-                                    isInputNum={true}
-                                    shouldAutoFocus={true}
-                                    placeholder={'######'}
-                                    inputStyle={{
-                                      width: '3rem',
-                                      height: '3rem',
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="form-login">
-                                {this.state.verifyotploading ? (
-                                  <button className="btn btn-login" disabled="">
-                                    <span
-                                      className="spinner-border spinner-border-sm me-2"
-                                      role="status"
-                                    ></span>
-                                    Verifying OTP
-                                  </button>
-                                ) : (
-                                  <div
-                                    className="btn btn-login"
-                                    onClick={() => {
-                                      this.otpVerification(this.state.otp);
-                                    }}
-                                  >
-                                    Verify OTP
-                                  </div>
-                                )}
-                              </div>
-                              <Timer
-                                seconds={30}
-                                minutes={0}
-                                resend={() => this.resendOtp()}
-                                text={'Resend OTP in'}
-                                buttonColor={'#5BC2C1'}
-                                background={'#fff'}
-                                ButtonText={"Didn't get the code? Resend OTP"}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <div className="form-login">
-                                <label>Mobile Number</label>
-                                <div className="form-addons">
-                                  <input
-                                    type="tel"
-                                    placeholder="Enter your mobile number"
-                                    maxLength={10}
-                                    value={this.state.phoneNumber}
-                                    onChange={(e) =>
-                                      this.setState({
-                                        phoneNumber: e.target.value,
-                                      })
-                                    }
-                                    onKeyPress={(e) => {
-                                      if (e.key === 'Enter') {
-                                        this.mobileVerify();
-                                      }
-                                    }}
-                                  />
-                                  <i
-                                    className="iconly-Calling icli"
-                                    style={{
-                                      fontSize: 25,
-                                      position: 'absolute',
-                                      right: 8,
-                                      top: 8,
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="form-login">
-                                {this.state.sendotploading ? (
-                                  <button className="btn btn-login" disabled="">
-                                    <span
-                                      className="spinner-border spinner-border-sm me-2"
-                                      role="status"
-                                    ></span>
-                                    Continue
-                                  </button>
-                                ) : (
-                                  <div
-                                    className="btn btn-sm btn-login"
-                                    onClick={() => {
-                                      this.mobileVerify();
-                                    }}
-                                  >
-                                    Continue
-                                  </div>
-                                )}
-                              </div>
-                            </>
-                          )}
-                        </div>
+            <div className="login-content">
+              <div className="login-userset">
+                <div className="login-logo">
+                  <img
+                    src={logo}
+                    alt="img"
+                    style={{
+                      maxWidth: '60%',
+                      margin: '20px auto 40px',
+                    }}
+                  />
+                </div>
+
+                <div className="login-userheading">
+                  <h2 className="mb-1">{this.state.heading}</h2>
+                  <h5>{this.state.subheading}</h5>
+                </div>
+                {this.state.otpButton ? (
+                  <>
+                    <p
+                      onClick={() => {
+                        this.setState({
+                          heading: 'Log in',
+                          subheading: 'Continue to WeazyDine Dashboard',
+                          otpButton: false,
+                          otp: '',
+                        });
+                      }}
+                      style={{
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                        marginTop: -20,
+                      }}
+                    >
+                      <i className="fa fa-edit" />{' '}
+                      <span>{this.state.phoneNumber}</span>
+                    </p>
+                    <div className="form-login">
+                      <div className="pass-group d-flex justify-content-center my-3">
+                        <OtpInput
+                          value={this.state.otp}
+                          onChange={(otp) => {
+                            this.setState({ otp: otp });
+                            if (otp.length === 6) {
+                              this.otpVerification(otp);
+                            }
+                          }}
+                          numInputs={6}
+                          separator={<span>-</span>}
+                          isInputNum={true}
+                          shouldAutoFocus={true}
+                          placeholder={'######'}
+                          inputStyle={{
+                            width: '3rem',
+                            height: '3rem',
+                          }}
+                        />
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="col-md-3"></div>
+                    <div className="form-login">
+                      {this.state.verifyotploading ? (
+                        <button className="btn btn-login" disabled="">
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Verifying OTP
+                        </button>
+                      ) : (
+                        <div
+                          className="btn btn-login"
+                          onClick={() => {
+                            this.otpVerification(this.state.otp);
+                          }}
+                        >
+                          Verify OTP
+                        </div>
+                      )}
+                    </div>
+                    <Timer
+                      seconds={30}
+                      minutes={0}
+                      resend={() => this.resendOtp()}
+                      text={'Resend OTP in'}
+                      buttonColor={'#5BC2C1'}
+                      background={'#fff'}
+                      ButtonText={"Didn't get the code? Resend OTP"}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="form-login">
+                      <label>Mobile Number</label>
+                      <div className="form-addons">
+                        <input
+                          type="tel"
+                          placeholder="Enter your mobile number"
+                          maxLength={10}
+                          value={this.state.phoneNumber}
+                          onChange={(e) =>
+                            this.setState({
+                              phoneNumber: e.target.value,
+                            })
+                          }
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              this.mobileVerify();
+                            }
+                          }}
+                        />
+                        <i
+                          className="iconly-Calling icli"
+                          style={{
+                            fontSize: 25,
+                            position: 'absolute',
+                            right: 8,
+                            top: 8,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-login">
+                      {this.state.sendotploading ? (
+                        <button className="btn btn-login" disabled="">
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></span>
+                          Continue
+                        </button>
+                      ) : (
+                        <div
+                          className="btn btn-sm btn-login"
+                          onClick={() => {
+                            this.mobileVerify();
+                          }}
+                        >
+                          Continue
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
