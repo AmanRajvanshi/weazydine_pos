@@ -503,6 +503,7 @@ export class Editproduct extends Component {
                 update_child={this.update_variant_from_child}
                 max_addons={this.state.max_addon}
                 free_addons={this.state.free_addon}
+                newaddonLoading={this.state.newaddonLoading}
               />
             </div>
           ) : (
@@ -598,6 +599,7 @@ class Variants extends Component {
       newaddon: false,
       max_addon: this.props.max_addons,
       free_addon: this.props.free_addons,
+      newaddonLoading: this.props.newaddonLoading,
     };
   }
 
@@ -836,73 +838,74 @@ class Variants extends Component {
               </div>
             )}
 
-            <div className="row">
-              <div className="col-md-4 d-flex align-items-center">
-                <h6 className="py-2 underline">Addons</h6>
+            <div className="row border-top">
+              <div className="col-md-4">
+                <h3 className="py-2 underline">Addons</h3>
                 <button
-                  className="btn btn-outline-secondary"
+                  className="btn btn-outline-secondary btn-sm"
                   onClick={() => {
                     this.setState({
                       newaddon: true,
                     });
-                  }}
-                  style={{
-                    marginLeft: '10px',
                   }}
                 >
                   Add New Addon
                 </button>
               </div>
               <div className="col-md-4 d-flex align-items-center">
-                <label className="py-2">Max Addons Count</label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  onChange={(e) => {
-                    this.setState({
-                      max_addon: e.target.value,
-                    });
-                  }}
-                  value={this.state.max_addon}
-                >
-                  <option>Max Addons Count</option>
-                  <option value="-1">Unlimited</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                </select>
+                <div className="form-group">
+                  <label className="py-2">Max Addons Count</label>
+                  <select
+                    className="select-container"
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      this.setState({
+                        max_addon: e.target.value,
+                      });
+                    }}
+                    value={this.state.max_addon}
+                  >
+                    <option>Max Addons Count</option>
+                    <option value="-1">Unlimited</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                  </select>
+                </div>
               </div>
-              <div className="col-md-4 d-flex align-items-center">
-                <label className="py-2">Free Addons Count</label>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  onChange={(e) => {
-                    this.setState({
-                      free_addon: e.target.value,
-                    });
-                  }}
-                  value={this.state.free_addon}
-                >
-                  <option>Free Addons Count</option>
-                  <option value="0">No Addons (All addons are paid)</option>
-                  <option value="-1">
-                    Unlimited Addons (All addons are free)
-                  </option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                </select>
+              <div className="col-md-4 d-flex align-items-center ">
+                <div className="form-group">
+                  <label className="py-2">Free Addons Count</label>
+                  <select
+                    className="select-container"
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      this.setState({
+                        free_addon: e.target.value,
+                      });
+                    }}
+                    value={this.state.free_addon}
+                  >
+                    <option>Free Addons Count</option>
+                    <option value="0">No Addons (All addons are paid)</option>
+                    <option value="-1">
+                      Unlimited Addons (All addons are free)
+                    </option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div className="row">
@@ -978,7 +981,7 @@ class Variants extends Component {
                   <div className="col-lg-12 d-flex justify-content-end">
                     {this.state.newaddonLoading ? (
                       <button
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                         style={{
                           pointerEvents: 'none',
                           opacity: '0.8',
@@ -995,8 +998,7 @@ class Variants extends Component {
                         onClick={() => {
                           this.create_addon();
                         }}
-                        href="javascript:void(0);"
-                        className="btn btn-submit me-2"
+                        className="btn btn-primary btn-sm me-2"
                       >
                         Add New Addon
                       </a>

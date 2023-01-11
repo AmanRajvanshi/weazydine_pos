@@ -461,7 +461,7 @@ export class Productlist extends Component {
 class Category extends Component {
   render() {
     return (
-      <div className="row">
+      <>
         {this.props.category.length > 0 && (
           <ul className="tabs horizontal_scroll">
             <li
@@ -504,7 +504,7 @@ class Category extends Component {
             })}
           </ul>
         )}
-      </div>
+      </>
     );
   }
 }

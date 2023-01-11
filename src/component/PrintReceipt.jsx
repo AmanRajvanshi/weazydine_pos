@@ -16,6 +16,7 @@ export class PrintReceipt extends Component {
 
   componentDidMount() {
     // this.orderDetails();
+    console.log(this.props.order);
   }
 
   orderDetails = () => {

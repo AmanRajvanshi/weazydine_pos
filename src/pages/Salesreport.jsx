@@ -348,14 +348,39 @@ class Salesreport extends Component {
                                   <tr>
                                     <td>{index + 1}</td>
                                     <td>
-                                      {moment(item.created_at).format('llll')}
+                                      {moment(item.created_at).format('lll')}
                                     </td>
                                     <td>
                                       <BiRupee />
                                       {item.txn_amount}
                                     </td>
-                                    <td>{item.txn_channel}</td>
-                                    <td>{item.salesCount}</td>
+                                    <td>
+                                      {item.txn_method === 'upi' ||
+                                      item.txn_method === 'UPI'
+                                        ? 'UPI'
+                                        : item.txn_method === 'netbanking' ||
+                                          item.txn_method === 'NB'
+                                        ? 'Net Banking'
+                                        : item.txn_method === 'Card'
+                                        ? 'CARD'
+                                        : item.txn_method === 'Cash'
+                                        ? 'CASH'
+                                        : item.txn_method === 'Weazy Pay'
+                                        ? 'Weazy Pay'
+                                        : item.txn_method === 'offline-cash'
+                                        ? 'Offline Cash'
+                                        : ''}
+                                    </td>
+                                    <td
+                                      style={{
+                                        color:
+                                          item.txn_channel === 'online'
+                                            ? 'green'
+                                            : 'red',
+                                      }}
+                                    >
+                                      {item.txn_channel}
+                                    </td>
                                     <td>{item.orders.order_code}</td>
                                     <td>{item.payment_txn_id}</td>
                                     <td>{item.txn_status}</td>

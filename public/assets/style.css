@@ -7192,18 +7192,20 @@ span.select-container.select-container--default.select-container--open {
 
 .login-wrapper .login-img {
   background: #5bc2c1;
-  width: 30%;
+  width: 40%;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 30px;
+  flex-direction: column;
 }
 
 .login-wrapper .login-img h1{
   font-size: 60px;
   font-weight: 600;
   margin-bottom: 20px;
+  text-shadow: 3px 3px 3px #0000006e;
 }
 
 @media (max-width: 991px) {

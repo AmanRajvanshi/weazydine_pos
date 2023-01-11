@@ -37,7 +37,6 @@ export class Header extends Component {
       shop_status: this.context.user.shop_open,
       role: this.context.role.role,
     });
-    console.log(this.context.token);
   }
 
   logOut = () => {

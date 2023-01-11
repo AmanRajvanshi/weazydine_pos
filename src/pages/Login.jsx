@@ -5,6 +5,7 @@ import { AuthContext } from '../AuthContextProvider';
 import { toast } from 'react-toastify';
 import OtpInput from 'react-otp-input';
 import Timer from 'otp-timer';
+import video from '../assets/login.mp4';
 
 class Login extends Component {
   static contextType = AuthContext;
@@ -179,6 +180,14 @@ class Login extends Component {
         <div className="account-content">
           <div className="login-wrapper">
             <div class="login-img">
+              {/* <video
+                loading="lazy"
+                muted="muted"
+                src={video}
+                type="video/mp4"
+                autoplay="autoplay"
+                loop="loop"
+              ></video> */}
               <h1>Login to your account.</h1>
             </div>
 
