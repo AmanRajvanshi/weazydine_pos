@@ -188,7 +188,10 @@ class Login extends Component {
                 autoplay="autoplay"
                 loop="loop"
               ></video> */}
-              <h1>Login to your account.</h1>
+              <h1>We're holding the door for you!</h1>
+              <h3>
+                Login now and manage all your Weazy Dine services with ease.
+              </h3>
             </div>
 
             <div className="login-content">

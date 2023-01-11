@@ -1841,7 +1841,7 @@ div#global-loader,
 }
 
 .page-wrapper {
-  margin: 0 0 0 250px;
+  margin: 0 0 0 200px;
   padding: 60px 0 0;
   position: relative;
   left: 0;
@@ -4714,17 +4714,17 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .sidebar1 {
-  background-color: #fff;
+  background-color: #0a2948;
   margin-top: 0;
-  z-index: 1001;
+  z-index: 1003;
   position: fixed;
-  top: 60px;
+  /* top: 60px;
   bottom: 0;
-  left: 0;
+  left: 0; */
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
-  width: 250px;
+  width: 200px;
 }
 
 @media (max-width: 991px) {
@@ -7191,7 +7191,9 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .login-wrapper .login-img {
-  background: #5bc2c1;
+  /* background: linear-gradient(45deg,#5bc2c1, #296e84); */
+  background-color: #296e84;
+  background-image: url(./login-page-blob.svg);
   width: 40%;
   color: #fff;
   display: flex;
@@ -7199,9 +7201,14 @@ span.select-container.select-container--default.select-container--open {
   justify-content: center;
   padding: 0 30px;
   flex-direction: column;
+  background-repeat: no-repeat;
+  /* position: absolute;
+  background-position: bottom -60vh right -25vw;
+  height: 100%; */
+  background-size: cover;
 }
 
-.login-wrapper .login-img h1{
+.login-wrapper .login-img h1 {
   font-size: 60px;
   font-weight: 600;
   margin-bottom: 20px;
@@ -9486,7 +9493,7 @@ span.select-container.select-container--default.select-container--open {
 }
 
 .sidebar_icons {
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .coming_soon_timings {
@@ -9812,7 +9819,7 @@ input[type='number'] {
   color: #5bc2c1 !important;
 }
 
-.text-secondary{
+.text-secondary {
   color: #296e84 !important;
 }
 
@@ -9823,4 +9830,22 @@ input[type='number'] {
 .nav-link {
   padding: 3px 7px;
   border-radius: 5px !important;
+}
+
+.sidebar_logo {
+  width: 85%;
+  height: 100%;
+  object-fit: contain;
+  margin-top: 15px;
+  margin: 15px auto 15px;
+}
+
+.sidebar_logo_main_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ps-menu-button {
+  height: 40px !important;
 }
