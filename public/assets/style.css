@@ -9849,3 +9849,8 @@ input[type='number'] {
 .ps-menu-button {
   height: 40px !important;
 }
+
+
+#sidebar12{
+  border: none !important;
+}
